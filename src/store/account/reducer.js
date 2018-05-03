@@ -99,4 +99,28 @@ export default reducer(initState, {
       remindError: action.error,
     };
   },
+
+  [types.REGISTER]: (state, action) => {
+    return {
+      ...state,
+      registerWait: true,
+    };
+  },
+
+  [types.REGISTER_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      registerSuccess: true,
+      registerWait: false,
+    };
+  },
+
+  [types.REGISTER_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      registerSuccess: false,
+      registerWait: false,
+      registerError: action.error,
+    };
+  }
 });
