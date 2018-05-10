@@ -1,19 +1,23 @@
+import castleBlue from '../img/castle-blue.png';
+import castleGreen from '../img/castle-green.png';
+import castleOrange from '../img/castle-orange.png';
+
 export default [
   {
-    image: 'https://dxlfb468n8ekd.cloudfront.net/gsc/U9ID9G/bb/7a/f4/bb7af4896a3c48a7b77bfd9d6abec1ea/images/events/u61.png?token=1e2028eb34cb2a53d7d684008ba76b4b',
-    title: 'Безопасность',
-    text: 'Безопасность'
+    image: castleBlue,
+    title: 'Full security app',
+    text: 'The application guarantees complete safety and security of data due to the unique keys of the phone'
   },
 
   {
-    image: 'https://dxlfb468n8ekd.cloudfront.net/gsc/U9ID9G/bb/7a/f4/bb7af4896a3c48a7b77bfd9d6abec1ea/images/events/u61.png?token=1e2028eb34cb2a53d7d684008ba76b4b',
-    title: 'Безопасность',
-    text: 'Безопасность'
+    image: castleGreen,
+    title: 'Good design',
+    text: 'The application guarantees complete safety and security of data due to the unique keys of the phone'
   },
 
   {
-    image: 'https://dxlfb468n8ekd.cloudfront.net/gsc/U9ID9G/bb/7a/f4/bb7af4896a3c48a7b77bfd9d6abec1ea/images/events/u61.png?token=1e2028eb34cb2a53d7d684008ba76b4b',
-    title: 'Безопасность',
-    text: 'Безопасность'
+    image: castleOrange,
+    title: 'Opensource project',
+    text: 'The application guarantees complete safety and security of data due to the unique keys of the phone'
   }
 ];

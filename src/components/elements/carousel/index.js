@@ -10,10 +10,13 @@ import {
   TouchableWithoutFeedback
 } from 'react-native';
 import { withNavigation } from 'react-navigation';
+import { Rect } from 'react-native-svg';
+
 
 import styles from './styles';
 import Title from '../title';
 import routeEnum from '../../../enums/route-enum';
+import castleTowers from './img/castle-towers.png';
 
 const deviceWidth = Dimensions.get('window').width;
 const barWidth = 110;
@@ -49,16 +52,11 @@ class Carousel extends PureComponent {
     data.forEach((item, i) => {
       const thisItem = (
         <View key={`item${i}`} style={[styles.itemWrap, { width: deviceWidth }]}>
-          <Image
-            source={{ uri: item.image }}
-            style={styles.image}
-          />
-          <Title>{item.title}</Title>
+          <Image source={castleTowers} style={styles.towers}  />
+          <Image source={item.image} style={styles.itemImage} />
+          <Title textStyle={styles.itemTitle}>{item.title}</Title>
           <Text style={styles.itemText}>
-            Приложение хранит ваши данные
-            в зашифрованном виде с помощью
-            сложного шифрования с системой
-            ключ-закрытый ключ
+            {item.text}
           </Text>
         </View>
       );
@@ -118,9 +116,12 @@ class Carousel extends PureComponent {
           { barArray }
         </View>
         <TouchableWithoutFeedback onPress={this.handleSkip}>
-          <Text style={styles.skip}>
-            Skip all features
-          </Text>
+          <View>
+            <Text style={styles.skip}>
+              Skip all features
+            </Text>
+            
+          </View>
         </TouchableWithoutFeedback>
       </View>
     );
