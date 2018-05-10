@@ -1,17 +1,19 @@
 import React, {Component} from 'react';
 import {
-  StyleSheet,
-  Button,
   Text,
   View
 } from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
+import Link from '../../components/elements/link';
+import styles from './styles';
+
 class Main extends Component {
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
+    navigation: PropTypes.shape({})
   };
 
   static contextTypes = {
@@ -19,33 +21,23 @@ class Main extends Component {
   };
 
   render() {
+    const { navigation } = this.props;
+
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
           {this.context.t('Main')}
         </Text>
-        <Button
-          onPress={() => this.props.navigation.navigate('Login', {title: this.context.t('Login')})}
-          title="Go to Login"
+        <Link
+          navigation={navigation}
+          to="Login"
+          title={this.context.t('Login')}
+          label="Go to Login"
         />
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-});
 
 export default connect(state => ({
   i18n: state.i18nState,

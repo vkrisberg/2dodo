@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 
-import IMG_DRAWER_BUTTON from '../../../icons/drawerButton.png';
+import drawerIcon from './img/drawerButton.png';
 
 export default class DrawerButton extends React.Component {
 
@@ -17,7 +17,7 @@ export default class DrawerButton extends React.Component {
   render() {
     return (
       <TouchableOpacity onPress={this.props.onPress} style={styles.container}>
-        <Image source={IMG_DRAWER_BUTTON}/>
+        <Image source={drawerIcon}/>
       </TouchableOpacity>
     );
   }

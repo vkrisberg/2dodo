@@ -27,4 +27,12 @@ export default {
   current: () => {
     return http.get(`/api/v1/users/self`);
   },
+
+  /**
+   * Registration
+   * @returns {AxiosPromise<any>}
+   */
+  register: (data) => {
+    return http.post('/api/registration/', data);
+  }
 };

@@ -1,17 +1,22 @@
 import account from '../../api/account';
 
 export const types = {
-  LOGIN: Symbol('LOGIN'),
-  LOGIN_SUCCESS: Symbol('LOGIN_SUCCESS'),
-  LOGIN_FAILURE: Symbol('LOGIN_FAILURE'),
+  LOGIN: 'LOGIN',
+  LOGIN_SUCCESS: 'LOGIN_SUCCESS',
+  LOGIN_FAILURE: 'LOGIN_FAILURE',
 
-  LOGOUT: Symbol('LOGOUT'),
-  LOGOUT_SUCCESS: Symbol('LOGOUT_SUCCESS'),
-  LOGOUT_FAILURE: Symbol('LOGOUT_FAILURE'),
+  LOGOUT: 'LOGOUT',
+  LOGOUT_SUCCESS: 'LOGOUT_SUCCESS',
+  LOGOUT_FAILURE: 'LOGOUT_FAILURE',
 
-  REMIND: Symbol('REMIND'),
-  REMIND_SUCCESS: Symbol('REMIND_SUCCESS'),
-  REMIND_FAILURE: Symbol('REMIND_FAILURE')
+  REMIND: 'REMIND',
+  REMIND_SUCCESS: 'REMIND_SUCCESS',
+  REMIND_FAILURE: 'REMIND_FAILURE',
+
+  REGISTER: 'REGISTER',
+  REGISTER_SUCCESS: 'REGISTER_SUCCESS',
+  REGISTER_FAILURE: 'REGISTER_FAILURE',
+
 };
 
 export default {
@@ -67,4 +72,20 @@ export default {
       }
     };
   },
+
+  register: (data) => {
+    return async dispatch => {
+      dispatch({ type: types.REGISTER });
+      try {
+        const res = await account.register(data);
+        dispatch({ type: types.REGISTER_SUCCESS, payload: res.data.result });
+      } catch(e) {
+        if (e.response && e.response.status < 500) {
+          dispatch({type: types.REGISTER_FAILURE, error: e.response.data.error});
+        } else {
+          throw e;
+        }
+      }
+    };
+  }
 };
