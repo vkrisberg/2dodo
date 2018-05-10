@@ -1,38 +1,23 @@
-import http from '../utils/http';
+const http = require('../utils/http');
 
 export default {
-  /**
-   * Signin
-   * @param login
-   * @param password
-   * @param remember
-   * @returns {AxiosPromise<any>}
-   */
-  login: (login, password, remember = false) => {
-    return http.post(`/api/v1/users/sign`, {login, password, remember});
+  ping: () => {
+    return http.get('/ping/');
   },
 
-  /**
-   * Signout
-   * @returns {AxiosPromise}
-   */
-  logout: () => {
-    return http.delete(`/api/v1/users/sign`);
+  registration: ({name, email, open_key, hash_key, device_id, device_name, platform, settings}) => {
+    const data = {name, email, open_key, hash_key, device_id, device_name, platform, settings};
+    return http.post('/registration/', data);
   },
 
-  /**
-   * Remind
-   * @returns {AxiosPromise<any>}
-   */
-  current: () => {
-    return http.get(`/api/v1/users/self`);
+  updateToken: (data) => {
+    return http.post('/users/', data);
   },
 
-  /**
-   * Registration
-   * @returns {AxiosPromise<any>}
-   */
-  register: (data) => {
-    return http.post('/api/registration/', data);
-  }
+  acceptAction: (token) => {
+    const params = {
+      token,
+    };
+    return http.get('/tokens/', {params});
+  },
 };
