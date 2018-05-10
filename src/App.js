@@ -16,7 +16,7 @@ export default class App extends Component {
     super(props);
 
     const device = {
-      deviceId: RNDeviceInfo.getUniqueID(),
+      deviceId: 'uniqDeviceId0', // RNDeviceInfo.getUniqueID(),
       deviceName: RNDeviceInfo.getDeviceName(),
       platform: Platform.OS,
     };

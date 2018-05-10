@@ -6,17 +6,24 @@ let _username = '';
 let _password = '';
 
 /**
- * Get base64 username@deviceId
+ * Get basic auth header
  * @param deviceId
- * @param username - username with hostname (username@example.com)
- * @returns {*|string}
+ * @param username
+ * @param password
+ * @returns {{Authorization: string}}
  */
-function getUsernameBase64(deviceId, username) {
+function getHeaders(deviceId, username, password) {
   const wsUsername = `${username}@${deviceId}`;
-
-  return codeclib.base64Encode(
+  const wsUsernameBase64 = codeclib.base64Encode(
     codeclib.utf8Decode(wsUsername)
   );
+  const basicAuth = codeclib.base64Encode(
+    codeclib.utf8Decode(`${wsUsernameBase64}:${password}`)
+  );
+
+  return {
+    Authorization: `Basic ${basicAuth}`,
+  };
 };
 
 /**
@@ -31,11 +38,13 @@ const init = function (deviceId, username, password) {
     return _ws;
   }
 
-  const usernameBase64 = getUsernameBase64(deviceId, username);
-  const wsUrl = `ws${CONFIG.isSecure ? 's' : ''}://${usernameBase64}:${password}@${CONFIG.wsHost}`;
+  const wsUrl = `ws${CONFIG.isSecure ? 's' : ''}://${CONFIG.wsHost}`;
+  const wsHeaders = getHeaders(deviceId, username, password);
+
+  _ws = new WebSocket(wsUrl, '', {headers: wsHeaders});
   _username = username;
   _password = password;
-  _ws = new WebSocket(wsUrl);
+
   return _ws;
 };
 
