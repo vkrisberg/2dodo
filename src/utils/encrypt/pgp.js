@@ -1,9 +1,9 @@
-import openpgp from 'openpgp';
+import * as openpgp from 'react-native-openpgp';
 import {assignIn} from 'lodash';
 
 const defaults = {
   userIds: [
-    {name:'John Smith', email:'john@example.com'},
+    {name:'', email:''},
   ],
   numBits: 2048,
   passphrase: '',
@@ -11,14 +11,25 @@ const defaults = {
 
 /**
  * Generate RSA-2048 keys
- * @param params
- * @returns {*|PromiseLike<T>|Promise<T>}
+ * @param name
+ * @param email
+ * @param passphrase
+ * @returns {Promise<*>|Promise<Object>}
  */
-const generateKey = (params = {}) => {
+const generateKey = ({name = 'Example', email = 'example@example.com', passphrase = ''}) => {
+  const params = {
+    userIds: [
+      {name, email},
+    ],
+    passphrase,
+  };
   const _options = assignIn({}, defaults, params);
 
   return openpgp.generateKey(_options).then((key) => {
-    return key;
+    return {
+      publicKey: key.publicKeyArmored,
+      privateKey: key.privateKeyArmored,
+    };
   });
 };
 

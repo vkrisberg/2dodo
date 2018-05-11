@@ -1,10 +1,12 @@
-import React, { Component } from 'react';
-import { View, Image, Text } from 'react-native';
+import React, {Component} from 'react';
+import {ScrollView, View, Image, Text} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 
 import {accountActions} from '../../store/actions';
 import {websocket} from '../../utils';
+import {pgplib} from '../../utils/encrypt';
 import {Title} from '../../components/elements';
 import routeEnum from '../../enums/route-enum';
 import chatIcon from '../login/img/chat.png';
@@ -18,8 +20,14 @@ class Preload extends Component {
     dispatch: PropTypes.func.isRequired,
   };
 
+  state = {
+    publicKey: 'public',
+    privateKey: 'private',
+  };
+
   componentDidMount() {
     // this.handleTimeout = setTimeout(() => { this.props.navigation.navigate(routeEnum.Events); }, 2000);
+    // this.generateKeys();
     if (!this.props.account.username || !this.props.account.hashKey) {
       this.props.dispatch(accountActions.remind()).then((data) => {
         console.log('remind', this.props.account);
@@ -31,6 +39,14 @@ class Preload extends Component {
   componentWillUnmount() {
     // clearInterval(this.handleTimeout);
   }
+
+  generateKeys = async () => {
+    let startTime = moment();
+    console.log('[pgplib.generateKey] start: %s', startTime.toDate());
+    const keys = await pgplib.generateKey({});
+    console.log('[pgplib.generateKey] stopped: %s sec.', moment().diff(startTime, 'seconds'));
+    this.setState(keys);
+  };
 
   wsConnect = (account) => {
     const ws = websocket.init(account.deviceId, account.username, account.hashKey);
@@ -55,13 +71,19 @@ class Preload extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Image style={styles.image} source={chatIcon} />
+      <ScrollView>
+        <Image style={styles.image} source={chatIcon}/>
         <Title>2DODO</Title>
+        <Text>
+          {this.state.publicKey}
+        </Text>
+        <Text>
+          {this.state.privateKey}
+        </Text>
         <Text style={styles.text}>
           Do what you want
         </Text>
-      </View>
+      </ScrollView>
     );
   }
 }

@@ -137,6 +137,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-openpgp')
     compile project(':react-native-randombytes')
     compile project(':react-native-image-picker')
     compile project(':react-native-device-info')

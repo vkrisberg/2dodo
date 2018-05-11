@@ -25,6 +25,7 @@
     "react-native-device-info": "^0.21.5",
     "react-native-image-picker": "^0.26.7",
     "react-native-languages": "^1.0.7",
+    "react-native-openpgp": "^1.0.4",
     "react-native-randombytes": "^3.1.0",
     "react-navigation": "^1.5.11",
     "react-navigation-redux-helpers": "^1.0.5",

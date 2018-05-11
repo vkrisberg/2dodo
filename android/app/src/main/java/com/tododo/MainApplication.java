@@ -3,6 +3,7 @@ package com.tododo;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.github.orhan.openpgp.RNOpenPGPPackage;
 import com.bitgo.randombytes.RandomBytesPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
@@ -27,6 +28,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNOpenPGPPackage(),
             new RandomBytesPackage(),
             new ImagePickerPackage(),
             new RNDeviceInfo(),
