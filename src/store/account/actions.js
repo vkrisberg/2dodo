@@ -1,8 +1,8 @@
 import {AsyncStorage} from 'react-native';
 import CONFIG from '../../config';
 import account from '../../api/account';
+import storageEnum from '../../enums/storage-enum';
 
-const AUTH_STORAGE_KEY = 'authorization';
 const TEST_ACCOUNT = {
   username: 'test@api.2do.do',
   hashKey: '68603d6f4cc29f0575815f10ec31ffbfac43248d7aa781539d7fb52b9ed66e37',
@@ -39,17 +39,18 @@ export default {
     return async dispatch => {
       dispatch({type: types.REMIND});
       try {
-        await AsyncStorage.setItem(`${CONFIG.storagePrefix}:${AUTH_STORAGE_KEY}`, JSON.stringify(TEST_ACCOUNT));
-        const result = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${AUTH_STORAGE_KEY}`);
+        // await AsyncStorage.clear();
+        // await AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.authorization}`, JSON.stringify(TEST_ACCOUNT));
+        const result = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.authorization}`);
         const payload = JSON.parse(result);
-        if (result) {
-          dispatch({type: types.REMIND_SUCCESS, payload});
-        } else {
-          dispatch({type: types.REMIND_FAILURE, error: null});
+        if (result === null) {
+          throw new Error('authorization is empty in storage');
         }
+        dispatch({type: types.REMIND_SUCCESS, payload});
         return payload;
       } catch (e) {
         dispatch({type: types.REMIND_FAILURE, error: e});
+        throw e;
       }
     };
   },

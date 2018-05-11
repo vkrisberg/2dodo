@@ -7,5 +7,5 @@ export default {
   Contacts: 'Contacts',
   Preload: 'Preload',
   Events: 'Events',
-  PasswordApprove: 'PasswordApprove'
+  PasswordApprove: 'PasswordApprove',
 };

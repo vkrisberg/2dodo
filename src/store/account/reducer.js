@@ -8,6 +8,7 @@ const initState = {
     avatar: '',
   },
 
+  isAuth: false,
   username: '',
   publicKey: null,
   privateKey: null,
