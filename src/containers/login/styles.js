@@ -17,7 +17,6 @@ export default StyleSheet.create({
   link: {
     marginTop: 20,
     marginBottom: 10,
-    color: 'white',
     alignSelf: 'center'
   },
 

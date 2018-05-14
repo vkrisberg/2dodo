@@ -45,11 +45,11 @@ class Registration extends Component {
       return;
     }
 
-    const nickname = data.nickname.toLowerCase() || '';
+    const nickname = (data.nickname || '').toLowerCase();
     const sendData = {
-      nickname: data.nickname.toLowerCase() || '',
+      nickname,
       name: `${nickname}@${account.hostname}`,
-      email: data.email.toLowerCase() || '',
+      email: (data.email || '').toLowerCase(),
       device_id: account.deviceId,
       device_name: account.deviceName,
       platform: account.platform,
@@ -59,12 +59,17 @@ class Registration extends Component {
 
     dispatch(accountActions.register(sendData))
       .then(() => {
-        AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.keys}`, JSON.stringify(account.keys));
-        AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.user}`, JSON.stringify(account.user));
+        AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.keys}`, JSON.stringify(this.props.account.keys));
+        AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.user}`, JSON.stringify(this.props.account.user));
         this.props.navigation.navigate(routeEnum.Login);
       })
       .catch((error) => {
-        console.log('registration error', error);
+        console.log('registration error', error.response.data);
+        if (error.response.status === 400) {
+          AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.keys}`, JSON.stringify(this.props.account.keys));
+          AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.user}`, JSON.stringify(this.props.account.user));
+          this.props.navigation.navigate(routeEnum.Login);
+        }
       });
   }
 

@@ -27,13 +27,12 @@ export const types = {
   REGISTER: 'REGISTER',
   REGISTER_SUCCESS: 'REGISTER_SUCCESS',
   REGISTER_FAILURE: 'REGISTER_FAILURE',
-
 };
 
 export default {
 
   update: (data) => {
-    return {type: types.UPDATE, payload: data}
+    return {type: types.UPDATE, payload: data};
   },
 
   remind: () => {
@@ -41,12 +40,21 @@ export default {
       dispatch({type: types.REMIND});
       try {
         // await AsyncStorage.clear();
-        // await AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.authorization}`, JSON.stringify(TEST_ACCOUNT));
-        const result = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.authorization}`);
-        const payload = JSON.parse(result);
-        if (result === null) {
-          throw new Error('authorization is empty in storage');
+        const authorized = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
+        if (!authorized) {
+          throw new Error('remind failed: user is not authorized');
         }
+
+        const user = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.user}`);
+        const keys = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.keys}`);
+        if (!user || !keys) {
+          throw new Error('remind failed: user or keys is empty in storage');
+        }
+        const payload = {
+          user: JSON.parse(user),
+          keys: JSON.parse(keys),
+        };
+
         dispatch({type: types.REMIND_SUCCESS, payload});
         return payload;
       } catch (e) {
@@ -56,21 +64,14 @@ export default {
     };
   },
 
-  login: (email, password, remember) => {
+  login: ({deviceId, user, keys, navigation}) => {
     return async dispatch => {
       dispatch({type: types.LOGIN});
-
+      // dispatch({type: types.LOGIN_SUCCESS});
       try {
-        const response = await account.login(email, password, remember);
-        const {result} = response.data;
-        dispatch({type: types.LOGIN_SUCCESS, payload: result});
-        return result;
       } catch (e) {
-        if (e.response && e.response.status < 500) {
-          dispatch({type: types.LOGIN_FAILURE, error: e.response.data.error});
-        } else {
-          throw e;
-        }
+        dispatch({type: types.LOGIN_FAILURE, error: e});
+        throw e;
       }
     };
   },
@@ -78,16 +79,12 @@ export default {
   logout: () => {
     return async dispatch => {
       dispatch({type: types.LOGOUT});
-
       try {
-        const res = await account.logout();
+        await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
         dispatch({type: types.LOGOUT_SUCCESS});
       } catch (e) {
-        if (e.response && e.response.status < 500) {
-          dispatch({type: types.LOGOUT_FAILURE, error: e.response.data.error});
-        } else {
-          throw e;
-        }
+        dispatch({type: types.LOGOUT_FAILURE, error: e});
+        throw e;
       }
     };
   },
@@ -98,13 +95,20 @@ export default {
       try {
         const {publicKey, privateKey} = await pgplib.generateKey({name: data.name, email: data.email});
         const hashKey = hashlib.hexSha256(privateKey);
+        data.publicKey = publicKey;
+        data.privateKey = privateKey;
+        data.hashKey = hashKey;
         data.open_key = publicKey;
         data.hash_key = hashKey;
         const res = await account.registration(data);
         dispatch({type: types.REGISTER_SUCCESS, payload: res.data, data});
         return res.data;
       } catch (e) {
-        dispatch({type: types.REGISTER_FAILURE, error: e.response});
+        if (e.response && e.response.status < 500) {
+          dispatch({type: types.REGISTER_FAILURE, error: e.response.data, data});
+        } else {
+          dispatch({type: types.REGISTER_FAILURE, error: e.response.data});
+        }
         throw e;
       }
     };

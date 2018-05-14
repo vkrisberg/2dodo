@@ -4,13 +4,13 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import {accountActions} from '../../store/actions';
-import {ws} from '../../utils';
 import Logo from '../../components/elements/logo';
 import BackgroundContainer from '../background-container';
 import {routeEnum, storageEnum} from '../../enums';
 
 import styles from './styles';
 import CONFIG from '../../config';
+import {ws} from '../../utils';
 
 class Preload extends Component {
 
@@ -20,31 +20,40 @@ class Preload extends Component {
   };
 
   componentDidMount() {
-    if (this.props.account.isAuth) {
-      this.props.navigation.navigate(routeEnum.Main);
+    const {dispatch, navigation} = this.props;
+    const {authorized, deviceId, user, keys} = this.props.account;
+
+    if (authorized) {
+      navigation.navigate(routeEnum.Main);
     } else {
-      this.props.dispatch(accountActions.remind())
+      dispatch(accountActions.remind())
         .then(() => {
-          this.wsConnect();
+          dispatch(accountActions.login({navigation, deviceId, user, keys}))
+            .then(() => {
+              this.wsConnect();
+            })
+            .catch((error) => {
+              console.log('login error', error);
+            });
         })
         .catch(async () => {
           const skipEvents = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.skipEvents}`);
           if (skipEvents) {
-            this.props.navigation.navigate(routeEnum.Login);
+            navigation.navigate(routeEnum.Login);
             return;
           }
-          this.props.navigation.navigate(routeEnum.Events);
+          navigation.navigate(routeEnum.Events);
         });
     }
   }
 
   wsConnect = () => {
-    const {deviceId, username, hashKey} = this.props.account;
+    const {deviceId, user, keys} = this.props.account;
 
     ws.init({
       deviceId,
-      username,
-      hashKey,
+      username: user.username,
+      hashKey: keys.hashKey,
       navigation: this.props.navigation,
     });
   };

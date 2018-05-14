@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { withNavigation } from 'react-navigation';
 
 class Link extends PureComponent {
-  
+
   static propTypes = {
     label: PropTypes.string,
     children: PropTypes.string,

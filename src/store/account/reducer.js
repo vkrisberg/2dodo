@@ -1,8 +1,8 @@
 import reducer from '../../utils/reducer';
-import {types} from './actions.js';
+import {types} from './actions';
 
 const initState = {
-  isAuth: false,
+  authorized: false,
 
   user: {
     nickname: '', // login
@@ -47,6 +47,7 @@ export default reducer(initState, {
   [types.LOGIN_SUCCESS]: (state, action) => {
     return {
       ...state,
+      authorized: true,
       loading: false,
     };
   },
@@ -54,6 +55,7 @@ export default reducer(initState, {
   [types.LOGIN_FAILURE]: (state, action) => {
     return {
       ...state,
+      authorized: false,
       loading: false,
       error: action.error,
     };
@@ -70,11 +72,13 @@ export default reducer(initState, {
   [types.LOGOUT_SUCCESS]: (state, action) => {
     return {
       ...state,
-      user: {},
-      username: '',
-      publicKey: null,
-      privateKey: null,
-      hashKey: null,
+      authorized: false,
+      user: {
+        ...initState.user,
+      },
+      keys: {
+        ...initState.keys,
+      },
       loading: false
     };
   },
@@ -98,10 +102,12 @@ export default reducer(initState, {
   [types.REMIND_SUCCESS]: (state, action) => {
     return {
       ...state,
-      username: action.payload.username,
-      publicKey: action.payload.publicKey,
-      privateKey: action.payload.privateKey,
-      hashKey: action.payload.hashKey,
+      user: {
+        ...action.payload.user,
+      },
+      keys: {
+        ...action.payload.keys,
+      },
       loading: false
     };
   },
@@ -109,10 +115,12 @@ export default reducer(initState, {
   [types.REMIND_FAILURE]: (state, action) => {
     return {
       ...state,
-      username: '',
-      publicKey: null,
-      privateKey: null,
-      hashKey: null,
+      user: {
+        ...initState.user,
+      },
+      keys: {
+        ...initState.keys,
+      },
       loading: false,
       error: action.error,
     };
@@ -151,11 +159,34 @@ export default reducer(initState, {
   },
 
   [types.REGISTER_FAILURE]: (state, action) => {
+    const {data} = action;
+    let _state = {...state};
+
+    if (data) {
+      const account = {
+        user: {
+          ...state.user,
+          nickname: data.nickname,
+          username: `${data.nickname}@${state.hostname}`,
+          fullName: data.fullName,
+          email: data.email,
+        },
+        keys: {
+          publicKey: data.publicKey,
+          privateKey: data.privateKey,
+          hashKey: data.hashKey,
+        }
+      };
+      _state = {
+        ...state,
+        ...account,
+      };
+    }
+
     return {
-      ...state,
-      registerSuccess: false,
+      ..._state,
       loading: false,
       error: action.error,
     };
-  }
+  },
 });
