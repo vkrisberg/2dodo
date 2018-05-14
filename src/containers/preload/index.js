@@ -1,15 +1,13 @@
 import React, {Component} from 'react';
-import {AsyncStorage, View, Image, Text} from 'react-native';
+import {AsyncStorage, Text} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import {accountActions} from '../../store/actions';
 import {ws} from '../../utils';
-import {Title} from '../../components/elements';
 import Logo from '../../components/elements/logo';
 import BackgroundContainer from '../background-container';
 import {routeEnum, storageEnum} from '../../enums';
-import chatIcon from '../login/img/chat.png';
 
 import styles from './styles';
 import CONFIG from '../../config';
@@ -30,6 +28,7 @@ class Preload extends Component {
           this.wsConnect();
         }).catch(async () => {
           const skipEvents = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.skipEvents}`);
+          console.log('skipEvents', skipEvents)
           if (skipEvents) {
             this.props.navigation.navigate(routeEnum.Login);
             return;
