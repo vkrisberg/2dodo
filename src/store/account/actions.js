@@ -1,7 +1,8 @@
 import {AsyncStorage} from 'react-native';
-import CONFIG from '../../config';
 import account from '../../api/account';
+import {pgplib, hashlib} from '../../utils/encrypt';
 import storageEnum from '../../enums/storage-enum';
+import CONFIG from '../../config';
 
 const TEST_ACCOUNT = {
   username: 'test@api.2do.do',
@@ -9,7 +10,7 @@ const TEST_ACCOUNT = {
 };
 
 export const types = {
-  INIT: 'INIT',
+  UPDATE: 'UPDATE',
 
   LOGIN: 'LOGIN',
   LOGIN_SUCCESS: 'LOGIN_SUCCESS',
@@ -31,8 +32,8 @@ export const types = {
 
 export default {
 
-  init: (data) => {
-    return {type: types.INIT, payload: data}
+  update: (data) => {
+    return {type: types.UPDATE, payload: data}
   },
 
   remind: () => {
@@ -93,16 +94,18 @@ export default {
 
   register: (data) => {
     return async dispatch => {
-      dispatch({ type: types.REGISTER });
+      dispatch({type: types.REGISTER});
       try {
-        const res = await account.register(data);
-        dispatch({ type: types.REGISTER_SUCCESS, payload: res.data.result });
-      } catch(e) {
-        if (e.response && e.response.status < 500) {
-          dispatch({type: types.REGISTER_FAILURE, error: e.response.data.error});
-        } else {
-          throw e;
-        }
+        const {publicKey, privateKey} = await pgplib.generateKey({name: data.name, email: data.email});
+        const hashKey = hashlib.hexSha256(privateKey);
+        data.open_key = publicKey;
+        data.hash_key = hashKey;
+        const res = await account.registration(data);
+        dispatch({type: types.REGISTER_SUCCESS, payload: res.data, data});
+        return res.data;
+      } catch (e) {
+        dispatch({type: types.REGISTER_FAILURE, error: e.response});
+        throw e;
       }
     };
   }

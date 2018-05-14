@@ -22,7 +22,7 @@ export default class App extends Component {
     };
     this.language = RNLanguages.language.substr(0, 2);
 
-    store.dispatch(accountActions.init(device));
+    store.dispatch(accountActions.update(device));
     store.dispatch(setTranslations(translations));
     http.init(store);
   }

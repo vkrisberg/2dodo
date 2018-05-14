@@ -19,7 +19,7 @@ class MainForm extends Component {
       isChecked: false
     };
   }
-  
+
   static propTypes = {
     handleSubmit: PropTypes.func
   }
@@ -43,7 +43,7 @@ class MainForm extends Component {
           </Text>
         </View>
         <View>
-          <Field name="login" component={Input} placeholder="Создайте Логин" />
+          <Field name="nickname" component={Input} placeholder="Создайте Логин" />
           <Field name="password" component={Input} placeholder="Пароль" />
           <Field name="confirmPassword" component={Input} placeholder="Повторить пароль" />
           <Field

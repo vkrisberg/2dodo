@@ -23,7 +23,7 @@ class SettingsForm extends Component {
     const { handleSubmit } = this.props;
 
     return (
-      <View style={styles.container}>
+      <View>
         <Arrow onPress={this.props.previousPage} />
         <Title style={styles.title}>Настройки</Title>
         <View style={styles.descriptionWrapper}>
@@ -40,8 +40,8 @@ class SettingsForm extends Component {
             <Text style={styles.themeButtonText}>Ночь</Text>
           </TouchableOpacity>
         </View>
-        
-        <Field name="firstAndLastName" component={Input} placeholder="Фамилия и Имя" />
+
+        <Field name="fullName" component={Input} placeholder="Фамилия и Имя" />
         <View style={styles.image}>
         </View>
         <Text style={[styles.description, { marginBottom: 30}]}>
@@ -65,7 +65,7 @@ class SettingsForm extends Component {
 }
 
 export default reduxForm({
-  form: 'signUp',
+  form: 'registration',
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true
 })(withNavigation(SettingsForm));

@@ -26,15 +26,15 @@ class Preload extends Component {
       this.props.dispatch(accountActions.remind())
         .then(() => {
           this.wsConnect();
-        }).catch(async () => {
+        })
+        .catch(async () => {
           const skipEvents = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.skipEvents}`);
-          console.log('skipEvents', skipEvents)
           if (skipEvents) {
             this.props.navigation.navigate(routeEnum.Login);
             return;
           }
           this.props.navigation.navigate(routeEnum.Events);
-      });
+        });
     }
   }
 
@@ -52,7 +52,7 @@ class Preload extends Component {
   render() {
     return (
       <BackgroundContainer style={styles.container}>
-        <Logo />
+        <Logo/>
         <Text style={styles.text}>
           Do what you want
         </Text>

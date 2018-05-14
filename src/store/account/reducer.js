@@ -2,20 +2,26 @@ import reducer from '../../utils/reducer';
 import {types} from './actions.js';
 
 const initState = {
+  isAuth: false,
+
   user: {
-    name: '',
+    nickname: '', // login
+    username: '', // login@hostname
+    fullName: '', // first and last name
     email: '',
     avatar: '',
   },
 
-  isAuth: false,
-  username: '',
-  publicKey: null,
-  privateKey: null,
-  hashKey: null,
+  keys: {
+    publicKey: null,
+    privateKey: null,
+    hashKey: null,
+  },
+
   deviceId: '',
   deviceName: '',
   platform: '',
+  hostname: 'api.2do.do',
 
   loading: false,
   error: null,
@@ -23,7 +29,7 @@ const initState = {
 
 export default reducer(initState, {
 
-  [types.INIT]: (state, action) => {
+  [types.UPDATE]: (state, action) => {
     return {
       ...state,
       ...action.payload,
@@ -121,8 +127,25 @@ export default reducer(initState, {
   },
 
   [types.REGISTER_SUCCESS]: (state, action) => {
+    const {data} = action;
+    const account = {
+      user: {
+        ...state.user,
+        nickname: data.nickname,
+        username: `${data.nickname}@${state.hostname}`,
+        fullName: data.fullName,
+        email: data.email,
+      },
+      keys: {
+        publicKey: data.publicKey,
+        privateKey: data.privateKey,
+        hashKey: data.hashKey,
+      }
+    };
+
     return {
       ...state,
+      ...account,
       loading: false,
     };
   },

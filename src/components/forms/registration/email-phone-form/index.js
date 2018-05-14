@@ -13,7 +13,7 @@ import styles from './styles';
 class EmailPhoneForm extends Component {
   render() {
     return (
-      <View style={styles.container}>
+      <View>
         <Arrow onPress={this.props.previousPage} />
         <Title style={styles.title}>Регистрация</Title>
         <View style={styles.descriptionWrapper}>

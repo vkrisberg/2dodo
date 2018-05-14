@@ -4,8 +4,8 @@ import {
   Text
 } from 'react-native';
 import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
 import { withNavigation } from 'react-navigation';
+import PropTypes from 'prop-types';
 
 import Link from '../../components/elements/link';
 import styles from './styles';
