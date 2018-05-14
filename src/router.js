@@ -76,7 +76,7 @@ const MainStack = StackNavigator({
     screen: PasswordApprove
   }
 }, {
-  initialRouteName: 'Preload',
+  initialRouteName: 'Contacts',
   gesturesEnabled: true,
   drawerLockMode: 'locked-closed',
   navigationOptions: {
