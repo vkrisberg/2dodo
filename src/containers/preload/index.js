@@ -1,19 +1,53 @@
-import React, { Component } from 'react';
-import { Text } from 'react-native';
+import React, {Component} from 'react';
+import {AsyncStorage, Text} from 'react-native';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
-import routeEnum from '../../enums/route-enum';
-import styles from './styles';
-import BackgroundContainer from '../background-container';
+import {accountActions} from '../../store/actions';
+import {ws} from '../../utils';
 import Logo from '../../components/elements/logo';
+import BackgroundContainer from '../background-container';
+import {routeEnum, storageEnum} from '../../enums';
 
-export default class Preload extends Component {
+import styles from './styles';
+import CONFIG from '../../config';
+
+class Preload extends Component {
+
+  static propTypes = {
+    account: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
+  };
+
   componentDidMount() {
-    this.handleTimeout = setTimeout(() => { this.props.navigation.navigate(routeEnum.Events); }, 2000);
+    if (this.props.account.isAuth) {
+      this.props.navigation.navigate(routeEnum.Main);
+    } else {
+      this.props.dispatch(accountActions.remind())
+        .then(() => {
+          this.wsConnect();
+        }).catch(async () => {
+          const skipEvents = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.skipEvents}`);
+          console.log('skipEvents', skipEvents)
+          if (skipEvents) {
+            this.props.navigation.navigate(routeEnum.Login);
+            return;
+          }
+          this.props.navigation.navigate(routeEnum.Events);
+      });
+    }
   }
 
-  componentWillUnmount() {
-    clearInterval(this.handleTimeout);
-  }
+  wsConnect = () => {
+    const {deviceId, username, hashKey} = this.props.account;
+
+    ws.init({
+      deviceId,
+      username,
+      hashKey,
+      navigation: this.props.navigation,
+    });
+  };
 
   render() {
     return (
@@ -26,3 +60,7 @@ export default class Preload extends Component {
     );
   }
 }
+
+export default connect(state => ({
+  account: state.account
+}))(Preload);

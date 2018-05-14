@@ -2,17 +2,23 @@ import reducer from '../../utils/reducer';
 import {types} from './actions.js';
 
 const initState = {
-  user: {},
-  hasToken: null, // null, true, false
+  user: {
+    name: '',
+    email: '',
+    avatar: '',
+  },
 
-  loginWait: false,
-  loginError: null,
+  isAuth: false,
+  username: '',
+  publicKey: null,
+  privateKey: null,
+  hashKey: null,
+  deviceId: '',
+  deviceName: '',
+  platform: '',
 
-  logoutWait: false,
-  logoutError: null,
-
-  remindWait: false,
-  remindError: null,
+  loading: false,
+  error: null,
 };
 
 export default reducer(initState, {
@@ -20,40 +26,38 @@ export default reducer(initState, {
   [types.INIT]: (state, action) => {
     return {
       ...state,
+      ...action.payload,
     };
   },
 
   [types.LOGIN]: (state, action) => {
     return {
       ...state,
-      loginWait: true,
-      loginError: null
+      loading: true,
+      error: null
     };
   },
 
   [types.LOGIN_SUCCESS]: (state, action) => {
     return {
       ...state,
-      user: action.payload.user,
-      hasToken: true,
-      loginWait: false,
-      remindError: null
+      loading: false,
     };
   },
 
   [types.LOGIN_FAILURE]: (state, action) => {
     return {
       ...state,
-      loginWait: false,
-      loginError: action.error,
+      loading: false,
+      error: action.error,
     };
   },
 
   [types.LOGOUT]: (state, action) => {
     return {
       ...state,
-      logoutWait: true,
-      logoutError: null
+      loading: true,
+      error: null
     };
   },
 
@@ -61,57 +65,65 @@ export default reducer(initState, {
     return {
       ...state,
       user: {},
-      hasToken: false,
-      logoutWait: false
+      username: '',
+      publicKey: null,
+      privateKey: null,
+      hashKey: null,
+      loading: false
     };
   },
 
   [types.LOGOUT_FAILURE]: (state, action) => {
     return {
       ...state,
-      logoutWait: false,
-      logoutError: action.error,
+      loading: false,
+      error: action.error,
     };
   },
 
   [types.REMIND]: (state, action) => {
     return {
       ...state,
-      remindWait: true,
-      remindError: null
+      loading: true,
+      error: null
     };
   },
 
   [types.REMIND_SUCCESS]: (state, action) => {
     return {
       ...state,
-      user: action.payload.user,
-      hasToken: true,
-      remindWait: false
+      username: action.payload.username,
+      publicKey: action.payload.publicKey,
+      privateKey: action.payload.privateKey,
+      hashKey: action.payload.hashKey,
+      loading: false
     };
   },
 
   [types.REMIND_FAILURE]: (state, action) => {
     return {
       ...state,
-      hasToken: false,
-      remindWait: false,
-      remindError: action.error,
+      username: '',
+      publicKey: null,
+      privateKey: null,
+      hashKey: null,
+      loading: false,
+      error: action.error,
     };
   },
 
   [types.REGISTER]: (state, action) => {
     return {
       ...state,
-      registerWait: true,
+      loading: true,
+      error: null,
     };
   },
 
   [types.REGISTER_SUCCESS]: (state, action) => {
     return {
       ...state,
-      registerSuccess: true,
-      registerWait: false,
+      loading: false,
     };
   },
 
@@ -119,8 +131,8 @@ export default reducer(initState, {
     return {
       ...state,
       registerSuccess: false,
-      registerWait: false,
-      registerError: action.error,
+      loading: false,
+      error: action.error,
     };
   }
 });

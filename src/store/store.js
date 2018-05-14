@@ -9,5 +9,5 @@ import * as reducers from './reducers';
 export default createStore(
   combineReducers({...reducers, i18nState, form: formReducer}),
   undefined,
-  applyMiddleware(navigationMiddleware, thunkMiddleware, loggerMiddleware)
+  applyMiddleware(navigationMiddleware, thunkMiddleware/*, loggerMiddleware*/)
 );
