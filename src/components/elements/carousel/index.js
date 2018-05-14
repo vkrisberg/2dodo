@@ -32,15 +32,10 @@ class Carousel extends PureComponent {
 
   static propTypes = {
     data: PropTypes.array,
+    onSkip: PropTypes.func,
     navigation: PropTypes.shape({
       navigate: PropTypes.func
     })
-  }
-
-  handleSkip = () => {
-    const{ navigate } = this.props.navigation;
-
-    return navigate(routeEnum.Login);
   }
 
   render() {
@@ -114,12 +109,12 @@ class Carousel extends PureComponent {
         <View style={styles.barContainer}>
           { barArray }
         </View>
-        <TouchableWithoutFeedback onPress={this.handleSkip}>
+        <TouchableWithoutFeedback onPress={this.props.onSkip}>
           <View>
             <Text style={styles.skip}>
               Skip all features
             </Text>
-            
+
           </View>
         </TouchableWithoutFeedback>
       </View>
