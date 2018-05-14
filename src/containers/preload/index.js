@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 import {accountActions} from '../../store/actions';
 import {ws} from '../../utils';
 import {Title} from '../../components/elements';
+import Logo from '../../components/elements/logo';
+import BackgroundContainer from '../background-container';
 import {routeEnum, storageEnum} from '../../enums';
 import chatIcon from '../login/img/chat.png';
 
@@ -50,13 +52,12 @@ class Preload extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Image style={styles.image} source={chatIcon}/>
-        <Title>2DODO</Title>
+      <BackgroundContainer style={styles.container}>
+        <Logo />
         <Text style={styles.text}>
           Do what you want
         </Text>
-      </View>
+      </BackgroundContainer>
     );
   }
 }

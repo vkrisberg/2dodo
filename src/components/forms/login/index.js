@@ -9,6 +9,13 @@ import styles from './styles';
 import account from '../../../api/account';
 
 class LoginForm extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isChecked: true
+    };
+  }
 
   handleLogin = (data) => {
 
@@ -30,16 +37,18 @@ class LoginForm extends Component {
       <View>
         <Field component={Input} name="login" placeholder="Логин" />
         <Field component={Input} name="password" placeholder="Пароль" />
-        <View>
-          <Text style={styles.security}>Безопасность</Text>
+        <View style={{ marginTop: 10, marginBottom: 25 }}>
+          <Text style={styles.security}>For best security</Text>
           <Field
             style={styles.checkbox}
             name="createNewKey"
             component={Checkbox}
-            label="Создать новый ключ"
+            checked={this.state.isChecked}
+            onValueChange={() => {this.setState({isChecked: !this.state.isChecked});}}
+            label="Create a new key"
           />
         </View>
-        <Button onPress={handleSubmit(this.handleLogin)}>Войти</Button>
+        <Button onPress={handleSubmit(this.handleLogin)}>Enter</Button>
       </View>
     );
   }

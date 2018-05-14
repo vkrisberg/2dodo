@@ -5,11 +5,11 @@ import styles from './styles';
 
 export default class Title extends PureComponent {
   render() {
-    const { children, value, style } = this.props;
+    const { children, value, style, textStyle } = this.props;
     
     return (
       <View style={[styles.wrapper, style]}>
-        <Text style={styles.title}>{children || value}</Text>
+        <Text style={[styles.title, textStyle]}>{children || value}</Text>
       </View>
     );
   }

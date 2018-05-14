@@ -14,10 +14,6 @@ class Link extends PureComponent {
     style: ViewPropTypes.style
   }
 
-  componentDidMount() {
-    console.log(this.props);
-  }
-
   handleLink = () => {
     const { navigation, to } = this.props;
 
@@ -29,7 +25,7 @@ class Link extends PureComponent {
 
     return (
       <TouchableOpacity onPress={this.handleLink}>
-        <Text style={[style, {color: color === 'blue' ? '#6699CC' : 'inherit'}]}>{ label || children }</Text>
+        <Text style={[style, {color: color === 'blue' ? '#6699CC' : 'white'}]}>{ label || children }</Text>
       </TouchableOpacity>
     );
   }

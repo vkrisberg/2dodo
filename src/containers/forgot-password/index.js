@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, Image } from 'react-native';
 import { connect } from 'react-redux';
 
-import chatIcon from '../login/img/chat.png';
+// import chatIcon from '../login/img/chat.png';
 import styles from './styles';
 import Title from '../../components/elements/title';
 import ForgotPasswordForm from '../../components/forms/forgot-password';
@@ -19,11 +19,11 @@ class ForgotPassword extends Component {
     return (
       <View style={styles.container}>
         <Arrow onPress={this.returnToLogin} />
-        <View style={styles.logo}>
+        {/* <View style={styles.logo}>
           <Image
             source={chatIcon}
           />
-        </View>
+        </View> */}
         <Title>Забытый пароль</Title>
         <Text style={styles.description}>Укажите адрес электронной почты связанный с вашей учетной записью</Text>
         <ForgotPasswordForm />

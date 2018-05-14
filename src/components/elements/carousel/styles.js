@@ -5,52 +5,65 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'white'
+    backgroundColor: 'transparent'
   },
 
   barContainer: {
     position: 'absolute',
     zIndex: 2,
-    bottom: 106,
+    bottom: 140,
     flexDirection: 'row'
   },
 
   track: {
-    backgroundColor: '#d7d7d7',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
     overflow: 'hidden',
-    width: 8,
-    height: 8,
+    width: 9,
+    height: 9,
     borderRadius: 70
   },
 
   bar: {
-    backgroundColor: '#949494',
-    width: 8,
-    height: 8,
+    backgroundColor: 'white',
+    width: 9,
+    height: 9,
     position: 'absolute',
     left: 0,
     top: 0,
   },
 
-  image: {
-    width: 180,
-    height: 180,
-    transform: [{ rotate: '45deg' }],
-    marginBottom: 60,
+  itemImage: {
+    width: 130,
+    height: 206,
+    marginBottom: 40,
     marginTop: 80
+  },
+
+  towers: {
+    position: 'absolute',
+    width: 202,
+    height: 134,
+    marginTop: 150,
+    left: '20%'
   },
 
   itemWrap: {
     alignItems: 'center'
   },
 
+  itemTitle: {
+    color: 'white'
+  },
+
   itemText: {
     width: 236,
-    textAlign: 'center'
+    textAlign: 'center',
+    color: 'white'
   },
   
   skip: {
-    marginBottom: 45
+    marginBottom: 75,
+    color: 'white'
   }
   
 });

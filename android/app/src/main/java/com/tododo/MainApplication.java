@@ -7,6 +7,8 @@ import com.github.orhan.openpgp.RNOpenPGPPackage;
 import com.bitgo.randombytes.RandomBytesPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.imagepicker.ImagePickerPackage;
 import com.reactcommunity.reactnativelanguages.ReactNativeLanguagesPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -32,6 +34,8 @@ public class MainApplication extends Application implements ReactApplication {
             new RandomBytesPackage(),
             new ImagePickerPackage(),
             new RNDeviceInfo(),
+            new VectorIconsPackage(),
+            new ImagePickerPackage(),
             new ReactNativeLanguagesPackage()
       );
     }

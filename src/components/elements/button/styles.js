@@ -8,7 +8,9 @@ export default StyleSheet.create({
   button: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#6b6b6b',
+    borderColor: 'white',
+    borderWidth: 2,
+    backgroundColor: 'transparent',
     width: 205,
     height: 50,
     padding: 10,
