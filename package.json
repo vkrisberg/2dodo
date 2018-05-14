@@ -20,6 +20,7 @@
     "react-native-check-box": "^2.1.0",
     "react-native-image-picker": "^0.26.7",
     "react-native-languages": "^1.0.7",
+    "react-native-vector-icons": "^4.6.0",
     "react-navigation": "^1.5.11",
     "react-navigation-redux-helpers": "^1.0.5",
     "react-redux": "^5.0.7",

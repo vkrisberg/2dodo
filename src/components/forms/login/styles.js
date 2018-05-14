@@ -7,12 +7,12 @@ export default StyleSheet.create({
   },
 
   security: {
-    color: '#999999',
+    color: '#ced9e8',
     position: 'absolute'
   },
 
   checkbox: {
-    marginLeft: 120,
-    marginTop: -2
+    marginLeft: 150,
+    flexDirection: 'row'
   }
 });

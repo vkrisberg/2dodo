@@ -10,7 +10,6 @@ import {
   TouchableWithoutFeedback
 } from 'react-native';
 import { withNavigation } from 'react-navigation';
-import { Rect } from 'react-native-svg';
 
 
 import styles from './styles';

@@ -4,16 +4,16 @@ export default StyleSheet.create({
   input: {
     width: 300,
     height: 45,
-    borderColor: '#dcdcdc',
+    borderColor: '#ced9e8',
     borderWidth: 1,
     marginBottom: 15,
-    color: '#aeadb0',
+    color: 'white',
     padding: 15,
-    borderRadius: 4
+    borderRadius: 40
   },
 
   inputFocused: {
-    borderWidth: 3,
-    borderColor: '#e6e6e6'
+    borderWidth: 2,
+    borderColor: 'white'
   }
 });

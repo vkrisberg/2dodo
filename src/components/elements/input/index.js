@@ -29,7 +29,7 @@ export default class Input extends Component {
     return (
       <TextInput
         underlineColorAndroid="transparent"
-        placeholderTextColor="#aeadb0"
+        placeholderTextColor="#ced9e8"
         onChangeText={input.onChange}
         style={[styles.input, this.state.focused && styles.inputFocused, style]}
         placeholder={placeholder}

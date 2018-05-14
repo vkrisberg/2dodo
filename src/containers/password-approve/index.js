@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Arrow from '../../components/elements/arrow';
 import styles from './styles';
 import routeEnum from '../../enums/route-enum';
-import chatIcon from '../login/img/chat.png';
+// import chatIcon from '../login/img/chat.png';
 import Title from '../../components/elements/title';
 import Button from '../../components/elements/button';
 
@@ -21,11 +21,11 @@ class PasswordApprove extends Component {
     return (
       <View style={styles.container}>
         <Arrow onPress={this.returnToLogin} />
-        <View style={styles.logo}>
+        {/* <View style={styles.logo}>
           <Image
             source={chatIcon}
           />
-        </View>
+        </View> */}
         <Title>Успех</Title>
         <Text style={styles.description}>
           Письмо с восстановлением пароля

@@ -76,7 +76,7 @@ const MainStack = StackNavigator({
     screen: PasswordApprove
   }
 }, {
-  initialRouteName: 'Events',
+  initialRouteName: 'Login',
   gesturesEnabled: true,
   drawerLockMode: 'locked-closed',
   navigationOptions: {
