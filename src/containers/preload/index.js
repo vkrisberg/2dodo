@@ -21,16 +21,17 @@ class Preload extends Component {
 
   componentDidMount() {
     const {dispatch, navigation} = this.props;
-    const {authorized, deviceId, user, keys} = this.props.account;
+    const {authorized} = this.props.account;
 
     if (authorized) {
       navigation.navigate(routeEnum.Main);
     } else {
       dispatch(accountActions.remind())
         .then(() => {
+          const {deviceId, user, keys} = this.props.account;
           dispatch(accountActions.login({navigation, deviceId, user, keys}))
             .then(() => {
-              this.wsConnect();
+              this.wsConnect({deviceId, user, keys});
             })
             .catch((error) => {
               console.log('login error', error);
@@ -47,13 +48,12 @@ class Preload extends Component {
     }
   }
 
-  wsConnect = () => {
-    const {deviceId, user, keys} = this.props.account;
-
+  wsConnect = ({deviceId, user, keys}) => {
+    console.log('deviceId, user, keys', deviceId, user.username, keys.hashKey)
     ws.init({
       deviceId,
       username: user.username,
-      hashKey: keys.hashKey,
+      password: keys.hashKey,
       navigation: this.props.navigation,
     });
   };

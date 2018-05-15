@@ -39,6 +39,7 @@ export default reducer(initState, {
   [types.LOGIN]: (state, action) => {
     return {
       ...state,
+      ...action.payload,
       loading: true,
       error: null
     };

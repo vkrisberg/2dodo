@@ -40,6 +40,7 @@ export default {
       dispatch({type: types.REMIND});
       try {
         // await AsyncStorage.clear();
+        // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
         const authorized = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
         if (!authorized) {
           throw new Error('remind failed: user is not authorized');
@@ -54,7 +55,6 @@ export default {
           user: JSON.parse(user),
           keys: JSON.parse(keys),
         };
-
         dispatch({type: types.REMIND_SUCCESS, payload});
         return payload;
       } catch (e) {
@@ -66,9 +66,9 @@ export default {
 
   login: ({deviceId, user, keys, navigation}) => {
     return async dispatch => {
-      dispatch({type: types.LOGIN});
-      // dispatch({type: types.LOGIN_SUCCESS});
       try {
+        dispatch({type: types.LOGIN, payload: {user, keys}});
+        // dispatch({type: types.LOGIN_SUCCESS});
       } catch (e) {
         dispatch({type: types.LOGIN_FAILURE, error: e});
         throw e;
@@ -80,8 +80,7 @@ export default {
     return async dispatch => {
       dispatch({type: types.LOGOUT});
       try {
-        await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
-        dispatch({type: types.LOGOUT_SUCCESS});
+        // dispatch({type: types.LOGOUT_SUCCESS});
       } catch (e) {
         dispatch({type: types.LOGOUT_FAILURE, error: e});
         throw e;
@@ -95,6 +94,7 @@ export default {
       try {
         const {publicKey, privateKey} = await pgplib.generateKey({name: data.name, email: data.email});
         const hashKey = hashlib.hexSha256(privateKey);
+        console.log('register hashKey', hashKey);
         data.publicKey = publicKey;
         data.privateKey = privateKey;
         data.hashKey = hashKey;

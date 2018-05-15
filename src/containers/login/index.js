@@ -31,24 +31,28 @@ class Login extends Component {
     t: PropTypes.func.isRequired,
   };
 
-  wsConnect = () => {
-    const {deviceId, user, keys} = this.props.account;
-
+  wsConnect = ({deviceId, user, keys}) => {
     ws.init({
       deviceId,
       username: user.username,
-      hashKey: keys.hashKey,
+      password: keys.hashKey,
       navigation: this.props.navigation,
     });
   };
 
-  onLogin = () => {
+  onLogin = async () => {
     const {dispatch, navigation} = this.props;
-    const {deviceId, user, keys} = this.props.account;
-
+    let {deviceId, user, keys} = this.props.account;
+    if (!user.nickname || !keys.hashKey) {
+      user = JSON.parse(await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.user}`));
+      keys = JSON.parse(await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.keys}`));
+    }
+    // console.log('onLogin USER', user);
+    // console.log('onLogin KEYS', keys);
+    // console.log('onLogin DEVICE', deviceId);
     dispatch(accountActions.login({navigation, deviceId, user, keys}))
       .then(() => {
-        this.wsConnect();
+        this.wsConnect({deviceId, user, keys});
       })
       .catch((error) => {
         console.log('login error', error);

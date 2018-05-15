@@ -10,7 +10,7 @@ import CONFIG from '../../config';
 export default class Events extends Component {
   onSkip = () => {
     const {navigation} = this.props;
-    AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.skipEvents}`, '1');
+    AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.skipEvents}`, 'true');
     navigation.navigate(routeEnum.Login);
   }
 

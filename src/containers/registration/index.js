@@ -59,6 +59,7 @@ class Registration extends Component {
 
     dispatch(accountActions.register(sendData))
       .then(() => {
+        console.log('registration success', this.props.account);
         AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.keys}`, JSON.stringify(this.props.account.keys));
         AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.user}`, JSON.stringify(this.props.account.user));
         this.props.navigation.navigate(routeEnum.Login);
@@ -66,8 +67,6 @@ class Registration extends Component {
       .catch((error) => {
         console.log('registration error', error.response.data);
         if (error.response.status === 400) {
-          AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.keys}`, JSON.stringify(this.props.account.keys));
-          AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.user}`, JSON.stringify(this.props.account.user));
           this.props.navigation.navigate(routeEnum.Login);
         }
       });
