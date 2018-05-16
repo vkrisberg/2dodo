@@ -11,8 +11,10 @@ export default class Logo extends PureComponent {
   }
 
   render() {
+    const { flex, style } = this.props;
+
     return (
-      <LogoContainer style={this.props.style}>
+      <LogoContainer isFlex={flex} style={style}>
         <LogoIcon source={logoIcon} />
         <LogoTitleIcon source={logoTitleIcon} />
       </LogoContainer>

@@ -17,7 +17,8 @@ export default class Input extends Component {
     placeholder: PropTypes.string,
     input: PropTypes.shape({}),
     style: ViewPropTypes.style,
-    focusedColor: PropTypes.string
+    focusedColor: PropTypes.string,
+    textColor: PropTypes.string
   };
 
   handleFocus = () => this.setState({ focused: true });
@@ -30,6 +31,7 @@ export default class Input extends Component {
       placeholder,
       style,
       focusedColor,
+      textColor,
       ...inputProps
     } = this.props;
 
@@ -40,6 +42,7 @@ export default class Input extends Component {
         onChangeText={input.onChange}
         focused={this.state.focused}
         focusedColor={focusedColor}
+        textColor={textColor}
         selectionColor={focusedColor ? focusedColor : 'white'}
         style={style}
         placeholder={placeholder}

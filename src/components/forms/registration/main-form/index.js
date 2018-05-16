@@ -39,18 +39,31 @@ class MainForm extends Component {
 
     return (
       <View>
-        <Title style={StyledTitle}>Регистрация</Title>
+        <Title style={StyledTitle}>Registration</Title>
         <DescriptionWrapper>
           <Description>
-            Во время регистрации приложение создаст
-            ключ безопасности для восстановления
-            доступа с любых устройств
+            During registration, the application will create security key for recovery
           </Description>
         </DescriptionWrapper>
         <View>
-          <Field name="nickname" focusedColor="black" component={Input} placeholder="Create login" />
-          <Field name="password" focusedColor="black" component={Input} placeholder="Password" />
-          <Field name="confirmPassword" focusedColor="black" component={Input} placeholder="Repeat password" />
+          <Field
+            name="nickname"
+            focusedColor="#7bb2ff"
+            component={Input}
+            placeholder="Create login"
+          />
+          <Field
+            name="password"
+            focusedColor="#7bb2ff"
+            component={Input}
+            placeholder="Password"
+          />
+          <Field
+            name="confirmPassword"
+            focusedColor="#7bb2ff"
+            component={Input}
+            placeholder="Repeat password"
+          />
           <Field
             name="ownServer"
             component={Checkbox}
@@ -60,7 +73,7 @@ class MainForm extends Component {
           />
         </View>
         { isChecked &&  <ServerInput
-          focusedColor="black"
+          focusedColor="#7bb2ff"
           name="server"
           component={Input}
           placeholder="https://servername.ru"

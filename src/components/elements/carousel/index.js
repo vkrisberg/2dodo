@@ -2,21 +2,17 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {
   Animated,
-  View,
-  Image,
   Dimensions,
-  Text,
-  ScrollView,
-  TouchableWithoutFeedback
+  ScrollView
 } from 'react-native';
 import {withNavigation} from 'react-navigation';
-import SvgUri from 'react-native-svg-uri';
+
 
 import Title from '../title';
 import routeEnum from '../../../enums/route-enum';
 import castleTowers from './img/castle-towers.png';
-import arrowIcon from './img/arrow.svg';
 import BackgroundContainer from '../../../containers/background-container';
+import Skip from '../skip';
 import {
   TowersImage,
   Track,
@@ -25,10 +21,7 @@ import {
   ItemText,
   ItemTitle,
   ItemWrap,
-  Skip,
-  Bar,
-  SkipWrapper,
-  SvgWrapper
+  Bar
 } from './styles';
 
 const deviceWidth = Dimensions.get('window').width;
@@ -51,6 +44,8 @@ class Carousel extends PureComponent {
       navigate: PropTypes.func
     })
   }
+
+  toLogin = () => this.props.navigation.navigate(routeEnum.Login)
 
   render() {
     const { data } = this.props;
@@ -107,16 +102,9 @@ class Carousel extends PureComponent {
         <BarContainer>
           { barArray }
         </BarContainer>
-        <TouchableWithoutFeedback onPress={this.props.onSkip}>
-          <SkipWrapper>
-            <Skip>
-              Skip all features
-            </Skip>
-            <SvgWrapper>
-              <SvgUri source={arrowIcon} />
-            </SvgWrapper>
-          </SkipWrapper>
-        </TouchableWithoutFeedback>
+        <Skip onSkip={this.toLogin}>
+          Skip this feature
+        </Skip>
       </BackgroundContainer>
     );
   }

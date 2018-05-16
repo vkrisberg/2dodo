@@ -1,7 +1,6 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {
-  View,
   TouchableWithoutFeedback,
   ViewPropTypes
 } from 'react-native';
@@ -16,14 +15,15 @@ const hitSlop = {
   right: 8
 };
 
-export default class RoundCheckbox extends PureComponent {
+export default class Checkbox extends PureComponent {
   
   static propTypes = {
     onPress: PropTypes.func.isRequired,
     checked: PropTypes.bool,
     style: ViewPropTypes.style,
     label: PropTypes.string,
-    color: PropTypes.string
+    color: PropTypes.string,
+    labelPadding: PropTypes.number
   };
 
   static defaultProps = {
@@ -35,14 +35,15 @@ export default class RoundCheckbox extends PureComponent {
       style,
       color,
       label,
-      checked
+      checked,
+      labelPadding
     } = this.props;
 
     return (
       <TouchableWithoutFeedback hitSlop={hitSlop} onPress={this._onPress}>
         <CommonWrapper style={style}>
-          <Label color={color}>{label}</Label>
-          <Icon checked={checked} />
+          <Label paddingLeft={labelPadding} color={color}>{label}</Label>
+          <Icon color={color} checked={checked} />
         </CommonWrapper>
       </TouchableWithoutFeedback>
     );

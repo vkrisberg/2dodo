@@ -5,9 +5,9 @@ export const LogoContainer = styled.View`
   width: 80;
   align-items: center;
   justify-content: center;
-  margin-top: ${props => props.flex ? 0 : 80};
-  flex: ${props => props.flex ? 1 : 0}
-  ${props => props.style && props.style}
+  margin-top: ${props => props.isFlex ? 0 : 80};
+  flex: ${props => props.isFlex ? 1 : 0}
+  ${({style}) => style && style}
 `;
 
 export const LogoIcon = styled.Image`

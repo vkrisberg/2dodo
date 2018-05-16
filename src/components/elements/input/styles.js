@@ -13,7 +13,7 @@ export const StyledInput = styled.TextInput`
   border-color: #ced9e8;
   border-width: 1;
   margin-bottom: 15;
-  color: ${props => getColor(props)};
+  color: ${props => props.textColor || 'black'};
   padding: 15px;
   border-radius: 40;
   ${props => props.focused && inputFocused(props)}

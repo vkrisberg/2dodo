@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {View, Text} from 'react-native';
 import {Field, reduxForm} from 'redux-form';
 import PropTypes from 'prop-types';
 
@@ -7,7 +6,12 @@ import PropTypes from 'prop-types';
 import Input from '../../elements/input';
 import Checkbox from '../../elements/checkbox';
 import Button from '../../elements/button';
-import styles from './styles';
+import {
+  Security,
+  StyledCheckbox,
+  Container,
+  SecurityContainer
+} from './styles';
 
 class LoginForm extends Component {
 
@@ -19,30 +23,41 @@ class LoginForm extends Component {
     super(props);
 
     this.state = {
-      isChecked: true
+      isChecked: false
     };
   }
 
+  newKey = () => this.setState({isChecked: !this.state.isChecked})
+
   render() {
     return (
-      <View>
-        <Field component={Input} name="nickname" placeholder="Логин"/>
-        <Field component={Input} name="password" placeholder="Пароль"/>
-        <View style={{marginTop: 10, marginBottom: 25}}>
-          <Text style={styles.security}>For best security</Text>
-          <Field
-            style={styles.checkbox}
+      <Container>
+        <Field
+          textColor="white"
+          component={Input}
+          name="nickname"
+          placeholder="Логин"
+        />
+        <Field
+          textColor="white"
+          component={Input}
+          name="password"
+          placeholder="Пароль"
+        />
+        <SecurityContainer>
+          <Security>For best security</Security>
+          <StyledCheckbox
             name="createNewKey"
             component={Checkbox}
+            color="white"
+            labelPadding={10}
             checked={this.state.isChecked}
-            onValueChange={() => {
-              this.setState({isChecked: !this.state.isChecked});
-            }}
+            onPress={this.newKey}
             label="Create a new key"
           />
-        </View>
+        </SecurityContainer>
         <Button onPress={this.props.onSubmit}>Enter</Button>
-      </View>
+      </Container>
     );
   }
 }

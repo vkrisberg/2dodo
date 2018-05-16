@@ -26,7 +26,7 @@ export default class Icon extends PureComponent {
   )
 
   render() {
-    const { checked } = this.props;
+    const { checked, color } = this.props;
 
     return (
       <Svg height="30" width="30">
@@ -35,9 +35,9 @@ export default class Icon extends PureComponent {
             cx="16"
             cy="12"
             r="11"
-            stroke={checked ? "#62a3ff" : 'black'}
+            stroke={checked ? "#62a3ff" : color || 'black'}
             strokeWidth="2"
-            fill={checked ? '#62a3ff': 'white'}
+            fill={checked ? '#62a3ff': 'transparent'}
           />
         </G>
         {checked && this.getMark()}

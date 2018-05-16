@@ -33,12 +33,6 @@ export const ItemText = styled.Text`
   color: white;
 `;
 
-export const Skip = styled.Text`
-  margin-bottom: 75;
-  margin-right: 8;
-  color: white;
-`;
-
 export const ItemWrap = styled.View`
   align-items: center;
   width: ${props => props.width};
@@ -60,12 +54,4 @@ export const Track = styled.View`
   height: 9;
   border-radius: 70;
   margin-left: ${props => props.marginLeft}
-`;
-
-export const SkipWrapper = styled.View`
-  flexDirection: row
-`;
-
-export const SvgWrapper = styled.View`
-  margin-top: 6;
 `;
