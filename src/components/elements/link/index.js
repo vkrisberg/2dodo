@@ -25,7 +25,7 @@ class Link extends PureComponent {
 
     return (
       <TouchableOpacity onPress={this.handleLink}>
-        <Text style={[style, {color: color === 'blue' ? '#6699CC' : 'white'}]}>{ label || children }</Text>
+        <Text style={[style, {color: color || 'white'}]}>{ label || children }</Text>
       </TouchableOpacity>
     );
   }

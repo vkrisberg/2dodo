@@ -1,69 +1,71 @@
-import { StyleSheet } from 'react-native';
+import styled from 'styled-components';
+import {Animated} from 'react-native';
 
-export default StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'transparent'
-  },
+export const TowersImage = styled.Image`
+  position: absolute;
+  width: 202;
+  height: 134;
+  margin-top: 150;
+  left: 20%;
+`;
 
-  barContainer: {
-    position: 'absolute',
-    zIndex: 2,
-    bottom: 140,
-    flexDirection: 'row'
-  },
+export const BarContainer = styled.View`
+  position: absolute;
+  zIndex: 2;
+  bottom: 140;
+  flex-direction: row;
+`;
 
-  track: {
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    overflow: 'hidden',
-    width: 9,
-    height: 9,
-    borderRadius: 70
-  },
+export const ItemImage = styled.Image`
+  width: 130;
+  height: 206;
+  margin-bottom: 40;
+  margin-top: 80;
+`;
 
-  bar: {
-    backgroundColor: 'white',
-    width: 9,
-    height: 9,
-    position: 'absolute',
-    left: 0,
-    top: 0,
-  },
+export const ItemTitle = {
+  color: 'white'
+};
 
-  itemImage: {
-    width: 130,
-    height: 206,
-    marginBottom: 40,
-    marginTop: 80
-  },
+export const ItemText = styled.Text`
+  width: 236;
+  text-align: center;
+  color: white;
+`;
 
-  towers: {
-    position: 'absolute',
-    width: 202,
-    height: 134,
-    marginTop: 150,
-    left: '20%'
-  },
+export const Skip = styled.Text`
+  margin-bottom: 75;
+  margin-right: 8;
+  color: white;
+`;
 
-  itemWrap: {
-    alignItems: 'center'
-  },
+export const ItemWrap = styled.View`
+  align-items: center;
+  width: ${props => props.width};
+`;
 
-  itemTitle: {
-    color: 'white'
-  },
+export const Bar = Animated.createAnimatedComponent(styled.View`
+  background-color: white;
+  width: 9;
+  height: 9;
+  position: absolute;
+  left: 0;
+  top: 0;
+`);
 
-  itemText: {
-    width: 236,
-    textAlign: 'center',
-    color: 'white'
-  },
-  
-  skip: {
-    marginBottom: 75,
-    color: 'white'
-  }
-  
-});
+export const Track = styled.View`
+  background-color: rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+  width: 9;
+  height: 9;
+  border-radius: 70;
+  margin-left: ${props => props.marginLeft}
+`;
+
+export const SkipWrapper = styled.View`
+  flexDirection: row
+`;
+
+export const SvgWrapper = styled.View`
+  margin-top: 6;
+`;

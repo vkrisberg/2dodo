@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {
   Animated,
@@ -9,13 +9,27 @@ import {
   ScrollView,
   TouchableWithoutFeedback
 } from 'react-native';
-import { withNavigation } from 'react-navigation';
+import {withNavigation} from 'react-navigation';
+import SvgUri from 'react-native-svg-uri';
 
-
-import styles from './styles';
 import Title from '../title';
 import routeEnum from '../../../enums/route-enum';
 import castleTowers from './img/castle-towers.png';
+import arrowIcon from './img/arrow.svg';
+import BackgroundContainer from '../../../containers/background-container';
+import {
+  TowersImage,
+  Track,
+  BarContainer,
+  ItemImage,
+  ItemText,
+  ItemTitle,
+  ItemWrap,
+  Skip,
+  Bar,
+  SkipWrapper,
+  SvgWrapper
+} from './styles';
 
 const deviceWidth = Dimensions.get('window').width;
 const barWidth = 110;
@@ -45,14 +59,14 @@ class Carousel extends PureComponent {
 
     data.forEach((item, i) => {
       const thisItem = (
-        <View key={`item${i}`} style={[styles.itemWrap, { width: deviceWidth }]}>
-          <Image source={castleTowers} style={styles.towers}  />
-          <Image source={item.image} style={styles.itemImage} />
-          <Title textStyle={styles.itemTitle}>{item.title}</Title>
-          <Text style={styles.itemText}>
+        <ItemWrap key={`item${i}`} width={deviceWidth}>
+          <TowersImage source={castleTowers} />
+          <ItemImage source={item.image} />
+          <Title textStyle={ItemTitle}>{item.title}</Title>
+          <ItemText>
             {item.text}
-          </Text>
-        </View>
+          </ItemText>
+        </ItemWrap>
       );
 
       imageArray.push(thisItem);
@@ -64,35 +78,19 @@ class Carousel extends PureComponent {
       });
 
       const thisBar = (
-        <View
+        <Track
           key={`bar${i}`}
-          style={[
-            styles.track,
-            {
-              marginLeft: i === 0 ? 0 : barSpace,
-            },
-          ]}
+          marginLeft={i === 0 ? 0 : barSpace}
         >
-          <Animated.View
-            style={[
-              styles.bar,
-              {
-                transform: [
-                  { translateX: scrollBarVal },
-                ],
-              },
-            ]}
-          />
-        </View>
+          <Bar translateX={scrollBarVal} />
+        </Track>
       );
 
       barArray.push(thisBar);
     });
 
     return(
-      <View
-        style={styles.container}
-      >
+      <BackgroundContainer>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -106,18 +104,20 @@ class Carousel extends PureComponent {
         >
           { imageArray }
         </ScrollView>
-        <View style={styles.barContainer}>
+        <BarContainer>
           { barArray }
-        </View>
+        </BarContainer>
         <TouchableWithoutFeedback onPress={this.props.onSkip}>
-          <View>
-            <Text style={styles.skip}>
+          <SkipWrapper>
+            <Skip>
               Skip all features
-            </Text>
-
-          </View>
+            </Skip>
+            <SvgWrapper>
+              <SvgUri source={arrowIcon} />
+            </SvgWrapper>
+          </SkipWrapper>
         </TouchableWithoutFeedback>
-      </View>
+      </BackgroundContainer>
     );
   }
 }

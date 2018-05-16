@@ -1,23 +1,30 @@
 import React, {Component} from 'react';
-import {
-  View,
-  Text, AsyncStorage
-} from 'react-native';
 import {connect} from 'react-redux';
 import {withNavigation} from 'react-navigation';
 import PropTypes from 'prop-types';
+import {
+  View,
+  AsyncStorage,
+  TouchableWithoutFeedback
+} from 'react-native';
 
 import Link from '../../components/elements/link';
-import styles from './styles';
 import LoginForm from '../../components/forms/login';
 import routeEnum from '../../enums/route-enum';
 import Logo from '../../components/elements/logo';
 import BackgroundContainer from '../background-container';
-import Button from '../../components/elements/button';
 import {ws} from '../../utils';
 import CONFIG from '../../config';
 import {storageEnum} from '../../enums';
 import {accountActions} from '../../store/actions';
+import backgroundImage from './img/background.png';
+import {
+  StyledText,
+  StyledLink,
+  StyledRegistration,
+  StyledKeysImport,
+  RegistrationLabel
+} from './styles';
 
 class Login extends Component {
 
@@ -61,17 +68,21 @@ class Login extends Component {
 
   render() {
     return (
-      <BackgroundContainer>
-        <Logo/>
-        <Text style={styles.text}>Please enter your email and pass</Text>
+      <BackgroundContainer image={backgroundImage}>
+        <Logo flex={false}/>
+        <StyledText>Please enter your email and pass</StyledText>
         <LoginForm onSubmit={this.onLogin}/>
         <View>
-          <Link style={styles.link} to={routeEnum.ForgotPassword}>Forget password?</Link>
-          <View style={styles.registration}>
-            <Text style={{marginRight: 10, color: '#ced9e8'}}>First time in app?</Text>
-            <Link color={'blue'} to={routeEnum.Registration}>Registration</Link>
-          </View>
-          <Button wrapperStyle={{backgroundColor: 'grey'}} onPress={this.toKeyImport}>Key import</Button>
+          <StyledLink to={routeEnum.ForgotPassword}>Forget password?</StyledLink>
+          <StyledRegistration>
+            <RegistrationLabel>First time in app?</RegistrationLabel>
+            <Link color="#4d8fdb" to={routeEnum.Registration}>Registration</Link>
+          </StyledRegistration>
+          <TouchableWithoutFeedback  onPress={this.toKeyImport}>
+            <StyledKeysImport>
+              Key import
+            </StyledKeysImport>
+          </TouchableWithoutFeedback>
         </View>
       </BackgroundContainer>
     );

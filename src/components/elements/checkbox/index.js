@@ -1,14 +1,13 @@
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {
   View,
   TouchableWithoutFeedback,
-  ViewPropTypes,
-  Text
+  ViewPropTypes
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
 
-import styles from './styles';
+import {CommonWrapper, Label} from './styles';
+import Icon from './icon';
 
 const hitSlop = {
   top: 8,
@@ -18,75 +17,38 @@ const hitSlop = {
 };
 
 export default class RoundCheckbox extends PureComponent {
+  
   static propTypes = {
-    onValueChange: PropTypes.func,
-    icon: PropTypes.string,
-    size: PropTypes.number,
-    backgroundColor: PropTypes.string,
-    iconColor: PropTypes.string,
-    borderColor: PropTypes.string,
+    onPress: PropTypes.func.isRequired,
     checked: PropTypes.bool,
     style: ViewPropTypes.style,
-    label: PropTypes.string
+    label: PropTypes.string,
+    color: PropTypes.string
   };
 
   static defaultProps = {
-    icon: 'ios-checkmark',
-    size: 26,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    iconColor: 'white',
-    borderColor: 'white',
     checked: false,
-    onValueChange: () => {},
   };
 
   render() {
     const {
-      size,
       style,
-      icon,
-      checked,
-      iconColor
+      color,
+      label,
+      checked
     } = this.props;
-    const iconSize = parseInt(size * 1.3);
 
     return (
       <TouchableWithoutFeedback hitSlop={hitSlop} onPress={this._onPress}>
-        <View style={style}>
-          <Text style={styles.label}>{this.props.label}</Text>
-          <View
-            shouldRasterizeIOS={true}
-            style={[this.getIconWrapperStyle(), styles.commonWrapperStyles]}
-          >
-            <Icon
-              name={icon}
-              color={checked ? iconColor : 'transparent'}
-              style={{ height: iconSize, fontSize: iconSize, backgroundColor: 'transparent' }}
-            />
-          </View>
-        </View>
+        <CommonWrapper style={style}>
+          <Label color={color}>{label}</Label>
+          <Icon checked={checked} />
+        </CommonWrapper>
       </TouchableWithoutFeedback>
     );
   }
 
   _onPress = () => {
-    this.props.onValueChange(!this.props.checked);
+    this.props.onPress(!this.props.checked);
   };
-
-  getIconWrapperStyle() {
-    const {
-      size,
-      checked,
-      backgroundColor,
-      borderColor
-    } = this.props;
-
-    return {
-      width: size,
-      height: size,
-      backgroundColor: checked ? backgroundColor : 'transparent',
-      borderColor,
-      borderRadius: size / 2,
-    };
-  }
 }

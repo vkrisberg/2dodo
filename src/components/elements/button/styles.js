@@ -1,23 +1,26 @@
-import { StyleSheet } from 'react-native';
+import styled from 'styled-components';
 
-export default StyleSheet.create({
-  container: {
-    alignItems: 'center'
-  },
+const getColor = ({ color }) => color || 'white';
 
-  button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderColor: 'white',
-    borderWidth: 2,
-    backgroundColor: 'transparent',
-    width: 205,
-    height: 50,
-    padding: 10,
-    borderRadius: 70
-  },
+export const Container = styled.View`
+  align-items: center;
+  ${props => props.style && props.style}
+`;
 
-  buttonText: {
-    color: 'white'
-  }
-});
+export const StyledButton = styled.TouchableOpacity`
+  align-items: center;
+  justify-content: center;
+  border-color: ${props => getColor(props)};
+  border-width: 2;
+  background-color: transparent;
+  width: 205;
+  height: 50;
+  padding: 10px;
+  border-radius: 70;
+  ${props => props.wrapperStyle && props.wrapperStyle}
+`;
+
+export const ButtonText = styled.Text`
+  color: ${props => getColor(props)};
+  ${props => props.textStyle && props.textStyle}
+`;

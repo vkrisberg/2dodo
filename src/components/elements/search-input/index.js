@@ -1,13 +1,11 @@
 import React, { PureComponent } from 'react';
-import { View, TextInput } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { View, Text, TextInput } from 'react-native';
 
 export default class SearchInput extends PureComponent {
   render() {
     return (
       <View>
-        <Icon
-          name="ios-search-outline" />
+        <Text>132</Text>
         <TextInput />
       </View>
     );
