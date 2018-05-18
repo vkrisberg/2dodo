@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {AsyncStorage, View, Text} from 'react-native';
+import {AsyncStorage} from 'react-native';
 import {connect} from 'react-redux';
 import {withNavigation} from 'react-navigation';
 import PropTypes from 'prop-types';
@@ -27,7 +27,7 @@ class Registration extends Component {
   };
 
   state = {
-    page: 3,
+    page: 1,
   };
 
   nextPage = () => {

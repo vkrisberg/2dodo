@@ -1,17 +1,17 @@
-import React, { Component} from 'react';
-import { reduxForm, Field } from 'redux-form';
-import { withNavigation } from 'react-navigation';
+import React, {Component} from 'react';
+import {reduxForm, Field} from 'redux-form';
+import {withNavigation} from 'react-navigation';
 
 import Title from '../../../elements/title';
 import Input from '../../../elements/input';
 import Button from '../../../elements/button';
+import AvatarIcon from '../../../icons/avatar-icon';
+import ThemeButton from './components/theme-button';
 import {
   StyledTitle,
   DescriptionWrapper,
   Description,
   ButtonWrapper,
-  ThemeButton,
-  ThemeButtonText,
   StyledImage,
   Container
 } from './styles';
@@ -38,14 +38,12 @@ class SettingsForm extends Component {
             this step until better times
           </Description>
         </DescriptionWrapper>
-        <StyledImage />
+        <StyledImage>
+          <AvatarIcon />
+        </StyledImage>
         <ButtonWrapper>
-          <ThemeButton marginRight={15} onPress={this.setDayTheme}>
-            <ThemeButtonText>Day</ThemeButtonText>
-          </ThemeButton>
-          <ThemeButton night onPress={this.setNightTheme}>
-            <ThemeButtonText night>Night</ThemeButtonText>
-          </ThemeButton>
+          <ThemeButton markColor="black" marginRight={15} />
+          <ThemeButton markColor="#333" night />
         </ButtonWrapper>
         <Field
           focusedColor="#7bb2ff"

@@ -17,21 +17,6 @@ export const DescriptionWrapper = styled.View`
   margin-bottom: 25;
 `;
 
-export const ThemeButton = styled.TouchableOpacity`
-  width: 140;
-  height: 43;
-  justify-content: center;
-  border-radius: 70;
-  background-color: ${props => props.night ? 'black' : '#f4f4f4'}
-  margin-right: ${props => props.marginRight || 0};
-`;
-
-export const ThemeButtonText = styled.Text`
-  align-self: flex-start;
-  margin-left: 15;
-  color: ${props => props.night ? 'white' : 'black'}
-`;
-
 export const ButtonWrapper = styled.View`
   flex-wrap: wrap;
   align-items: flex-start;
@@ -45,6 +30,8 @@ export const StyledImage = styled.View`
   background-color: #e4e4e4;
   margin-bottom: 15;
   border-radius: 70;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const Container = styled.View`

@@ -4,7 +4,6 @@ import {withNavigation} from 'react-navigation';
 import PropTypes from 'prop-types';
 import {
   View,
-  AsyncStorage,
   TouchableWithoutFeedback
 } from 'react-native';
 

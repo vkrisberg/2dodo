@@ -76,12 +76,12 @@ const MainStack = StackNavigator({
     screen: PasswordApprove
   }
 }, {
-  initialRouteName: 'Registration',
+  initialRouteName: 'Contacts',
   gesturesEnabled: true,
   drawerLockMode: 'locked-closed',
   navigationOptions: {
     header:false,
-    headerBackTitle: null,
+    headerBackTitle: null
   },
   transitionConfig: TransitionConfiguration
 });
