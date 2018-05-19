@@ -7,8 +7,8 @@ import {accountActions} from '../../store/actions';
 import Logo from '../../components/elements/logo';
 import BackgroundContainer from '../background-container';
 import {routeEnum, storageEnum} from '../../enums';
+import {StyledText} from './styles';
 
-import styles from './styles';
 import CONFIG from '../../config';
 import {ws} from '../../utils';
 
@@ -17,6 +17,7 @@ class Preload extends Component {
   static propTypes = {
     account: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
+    navigation: PropTypes.shape({})
   };
 
   componentDidMount() {
@@ -60,11 +61,11 @@ class Preload extends Component {
 
   render() {
     return (
-      <BackgroundContainer style={styles.container}>
+      <BackgroundContainer>
         <Logo/>
-        <Text style={styles.text}>
+        <StyledText>
           Do what you want
-        </Text>
+        </StyledText>
       </BackgroundContainer>
     );
   }

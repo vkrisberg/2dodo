@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View } from 'react-native';
 import { Field, reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
 
 import Button from '../../../elements/button';
 import Checkbox from '../../../elements/checkbox';
 import Input from '../../../elements/input';
+import {
+  Description,
+  StyledTitle,
+  DescriptionWrapper,
+  ServerInput
+} from './styles';
 import Title from '../../../elements/title';
-import styles from './styles';
 // import validate from '../validate';
 
 class MainForm extends Component {
@@ -34,27 +39,46 @@ class MainForm extends Component {
 
     return (
       <View>
-        <Title style={styles.title}>Регистрация</Title>
-        <View style={styles.descriptionWrapper}>
-          <Text style={styles.description}>
-            Во время регистрации приложение создаст
-            ключ безопасности для восстановления
-            доступа с любых устройств
-          </Text>
-        </View>
+        <Title style={StyledTitle}>Registration</Title>
+        <DescriptionWrapper>
+          <Description>
+            During registration, the application will create security key for recovery
+          </Description>
+        </DescriptionWrapper>
         <View>
-          <Field name="nickname" component={Input} placeholder="Создайте Логин" />
-          <Field name="password" component={Input} placeholder="Пароль" />
-          <Field name="confirmPassword" component={Input} placeholder="Повторить пароль" />
+          <Field
+            name="nickname"
+            focusedColor="#7bb2ff"
+            component={Input}
+            placeholder="Create login"
+          />
+          <Field
+            name="password"
+            focusedColor="#7bb2ff"
+            component={Input}
+            placeholder="Password"
+          />
+          <Field
+            name="confirmPassword"
+            focusedColor="#7bb2ff"
+            component={Input}
+            placeholder="Repeat password"
+          />
           <Field
             name="ownServer"
             component={Checkbox}
-            label="Применить свои параметры сервера"
-            onClick={this.toggleServerInput}
+            checked={isChecked}
+            label="Use a special servers parameters"
+            onPress={this.toggleServerInput}
           />
         </View>
-        { isChecked &&  <Field name="server" style={styles.serverInput} component={Input} placeholder="https://servername.ru" /> }
-        <Button onPress={handleSubmit}>Продолжить</Button>
+        { isChecked &&  <ServerInput
+          focusedColor="#7bb2ff"
+          name="server"
+          component={Input}
+          placeholder="https://servername.ru"
+        /> }
+        <Button color="black" onPress={handleSubmit}>Continue</Button>
       </View>
     );
   }

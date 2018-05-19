@@ -1,19 +1,21 @@
-import { StyleSheet } from 'react-native';
+import styled from 'styled-components';
 
-export default StyleSheet.create({
-  input: {
-    width: 300,
-    height: 45,
-    borderColor: '#ced9e8',
-    borderWidth: 1,
-    marginBottom: 15,
-    color: 'white',
-    padding: 15,
-    borderRadius: 40
-  },
+const getColor = ({focusedColor}) => focusedColor ? focusedColor : 'white';
 
-  inputFocused: {
-    borderWidth: 2,
-    borderColor: 'white'
-  }
+const inputFocused = (props) => ({
+  'border-width': 2,
+  'border-color': `${getColor(props)}`
 });
+
+export const StyledInput = styled.TextInput`
+  width: 300;
+  height: 45;
+  border-color: #ced9e8;
+  border-width: 1;
+  margin-bottom: 15;
+  color: ${props => props.textColor || 'black'};
+  padding: 15px;
+  border-radius: 40;
+  ${props => props.focused && inputFocused(props)}
+  ${props => props.style && props.style}
+`;

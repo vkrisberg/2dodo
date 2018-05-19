@@ -1,14 +1,10 @@
-import { StyleSheet } from 'react-native';
+import styled from 'styled-components';
 
-export default StyleSheet.create({
-  commonWrapperStyles: {
-    borderWidth: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
+export const Label = styled.Text`
+  color: ${props => props.color || 'black'};
+  padding-right: ${({paddingLeft}) => paddingLeft ? paddingLeft : 60};
+`;
 
-  label: {
-    color: 'white',
-    marginRight: 10
-  }
-});
+export const CommonWrapper = styled.View`
+  flex-direction: row;
+`;

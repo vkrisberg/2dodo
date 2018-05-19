@@ -4,6 +4,7 @@ import {Provider} from 'react-redux';
 import RNDeviceInfo from 'react-native-device-info';
 import RNLanguages from 'react-native-languages';
 import I18n, {setTranslations} from 'redux-i18n';
+
 import {accountActions} from './store/actions';
 import translations from './translations';
 import store from './store/store';

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import { View, Image, Text } from 'react-native';
+import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 
 import Arrow from '../../components/elements/arrow';
 import styles from './styles';
 import routeEnum from '../../enums/route-enum';
-// import chatIcon from '../login/img/chat.png';
 import Title from '../../components/elements/title';
 import Button from '../../components/elements/button';
+import Logo from '../../components/elements/logo';
 
 class PasswordApprove extends Component {
 
@@ -21,11 +21,7 @@ class PasswordApprove extends Component {
     return (
       <View style={styles.container}>
         <Arrow onPress={this.returnToLogin} />
-        {/* <View style={styles.logo}>
-          <Image
-            source={chatIcon}
-          />
-        </View> */}
+        <Logo />
         <Title>Успех</Title>
         <Text style={styles.description}>
           Письмо с восстановлением пароля

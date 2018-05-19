@@ -1,23 +1,27 @@
 import { StyleSheet } from 'react-native';
+import styled from 'styled-components';
 
-export default StyleSheet.create({
-  description: {
-    textAlign: 'center',
-    marginHorizontal: 26,
-    width: 240
-  },
+import {Field} from 'redux-form';
 
-  descriptionWrapper: {
-    width: '100%',
-    marginBottom: 26
-  },
+export const Description = styled.Text`
+  text-align: center;
+  margin: 0 26px;
+  width: 240px;
+`;
 
-  title: {
-    paddingTop: 30
-  },
+export const DescriptionWrapper = styled.View`
+  width: 100%;
+  margin-bottom: 26px;
+`;
 
-  serverInput: {
-    marginTop: -10,
-    marginBottom: 30
-  }
-});
+export const StyledTitle = {
+  'padding-top': '100px',
+  'font-weight': 'bold',
+  'font-size': '16px',
+  'color': 'black'
+};
+
+export const ServerInput = styled(Field)`
+  margin-top: 10;
+  margin-bottom: 30;
+`;

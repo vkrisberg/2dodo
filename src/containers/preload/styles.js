@@ -1,11 +1,7 @@
-import { StyleSheet } from 'react-native';
+import styled from 'styled-components';
 
-export default StyleSheet.create({
-  text: {
-    alignSelf: 'center',
-    position: 'absolute',
-    bottom: 75,
-    fontSize: 15,
-    color: 'white'
-  }
-});
+export const StyledText = styled.Text`
+  align-self: center;
+  color: white;
+  bottom: 75;
+`;

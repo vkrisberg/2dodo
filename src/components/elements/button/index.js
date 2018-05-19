@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 
-import styles from './styles';
+import {Container, StyledButton, ButtonText} from './styles';
 
 export default class Button extends PureComponent {
   
@@ -17,7 +17,8 @@ export default class Button extends PureComponent {
     title: PropTypes.string,
     style: ViewPropTypes.style,
     wrapperStyle: ViewPropTypes.style,
-    textStyle: ViewPropTypes.style
+    textStyle: ViewPropTypes.style,
+    color: PropTypes.string
   }
   
   render() {
@@ -27,15 +28,16 @@ export default class Button extends PureComponent {
       title,
       style,
       wrapperStyle,
-      textStyle
+      textStyle,
+      color
     } = this.props;
 
     return (
-      <View style={[styles.container, style]}>
-        <TouchableOpacity style={[wrapperStyle, styles.button]} onPress={onPress} {...this.props} >
-          <Text style={[textStyle, styles.buttonText]}>{ children || title }</Text>
-        </TouchableOpacity>
-      </View>
+      <Container style={style}>
+        <StyledButton style={wrapperStyle} onPress={onPress} {...this.props} >
+          <ButtonText color={color} style={textStyle}>{ children || title }</ButtonText>
+        </StyledButton>
+      </Container>
     );
   }
 }
