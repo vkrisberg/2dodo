@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {withNavigation} from 'react-navigation';
 import PropTypes from 'prop-types';
 import {
+  AsyncStorage,
   View,
   TouchableWithoutFeedback
 } from 'react-native';
@@ -49,13 +50,12 @@ class Login extends Component {
   onLogin = async () => {
     const {dispatch, navigation} = this.props;
     let {deviceId, user, keys} = this.props.account;
+
     if (!user.nickname || !keys.hashKey) {
       user = JSON.parse(await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.user}`));
       keys = JSON.parse(await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.keys}`));
     }
-    // console.log('onLogin USER', user);
-    // console.log('onLogin KEYS', keys);
-    // console.log('onLogin DEVICE', deviceId);
+
     dispatch(accountActions.login({navigation, deviceId, user, keys}))
       .then(() => {
         this.wsConnect({deviceId, user, keys});
@@ -81,7 +81,7 @@ class Login extends Component {
             <RegistrationLabel>First time in app?</RegistrationLabel>
             <Link color="#4d8fdb" to={routeEnum.Registration}>Registration</Link>
           </StyledRegistration>
-          <TouchableWithoutFeedback  onPress={this.toKeyImport}>
+          <TouchableWithoutFeedback onPress={this.toKeyImport}>
             <StyledKeysImport>
               Key import
             </StyledKeysImport>

@@ -3,6 +3,7 @@ package com.tododo;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import io.realm.react.RealmReactPackage;
 import com.horcrux.svg.SvgPackage;
 import com.github.orhan.openpgp.RNOpenPGPPackage;
 import com.bitgo.randombytes.RandomBytesPackage;
@@ -31,6 +32,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RealmReactPackage(),
             new SvgPackage(),
             new RNOpenPGPPackage(),
             new RandomBytesPackage(),

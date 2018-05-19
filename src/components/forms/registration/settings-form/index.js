@@ -47,7 +47,7 @@ class SettingsForm extends Component {
         </ButtonWrapper>
         <Field
           focusedColor="#7bb2ff"
-          name="name"
+          name="firstName"
           component={Input}
           placeholder="Name"
         />

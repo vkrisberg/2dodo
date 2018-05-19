@@ -94,7 +94,6 @@ export default {
       try {
         const {publicKey, privateKey} = await pgplib.generateKey({name: data.name, email: data.email});
         const hashKey = hashlib.hexSha256(privateKey);
-        console.log('register hashKey', hashKey);
         data.publicKey = publicKey;
         data.privateKey = privateKey;
         data.hashKey = hashKey;

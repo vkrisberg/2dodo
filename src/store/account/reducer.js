@@ -7,7 +7,8 @@ const initState = {
   user: {
     nickname: '', // login
     username: '', // login@hostname
-    fullName: '', // first and last name
+    firstName: '',
+    secondName: '',
     email: '',
     avatar: '',
   },
@@ -140,9 +141,10 @@ export default reducer(initState, {
     const account = {
       user: {
         ...state.user,
-        nickname: data.nickname,
-        username: `${data.nickname}@${state.hostname}`,
-        fullName: data.fullName,
+        nickname: data.name,
+        username: `${data.name}@${state.hostname}`,
+        firstName: data.firstName,
+        secondName: data.secondName,
         email: data.email,
       },
       keys: {

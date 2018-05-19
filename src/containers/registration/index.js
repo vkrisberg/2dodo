@@ -45,16 +45,15 @@ class Registration extends Component {
       return;
     }
 
-    const nickname = (data.nickname || '').toLowerCase();
     const sendData = {
-      nickname,
-      name: `${nickname}@${account.hostname}`,
+      name: (data.nickname || '').toLowerCase(),
       email: (data.email || '').toLowerCase(),
       device_id: account.deviceId,
       device_name: account.deviceName,
       platform: account.platform,
       settings: null,
-      fullName: data.fullName || '',
+      firstName: data.firstName,
+      secondName: data.secondName,
     };
 
     dispatch(accountActions.register(sendData))
