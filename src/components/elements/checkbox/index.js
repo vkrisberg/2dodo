@@ -1,31 +1,55 @@
-import React, { Component } from 'react';
-import { View, Text, TouchableHighlight, ViewPropTypes } from 'react-native';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import CheckBox from 'react-native-check-box';
+import {
+  TouchableWithoutFeedback,
+  ViewPropTypes
+} from 'react-native';
 
-import styles from './styles';
+import {CommonWrapper, Label} from './styles';
+import Icon from './icon';
 
-export default class Checkbox extends Component {
+const hitSlop = {
+  top: 8,
+  bottom: 8,
+  left: 8,
+  right: 8
+};
 
+export default class Checkbox extends PureComponent {
+  
   static propTypes = {
+    onPress: PropTypes.func.isRequired,
+    checked: PropTypes.bool,
+    style: ViewPropTypes.style,
     label: PropTypes.string,
-    onClick: PropTypes.func,
-    style: ViewPropTypes.style
-  }
+    color: PropTypes.string,
+    labelPadding: PropTypes.number
+  };
 
-  handleClick = () => {
-    const { onClick } = this.props;
-
-    return onClick ? onClick() : null;
-  }
+  static defaultProps = {
+    checked: false,
+  };
 
   render() {
+    const {
+      style,
+      color,
+      label,
+      checked,
+      labelPadding
+    } = this.props;
+
     return (
-      <CheckBox
-        style={[this.props.style, styles.checkbox]}
-        leftText={this.props.label}
-        onClick={this.handleClick}
-      />
+      <TouchableWithoutFeedback hitSlop={hitSlop} onPress={this._onPress}>
+        <CommonWrapper style={style}>
+          <Label paddingLeft={labelPadding} color={color}>{label}</Label>
+          <Icon color={color} checked={checked} />
+        </CommonWrapper>
+      </TouchableWithoutFeedback>
     );
   }
+
+  _onPress = () => {
+    this.props.onPress(!this.props.checked);
+  };
 }

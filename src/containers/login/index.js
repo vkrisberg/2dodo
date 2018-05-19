@@ -1,54 +1,97 @@
 import React, {Component} from 'react';
-import {
-  Image,
-  View,
-  Text
-} from 'react-native';
 import {connect} from 'react-redux';
+import {withNavigation} from 'react-navigation';
 import PropTypes from 'prop-types';
+import {
+  AsyncStorage,
+  View,
+  TouchableWithoutFeedback
+} from 'react-native';
 
-import Title from '../../components/elements/title';
 import Link from '../../components/elements/link';
-import styles from './styles';
 import LoginForm from '../../components/forms/login';
 import routeEnum from '../../enums/route-enum';
-import chatIcon from './img/chat.png';
+import Logo from '../../components/elements/logo';
+import BackgroundContainer from '../background-container';
+import {ws} from '../../utils';
+import CONFIG from '../../config';
+import {storageEnum} from '../../enums';
+import {accountActions} from '../../store/actions';
+import backgroundImage from './img/background.png';
+import {
+  StyledText,
+  StyledLink,
+  StyledRegistration,
+  StyledKeysImport,
+  RegistrationLabel
+} from './styles';
 
 class Login extends Component {
 
   static propTypes = {
+    account: PropTypes.object,
     dispatch: PropTypes.func.isRequired,
+    navigation: PropTypes.shape({navigate: PropTypes.func})
   };
 
   static contextTypes = {
     t: PropTypes.func.isRequired,
   };
 
-  componentDidMount() {
-    console.log(this.props);
-  }
+  wsConnect = ({deviceId, user, keys}) => {
+    ws.init({
+      deviceId,
+      username: user.username,
+      password: keys.hashKey,
+      navigation: this.props.navigation,
+    });
+  };
+
+  onLogin = async () => {
+    const {dispatch, navigation} = this.props;
+    let {deviceId, user, keys} = this.props.account;
+
+    if (!user.nickname || !keys.hashKey) {
+      user = JSON.parse(await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.user}`));
+      keys = JSON.parse(await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.keys}`));
+    }
+
+    dispatch(accountActions.login({navigation, deviceId, user, keys}))
+      .then(() => {
+        this.wsConnect({deviceId, user, keys});
+      })
+      .catch((error) => {
+        console.log('login error', error);
+      });
+  };
+
+  toKeyImport = () => {
+    // return this.props.navigation.navigate(routeEnum.ImportKey);
+  };
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.logo}>
-          <Image
-            source={chatIcon}
-          />
-        </View>
-        <Title>Добро пожаловать</Title>
-        <LoginForm />
+      <BackgroundContainer image={backgroundImage}>
+        <Logo flex={false}/>
+        <StyledText>Please enter your email and pass</StyledText>
+        <LoginForm onSubmit={this.onLogin}/>
         <View>
-          <Link style={styles.link}  color="blue" to={routeEnum.ForgotPassword}>Восстановление пароля</Link>
-          <View style={styles.registration}>
-            <Text style={{marginRight: 10}}>Первый раз в приложении?</Text>
-            <Link color="blue" to={routeEnum.Registration}>Регистрация</Link>
-          </View>
-          <Link color="blue" style={styles.keyImport} to={routeEnum.KeyImport}>Импортировать ключи</Link>
+          <StyledLink to={routeEnum.ForgotPassword}>Forget password?</StyledLink>
+          <StyledRegistration>
+            <RegistrationLabel>First time in app?</RegistrationLabel>
+            <Link color="#4d8fdb" to={routeEnum.Registration}>Registration</Link>
+          </StyledRegistration>
+          <TouchableWithoutFeedback onPress={this.toKeyImport}>
+            <StyledKeysImport>
+              Key import
+            </StyledKeysImport>
+          </TouchableWithoutFeedback>
         </View>
-      </View>
+      </BackgroundContainer>
     );
   }
 }
 
-export default connect(state => ({}))(Login);
+export default connect(state => ({
+  account: state.account,
+}))(withNavigation(Login));

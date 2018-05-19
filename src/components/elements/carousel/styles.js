@@ -1,56 +1,57 @@
-import { StyleSheet } from 'react-native';
+import styled from 'styled-components';
+import {Animated} from 'react-native';
 
-export default StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'white'
-  },
+export const TowersImage = styled.Image`
+  position: absolute;
+  width: 202;
+  height: 134;
+  margin-top: 150;
+  left: 20%;
+`;
 
-  barContainer: {
-    position: 'absolute',
-    zIndex: 2,
-    bottom: 106,
-    flexDirection: 'row'
-  },
+export const BarContainer = styled.View`
+  position: absolute;
+  zIndex: 2;
+  bottom: 140;
+  flex-direction: row;
+`;
 
-  track: {
-    backgroundColor: '#d7d7d7',
-    overflow: 'hidden',
-    width: 8,
-    height: 8,
-    borderRadius: 70
-  },
+export const ItemImage = styled.Image`
+  width: 130;
+  height: 206;
+  margin-bottom: 40;
+  margin-top: 80;
+`;
 
-  bar: {
-    backgroundColor: '#949494',
-    width: 8,
-    height: 8,
-    position: 'absolute',
-    left: 0,
-    top: 0,
-  },
+export const ItemTitle = {
+  color: 'white'
+};
 
-  image: {
-    width: 180,
-    height: 180,
-    transform: [{ rotate: '45deg' }],
-    marginBottom: 60,
-    marginTop: 80
-  },
+export const ItemText = styled.Text`
+  width: 236;
+  text-align: center;
+  color: white;
+`;
 
-  itemWrap: {
-    alignItems: 'center'
-  },
+export const ItemWrap = styled.View`
+  align-items: center;
+  width: ${props => props.width};
+`;
 
-  itemText: {
-    width: 236,
-    textAlign: 'center'
-  },
-  
-  skip: {
-    marginBottom: 45
-  }
-  
-});
+export const Bar = Animated.createAnimatedComponent(styled.View`
+  background-color: white;
+  width: 9;
+  height: 9;
+  position: absolute;
+  left: 0;
+  top: 0;
+`);
+
+export const Track = styled.View`
+  background-color: rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+  width: 9;
+  height: 9;
+  border-radius: 70;
+  margin-left: ${props => props.marginLeft}
+`;

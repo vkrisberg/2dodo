@@ -1,38 +1,35 @@
 import { StyleSheet } from 'react-native';
+import styled from 'styled-components';
 
-export default StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-  },
+import Link from '../../components/elements/link';
 
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
+export const StyledText = styled.Text`
+  color: white;
+  margin-bottom: 20;
+  margin-top: 80;
+  font-size: 18;
+`;
 
-  logo: {
-    width: 65,
-    height: 65,
-    marginTop: 25,
-    marginBottom: 30
-  },
+export const StyledLink = styled(Link)`
+  margin-top: 20;
+  margin-bottom: 10;
+  align-self: center;
+`;
 
-  link: {
-    marginTop: 80,
-    marginBottom: 10,
-    alignSelf: 'center'
-  },
+export const StyledRegistration = styled.View`
+  flex-direction: row;
+  align-self: center;
+  margin-top: 25px;
+`;
 
-  registration: {
-    flexDirection: 'row',
-    alignSelf: 'center'
-  },
+export const StyledKeysImport = styled.Text`
+  color: #808694;
+  font-weight: bold;
+  margin-top: 45px;
+  text-align: center;
+`;
 
-  keyImport: {
-    marginTop: 10,
-    alignSelf: 'center'
-  }
-});
+export const RegistrationLabel = styled.Text`
+  margin-right: 10;
+  color: #ced9e8;
+`;

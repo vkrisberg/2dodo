@@ -1,126 +1,195 @@
 import reducer from '../../utils/reducer';
-import {types} from './actions.js';
+import {types} from './actions';
 
 const initState = {
-  user: {},
-  hasToken: null, // null, true, false
+  authorized: false,
 
-  loginWait: false,
-  loginError: null,
+  user: {
+    nickname: '', // login
+    username: '', // login@hostname
+    firstName: '',
+    secondName: '',
+    email: '',
+    avatar: '',
+  },
 
-  logoutWait: false,
-  logoutError: null,
+  keys: {
+    publicKey: null,
+    privateKey: null,
+    hashKey: null,
+  },
 
-  remindWait: false,
-  remindError: null,
+  deviceId: '',
+  deviceName: '',
+  platform: '',
+  hostname: 'api.2do.do',
+
+  loading: false,
+  error: null,
 };
 
 export default reducer(initState, {
 
-  [types.INIT]: (state, action) => {
+  [types.UPDATE]: (state, action) => {
     return {
       ...state,
+      ...action.payload,
     };
   },
 
   [types.LOGIN]: (state, action) => {
     return {
       ...state,
-      loginWait: true,
-      loginError: null
+      ...action.payload,
+      loading: true,
+      error: null
     };
   },
 
   [types.LOGIN_SUCCESS]: (state, action) => {
     return {
       ...state,
-      user: action.payload.user,
-      hasToken: true,
-      loginWait: false,
-      remindError: null
+      authorized: true,
+      loading: false,
     };
   },
 
   [types.LOGIN_FAILURE]: (state, action) => {
     return {
       ...state,
-      loginWait: false,
-      loginError: action.error,
+      authorized: false,
+      loading: false,
+      error: action.error,
     };
   },
 
   [types.LOGOUT]: (state, action) => {
     return {
       ...state,
-      logoutWait: true,
-      logoutError: null
+      loading: true,
+      error: null
     };
   },
 
   [types.LOGOUT_SUCCESS]: (state, action) => {
     return {
       ...state,
-      user: {},
-      hasToken: false,
-      logoutWait: false
+      authorized: false,
+      user: {
+        ...initState.user,
+      },
+      keys: {
+        ...initState.keys,
+      },
+      loading: false
     };
   },
 
   [types.LOGOUT_FAILURE]: (state, action) => {
     return {
       ...state,
-      logoutWait: false,
-      logoutError: action.error,
+      loading: false,
+      error: action.error,
     };
   },
 
   [types.REMIND]: (state, action) => {
     return {
       ...state,
-      remindWait: true,
-      remindError: null
+      loading: true,
+      error: null
     };
   },
 
   [types.REMIND_SUCCESS]: (state, action) => {
     return {
       ...state,
-      user: action.payload.user,
-      hasToken: true,
-      remindWait: false
+      user: {
+        ...action.payload.user,
+      },
+      keys: {
+        ...action.payload.keys,
+      },
+      loading: false
     };
   },
 
   [types.REMIND_FAILURE]: (state, action) => {
     return {
       ...state,
-      hasToken: false,
-      remindWait: false,
-      remindError: action.error,
+      user: {
+        ...initState.user,
+      },
+      keys: {
+        ...initState.keys,
+      },
+      loading: false,
+      error: action.error,
     };
   },
 
   [types.REGISTER]: (state, action) => {
     return {
       ...state,
-      registerWait: true,
+      loading: true,
+      error: null,
     };
   },
 
   [types.REGISTER_SUCCESS]: (state, action) => {
+    const {data} = action;
+    const account = {
+      user: {
+        ...state.user,
+        nickname: data.name,
+        username: `${data.name}@${state.hostname}`,
+        firstName: data.firstName,
+        secondName: data.secondName,
+        email: data.email,
+      },
+      keys: {
+        publicKey: data.publicKey,
+        privateKey: data.privateKey,
+        hashKey: data.hashKey,
+      }
+    };
+
     return {
       ...state,
-      registerSuccess: true,
-      registerWait: false,
+      ...account,
+      loading: false,
     };
   },
 
   [types.REGISTER_FAILURE]: (state, action) => {
+    const {data} = action;
+    let _state = {...state};
+
+    if (data) {
+      const account = {
+        user: {
+          ...state.user,
+          nickname: data.nickname,
+          username: `${data.nickname}@${state.hostname}`,
+          fullName: data.fullName,
+          email: data.email,
+        },
+        keys: {
+          publicKey: data.publicKey,
+          privateKey: data.privateKey,
+          hashKey: data.hashKey,
+        }
+      };
+      _state = {
+        ...state,
+        ...account,
+      };
+    }
+
     return {
-      ...state,
-      registerSuccess: false,
-      registerWait: false,
-      registerError: action.error,
+      ..._state,
+      loading: false,
+      error: action.error,
     };
-  }
+  },
 });

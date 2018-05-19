@@ -1,23 +1,7 @@
-import { StyleSheet } from 'react-native';
+import styled from 'styled-components';
 
-export default StyleSheet.create({
-  container: {
-    backgroundColor: 'white',
-    flex: 1,
-    alignItems: 'center'
-  },
-
-  image: {
-    width: 100,
-    height: 100,
-    alignSelf: 'center',
-    marginTop: 50,
-    marginBottom: 50
-  },
-
-  text: {
-    alignSelf: 'center',
-    position: 'absolute',
-    bottom: 50
-  }
-});
+export const StyledText = styled.Text`
+  align-self: center;
+  color: white;
+  bottom: 75;
+`;

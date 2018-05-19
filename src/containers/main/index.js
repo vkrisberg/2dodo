@@ -22,7 +22,7 @@ class Main extends Component {
 
   render() {
     const { navigation } = this.props;
-
+    console.log('account', this.props.account);
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
@@ -41,4 +41,5 @@ class Main extends Component {
 
 export default connect(state => ({
   i18n: state.i18nState,
+  account: state.account,
 }))(Main);

@@ -1,48 +1,65 @@
-import React, { Component } from 'react';
-import { View, Text, Image } from 'react-native';
-import { Field, reduxForm } from 'redux-form';
+import React, {Component} from 'react';
+import {Field, reduxForm} from 'redux-form';
+import PropTypes from 'prop-types';
+
 
 import Input from '../../elements/input';
 import Checkbox from '../../elements/checkbox';
 import Button from '../../elements/button';
-import styles from './styles';
-import account from '../../../api/account';
+import {
+  Security,
+  StyledCheckbox,
+  Container,
+  SecurityContainer
+} from './styles';
 
 class LoginForm extends Component {
 
-  handleLogin = (data) => {
+  static propTypes = {
+    onSubmit: PropTypes.func.isRequired,
+  };
 
-    // return account.login(data)
-    //   .then(result => {
-    //     if (result.success) {
-    //       return true;
-    //     } else {
-    //       return false;
-    //     }
-    //   })
-    //   .catch(err => console.log(err));
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isChecked: false
+    };
   }
 
-  render() {
-    const { handleSubmit } = this.props;
+  newKey = () => this.setState({isChecked: !this.state.isChecked})
 
+  render() {
     return (
-      <View>
-        <Field component={Input} name="login" placeholder="Логин" />
-        <Field component={Input} name="password" placeholder="Пароль" />
-        <View>
-          <Text style={styles.security}>Безопасность</Text>
-          <Field
-            style={styles.checkbox}
+      <Container>
+        <Field
+          textColor="white"
+          component={Input}
+          name="nickname"
+          placeholder="Логин"
+        />
+        <Field
+          textColor="white"
+          component={Input}
+          name="password"
+          placeholder="Пароль"
+        />
+        <SecurityContainer>
+          <Security>For best security</Security>
+          <StyledCheckbox
             name="createNewKey"
             component={Checkbox}
-            label="Создать новый ключ"
+            color="white"
+            labelPadding={10}
+            checked={this.state.isChecked}
+            onPress={this.newKey}
+            label="Create a new key"
           />
-        </View>
-        <Button onPress={handleSubmit(this.handleLogin)}>Войти</Button>
-      </View>
+        </SecurityContainer>
+        <Button onPress={this.props.onSubmit}>Enter</Button>
+      </Container>
     );
   }
 }
 
-export default reduxForm({ form: 'signIn' })(LoginForm);
+export default reduxForm({form: 'login'})(LoginForm);

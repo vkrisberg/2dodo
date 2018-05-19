@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { withNavigation } from 'react-navigation';
 
 class Link extends PureComponent {
-  
+
   static propTypes = {
     label: PropTypes.string,
     children: PropTypes.string,
@@ -12,10 +12,6 @@ class Link extends PureComponent {
     navigation: PropTypes.shape({}),
     color: PropTypes.string,
     style: ViewPropTypes.style
-  }
-
-  componentDidMount() {
-    console.log(this.props);
   }
 
   handleLink = () => {
@@ -29,7 +25,7 @@ class Link extends PureComponent {
 
     return (
       <TouchableOpacity onPress={this.handleLink}>
-        <Text style={[style, {color: color === 'blue' ? '#6699CC' : 'inherit'}]}>{ label || children }</Text>
+        <Text style={[style, {color: color || 'white'}]}>{ label || children }</Text>
       </TouchableOpacity>
     );
   }
