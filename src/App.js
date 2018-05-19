@@ -4,17 +4,28 @@ import {Provider} from 'react-redux';
 import RNDeviceInfo from 'react-native-device-info';
 import RNLanguages from 'react-native-languages';
 import I18n, {setTranslations} from 'redux-i18n';
+import Realm from 'realm';
 
 import {accountActions} from './store/actions';
 import translations from './translations';
 import store from './store/store';
 import http from './utils/http';
 import AppWithNavigationState from './router';
+import Schema from './schema';
 
 export default class App extends Component {
 
   constructor(props) {
     super(props);
+
+    Realm.open({schema: Schema})
+      .then(realm => {
+        console.log('REALM', realm);
+        // ...use the realm instance here
+      })
+      .catch(error => {
+        // Handle the error here if something went wrong
+      });
 
     const device = {
       deviceId: RNDeviceInfo.getUniqueID(),
