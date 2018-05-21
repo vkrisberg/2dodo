@@ -22,7 +22,8 @@ class Tab extends PureComponent {
     tabIndex: PropTypes.number,
     pressOpacity: PropTypes.number,
     fontSize: PropTypes.number,
-    navigation: PropTypes.shape({})
+    navigation: PropTypes.shape({}),
+    activeIcon: PropTypes.node
   }
   
   _handleTabPress = () => {
@@ -34,15 +35,14 @@ class Tab extends PureComponent {
   _getColor = () => {
     const {
       selected,
-      tabIndex,
-      unActiveColor
+      text
     } = this.props;
 
-    if (selected === tabIndex) {
-      return activeColor;
+    if (selected === text) {
+      return "#68a7ff";
     }
 
-    return unActiveColor;
+    return "#a4a7ae";
   }
   
   render() {

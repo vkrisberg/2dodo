@@ -45,7 +45,7 @@ class Contacts extends Component {
             </TouchableWithoutFeedback>
           </AddContact>
         </Header>
-        <SearchInput />
+        <SearchInput placeholder="Search contacts"/>
         {this.getContacts()}
       </TabsContainer>
     );

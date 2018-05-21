@@ -32,7 +32,7 @@ export default class SearchInput extends Component {
         <IconContainer>
           <SearchIcon />
         </IconContainer>
-        {!this.state.isFocused && <StyledText>Search contacts</StyledText>}
+        {!this.state.isFocused && <StyledText>{this.props.placeholder}</StyledText>}
         <InputView>
           <StyledInput
             underlineColorAndroid="transparent"
@@ -42,7 +42,6 @@ export default class SearchInput extends Component {
             onChange={this.onChange}
           />
         </InputView>
-        {/* <TextInput placeholder="Search contacts" /> */}
       </SearchInputView>
     );
   }

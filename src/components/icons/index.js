@@ -8,3 +8,6 @@ export {default as GroupsIcon} from './groups-icon';
 export {default as SettingsIcon} from './settings-icon';
 export {default as FavoritsIcon} from './favorits-icon';
 export {default as MessagesIcon} from './messages-icon';
+export {default as FavoritsDotsIcon} from './favorits-dots-icon';
+export {default as EmptyFavoritsIcon} from './empty-favorits-icon';
+export {default as EmptyMessagesIcon} from './empty-messages-icon';
