@@ -38,7 +38,7 @@ class Preload extends Component {
               console.log('login error', error);
             });
         })
-        .catch(async () => {
+        .catch(async (e) => {
           const skipEvents = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.skipEvents}`);
           if (skipEvents) {
             navigation.navigate(routeEnum.Login);
@@ -50,7 +50,6 @@ class Preload extends Component {
   }
 
   wsConnect = ({deviceId, user, keys}) => {
-    console.log('deviceId, user, keys', deviceId, user.username, keys.hashKey)
     ws.init({
       deviceId,
       username: user.username,

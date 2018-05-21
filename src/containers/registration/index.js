@@ -3,6 +3,7 @@ import {AsyncStorage} from 'react-native';
 import {connect} from 'react-redux';
 import {withNavigation} from 'react-navigation';
 import PropTypes from 'prop-types';
+import Realm from 'realm';
 
 import MainForm from '../../components/forms/registration/main-form';
 import EmailPhoneForm from '../../components/forms/registration/email-phone-form';
@@ -38,6 +39,40 @@ class Registration extends Component {
     return this.setState({page: this.state.page - 1});
   }
 
+  saveToDatabase = () => {
+    const {username} = this.props.account.user;
+    const {deviceId, hostname} = this.props.account;
+    const dateCreate = new Date();
+    const dateUpdate = new Date();
+    const user = {
+      ...this.props.account.user,
+      username,
+    };
+    const keys = {
+      ...this.props.account.keys,
+      username,
+    };
+    const account = {
+      username,
+      user,
+      keys,
+      deviceId,
+      hostname,
+      dateCreate,
+      dateUpdate,
+    };
+    Realm.open(CONFIG.realmConfig)
+      .then((realm) => {
+        realm.write(() => {
+          realm.create('Account', account, true);
+        });
+        realm.close();
+      })
+      .catch((error) => {
+        console.log('Registration: realm error', error);
+      });
+  }
+
   handleSubmit = async (data) => {
     const {account, dispatch} = this.props;
 
@@ -59,8 +94,7 @@ class Registration extends Component {
     dispatch(accountActions.register(sendData))
       .then(() => {
         console.log('registration success', this.props.account);
-        AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.keys}`, JSON.stringify(this.props.account.keys));
-        AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.user}`, JSON.stringify(this.props.account.user));
+        this.saveToDatabase();
         this.props.navigation.navigate(routeEnum.Login);
       })
       .catch((error) => {

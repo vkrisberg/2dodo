@@ -21,8 +21,8 @@ class Main extends Component {
   };
 
   render() {
-    const { navigation } = this.props;
-    console.log('account', this.props.account);
+    const {navigation} = this.props;
+
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>

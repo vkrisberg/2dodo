@@ -3,11 +3,7 @@ import account from '../../api/account';
 import {pgplib, hashlib} from '../../utils/encrypt';
 import storageEnum from '../../enums/storage-enum';
 import CONFIG from '../../config';
-
-const TEST_ACCOUNT = {
-  username: 'test@api.2do.do',
-  hashKey: '68603d6f4cc29f0575815f10ec31ffbfac43248d7aa781539d7fb52b9ed66e37',
-};
+import Realm from 'realm';
 
 export const types = {
   UPDATE: 'UPDATE',
@@ -36,26 +32,38 @@ export default {
   },
 
   remind: () => {
-    return async dispatch => {
+    return async (dispatch, getState) => {
       dispatch({type: types.REMIND});
       try {
+        let user = null, keys = null;
         // await AsyncStorage.clear();
         // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
+        // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
         const authorized = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
-        if (!authorized) {
+        const username = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
+        if (!authorized || !username) {
           throw new Error('remind failed: user is not authorized');
         }
-
-        const user = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.user}`);
-        const keys = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.keys}`);
-        if (!user || !keys) {
+        // const user = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.user}`);
+        // const keys = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.keys}`);
+        const realm = await Realm.open(CONFIG.realmConfig)
+          .then((realm) => {
+            return realm;
+          })
+          .catch((error) => {
+            console.log('error connecting to database', error);
+            throw new Error('remind failed: error connecting to database');
+          });
+        const account = realm.objectForPrimaryKey('Account', username);
+        if (!account || !account.user || !account.keys) {
           throw new Error('remind failed: user or keys is empty in storage');
         }
         const payload = {
-          user: JSON.parse(user),
-          keys: JSON.parse(keys),
+          user: {...account.user},
+          keys: {...account.keys},
         };
         dispatch({type: types.REMIND_SUCCESS, payload});
+        realm.close();
         return payload;
       } catch (e) {
         dispatch({type: types.REMIND_FAILURE, error: e});

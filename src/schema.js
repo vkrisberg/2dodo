@@ -1,3 +1,5 @@
+import CONFIG from './config';
+
 /**
  * User schema
  */
@@ -11,11 +13,11 @@ User.schema = {
   name: 'User',
   primaryKey: 'username',
   properties: {
-    nickname: 'string', // login
     username: 'string', // login@hostname
+    nickname: 'string', // login
+    email: 'string',
     firstName: 'string?',
     secondName: 'string?',
-    email: 'string',
     avatar: 'string?',
   }
 };
@@ -34,8 +36,26 @@ RsaKey.schema = {
     publicKey: 'string',
     privateKey: 'string',
     hashKey: 'string',
+  }
+};
+
+/**
+ * Account schema
+ */
+class Account {
+}
+
+Account.schema = {
+  name: 'Account',
+  primaryKey: 'username',
+  properties: {
+    username: 'string',
+    user: 'User',
+    keys: 'RsaKey',
+    deviceId: 'string',
     hostname: 'string',
-    user: {type: 'User'},
+    dateCreate: 'date',
+    dateUpdate: 'date',
   }
 };
 
@@ -52,11 +72,14 @@ Message.schema = {
     username: 'string',
     from: 'string',
     text: 'string',
+    dateCreate: 'date',
+    dateUpdate: 'date',
   }
 };
 
 export default [
   User,
   RsaKey,
+  Account,
   Message,
 ];

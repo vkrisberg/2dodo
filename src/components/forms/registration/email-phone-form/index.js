@@ -59,7 +59,7 @@ class EmailPhoneForm extends Component {
             label="Create a new key"
           />
         </SecurityContainer>
-        <Button color="black" onPress={this.props.handleSubmit}>Done</Button>
+        <Button color="black" onPress={this.props.handleSubmit}>Continue</Button>
         <Skip marginTop={90} color="#9fa3ae" onSkip={this.props.handleSubmit}>Skip this step</Skip>
       </Container>
     );
