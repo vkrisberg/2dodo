@@ -27,7 +27,9 @@ class LoginForm extends Component {
     };
   }
 
-  newKey = () => this.setState({isChecked: !this.state.isChecked})
+  toggleNewKeyCheckbox = () => {
+    this.setState({isChecked: !this.state.isChecked});
+  };
 
   render() {
     return (
@@ -35,7 +37,7 @@ class LoginForm extends Component {
         <Field
           textColor="white"
           component={Input}
-          name="nickname"
+          name="username"
           placeholder="Логин"
         />
         <Field
@@ -52,7 +54,7 @@ class LoginForm extends Component {
             color="white"
             labelPadding={10}
             checked={this.state.isChecked}
-            onPress={this.newKey}
+            onPress={this.toggleNewKeyCheckbox}
             label="Create a new key"
           />
         </SecurityContainer>

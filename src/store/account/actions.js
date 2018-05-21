@@ -35,10 +35,11 @@ export default {
     return async (dispatch, getState) => {
       dispatch({type: types.REMIND});
       try {
-        let user = null, keys = null;
+        //--- TODO - remove after test
         // await AsyncStorage.clear();
         // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
         // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
+        //---
         const authorized = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
         const username = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
         if (!authorized || !username) {
@@ -72,7 +73,7 @@ export default {
     };
   },
 
-  login: ({deviceId, user, keys, navigation}) => {
+  login: ({deviceId, user, keys}) => {
     return async dispatch => {
       try {
         dispatch({type: types.LOGIN, payload: {user, keys}});

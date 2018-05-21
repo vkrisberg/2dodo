@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
+import PropTypes from 'prop-types';
 
 import Title from '../../../elements/title';
 import Input from '../../../elements/input';
@@ -17,6 +18,11 @@ import {
 } from './styles';
 
 class EmailPhoneForm extends Component {
+
+  static propTypes = {
+    onSubmit: PropTypes.func.isRequired,
+  };
+
   constructor(props) {
     super(props);
 
@@ -25,7 +31,9 @@ class EmailPhoneForm extends Component {
     };
   }
 
-  keyCopy = () => this.setState({isKeyCopy: !this.state.isKeyCopy})
+  toggleKeyCopyCheckbox = () => {
+    this.setState({isKeyCopy: !this.state.isKeyCopy});
+  };
 
   render() {
     return (
@@ -55,12 +63,12 @@ class EmailPhoneForm extends Component {
             component={Checkbox}
             labelPadding={10}
             checked={this.state.isKeyCopy}
-            onPress={this.keyCopy}
+            onPress={this.toggleKeyCopyCheckbox}
             label="Create a new key"
           />
         </SecurityContainer>
-        <Button color="black" onPress={this.props.handleSubmit}>Continue</Button>
-        <Skip marginTop={90} color="#9fa3ae" onSkip={this.props.handleSubmit}>Skip this step</Skip>
+        <Button color="black" onPress={this.props.onSubmit}>Continue</Button>
+        <Skip marginTop={90} color="#9fa3ae" onSkip={this.props.onSubmit}>Skip this step</Skip>
       </Container>
     );
   }

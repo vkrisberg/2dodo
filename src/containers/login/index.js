@@ -7,6 +7,7 @@ import {
   View,
   TouchableWithoutFeedback
 } from 'react-native';
+import Realm from 'realm';
 
 import Link from '../../components/elements/link';
 import LoginForm from '../../components/forms/login';
@@ -15,7 +16,6 @@ import Logo from '../../components/elements/logo';
 import BackgroundContainer from '../background-container';
 import {ws} from '../../utils';
 import CONFIG from '../../config';
-import {storageEnum} from '../../enums';
 import {accountActions} from '../../store/actions';
 import backgroundImage from './img/background.png';
 import {
@@ -38,6 +38,17 @@ class Login extends Component {
     t: PropTypes.func.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+    this.realm = null;
+  }
+
+  componentWillUnmount() {
+    if (this.realm) {
+      this.realm.close();
+    }
+  }
+
   wsConnect = ({deviceId, user, keys}) => {
     ws.init({
       deviceId,
@@ -48,15 +59,28 @@ class Login extends Component {
   };
 
   onLogin = async () => {
-    const {dispatch, navigation} = this.props;
-    let {deviceId, user, keys} = this.props.account;
+    const {dispatch} = this.props;
+    const username = this.props.login.values ? this.props.login.values.username : '';
 
-    if (!user.nickname || !keys.hashKey) {
-      user = JSON.parse(await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.user}`));
-      keys = JSON.parse(await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.keys}`));
+    if (!username) {
+      return false;
     }
 
-    dispatch(accountActions.login({navigation, deviceId, user, keys}))
+    const realm = await Realm.open(CONFIG.realmConfig)
+      .then((realm) => {
+        return realm;
+      })
+      .catch((error) => {
+        console.log('error connecting to database', error);
+        throw new Error('login failed: error connecting to database');
+      });
+    const account = realm.objectForPrimaryKey('Account', username.toLowerCase());
+    if (!account) {
+      return false;
+    }
+    const {deviceId, user, keys} = account;
+
+    dispatch(accountActions.login({deviceId, user, keys}))
       .then(() => {
         this.wsConnect({deviceId, user, keys});
       })
@@ -94,4 +118,5 @@ class Login extends Component {
 
 export default connect(state => ({
   account: state.account,
+  login: state.form.login,
 }))(withNavigation(Login));
