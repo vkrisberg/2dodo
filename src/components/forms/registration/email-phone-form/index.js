@@ -31,7 +31,7 @@ class EmailPhoneForm extends Component {
     };
   }
 
-  toggleKeyCopyCheckbox = () => {
+  toggleKeyCopy = () => {
     this.setState({isKeyCopy: !this.state.isKeyCopy});
   };
 
@@ -63,7 +63,7 @@ class EmailPhoneForm extends Component {
             component={Checkbox}
             labelPadding={10}
             checked={this.state.isKeyCopy}
-            onPress={this.toggleKeyCopyCheckbox}
+            onPress={this.toggleKeyCopy}
             label="Create a new key"
           />
         </SecurityContainer>

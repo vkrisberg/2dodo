@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { View } from 'react-native';
-import { Field, reduxForm } from 'redux-form';
+import React, {Component} from 'react';
+import {View} from 'react-native';
+import {Field, reduxForm} from 'redux-form';
 import PropTypes from 'prop-types';
 
 import Button from '../../../elements/button';
@@ -13,9 +13,15 @@ import {
   ServerInput
 } from './styles';
 import Title from '../../../elements/title';
+
 // import validate from '../validate';
 
 class MainForm extends Component {
+
+  static propTypes = {
+    defaultServer: PropTypes.string,
+    handleSubmit: PropTypes.func,
+  };
 
   constructor(props) {
     super(props);
@@ -25,17 +31,13 @@ class MainForm extends Component {
     };
   }
 
-  static propTypes = {
-    handleSubmit: PropTypes.func
-  }
-
   toggleServerInput = () => {
-    this.setState({ isChecked: !this.state.isChecked });
-  }
+    this.setState({isChecked: !this.state.isChecked});
+  };
 
   render() {
-    const { handleSubmit } = this.props;
-    const { isChecked } = this.state;
+    const {defaultServer, handleSubmit} = this.props;
+    const {isChecked} = this.state;
 
     return (
       <View>
@@ -72,12 +74,12 @@ class MainForm extends Component {
             onPress={this.toggleServerInput}
           />
         </View>
-        { isChecked &&  <ServerInput
+        {isChecked && <ServerInput
           focusedColor="#7bb2ff"
           name="server"
           component={Input}
-          placeholder="https://servername.ru"
-        /> }
+          placeholder={defaultServer}
+        />}
         <Button color="black" onPress={handleSubmit}>Continue</Button>
       </View>
     );

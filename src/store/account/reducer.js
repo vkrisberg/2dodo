@@ -24,6 +24,7 @@ const initState = {
   deviceName: '',
   platform: '',
   hostname: CONFIG.httpHost,
+  isSecure: CONFIG.isSecure,
 
   loading: false,
   error: null,

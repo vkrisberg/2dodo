@@ -107,10 +107,12 @@ class Registration extends Component {
 
   render() {
     const {page} = this.state;
+    const {hostname, isSecure} = this.props.account;
+    const server = `http${isSecure ? 's' : ''}://${hostname}`;
 
     return (
       <BackgroundContainer image={backgroundImage}>
-        {page === 1 && <MainForm onSubmit={this.nextPage}/>}
+        {page === 1 && <MainForm defaultServer={server} onSubmit={this.nextPage}/>}
         {page === 2 && <EmailPhoneForm previousPage={this.previousPage} onSubmit={this.nextPage}/>}
         {page === 3 && <SettingsForm previousPage={this.previousPage} onSubmit={this.handleSubmit}/>}
       </BackgroundContainer>
