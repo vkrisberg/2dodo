@@ -66,21 +66,21 @@ class Login extends Component {
   };
 
   render() {
+    const { t } = this.context;
+
     return (
       <BackgroundContainer image={backgroundImage}>
         <Logo flex={false}/>
-        <StyledText>Please enter your email and pass</StyledText>
+        <StyledText>{t('Welcome')}</StyledText>
         <LoginForm onSubmit={this.onLogin}/>
         <View>
-          <StyledLink to={routeEnum.ForgotPassword}>Forget password?</StyledLink>
+          <StyledLink to={routeEnum.ForgotPassword}>{t('ForgetPassword')}</StyledLink>
           <StyledRegistration>
-            <RegistrationLabel>First time in app?</RegistrationLabel>
-            <Link color="#4d8fdb" to={routeEnum.Registration}>Registration</Link>
+            <RegistrationLabel>{t('FirstTimeInApp')}</RegistrationLabel>
+            <Link color="#4d8fdb" to={routeEnum.Registration}>{t('Registration')}</Link>
           </StyledRegistration>
           <TouchableWithoutFeedback  onPress={this.toKeyImport}>
-            <StyledKeysImport>
-              Key import
-            </StyledKeysImport>
+            <StyledKeysImport>{t('KeysImport')}</StyledKeysImport>
           </TouchableWithoutFeedback>
         </View>
       </BackgroundContainer>

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
 import PropTypes from 'prop-types';
-
+import {connect} from 'react-redux';
 
 import Input from '../../elements/input';
 import Checkbox from '../../elements/checkbox';
@@ -36,7 +36,7 @@ class LoginForm extends Component {
           textColor="white"
           component={Input}
           name="nickname"
-          placeholder="Логин"
+          placeholder="Login"
         />
         <Field
           textColor="white"
@@ -62,4 +62,5 @@ class LoginForm extends Component {
   }
 }
 
-export default reduxForm({form: 'login'})(LoginForm);
+
+export default connect()(reduxForm({form: 'login'})(LoginForm));
