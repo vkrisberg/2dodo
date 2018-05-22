@@ -7,5 +7,9 @@ export default {
   Contacts: 'Contacts',
   Preload: 'Preload',
   Events: 'Events',
+  Messages: 'Messages',
+  Groups: 'Groups',
+  Settings: 'Settings',
+  Favorits: 'Favorits',
   PasswordApprove: 'PasswordApprove',
 };

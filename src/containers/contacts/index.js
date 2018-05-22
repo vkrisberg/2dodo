@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
-import {
-  TouchableWithoutFeedback
-} from 'react-native';
+import {TouchableWithoutFeedback} from 'react-native';
 import { connect } from 'react-redux';
 
-import BottomMenu from '../../components/elements/bottom-menu';
-import Wrapper from '../../components/layouts/wrapper';
-import AddIcon from '../../components/icons/add-icon';
-import ContactsEmptyIcon from '../../components/icons/contacts-empty-icon';
-import SearchInput from '../../components/elements/search-input';
+import {routeEnum} from '../../enums';
+import {AddIcon, ContactsEmptyIcon} from '../../components/icons/';
+import {SearchInput} from '../../components/elements';
+import TabsContainer from '../tabs-container';
 import {
   StyledTitle,
   Header,
@@ -35,7 +32,7 @@ class Contacts extends Component {
 
   render() {
     return (
-      <Wrapper>
+      <TabsContainer selected={routeEnum.Contacts} scrolled>
         <Header>
           <TitleContainer>
             <StyledTitle>
@@ -48,10 +45,9 @@ class Contacts extends Component {
             </TouchableWithoutFeedback>
           </AddContact>
         </Header>
-        <SearchInput />
+        <SearchInput placeholder="Search contacts"/>
         {this.getContacts()}
-        <BottomMenu />
-      </Wrapper>
+      </TabsContainer>
     );
   }
 }
