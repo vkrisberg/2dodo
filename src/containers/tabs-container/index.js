@@ -6,7 +6,7 @@ import {View} from 'react-native';
 import Wrapper from '../../components/layouts/wrapper';
 import {menuEnum} from '../../enums';
 import {Tabs} from './styles';
-import Tab from './components/tab';
+import {Tab} from '../../components/elements';
 
 export default class TabsContainer extends Component {
   constructor(props) {

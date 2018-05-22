@@ -61,7 +61,7 @@ const MainStack = StackNavigator({
     screen: Favorits
   }
 }, {
-  initialRouteName: 'Messages',
+  initialRouteName: 'Contacts',
   gesturesEnabled: true,
   drawerLockMode: 'locked-closed',
   navigationOptions: {

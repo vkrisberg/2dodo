@@ -8,3 +8,5 @@ export {default as Link} from './link';
 export {default as ListItem} from './list-item';
 export {default as Title} from './title';
 export {default as SearchInput} from './search-input';
+export {default as Tab} from './tab';
+export {default as FavoritsNav} from './favorits-nav';
