@@ -18,7 +18,6 @@ import backgroundImage from './img/background.png';
 class Registration extends Component {
   static propTypes = {
     account: PropTypes.object,
-    registration: PropTypes.object,
     dispatch: PropTypes.func.isRequired,
     navigation: PropTypes.shape({navigate: PropTypes.func})
   };
@@ -73,7 +72,7 @@ class Registration extends Component {
       });
   }
 
-  handleSubmit = async (data) => {
+  registration = async (data) => {
     const {account, dispatch} = this.props;
 
     if (account.loading) {
@@ -114,7 +113,7 @@ class Registration extends Component {
       <BackgroundContainer image={backgroundImage}>
         {page === 1 && <MainForm defaultServer={server} onSubmit={this.nextPage}/>}
         {page === 2 && <EmailPhoneForm previousPage={this.previousPage} onSubmit={this.nextPage}/>}
-        {page === 3 && <SettingsForm previousPage={this.previousPage} onSubmit={this.handleSubmit}/>}
+        {page === 3 && <SettingsForm previousPage={this.previousPage} onSubmit={this.registration}/>}
       </BackgroundContainer>
     );
   }
@@ -122,5 +121,4 @@ class Registration extends Component {
 
 export default connect(state => ({
   account: state.account,
-  registration: state.form.registration,
 }))(withNavigation(Registration));

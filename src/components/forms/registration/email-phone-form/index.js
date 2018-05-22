@@ -20,7 +20,9 @@ import {
 class EmailPhoneForm extends Component {
 
   static propTypes = {
+    previousPage: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -67,8 +69,8 @@ class EmailPhoneForm extends Component {
             label="Create a new key"
           />
         </SecurityContainer>
-        <Button color="black" onPress={this.props.onSubmit}>Continue</Button>
-        <Skip marginTop={90} color="#9fa3ae" onSkip={this.props.onSubmit}>Skip this step</Skip>
+        <Button color="black" onPress={this.props.handleSubmit}>Continue</Button>
+        <Skip marginTop={90} color="#9fa3ae" onSkip={this.props.handleSubmit}>Skip this step</Skip>
       </Container>
     );
   }

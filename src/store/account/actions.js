@@ -32,7 +32,7 @@ export default {
   },
 
   remind: () => {
-    return async (dispatch, getState) => {
+    return async dispatch => {
       dispatch({type: types.REMIND});
       try {
         //--- TODO - remove after test
@@ -45,8 +45,7 @@ export default {
         if (!authorized || !username) {
           throw new Error('remind failed: user is not authorized');
         }
-        // const user = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.user}`);
-        // const keys = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.keys}`);
+
         const realm = await Realm.open(CONFIG.realmConfig)
           .then((realm) => {
             return realm;
@@ -56,9 +55,11 @@ export default {
             throw new Error('remind failed: error connecting to database');
           });
         const account = realm.objectForPrimaryKey('Account', username);
+        // console.log('account', account);
         if (!account || !account.user || !account.keys) {
           throw new Error('remind failed: user or keys is empty in storage');
         }
+
         const payload = {
           user: {...account.user},
           keys: {...account.keys},

@@ -17,6 +17,7 @@ class LoginForm extends Component {
 
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -58,7 +59,7 @@ class LoginForm extends Component {
             label="Create a new key"
           />
         </SecurityContainer>
-        <Button onPress={this.props.onSubmit}>Enter</Button>
+        <Button onPress={this.props.handleSubmit}>Enter</Button>
       </Container>
     );
   }

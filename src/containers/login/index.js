@@ -58,9 +58,9 @@ class Login extends Component {
     });
   };
 
-  onLogin = async () => {
+  login = async (data) => {
     const {dispatch} = this.props;
-    const username = this.props.login.values ? this.props.login.values.username : '';
+    const {username} = data;
 
     if (!username) {
       return false;
@@ -74,12 +74,14 @@ class Login extends Component {
         console.log('error connecting to database', error);
         throw new Error('login failed: error connecting to database');
       });
+
     const account = realm.objectForPrimaryKey('Account', username.toLowerCase());
     if (!account) {
+      console.log('login error: account is not found');
       return false;
     }
-    const {deviceId, user, keys} = account;
 
+    const {deviceId, user, keys} = account;
     dispatch(accountActions.login({deviceId, user, keys}))
       .then(() => {
         this.wsConnect({deviceId, user, keys});
@@ -100,7 +102,7 @@ class Login extends Component {
       <BackgroundContainer image={backgroundImage}>
         <Logo flex={false}/>
         <StyledText>{t('Welcome')}</StyledText>
-        <LoginForm onSubmit={this.onLogin}/>
+        <LoginForm onSubmit={this.login}/>
         <View>
           <StyledLink to={routeEnum.ForgotPassword}>{t('ForgetPassword')}</StyledLink>
           <StyledRegistration>
@@ -118,5 +120,4 @@ class Login extends Component {
 
 export default connect(state => ({
   account: state.account,
-  login: state.form.login,
 }))(withNavigation(Login));

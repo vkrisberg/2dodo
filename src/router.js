@@ -61,7 +61,7 @@ const MainStack = StackNavigator({
     screen: Favorits
   }
 }, {
-  initialRouteName: 'Login',
+  initialRouteName: 'Preload',
   gesturesEnabled: true,
   drawerLockMode: 'locked-closed',
   navigationOptions: {

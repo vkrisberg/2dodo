@@ -16,9 +16,11 @@ User.schema = {
     username: 'string', // login@hostname
     nickname: 'string', // login
     email: 'string',
+    phones: 'string?[]',
     firstName: 'string?',
     secondName: 'string?',
-    avatar: 'string?',
+    bio: 'string?',
+    avatar: 'data?',
   }
 };
 
@@ -60,6 +62,35 @@ Account.schema = {
 };
 
 /**
+ * Contact schema
+ */
+class Contact {
+  get fullName() {
+    return `${this.firstName} ${this.secondName}`;
+  }
+}
+
+Contact.schema = {
+  name: 'Contact',
+  primaryKey: 'username',
+  properties: {
+    username: 'string', // login@hostname
+    nickname: 'string', // login
+    phones: 'string?[]',
+    firstName: {type: 'string', optional: true, indexed: true},
+    secondName: {type: 'string', optional: true, indexed: true},
+    bio: 'string?',
+    avatar: 'data?',
+    sound: 'string?',
+    notification: {type: 'bool', default: true},
+    isBlocked: {type: 'bool', default: false},
+    settings: 'string?',
+    dateCreate: 'date',
+    dateUpdate: 'date',
+  }
+};
+
+/**
  * Chat message schema
  */
 class Message {
@@ -81,5 +112,6 @@ export default [
   User,
   RsaKey,
   Account,
+  Contact,
   Message,
 ];

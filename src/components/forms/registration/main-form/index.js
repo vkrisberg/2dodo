@@ -20,7 +20,8 @@ class MainForm extends Component {
 
   static propTypes = {
     defaultServer: PropTypes.string,
-    handleSubmit: PropTypes.func,
+    onSubmit: PropTypes.func,
+    handleSubmit: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -36,7 +37,7 @@ class MainForm extends Component {
   };
 
   render() {
-    const {defaultServer, handleSubmit} = this.props;
+    const {defaultServer} = this.props;
     const {isChecked} = this.state;
 
     return (
@@ -80,7 +81,7 @@ class MainForm extends Component {
           component={Input}
           placeholder={defaultServer}
         />}
-        <Button color="black" onPress={handleSubmit}>Continue</Button>
+        <Button color="black" onPress={this.props.handleSubmit}>Continue</Button>
       </View>
     );
   }

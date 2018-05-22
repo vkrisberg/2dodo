@@ -21,6 +21,7 @@ class SettingsForm extends Component {
   static propTypes = {
     previousPage: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
   };
 
   setDayTheme = () => {
@@ -64,7 +65,7 @@ class SettingsForm extends Component {
           Get 2dodo access to push notifications
           to recieve a messages
         </Description>
-        <Button color="black" onPress={this.props.onSubmit}>
+        <Button color="black" onPress={this.props.handleSubmit}>
           Done
         </Button>
       </Container>
