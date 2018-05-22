@@ -1,33 +1,41 @@
+import React from 'react';
+import {
+  PhotoIcon,
+  AudioIcon,
+  VideoIcon,
+  DocsIcon,
+  LinksIcon
+} from '../components/icons';
+
 export default [
   {
-    icon: '',
-    activeIcon: '',
+    icon: <PhotoIcon />,
+    activeIcon: <PhotoIcon />,
     text: 'Chats'
   },
   {
-    icon: '',
-    activeIcon: '',
+    icon: <PhotoIcon />,
+    activeIcon: <PhotoIcon />,
     text: 'Photo'
   },
   {
-    icon: '',
-    activeIcon: '',
+    icon: <AudioIcon />,
+    activeIcon: <AudioIcon />,
     text: 'Audio'
   },
   {
-    icon: '',
-    activeIcon: '',
+    icon: <DocsIcon />,
+    activeIcon: <DocsIcon />,
     text: 'Docs'
   },
   {
-    icon: '',
-    activeIcon: '',
+    icon: <VideoIcon />,
+    activeIcon: <VideoIcon />,
     text: 'Video'
   },
   {
-    icon: '',
-    activeIcon: '',
+    icon: <LinksIcon />,
+    activeIcon: <LinksIcon />,
     text: 'Links'
   }
-
 ];

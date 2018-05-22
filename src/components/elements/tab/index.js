@@ -1,11 +1,8 @@
 import React, { PureComponent } from 'react';
-import {
-  Text
-} from 'react-native';
 import PropTypes from 'prop-types';
 import {withNavigation} from 'react-navigation';
 
-import {Container, StyledText} from '../styles';
+import {Container, StyledText} from './styles';
 
 class Tab extends PureComponent {
   
@@ -60,7 +57,7 @@ class Tab extends PureComponent {
         onPress={this._handleTabPress}
         activeOpacity={pressOpacity}
       >
-        { selected === text ? activeIcon : icon}
+        {selected === text ? activeIcon : icon}
         <StyledText color={this._getColor()} fontSize={fontSize}>
           {text}
         </StyledText>

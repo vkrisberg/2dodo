@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {TouchableWithoutFeedback} from 'react-native';
 
 import TabsContainer from '../tabs-container';
@@ -10,39 +10,23 @@ import {
   StyledTitle,
   TitleContainer,
   AddContact,
-  SearchText,
   StyledIcon,
   EmptyFavoritsView,
   BoldText
 } from './styles';
 
-export default class Favorits extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      category: "Chats",
-      title: "messages"
-    };
-  }
-
+export default class Favorits extends PureComponent {
   searchFavorite = () => {
     
   }
 
   getFavorits = () => {
-    const { category, title } = this.state;
-
-    if (category === 'Chats') {
-      return (
-        <EmptyFavoritsView>
-          <EmptyMessagesIcon />
-          <BoldText>Your have not chats yet</BoldText>
-        </EmptyFavoritsView>
-      );
-    }
-
-    return null;
+    return (
+      <EmptyFavoritsView>
+        <EmptyMessagesIcon />
+        <BoldText>Your have not chats yet</BoldText>
+      </EmptyFavoritsView>
+    );
   }
 
   render() {

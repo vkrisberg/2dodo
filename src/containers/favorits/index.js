@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {TouchableWithoutFeedback} from 'react-native';
 
-import TabsContainer from '../tabs-container';
+import {TabsContainer} from '../index';
 import {routeEnum} from '../../enums';
 import {FavoritsDotsIcon, EmptyFavoritsIcon} from '../../components/icons';
+import {FavoritsNav} from '../../components/elements';
 import {
   Header,
   StyledTitle,
@@ -62,6 +63,7 @@ export default class Favorits extends Component {
             </TouchableWithoutFeedback>
           </AddContact>
         </Header>
+        <FavoritsNav />
         {this.getFavorits()}
       </TabsContainer>
     );

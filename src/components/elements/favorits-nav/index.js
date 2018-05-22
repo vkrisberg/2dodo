@@ -1,20 +1,80 @@
 import React, {Component} from 'react';
-import {Text} from 'react-native';
+import PropTypes from 'prop-types';
 
 import {favoritsNavEnum} from '../../../enums';
+import {Tabs} from './styles';
+import {Tab} from '../index';
 
 export default class FavoritsNav extends Component {
   constructor(props) {
     super(props);
+  }
 
-    this.state = {
-      category: favoritsNavEnum[0].text
-    };
+  static propTypes = {
+    selected: PropTypes.number,
+    activeColor: PropTypes.string,
+    unActiveColor: PropTypes.string,
+    onTabChange: PropTypes.func,
+    backgroundColor: PropTypes.string,
+    borderTopColor: PropTypes.string,
+    height: PropTypes.number,
+    iconSize: PropTypes.number,
+    onlyIcon: PropTypes.bool,
+    pressOpacity: PropTypes.number,
+    fontStyle: PropTypes.object,
+    style: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.number
+    ]),
+    children: PropTypes.any,
+    fontSize: PropTypes.number,
+    scrolled: PropTypes.bool
+  }
+
+  static defaultProps = {
+    onTabChange: () => {},
+    activeColor: 'black',
+    unActiveColor: 'gray',
+    backgroundColor: 'white',
+    borderTopColor: '#DDDDDD',
+    height: 42,
+    iconSize: 22,
+    onlyIcon: false,
+    pressOpacity: 0.7,
+    fontSize: 11,
   }
 
   render() {
+    const {
+      selected,
+      activeColor,
+      unActiveColor,
+      iconSize,
+      onlyIcon,
+      pressOpacity,
+      fontSize
+    } = this.props;
+
     return (
-      <Text>1234</Text>
+      <Tabs>
+        {favoritsNavEnum.map((child, tabIndex) => {
+          return <Tab
+            key={child.text}
+            tabIndex={tabIndex}
+            selected={selected}
+            activeColor={activeColor}
+            unActiveColor={unActiveColor}
+            iconSize={iconSize}
+            onlyIcon={onlyIcon}
+            pressOpacity={pressOpacity}
+            fontSize={fontSize}
+            icon={child.icon}
+            activeIcon={child.activeIcon}
+            text={child.text}
+          />;
+        })
+        }
+      </Tabs>
     );
   }
 }
