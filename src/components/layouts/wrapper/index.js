@@ -11,14 +11,16 @@ const ViewWrap = (props) => (
 
 export default class Wrapper extends PureComponent {
   render() {
-    const { scrolled, children } = this.props;
+    const { scrolled, children, barHidden } = this.props;
 
     return (
       <ViewWrap scrolled={scrolled}>
         <StatusBar
-          translucent
-          backgroundColor="rgba(0, 0, 0, 0.2)"
           animated
+          hidden={barHidden || false}
+          translucent
+          backgroundColor="rgba(0, 0, 0, 0)"
+          barStyle="dark-content"
         />
         {children}
       </ViewWrap>

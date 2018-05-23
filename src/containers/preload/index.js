@@ -38,10 +38,10 @@ class Preload extends Component {
               console.log('login error', error);
             });
         })
-        .catch(async (e) => {
+        .catch(async () => {
           const skipEvents = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.skipEvents}`);
           if (skipEvents) {
-            navigation.navigate(routeEnum.Login);
+            setTimeout(() => navigation.navigate(routeEnum.Login), 2000);
             return;
           }
           navigation.navigate(routeEnum.Events);
@@ -60,7 +60,7 @@ class Preload extends Component {
 
   render() {
     return (
-      <BackgroundContainer>
+      <BackgroundContainer barHidden>
         <Logo/>
         <StyledText>
           Do what you want
