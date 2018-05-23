@@ -85,6 +85,7 @@ Contact.schema = {
     notification: {type: 'bool', default: true},
     isBlocked: {type: 'bool', default: false},
     settings: 'string?',
+    publicKey: 'string?',
     dateCreate: 'date',
     dateUpdate: 'date',
   }

@@ -4,34 +4,22 @@ import {Provider} from 'react-redux';
 import RNDeviceInfo from 'react-native-device-info';
 import RNLanguages from 'react-native-languages';
 import I18n, {setTranslations} from 'redux-i18n';
-import Realm from 'realm';
 
 import {accountActions} from './store/actions';
 import translations from './translations';
 import store from './store/store';
-import http from './utils/http';
+import {http, ws, realm} from './utils';
 import AppWithNavigationState from './router';
-import CONFIG from './config';
 
 export default class App extends Component {
 
   constructor(props) {
     super(props);
 
-    this.initDatabase();
     this.initApp();
+    realm.init(store);
     http.init(store);
-  }
-
-  initDatabase() {
-    Realm.open(CONFIG.realmConfig)
-      .then((realm) => {
-        console.log('realm success');
-        realm.close();
-      })
-      .catch((error) => {
-        console.log('realm error', error);
-      });
+    ws.init({store});
   }
 
   async initApp() {

@@ -3,16 +3,15 @@ import {AsyncStorage} from 'react-native';
 import {connect} from 'react-redux';
 import {withNavigation} from 'react-navigation';
 import PropTypes from 'prop-types';
-import Realm from 'realm';
 
 import MainForm from '../../components/forms/registration/main-form';
 import EmailPhoneForm from '../../components/forms/registration/email-phone-form';
 import SettingsForm from '../../components/forms/registration/settings-form';
 import BackgroundContainer from '../background-container';
 import {accountActions} from '../../store/actions';
+import {realm} from '../../utils';
 import routeEnum from '../../enums/route-enum';
-import {storageEnum} from '../../enums';
-import CONFIG from '../../config';
+import {dbEnum} from '../../enums';
 import backgroundImage from './img/background.png';
 
 class Registration extends Component {
@@ -30,13 +29,18 @@ class Registration extends Component {
     page: 1,
   };
 
+  constructor(props) {
+    super(props);
+    this.realm = realm.getInstance();
+  }
+
   nextPage = () => {
     return this.setState({page: this.state.page + 1});
-  }
+  };
 
   previousPage = () => {
     return this.setState({page: this.state.page - 1});
-  }
+  };
 
   saveToDatabase = () => {
     const {username} = this.props.account.user;
@@ -60,17 +64,11 @@ class Registration extends Component {
       dateCreate,
       dateUpdate,
     };
-    Realm.open(CONFIG.realmConfig)
-      .then((realm) => {
-        realm.write(() => {
-          realm.create('Account', account, true);
-        });
-        realm.close();
-      })
-      .catch((error) => {
-        console.log('Registration: realm error', error);
-      });
-  }
+
+    this.realm.write(() => {
+      this.realm.create(dbEnum.Account, account, true);
+    });
+  };
 
   registration = async (data) => {
     const {account, dispatch} = this.props;
@@ -102,7 +100,7 @@ class Registration extends Component {
           this.props.navigation.navigate(routeEnum.Login);
         }
       });
-  }
+  };
 
   render() {
     const {page} = this.state;

@@ -8,7 +8,7 @@ export default {
   storagePrefix: '@2dodo',
   realmConfig: {
     schema: Schema,
-    schemaVersion: 1,
+    schemaVersion: 2,
     deleteRealmIfMigrationNeeded: true,
   },
 };

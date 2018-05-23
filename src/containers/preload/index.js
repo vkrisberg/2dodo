@@ -8,9 +8,8 @@ import Logo from '../../components/elements/logo';
 import BackgroundContainer from '../background-container';
 import {routeEnum, storageEnum} from '../../enums';
 import {StyledText} from './styles';
-
-import CONFIG from '../../config';
 import {ws} from '../../utils';
+import CONFIG from '../../config';
 
 class Preload extends Component {
 
@@ -19,6 +18,12 @@ class Preload extends Component {
     dispatch: PropTypes.func.isRequired,
     navigation: PropTypes.shape({})
   };
+
+  constructor(props) {
+    super(props);
+
+    ws.init({navigation: props.navigation});
+  }
 
   componentDidMount() {
     const {dispatch, navigation} = this.props;
@@ -38,7 +43,7 @@ class Preload extends Component {
               console.log('login error', error);
             });
         })
-        .catch(async (e) => {
+        .catch(async () => {
           const skipEvents = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.skipEvents}`);
           if (skipEvents) {
             navigation.navigate(routeEnum.Login);
@@ -50,11 +55,10 @@ class Preload extends Component {
   }
 
   wsConnect = ({deviceId, user, keys}) => {
-    ws.init({
+    ws.connect({
       deviceId,
       username: user.username,
       password: keys.hashKey,
-      navigation: this.props.navigation,
     });
   };
 

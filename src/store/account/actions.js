@@ -1,9 +1,10 @@
 import {AsyncStorage} from 'react-native';
-import account from '../../api/account';
+
+import apiAccount from '../../api/account';
+import {realm} from '../../utils';
 import {pgplib, hashlib} from '../../utils/encrypt';
-import storageEnum from '../../enums/storage-enum';
+import {storageEnum, dbEnum} from '../../enums';
 import CONFIG from '../../config';
-import Realm from 'realm';
 
 export const types = {
   UPDATE: 'UPDATE',
@@ -24,6 +25,8 @@ export const types = {
   REGISTER_SUCCESS: 'REGISTER_SUCCESS',
   REGISTER_FAILURE: 'REGISTER_FAILURE',
 };
+
+const _realm = realm.getInstance();
 
 export default {
 
@@ -46,15 +49,7 @@ export default {
           throw new Error('remind failed: user is not authorized');
         }
 
-        const realm = await Realm.open(CONFIG.realmConfig)
-          .then((realm) => {
-            return realm;
-          })
-          .catch((error) => {
-            console.log('error connecting to database', error);
-            throw new Error('remind failed: error connecting to database');
-          });
-        const account = realm.objectForPrimaryKey('Account', username);
+        const account = _realm.objectForPrimaryKey(dbEnum.Account, username);
         // console.log('account', account);
         if (!account || !account.user || !account.keys) {
           throw new Error('remind failed: user or keys is empty in storage');
@@ -65,7 +60,6 @@ export default {
           keys: {...account.keys},
         };
         dispatch({type: types.REMIND_SUCCESS, payload});
-        realm.close();
         return payload;
       } catch (e) {
         dispatch({type: types.REMIND_FAILURE, error: e});
@@ -109,7 +103,7 @@ export default {
         data.hashKey = hashKey;
         data.open_key = publicKey;
         data.hash_key = hashKey;
-        const res = await account.registration(data);
+        const res = await apiAccount.registration(data);
         dispatch({type: types.REGISTER_SUCCESS, payload: res.data, data});
         return res.data;
       } catch (e) {

@@ -7,15 +7,13 @@ import {
   View,
   TouchableWithoutFeedback
 } from 'react-native';
-import Realm from 'realm';
 
 import Link from '../../components/elements/link';
 import LoginForm from '../../components/forms/login';
-import routeEnum from '../../enums/route-enum';
+import {routeEnum, dbEnum} from '../../enums';
 import Logo from '../../components/elements/logo';
 import BackgroundContainer from '../background-container';
-import {ws} from '../../utils';
-import CONFIG from '../../config';
+import {ws, realm} from '../../utils';
 import {accountActions} from '../../store/actions';
 import backgroundImage from './img/background.png';
 import {
@@ -40,21 +38,14 @@ class Login extends Component {
 
   constructor(props) {
     super(props);
-    this.realm = null;
-  }
-
-  componentWillUnmount() {
-    if (this.realm) {
-      this.realm.close();
-    }
+    this.realm = realm.getInstance();
   }
 
   wsConnect = ({deviceId, user, keys}) => {
-    ws.init({
+    ws.connect({
       deviceId,
       username: user.username,
       password: keys.hashKey,
-      navigation: this.props.navigation,
     });
   };
 
@@ -65,17 +56,7 @@ class Login extends Component {
     if (!username) {
       return false;
     }
-
-    const realm = await Realm.open(CONFIG.realmConfig)
-      .then((realm) => {
-        return realm;
-      })
-      .catch((error) => {
-        console.log('error connecting to database', error);
-        throw new Error('login failed: error connecting to database');
-      });
-
-    const account = realm.objectForPrimaryKey('Account', username.toLowerCase());
+    const account = this.realm.objectForPrimaryKey(dbEnum.Account, username.toLowerCase());
     if (!account) {
       console.log('login error: account is not found');
       return false;

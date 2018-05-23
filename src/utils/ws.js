@@ -1,11 +1,14 @@
 import {codeclib} from './encrypt';
 import {onClose, onError, onMessage, onOpen} from './websocket';
-import store from '../store/store';
 import CONFIG from '../config.js';
 
 let _ws = null;
+let _deviceId = '';
 let _username = '';
 let _password = '';
+let _url = `ws${CONFIG.isSecure ? 's' : ''}://${CONFIG.wsHost}`;
+let _store = null;
+let _navigation = null;
 
 /**
  * Get basic auth header
@@ -29,46 +32,76 @@ function getHeaders({deviceId, username, password}) {
 };
 
 /**
- * Websocket init and connect
+ * Websocket initialization
+ * @param store
+ * @param navigation
+ * @returns {boolean}
+ */
+const init = function ({store, navigation}) {
+  if (store) {
+    _store = store;
+  }
+
+  if (navigation) {
+    _navigation = navigation;
+  }
+
+  return true;
+};
+
+/**
+ * Websocket connection
  * @param deviceId
  * @param username
  * @param password
- * @param navigation
+ * @param url
  * @returns {*}
  */
-const init = function ({deviceId, username, password, navigation}) {
+const connect = function ({deviceId, username, password, url}) {
   if (_ws) {
     return _ws;
   }
 
-  const wsUrl = `ws${CONFIG.isSecure ? 's' : ''}://${CONFIG.wsHost}`;
+  const wsUrl = url || _url;
   const wsHeaders = getHeaders({deviceId, username, password});
 
+  _deviceId = deviceId;
   _username = username;
   _password = password;
+  _url = wsUrl;
   _ws = new WebSocket(wsUrl, '', {headers: wsHeaders});
 
   _ws.onopen = () => {
-    onOpen({store, navigation});
+    onOpen({store: _store, navigation: _navigation});
   };
 
   _ws.onerror = (error) => {
-    onError({error, store, navigation});
-    _ws = null;
+    onError({error, store: _store, navigation: _navigation});
   };
 
   _ws.onclose = (event) => {
-    onClose({event, store, navigation});
+    onClose({event, store: _store, navigation: _navigation});
     _ws = null;
   };
 
   _ws.onmessage = (event) => {
-    onMessage({event, store, navigation});
+    onMessage({event, store: _store, navigation: _navigation});
   };
 
   return _ws;
 };
 
+const getInstance = () => {
+  return connect({
+    deviceId: _deviceId,
+    username: _username,
+    password: _password,
+    url: _url,
+  });
+};
+
 export default {
   init,
+  connect,
+  getInstance,
 };
