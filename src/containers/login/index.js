@@ -13,7 +13,7 @@ import LoginForm from '../../components/forms/login';
 import {routeEnum, dbEnum} from '../../enums';
 import Logo from '../../components/elements/logo';
 import BackgroundContainer from '../background-container';
-import {ws, realm} from '../../utils';
+import {services} from '../../utils';
 import {accountActions} from '../../store/actions';
 import backgroundImage from './img/background.png';
 import {
@@ -38,11 +38,11 @@ class Login extends Component {
 
   constructor(props) {
     super(props);
-    this.realm = realm.getInstance();
+    this.realm = services.getRealm();
   }
 
   wsConnect = ({deviceId, user, keys}) => {
-    ws.connect({
+    services.websocketConnect({
       deviceId,
       username: user.username,
       password: keys.hashKey,

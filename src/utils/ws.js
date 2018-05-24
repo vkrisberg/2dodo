@@ -1,12 +1,7 @@
 import {codeclib} from './encrypt';
 import {onClose, onError, onMessage, onOpen} from './websocket';
-import CONFIG from '../config.js';
 
 let _ws = null;
-let _deviceId = '';
-let _username = '';
-let _password = '';
-let _url = `ws${CONFIG.isSecure ? 's' : ''}://${CONFIG.wsHost}`;
 let _store = null;
 let _navigation = null;
 
@@ -35,7 +30,6 @@ function getHeaders({deviceId, username, password}) {
  * Websocket initialization
  * @param store
  * @param navigation
- * @returns {boolean}
  */
 const init = function ({store, navigation}) {
   if (store) {
@@ -45,8 +39,6 @@ const init = function ({store, navigation}) {
   if (navigation) {
     _navigation = navigation;
   }
-
-  return true;
 };
 
 /**
@@ -58,17 +50,9 @@ const init = function ({store, navigation}) {
  * @returns {*}
  */
 const connect = function ({deviceId, username, password, url}) {
-  if (_ws) {
-    return _ws;
-  }
-
   const wsUrl = url || _url;
   const wsHeaders = getHeaders({deviceId, username, password});
 
-  _deviceId = deviceId;
-  _username = username;
-  _password = password;
-  _url = wsUrl;
   _ws = new WebSocket(wsUrl, '', {headers: wsHeaders});
 
   _ws.onopen = () => {
@@ -91,17 +75,7 @@ const connect = function ({deviceId, username, password, url}) {
   return _ws;
 };
 
-const getInstance = () => {
-  return connect({
-    deviceId: _deviceId,
-    username: _username,
-    password: _password,
-    url: _url,
-  });
-};
-
 export default {
   init,
   connect,
-  getInstance,
 };
