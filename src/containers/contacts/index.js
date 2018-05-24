@@ -20,42 +20,60 @@ import {
 class Contacts extends Component {
 
   componentDidMount() {
-    this.loadContacts();
-    // this.createContact({
-    //   username: 'test@api.2do.do',
-    //   nickname: 'test',
-    // });
-    // this.createContact({
-    //   username: 'test2@api.2do.do',
-    //   nickname: 'test2',
-    // });
+    this.loadContactList();
+    this.createContact({
+      username: 'test@api.2do.do',
+      nickname: 'test',
+    }).then(() => {
+      this.loadContact('test@api.2do.do').then((contact) => {
+        contact.firstName = 'John';
+        contact.secondName = 'Smith';
+        this.updateContact(contact);
+      });
+    });
+    this.createContact({
+      username: 'test2@api.2do.do',
+      nickname: 'test2',
+    }).then(() => {
+      this.loadContact('test2@api.2do.do').then((contact) => {
+        contact.firstName = 'Tony';
+        contact.secondName = 'Laurence';
+        this.updateContact(contact).then(() => {
+          // this.deleteContact('test2@api.2do.do');
+        });
+      });
+    });
   }
 
-  loadContacts = (filter, sort, descending) => {
-    this.props.dispatch(contactActions.load(filter, sort, descending));
+  loadContact = (username) => {
+    return this.props.dispatch(contactActions.loadOne(username));
+  };
+
+  loadContactList = (filter, sort, descending) => {
+    return this.props.dispatch(contactActions.loadList(filter, sort, descending));
   };
 
   searchContacts = (text) => {
     const filter = `username CONTAINS[c] '${text}' OR firstName CONTAINS[c] '${text}' OR secondName CONTAINS[c] '${text}'`;
-    this.loadContacts(filter);
+    return this.loadContactList(filter);
   };
 
   createContact = (data) => {
-    this.props.dispatch(contactActions.create(data));
+    return this.props.dispatch(contactActions.create(data));
   };
 
   updateContact = (data) => {
-    this.props.dispatch(contactActions.update(data));
+    return this.props.dispatch(contactActions.update(data));
   };
 
   deleteContact = (username) => {
-    this.props.dispatch(contactActions.delete(username));
+    return this.props.dispatch(contactActions.delete(username));
   };
 
   getContacts = () => {
     const {contact} = this.props;
 
-    if (!contact.items.length) {
+    if (!contact.list.length) {
       return (
         <EmptyContactsView>
           <ContactsEmptyIcon/>
@@ -64,8 +82,8 @@ class Contacts extends Component {
       );
     }
 
-    return contact.items.map((item, index) => {
-      return <Text key={index}>{item.username}</Text>;
+    return contact.list.map((item, index) => {
+      return <Text key={index}>{item.username} {item.firstName} {item.secondName}</Text>;
     });
   };
 
@@ -75,14 +93,18 @@ class Contacts extends Component {
 
   onCreate = (data) => {
     // TODO: show contact creating form
+    // this.createContact(data);
   };
 
-  onUpdate = (data) => {
-    // TODO: show contact updating form
+  onUpdate = (username) => {
+    this.loadContact(username).then(() => {
+      // TODO: show contact updating form
+    });
   };
 
-  onDelete = (data) => {
+  onDelete = (username) => {
     // TODO: show contact deleting confirmation form
+    // this.deleteContact(username);
   };
 
   render() {

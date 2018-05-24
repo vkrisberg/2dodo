@@ -68,6 +68,10 @@ class Contact {
   get fullName() {
     return `${this.firstName} ${this.secondName}`;
   }
+
+  get hostname() {
+    return this.username.split('@')[1];
+  }
 }
 
 Contact.schema = {

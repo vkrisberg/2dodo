@@ -2,7 +2,7 @@ import reducer from '../../utils/reducer';
 import {types} from './actions';
 
 const initState = {
-  items: [],
+  list: [],
   current: {
     username: '', // login@hostname
     nickname: '', // login
@@ -15,6 +15,7 @@ const initState = {
     notification: true,
     isBlocked: false,
     settings: '',
+    publicKey: '',
     dateCreate: new Date(),
     dateUpdate: new Date(),
   },
@@ -35,7 +36,7 @@ export default reducer(initState, {
   [types.LOAD_SUCCESS]: (state, action) => {
     return {
       ...state,
-      items: action.payload,
+      list: action.payload,
       loading: false,
     };
   },
@@ -48,7 +49,7 @@ export default reducer(initState, {
     };
   },
 
-  [types.CREATE]: (state, action) => {
+  [types.LOAD_ONE]: (state, action) => {
     return {
       ...state,
       loading: true,
@@ -56,17 +57,38 @@ export default reducer(initState, {
     };
   },
 
+  [types.LOAD_ONE_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      current: action.payload,
+      loading: false,
+    };
+  },
+
+  [types.LOAD_ONE_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      loading: false,
+      error: action.error,
+    };
+  },
+
+  [types.CREATE]: (state, action) => {
+    return {
+      ...state,
+      current: {...initState.current},
+      loading: true,
+      error: null
+    };
+  },
+
   [types.CREATE_SUCCESS]: (state, action) => {
-    const items = state.items.map((item) => {
-      if (item.username === action.payload.username) {
-        return action.payload;
-      }
-      return item;
-    });
+    const list = state.list.filter((item) => item.username !== action.payload.username);
+    list.push(action.payload);
 
     return {
       ...state,
-      items,
+      list,
       loading: false,
     };
   },
@@ -88,7 +110,7 @@ export default reducer(initState, {
   },
 
   [types.UPDATE_SUCCESS]: (state, action) => {
-    const items = state.items.map((item) => {
+    const list = state.list.map((item) => {
       if (item.username === action.payload.username) {
         return action.payload;
       }
@@ -97,7 +119,7 @@ export default reducer(initState, {
 
     return {
       ...state,
-      items,
+      list,
       loading: false,
     };
   },
@@ -119,13 +141,13 @@ export default reducer(initState, {
   },
 
   [types.DELETE_SUCCESS]: (state, action) => {
-    const items = state.items.filter((item) => {
+    const list = state.list.filter((item) => {
       return item.username !== action.payload;
     });
 
     return {
       ...state,
-      items,
+      list,
       loading: false,
     };
   },
@@ -147,7 +169,7 @@ export default reducer(initState, {
   },
 
   [types.UPDATE_PUBKEY_SUCCESS]: (state, action) => {
-    const items = state.items.map((item) => {
+    const list = state.list.map((item) => {
       if (item.username === action.payload.username) {
         return action.payload;
       }
@@ -156,7 +178,7 @@ export default reducer(initState, {
 
     return {
       ...state,
-      items,
+      list,
       loading: false,
     };
   },

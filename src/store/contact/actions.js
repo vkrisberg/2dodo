@@ -7,6 +7,10 @@ export const types = {
   LOAD_SUCCESS: 'LOAD_SUCCESS',
   LOAD_FAILURE: 'LOAD_FAILURE',
 
+  LOAD_ONE: 'LOAD_ONE',
+  LOAD_ONE_SUCCESS: 'LOAD_ONE_SUCCESS',
+  LOAD_ONE_FAILURE: 'LOAD_ONE_FAILURE',
+
   CREATE: 'CREATE',
   CREATE_SUCCESS: 'CREATE_SUCCESS',
   CREATE_FAILURE: 'CREATE_FAILURE',
@@ -26,7 +30,7 @@ export const types = {
 
 export default {
 
-  load: (filter = '', sort = 'username', descending = false) => {
+  loadList: (filter = '', sort = 'username', descending = false) => {
     return async dispatch => {
       dispatch({type: types.LOAD});
       try {
@@ -37,10 +41,28 @@ export default {
           contacts = contacts.filtered(filter);
         }
         // console.log('contacts loaded', contacts.length);
-        dispatch({type: types.LOAD_SUCCESS, payload: contacts});
-        return contacts;
+        const payload = [...contacts];
+        dispatch({type: types.LOAD_SUCCESS, payload});
+        return payload;
       } catch (e) {
         dispatch({type: types.LOAD_FAILURE, error: e});
+        throw e;
+      }
+    };
+  },
+
+  loadOne: (username) => {
+    return async dispatch => {
+      dispatch({type: types.LOAD_ONE});
+      try {
+        const _realm = realm.getInstance();
+        const contact = _realm.objectForPrimaryKey(dbEnum.Contact, username);
+        // console.log('contact loaded', contact);
+        const payload = {...contact};
+        dispatch({type: types.LOAD_ONE_SUCCESS, payload});
+        return payload;
+      } catch (e) {
+        dispatch({type: types.LOAD_ONE_FAILURE, error: e});
         throw e;
       }
     };
@@ -57,10 +79,11 @@ export default {
           _realm.create(dbEnum.Contact, data, true);
         });
         const contact = _realm.objectForPrimaryKey(dbEnum.Contact, data.username);
+        const payload = {...contact};
         // console.log('contact created', contact);
-        apiContact.getOpenKey([data.username]);
-        dispatch({type: types.CREATE_SUCCESS, payload: contact});
-        return contact;
+        apiContact.getOpenKey([payload.username]);
+        dispatch({type: types.CREATE_SUCCESS, payload});
+        return payload;
       } catch (e) {
         dispatch({type: types.CREATE_FAILURE, error: e});
         throw e;
@@ -78,9 +101,10 @@ export default {
           _realm.create(dbEnum.Contact, data, true);
         });
         const contact = _realm.objectForPrimaryKey(dbEnum.Contact, data.username);
+        const payload = {...contact};
         // console.log('contact updated', contact);
-        dispatch({type: types.UPDATE_SUCCESS, payload: contact});
-        return contact;
+        dispatch({type: types.UPDATE_SUCCESS, payload});
+        return payload;
       } catch (e) {
         dispatch({type: types.UPDATE_FAILURE, error: e});
         throw e;
@@ -97,7 +121,9 @@ export default {
         if (!contact) {
           throw new Error('delete failed: contact is not found');
         }
-        await _realm.delete(contact);
+        await _realm.write(() => {
+          _realm.delete(contact);
+        });
         // console.log('contact deleted', contact);
         dispatch({type: types.DELETE_SUCCESS, payload: username});
         return true;
@@ -132,11 +158,11 @@ export default {
               contact.publicKey = item.open_key;
             });
             // console.log('contact publicKey updated', contact.username);
-            contacts.push(contact);
+            contacts.push({...contact});
           }
         }
         dispatch({type: types.UPDATE_PUBKEY_SUCCESS, payload: contacts});
-        return true;
+        return contacts;
       } catch (e) {
         dispatch({type: types.UPDATE_PUBKEY_FAILURE, error: e});
         throw e;
