@@ -1,8 +1,8 @@
-import {ws} from '../utils';
+import {services} from '../utils';
 
 export default {
   getOpenKey: (usernames = []) => {
-    const websocket = ws.getInstance();
+    const websocket = services.getWebsocket();
     const sendData = {
       type: 'server_message',
       action: 'get_open_key',

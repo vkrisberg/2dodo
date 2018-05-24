@@ -1,25 +1,13 @@
 import axios from 'axios';
-import CONFIG from '../config.js';
 
-const httpUrl = `http${CONFIG.isSecure ? 's' : ''}://${CONFIG.httpHost}${CONFIG.baseUrl}`;
-const http = axios.create({
-  baseURL: httpUrl,
-  headers: {},
-});
-
-http.init = async function (store) {
-  let prevToken = store.getState().account.token;
-  store.subscribe(() => {
-    let newToken = store.getState().account.token;
-    if (newToken !== prevToken) {
-      if (newToken === null) {
-        delete this.defaults.headers['Authorization'];
-      } else {
-        this.defaults.headers['Authorization'] = newToken;
-      }
-      prevToken = newToken;
-    }
+const init = async function (config, store) {
+  const url = `http${config.isSecure ? 's' : ''}://${config.httpHost}${config.baseUrl}`;
+  return axios.create({
+    baseURL: url,
+    headers: {},
   });
 };
 
-export default http;
+export default {
+  init
+};

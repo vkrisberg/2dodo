@@ -8,7 +8,7 @@ import Logo from '../../components/elements/logo';
 import BackgroundContainer from '../background-container';
 import {routeEnum, storageEnum} from '../../enums';
 import {StyledText} from './styles';
-import {ws} from '../../utils';
+import {services} from '../../utils';
 import CONFIG from '../../config';
 
 class Preload extends Component {
@@ -21,8 +21,8 @@ class Preload extends Component {
 
   constructor(props) {
     super(props);
-
-    ws.init({navigation: props.navigation});
+    const {navigation} = props;
+    services.websocketInit({navigation});
   }
 
   componentDidMount() {
@@ -55,7 +55,7 @@ class Preload extends Component {
   }
 
   wsConnect = ({deviceId, user, keys}) => {
-    ws.connect({
+    services.websocketConnect({
       deviceId,
       username: user.username,
       password: keys.hashKey,

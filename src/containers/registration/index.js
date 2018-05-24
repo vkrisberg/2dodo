@@ -9,7 +9,7 @@ import EmailPhoneForm from '../../components/forms/registration/email-phone-form
 import SettingsForm from '../../components/forms/registration/settings-form';
 import BackgroundContainer from '../background-container';
 import {accountActions} from '../../store/actions';
-import {realm} from '../../utils';
+import {services} from '../../utils';
 import routeEnum from '../../enums/route-enum';
 import {dbEnum} from '../../enums';
 import backgroundImage from './img/background.png';
@@ -31,7 +31,7 @@ class Registration extends Component {
 
   constructor(props) {
     super(props);
-    this.realm = realm.getInstance();
+    this.realm = services.getRealm();
   }
 
   nextPage = () => {

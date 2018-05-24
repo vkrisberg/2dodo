@@ -6,7 +6,7 @@ export default {
   baseUrl: '/api',
   isSecure: true,
   storagePrefix: '@2dodo',
-  realmConfig: {
+  realm: {
     schema: Schema,
     schemaVersion: 2,
     deleteRealmIfMigrationNeeded: true,

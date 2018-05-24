@@ -1,5 +1,5 @@
 import apiContact from '../../api/contact';
-import {realm} from '../../utils';
+import {services} from '../../utils';
 import {dbEnum} from '../../enums';
 
 export const types = {
@@ -34,8 +34,8 @@ export default {
     return async dispatch => {
       dispatch({type: types.LOAD});
       try {
-        const _realm = realm.getInstance();
-        let contacts = _realm.objects(dbEnum.Contact)
+        const realm = services.getRealm();
+        let contacts = realm.objects(dbEnum.Contact)
           .sorted(sort, descending);
         if (filter) {
           contacts = contacts.filtered(filter);
@@ -55,8 +55,8 @@ export default {
     return async dispatch => {
       dispatch({type: types.LOAD_ONE});
       try {
-        const _realm = realm.getInstance();
-        const contact = _realm.objectForPrimaryKey(dbEnum.Contact, username);
+        const realm = services.getRealm();
+        const contact = realm.objectForPrimaryKey(dbEnum.Contact, username);
         // console.log('contact loaded', contact);
         const payload = {...contact};
         dispatch({type: types.LOAD_ONE_SUCCESS, payload});
@@ -72,13 +72,13 @@ export default {
     return async dispatch => {
       dispatch({type: types.CREATE});
       try {
-        const _realm = realm.getInstance();
+        const realm = services.getRealm();
         data.dateCreate = new Date();
         data.dateUpdate = data.dateCreate;
-        await _realm.write(() => {
-          _realm.create(dbEnum.Contact, data, true);
+        await realm.write(() => {
+          realm.create(dbEnum.Contact, data, true);
         });
-        const contact = _realm.objectForPrimaryKey(dbEnum.Contact, data.username);
+        const contact = realm.objectForPrimaryKey(dbEnum.Contact, data.username);
         const payload = {...contact};
         // console.log('contact created', contact);
         apiContact.getOpenKey([payload.username]);
@@ -95,12 +95,12 @@ export default {
     return async dispatch => {
       dispatch({type: types.UPDATE});
       try {
-        const _realm = realm.getInstance();
+        const realm = services.getRealm();
         data.dateUpdate = new Date();
-        await _realm.write(() => {
-          _realm.create(dbEnum.Contact, data, true);
+        await realm.write(() => {
+          realm.create(dbEnum.Contact, data, true);
         });
-        const contact = _realm.objectForPrimaryKey(dbEnum.Contact, data.username);
+        const contact = realm.objectForPrimaryKey(dbEnum.Contact, data.username);
         const payload = {...contact};
         // console.log('contact updated', contact);
         dispatch({type: types.UPDATE_SUCCESS, payload});
@@ -116,13 +116,13 @@ export default {
     return async dispatch => {
       dispatch({type: types.DELETE});
       try {
-        const _realm = realm.getInstance();
-        const contact = _realm.objectForPrimaryKey(dbEnum.Contact, username);
+        const realm = services.getRealm();
+        const contact = realm.objectForPrimaryKey(dbEnum.Contact, username);
         if (!contact) {
           throw new Error('delete failed: contact is not found');
         }
-        await _realm.write(() => {
-          _realm.delete(contact);
+        await realm.write(() => {
+          realm.delete(contact);
         });
         // console.log('contact deleted', contact);
         dispatch({type: types.DELETE_SUCCESS, payload: username});
@@ -138,7 +138,7 @@ export default {
     return async dispatch => {
       dispatch({type: types.UPDATE_PUBKEY});
       try {
-        const _realm = realm.getInstance();
+        const realm = services.getRealm();
         const contacts = [];
 
         if (data.error) {
@@ -151,9 +151,9 @@ export default {
           // TODO - remove after fixing on server
           item.name += '@api.2do.do';
 
-          const contact = _realm.objectForPrimaryKey(dbEnum.Contact, item.name);
+          const contact = realm.objectForPrimaryKey(dbEnum.Contact, item.name);
           if (contact) {
-            await _realm.write(() => {
+            await realm.write(() => {
               contact.dateUpdate = new Date();
               contact.publicKey = item.open_key;
             });

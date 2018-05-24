@@ -1,7 +1,7 @@
 import {AsyncStorage} from 'react-native';
 
 import apiAccount from '../../api/account';
-import {realm} from '../../utils';
+import {services} from '../../utils';
 import {pgplib, hashlib} from '../../utils/encrypt';
 import {storageEnum, dbEnum} from '../../enums';
 import CONFIG from '../../config';
@@ -41,14 +41,14 @@ export default {
         // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
         // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
         //---
-        const _realm = await realm.init();
+        const realm = services.getRealm();
         const authorized = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
         const username = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
         if (!authorized || !username) {
           throw new Error('remind failed: user is not authorized');
         }
 
-        const account = _realm.objectForPrimaryKey(dbEnum.Account, username);
+        const account = realm.objectForPrimaryKey(dbEnum.Account, username);
         // console.log('account', account);
         if (!account || !account.user || !account.keys) {
           throw new Error('remind failed: user or keys is empty in storage');
