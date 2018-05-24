@@ -24,23 +24,21 @@ export const types = {
   UPDATE_PUBKEY_FAILURE: 'UPDATE_PUBKEY_FAILURE',
 };
 
-const _realm = realm.getInstance();
-
 export default {
 
   load: (filter = '', sort = 'username', descending = false) => {
     return async dispatch => {
       dispatch({type: types.LOAD});
       try {
-        const contacts = _realm.objects(dbEnum.Contact)
+        const _realm = realm.getInstance();
+        let contacts = _realm.objects(dbEnum.Contact)
           .sorted(sort, descending);
         if (filter) {
-          contacts.filtered(filter);
+          contacts = contacts.filtered(filter);
         }
-        const payload = contacts.length ? [...contacts] : [];
-        console.log('contacts', payload);
-        dispatch({type: types.LOAD_SUCCESS, payload});
-        return payload;
+        // console.log('contacts loaded', contacts.length);
+        dispatch({type: types.LOAD_SUCCESS, payload: contacts});
+        return contacts;
       } catch (e) {
         dispatch({type: types.LOAD_FAILURE, error: e});
         throw e;
@@ -52,17 +50,17 @@ export default {
     return async dispatch => {
       dispatch({type: types.CREATE});
       try {
+        const _realm = realm.getInstance();
         data.dateCreate = new Date();
         data.dateUpdate = data.dateCreate;
         await _realm.write(() => {
           _realm.create(dbEnum.Contact, data, true);
         });
         const contact = _realm.objectForPrimaryKey(dbEnum.Contact, data.username);
-        const payload = {...contact};
-        console.log('contact', payload);
+        // console.log('contact created', contact);
         apiContact.getOpenKey([data.username]);
-        dispatch({type: types.CREATE_SUCCESS, payload});
-        return payload;
+        dispatch({type: types.CREATE_SUCCESS, payload: contact});
+        return contact;
       } catch (e) {
         dispatch({type: types.CREATE_FAILURE, error: e});
         throw e;
@@ -74,15 +72,15 @@ export default {
     return async dispatch => {
       dispatch({type: types.UPDATE});
       try {
+        const _realm = realm.getInstance();
         data.dateUpdate = new Date();
         await _realm.write(() => {
           _realm.create(dbEnum.Contact, data, true);
         });
         const contact = _realm.objectForPrimaryKey(dbEnum.Contact, data.username);
-        const payload = {...contact};
-        console.log('contact', payload);
-        dispatch({type: types.UPDATE_SUCCESS, payload});
-        return payload;
+        // console.log('contact updated', contact);
+        dispatch({type: types.UPDATE_SUCCESS, payload: contact});
+        return contact;
       } catch (e) {
         dispatch({type: types.UPDATE_FAILURE, error: e});
         throw e;
@@ -94,11 +92,13 @@ export default {
     return async dispatch => {
       dispatch({type: types.DELETE});
       try {
+        const _realm = realm.getInstance();
         const contact = _realm.objectForPrimaryKey(dbEnum.Contact, username);
         if (!contact) {
           throw new Error('delete failed: contact is not found');
         }
         await _realm.delete(contact);
+        // console.log('contact deleted', contact);
         dispatch({type: types.DELETE_SUCCESS, payload: username});
         return true;
       } catch (e) {
@@ -112,11 +112,13 @@ export default {
     return async dispatch => {
       dispatch({type: types.UPDATE_PUBKEY});
       try {
+        const _realm = realm.getInstance();
+        const contacts = [];
+
         if (data.error) {
           throw new Error(data.error);
         }
 
-        const contacts = [];
         for (let i = 0; i < data.data.length; i++) {
           const item = data.data[i];
 
@@ -129,8 +131,8 @@ export default {
               contact.dateUpdate = new Date();
               contact.publicKey = item.open_key;
             });
-            console.log('CONTACT UPDATED', contact.username);
-            contacts.push({...contact});
+            // console.log('contact publicKey updated', contact.username);
+            contacts.push(contact);
           }
         }
         dispatch({type: types.UPDATE_PUBKEY_SUCCESS, payload: contacts});

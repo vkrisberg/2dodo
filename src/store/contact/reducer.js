@@ -2,7 +2,7 @@ import reducer from '../../utils/reducer';
 import {types} from './actions';
 
 const initState = {
-  list: [],
+  items: [],
   current: {
     username: '', // login@hostname
     nickname: '', // login
@@ -57,7 +57,7 @@ export default reducer(initState, {
   },
 
   [types.CREATE_SUCCESS]: (state, action) => {
-    const items = state.list.map((item) => {
+    const items = state.items.map((item) => {
       if (item.username === action.payload.username) {
         return action.payload;
       }
@@ -88,7 +88,7 @@ export default reducer(initState, {
   },
 
   [types.UPDATE_SUCCESS]: (state, action) => {
-    const items = state.list.map((item) => {
+    const items = state.items.map((item) => {
       if (item.username === action.payload.username) {
         return action.payload;
       }
@@ -119,7 +119,7 @@ export default reducer(initState, {
   },
 
   [types.DELETE_SUCCESS]: (state, action) => {
-    const items = state.list.filter((item) => {
+    const items = state.items.filter((item) => {
       return item.username !== action.payload;
     });
 
@@ -147,7 +147,7 @@ export default reducer(initState, {
   },
 
   [types.UPDATE_PUBKEY_SUCCESS]: (state, action) => {
-    const items = state.list.map((item) => {
+    const items = state.items.map((item) => {
       if (item.username === action.payload.username) {
         return action.payload;
       }

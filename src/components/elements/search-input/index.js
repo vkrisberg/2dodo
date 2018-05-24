@@ -18,13 +18,15 @@ export default class SearchInput extends Component {
     };
   }
 
-  onFocus = () => !this.state.isFocused && this.setState({isFocused: true})
+  onFocus = () => !this.state.isFocused && this.setState({isFocused: true});
 
-  onBlur = () => this.state.isFocused && this.setState({isFocused: false})
+  onBlur = () => this.state.isFocused && this.setState({isFocused: false});
 
-  onChange = () => {
-    return null;
-  }
+  onChange = (value) => {
+    if (this.props.onChange) {
+      this.props.onChange(value);
+    }
+  };
 
   render() {
     return (
@@ -39,7 +41,7 @@ export default class SearchInput extends Component {
             selectionColor="#999"
             onFocus={this.onFocus}
             onBlur={this.onBlur}
-            onChange={this.onChange}
+            onChangeText={this.onChange}
           />
         </InputView>
       </SearchInputView>

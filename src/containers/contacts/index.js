@@ -35,6 +35,11 @@ class Contacts extends Component {
     this.props.dispatch(contactActions.load(filter, sort, descending));
   };
 
+  searchContacts = (text) => {
+    const filter = `username CONTAINS[c] '${text}' OR firstName CONTAINS[c] '${text}' OR secondName CONTAINS[c] '${text}'`;
+    this.loadContacts(filter);
+  };
+
   createContact = (data) => {
     this.props.dispatch(contactActions.create(data));
   };
@@ -50,7 +55,7 @@ class Contacts extends Component {
   getContacts = () => {
     const {contact} = this.props;
 
-    if (!contact.list.length) {
+    if (!contact.items.length) {
       return (
         <EmptyContactsView>
           <ContactsEmptyIcon/>
@@ -59,9 +64,13 @@ class Contacts extends Component {
       );
     }
 
-    return contact.list.map((item) => {
-      return <Text>{item.username}</Text>;
+    return contact.items.map((item, index) => {
+      return <Text key={index}>{item.username}</Text>;
     });
+  };
+
+  onSearchChange = (text) => {
+    this.searchContacts(text)
   };
 
   onCreate = (data) => {
@@ -91,7 +100,7 @@ class Contacts extends Component {
             </TouchableWithoutFeedback>
           </AddContact>
         </Header>
-        <SearchInput placeholder="Search contacts"/>
+        <SearchInput placeholder="Search contacts" onChange={this.onSearchChange}/>
         {this.getContacts()}
       </TabsContainer>
     );

@@ -10,6 +10,7 @@ import translations from './translations';
 import store from './store/store';
 import {http, ws, realm} from './utils';
 import AppWithNavigationState from './router';
+import CONFIG from './config.js';
 
 export default class App extends Component {
 
@@ -17,7 +18,7 @@ export default class App extends Component {
     super(props);
 
     this.initApp();
-    realm.init(store);
+    realm.init(CONFIG.realmConfig, store);
     http.init(store);
     ws.init({store});
   }

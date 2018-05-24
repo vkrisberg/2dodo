@@ -26,8 +26,6 @@ export const types = {
   REGISTER_FAILURE: 'REGISTER_FAILURE',
 };
 
-const _realm = realm.getInstance();
-
 export default {
 
   update: (data) => {
@@ -43,6 +41,7 @@ export default {
         // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
         // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
         //---
+        const _realm = await realm.init();
         const authorized = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
         const username = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
         if (!authorized || !username) {
