@@ -1,13 +1,10 @@
 import {AsyncStorage} from 'react-native';
-import account from '../../api/account';
-import {pgplib, hashlib} from '../../utils/encrypt';
-import storageEnum from '../../enums/storage-enum';
-import CONFIG from '../../config';
 
-const TEST_ACCOUNT = {
-  username: 'test@api.2do.do',
-  hashKey: '68603d6f4cc29f0575815f10ec31ffbfac43248d7aa781539d7fb52b9ed66e37',
-};
+import apiAccount from '../../api/account';
+import {realm} from '../../utils';
+import {pgplib, hashlib} from '../../utils/encrypt';
+import {storageEnum, dbEnum} from '../../enums';
+import CONFIG from '../../config';
 
 export const types = {
   UPDATE: 'UPDATE',
@@ -39,21 +36,27 @@ export default {
     return async dispatch => {
       dispatch({type: types.REMIND});
       try {
+        //--- TODO - remove after test
         // await AsyncStorage.clear();
         // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
+        // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
+        //---
+        const _realm = await realm.init();
         const authorized = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
-        if (!authorized) {
+        const username = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
+        if (!authorized || !username) {
           throw new Error('remind failed: user is not authorized');
         }
 
-        const user = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.user}`);
-        const keys = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.keys}`);
-        if (!user || !keys) {
+        const account = _realm.objectForPrimaryKey(dbEnum.Account, username);
+        // console.log('account', account);
+        if (!account || !account.user || !account.keys) {
           throw new Error('remind failed: user or keys is empty in storage');
         }
+
         const payload = {
-          user: JSON.parse(user),
-          keys: JSON.parse(keys),
+          user: {...account.user},
+          keys: {...account.keys},
         };
         dispatch({type: types.REMIND_SUCCESS, payload});
         return payload;
@@ -64,7 +67,7 @@ export default {
     };
   },
 
-  login: ({deviceId, user, keys, navigation}) => {
+  login: ({deviceId, user, keys}) => {
     return async dispatch => {
       try {
         dispatch({type: types.LOGIN, payload: {user, keys}});
@@ -99,7 +102,7 @@ export default {
         data.hashKey = hashKey;
         data.open_key = publicKey;
         data.hash_key = hashKey;
-        const res = await account.registration(data);
+        const res = await apiAccount.registration(data);
         dispatch({type: types.REGISTER_SUCCESS, payload: res.data, data});
         return res.data;
       } catch (e) {

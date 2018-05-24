@@ -14,3 +14,19 @@ export const SearchInputView = styled.View`
 export const IconContainer = styled.View`
   align-self: flex-start;
 `;
+
+export const InputView = styled.View`
+  position: absolute;
+  top: 1;
+  align-items: center;
+  width: 220;
+`;
+
+export const StyledInput = styled.TextInput`
+  height: 35;
+  width: 100%;
+`;
+
+export const StyledText = styled.Text`
+  position: absolute;
+`;

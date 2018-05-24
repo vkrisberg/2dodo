@@ -1,5 +1,5 @@
-import CONFIG from '../config.js';
 import axios from 'axios';
+import CONFIG from '../config.js';
 
 const httpUrl = `http${CONFIG.isSecure ? 's' : ''}://${CONFIG.httpHost}${CONFIG.baseUrl}`;
 const http = axios.create({

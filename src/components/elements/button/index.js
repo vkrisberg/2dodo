@@ -1,8 +1,5 @@
 import React, { PureComponent } from 'react';
 import {
-  TouchableOpacity,
-  Text,
-  View,
   ViewPropTypes
 } from 'react-native';
 import PropTypes from 'prop-types';

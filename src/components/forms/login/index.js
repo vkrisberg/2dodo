@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
 import PropTypes from 'prop-types';
-
+import {connect} from 'react-redux';
 
 import Input from '../../elements/input';
 import Checkbox from '../../elements/checkbox';
@@ -17,6 +17,7 @@ class LoginForm extends Component {
 
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -27,7 +28,9 @@ class LoginForm extends Component {
     };
   }
 
-  newKey = () => this.setState({isChecked: !this.state.isChecked})
+  toggleNewKey = () => {
+    this.setState({isChecked: !this.state.isChecked});
+  };
 
   render() {
     return (
@@ -35,14 +38,14 @@ class LoginForm extends Component {
         <Field
           textColor="white"
           component={Input}
-          name="nickname"
-          placeholder="Логин"
+          name="username"
+          placeholder="Login"
         />
         <Field
           textColor="white"
           component={Input}
           name="password"
-          placeholder="Пароль"
+          placeholder="Password"
         />
         <SecurityContainer>
           <Security>For best security</Security>
@@ -52,14 +55,15 @@ class LoginForm extends Component {
             color="white"
             labelPadding={10}
             checked={this.state.isChecked}
-            onPress={this.newKey}
+            onPress={this.toggleNewKey}
             label="Create a new key"
           />
         </SecurityContainer>
-        <Button onPress={this.props.onSubmit}>Enter</Button>
+        <Button onPress={this.props.handleSubmit}>Enter</Button>
       </Container>
     );
   }
 }
 
-export default reduxForm({form: 'login'})(LoginForm);
+
+export default connect()(reduxForm({form: 'login'})(LoginForm));

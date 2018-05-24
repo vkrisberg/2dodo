@@ -1,8 +1,13 @@
 import React, {Component} from 'react';
-import {View, Text, TextInput} from 'react-native';
 
 import SearchIcon from '../../icons/search-icon';
-import {SearchInputView, IconContainer} from './styles';
+import {
+  SearchInputView,
+  IconContainer,
+  InputView,
+  StyledInput,
+  StyledText
+} from './styles';
 
 export default class SearchInput extends Component {
   constructor(props) {
@@ -13,8 +18,15 @@ export default class SearchInput extends Component {
     };
   }
 
-  onFocus = () => !this.state.isFocused && this.setState({isFocused: true})
-  onFocus = () => this.state.isFocused && this.setState({isFocused: false})
+  onFocus = () => !this.state.isFocused && this.setState({isFocused: true});
+
+  onBlur = () => this.state.isFocused && this.setState({isFocused: false});
+
+  onChange = (value) => {
+    if (this.props.onChange) {
+      this.props.onChange(value);
+    }
+  };
 
   render() {
     return (
@@ -22,17 +34,16 @@ export default class SearchInput extends Component {
         <IconContainer>
           <SearchIcon />
         </IconContainer>
-        <Text>Search contacts</Text>
-        <View style={{ position: 'absolute', top: '5%', alignItems: 'center', width: 220}}>
-          <TextInput
-            style={{height: 35, width: '100%'}}
+        {!this.state.isFocused && <StyledText>{this.props.placeholder}</StyledText>}
+        <InputView>
+          <StyledInput
             underlineColorAndroid="transparent"
             selectionColor="#999"
             onFocus={this.onFocus}
             onBlur={this.onBlur}
+            onChangeText={this.onChange}
           />
-        </View>
-        {/* <TextInput placeholder="Search contacts" /> */}
+        </InputView>
       </SearchInputView>
     );
   }

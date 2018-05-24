@@ -10,12 +10,10 @@ import {
 
 import Link from '../../components/elements/link';
 import LoginForm from '../../components/forms/login';
-import routeEnum from '../../enums/route-enum';
+import {routeEnum, dbEnum} from '../../enums';
 import Logo from '../../components/elements/logo';
 import BackgroundContainer from '../background-container';
-import {ws} from '../../utils';
-import CONFIG from '../../config';
-import {storageEnum} from '../../enums';
+import {ws, realm} from '../../utils';
 import {accountActions} from '../../store/actions';
 import backgroundImage from './img/background.png';
 import {
@@ -38,25 +36,34 @@ class Login extends Component {
     t: PropTypes.func.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+    this.realm = realm.getInstance();
+  }
+
   wsConnect = ({deviceId, user, keys}) => {
-    ws.init({
+    ws.connect({
       deviceId,
       username: user.username,
       password: keys.hashKey,
-      navigation: this.props.navigation,
     });
   };
 
-  onLogin = async () => {
-    const {dispatch, navigation} = this.props;
-    let {deviceId, user, keys} = this.props.account;
+  login = async (data) => {
+    const {dispatch} = this.props;
+    const {username} = data;
 
-    if (!user.nickname || !keys.hashKey) {
-      user = JSON.parse(await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.user}`));
-      keys = JSON.parse(await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.keys}`));
+    if (!username) {
+      return false;
+    }
+    const account = this.realm.objectForPrimaryKey(dbEnum.Account, username.toLowerCase());
+    if (!account) {
+      console.log('login error: account is not found');
+      return false;
     }
 
-    dispatch(accountActions.login({navigation, deviceId, user, keys}))
+    const {deviceId, user, keys} = account;
+    dispatch(accountActions.login({deviceId, user, keys}))
       .then(() => {
         this.wsConnect({deviceId, user, keys});
       })
@@ -70,21 +77,21 @@ class Login extends Component {
   };
 
   render() {
+    const { t } = this.context;
+
     return (
       <BackgroundContainer image={backgroundImage}>
         <Logo flex={false}/>
-        <StyledText>Please enter your email and pass</StyledText>
-        <LoginForm onSubmit={this.onLogin}/>
+        <StyledText>{t('Welcome')}</StyledText>
+        <LoginForm onSubmit={this.login}/>
         <View>
-          <StyledLink to={routeEnum.ForgotPassword}>Forget password?</StyledLink>
+          <StyledLink to={routeEnum.ForgotPassword}>{t('ForgetPassword')}</StyledLink>
           <StyledRegistration>
-            <RegistrationLabel>First time in app?</RegistrationLabel>
-            <Link color="#4d8fdb" to={routeEnum.Registration}>Registration</Link>
+            <RegistrationLabel>{t('FirstTimeInApp')}</RegistrationLabel>
+            <Link color="#4d8fdb" to={routeEnum.Registration}>{t('Registration')}</Link>
           </StyledRegistration>
-          <TouchableWithoutFeedback onPress={this.toKeyImport}>
-            <StyledKeysImport>
-              Key import
-            </StyledKeysImport>
+          <TouchableWithoutFeedback  onPress={this.toKeyImport}>
+            <StyledKeysImport>{t('KeysImport')}</StyledKeysImport>
           </TouchableWithoutFeedback>
         </View>
       </BackgroundContainer>

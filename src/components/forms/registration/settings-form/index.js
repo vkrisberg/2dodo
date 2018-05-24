@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {reduxForm, Field} from 'redux-form';
 import {withNavigation} from 'react-navigation';
+import PropTypes from 'prop-types';
 
 import Title from '../../../elements/title';
 import Input from '../../../elements/input';
@@ -17,18 +18,21 @@ import {
 } from './styles';
 
 class SettingsForm extends Component {
+  static propTypes = {
+    previousPage: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
+  };
 
   setDayTheme = () => {
     return null;
-  }
+  };
 
   setNightTheme = () => {
     return null;
-  }
+  };
 
   render() {
-    const { handleSubmit } = this.props;
-
     return (
       <Container>
         <Title style={StyledTitle}>Settings</Title>
@@ -39,11 +43,11 @@ class SettingsForm extends Component {
           </Description>
         </DescriptionWrapper>
         <StyledImage>
-          <AvatarIcon />
+          <AvatarIcon/>
         </StyledImage>
         <ButtonWrapper>
-          <ThemeButton markColor="black" marginRight={15} />
-          <ThemeButton markColor="#333" night />
+          <ThemeButton markColor="black" marginRight={15}/>
+          <ThemeButton markColor="#333" night/>
         </ButtonWrapper>
         <Field
           focusedColor="#7bb2ff"
@@ -61,7 +65,7 @@ class SettingsForm extends Component {
           Get 2dodo access to push notifications
           to recieve a messages
         </Description>
-        <Button color="black" onPress={handleSubmit}>
+        <Button color="black" onPress={this.props.handleSubmit}>
           Done
         </Button>
       </Container>

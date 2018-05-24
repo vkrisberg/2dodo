@@ -1,7 +1,15 @@
 import styled from 'styled-components';
 
+
+const getViewStyles = () => ({
+  alignItems: 'center',
+  backgroundColor: 'white',
+  flex: 1
+});
+
+
 export const Container = styled.View`
-  align-items: center;
-  background-color: white;
-  flex: 1;
+  ${getViewStyles()}
 `;
+
+export const ScrolledContainer = getViewStyles();

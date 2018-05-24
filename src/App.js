@@ -8,14 +8,22 @@ import I18n, {setTranslations} from 'redux-i18n';
 import {accountActions} from './store/actions';
 import translations from './translations';
 import store from './store/store';
-import http from './utils/http';
+import {http, ws, realm} from './utils';
 import AppWithNavigationState from './router';
+import CONFIG from './config.js';
 
 export default class App extends Component {
 
   constructor(props) {
     super(props);
 
+    this.initApp();
+    realm.init(CONFIG.realmConfig, store);
+    http.init(store);
+    ws.init({store});
+  }
+
+  async initApp() {
     const device = {
       deviceId: RNDeviceInfo.getUniqueID(),
       deviceName: RNDeviceInfo.getDeviceName(),
@@ -25,7 +33,6 @@ export default class App extends Component {
 
     store.dispatch(accountActions.update(device));
     store.dispatch(setTranslations(translations));
-    http.init(store);
   }
 
   render() {

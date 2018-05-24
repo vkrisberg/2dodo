@@ -1,5 +1,6 @@
 import reducer from '../../utils/reducer';
 import {types} from './actions';
+import CONFIG from '../../config';
 
 const initState = {
   authorized: false,
@@ -22,7 +23,8 @@ const initState = {
   deviceId: '',
   deviceName: '',
   platform: '',
-  hostname: 'api.2do.do',
+  hostname: CONFIG.httpHost,
+  isSecure: CONFIG.isSecure,
 
   loading: false,
   error: null,
@@ -169,9 +171,10 @@ export default reducer(initState, {
       const account = {
         user: {
           ...state.user,
-          nickname: data.nickname,
-          username: `${data.nickname}@${state.hostname}`,
-          fullName: data.fullName,
+          nickname: data.name,
+          username: `${data.name}@${state.hostname}`,
+          firstName: data.firstName,
+          secondName: data.secondName,
           email: data.email,
         },
         keys: {

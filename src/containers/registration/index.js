@@ -9,15 +9,14 @@ import EmailPhoneForm from '../../components/forms/registration/email-phone-form
 import SettingsForm from '../../components/forms/registration/settings-form';
 import BackgroundContainer from '../background-container';
 import {accountActions} from '../../store/actions';
+import {realm} from '../../utils';
 import routeEnum from '../../enums/route-enum';
-import {storageEnum} from '../../enums';
-import CONFIG from '../../config';
+import {dbEnum} from '../../enums';
 import backgroundImage from './img/background.png';
 
 class Registration extends Component {
   static propTypes = {
     account: PropTypes.object,
-    registration: PropTypes.object,
     dispatch: PropTypes.func.isRequired,
     navigation: PropTypes.shape({navigate: PropTypes.func})
   };
@@ -30,15 +29,48 @@ class Registration extends Component {
     page: 1,
   };
 
+  constructor(props) {
+    super(props);
+    this.realm = realm.getInstance();
+  }
+
   nextPage = () => {
     return this.setState({page: this.state.page + 1});
-  }
+  };
 
   previousPage = () => {
     return this.setState({page: this.state.page - 1});
-  }
+  };
 
-  handleSubmit = async (data) => {
+  saveToDatabase = () => {
+    const {username} = this.props.account.user;
+    const {deviceId, hostname} = this.props.account;
+    const dateCreate = new Date();
+    const dateUpdate = new Date();
+    const user = {
+      ...this.props.account.user,
+      username,
+    };
+    const keys = {
+      ...this.props.account.keys,
+      username,
+    };
+    const account = {
+      username,
+      user,
+      keys,
+      deviceId,
+      hostname,
+      dateCreate,
+      dateUpdate,
+    };
+
+    this.realm.write(() => {
+      this.realm.create(dbEnum.Account, account, true);
+    });
+  };
+
+  registration = async (data) => {
     const {account, dispatch} = this.props;
 
     if (account.loading) {
@@ -59,8 +91,7 @@ class Registration extends Component {
     dispatch(accountActions.register(sendData))
       .then(() => {
         console.log('registration success', this.props.account);
-        AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.keys}`, JSON.stringify(this.props.account.keys));
-        AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.user}`, JSON.stringify(this.props.account.user));
+        this.saveToDatabase();
         this.props.navigation.navigate(routeEnum.Login);
       })
       .catch((error) => {
@@ -69,16 +100,18 @@ class Registration extends Component {
           this.props.navigation.navigate(routeEnum.Login);
         }
       });
-  }
+  };
 
   render() {
     const {page} = this.state;
+    const {hostname, isSecure} = this.props.account;
+    const server = `http${isSecure ? 's' : ''}://${hostname}`;
 
     return (
       <BackgroundContainer image={backgroundImage}>
-        {page === 1 && <MainForm onSubmit={this.nextPage}/>}
+        {page === 1 && <MainForm defaultServer={server} onSubmit={this.nextPage}/>}
         {page === 2 && <EmailPhoneForm previousPage={this.previousPage} onSubmit={this.nextPage}/>}
-        {page === 3 && <SettingsForm previousPage={this.previousPage} onSubmit={this.handleSubmit}/>}
+        {page === 3 && <SettingsForm previousPage={this.previousPage} onSubmit={this.registration}/>}
       </BackgroundContainer>
     );
   }
@@ -86,5 +119,4 @@ class Registration extends Component {
 
 export default connect(state => ({
   account: state.account,
-  registration: state.form.registration,
 }))(withNavigation(Registration));

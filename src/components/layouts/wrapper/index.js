@@ -1,19 +1,29 @@
-import React, { PureComponent } from 'react';
-import {StatusBar} from 'react-native';
+import React, {PureComponent} from 'react';
+import {StatusBar, ScrollView} from 'react-native';
 
-import {Container} from './styles';
+import {Container, ScrolledContainer} from './styles';
+
+const ViewWrap = (props) => (
+  props.scrolled
+    ? <ScrollView contentContainerStyle={ScrolledContainer}>{props.children}</ScrollView>
+    : <Container>{props.children}</Container>
+);
 
 export default class Wrapper extends PureComponent {
   render() {
+    const { scrolled, children, barHidden } = this.props;
+
     return (
-      <Container>
+      <ViewWrap scrolled={scrolled}>
         <StatusBar
-          translucent
-          backgroundColor="rgba(0, 0, 0, 0.2)"
           animated
+          hidden={barHidden || false}
+          translucent
+          backgroundColor="rgba(0, 0, 0, 0)"
+          barStyle="dark-content"
         />
-        {this.props.children}
-      </Container>
+        {children}
+      </ViewWrap>
     );
   }
 }

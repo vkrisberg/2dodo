@@ -5,9 +5,10 @@ import CONFIG from '../../config';
 import {types} from '../../store/account/actions';
 
 export default function ({event, store, navigation}) {
-  AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
   if (event.wasClean) {
     console.log('websocket closed clear');
+    AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
+    AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
     store.dispatch({type: types.LOGOUT_SUCCESS});
     navigation.navigate(routeEnum.Login);
   } else {
