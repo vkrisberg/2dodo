@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {TouchableWithoutFeedback, Text} from 'react-native';
 import {connect} from 'react-redux';
 
-import contactApi from '../../api/contact';
 import {contactActions} from '../../store/actions';
 import {routeEnum} from '../../enums';
 import {AddIcon, ContactsEmptyIcon} from '../../components/icons/';
@@ -21,28 +20,29 @@ class Contacts extends Component {
 
   componentDidMount() {
     this.loadContactList();
-    this.createContact({
-      username: 'test@api.2do.do',
-      nickname: 'test',
-    }).then(() => {
-      this.loadContact('test@api.2do.do').then((contact) => {
-        contact.firstName = 'John';
-        contact.secondName = 'Smith';
-        this.updateContact(contact);
-      });
-    });
-    this.createContact({
-      username: 'test2@api.2do.do',
-      nickname: 'test2',
-    }).then(() => {
-      this.loadContact('test2@api.2do.do').then((contact) => {
-        contact.firstName = 'Tony';
-        contact.secondName = 'Laurence';
-        this.updateContact(contact).then(() => {
-          // this.deleteContact('test2@api.2do.do');
-        });
-      });
-    });
+    // TODO - remove after tests
+    // this.createContact({
+    //   username: 'test@api.2do.do',
+    //   nickname: 'test',
+    // }).then(() => {
+    //   this.loadContact('test@api.2do.do').then((contact) => {
+    //     contact.firstName = 'John';
+    //     contact.secondName = 'Smith';
+    //     this.updateContact(contact);
+    //   });
+    // });
+    // this.createContact({
+    //   username: 'test2@api.2do.do',
+    //   nickname: 'test2',
+    // }).then(() => {
+    //   this.loadContact('test2@api.2do.do').then((contact) => {
+    //     contact.firstName = 'Tony';
+    //     contact.secondName = 'Laurence';
+    //     this.updateContact(contact).then(() => {
+    //       // this.deleteContact('test2@api.2do.do');
+    //     });
+    //   });
+    // });
   }
 
   loadContact = (username) => {

@@ -15,19 +15,18 @@ import {
   BoldText
 } from './styles';
 
-export default class Favorits extends PureComponent {
+export default class Messages extends PureComponent {
   searchFavorite = () => {
-    
-  }
+  };
 
   getFavorits = () => {
     return (
       <EmptyFavoritsView>
-        <EmptyMessagesIcon />
+        <EmptyMessagesIcon/>
         <BoldText>Your have not chats yet</BoldText>
       </EmptyFavoritsView>
     );
-  }
+  };
 
   render() {
     return (
@@ -35,7 +34,7 @@ export default class Favorits extends PureComponent {
         <Header>
           <TitleContainer>
             <StyledIcon>
-              <FavoritsDotsIcon />
+              <FavoritsDotsIcon/>
             </StyledIcon>
             <StyledTitle>
               Messages
@@ -43,7 +42,7 @@ export default class Favorits extends PureComponent {
           </TitleContainer>
           <AddContact>
             <TouchableWithoutFeedback onPress={this.searchFavorite}>
-              <AddIcon />
+              <AddIcon/>
             </TouchableWithoutFeedback>
           </AddContact>
         </Header>

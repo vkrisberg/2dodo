@@ -96,14 +96,87 @@ Contact.schema = {
 };
 
 /**
- * Chat message schema
+ * Chat schema
  */
-class Message {
+class Chat {
 }
 
-Message.schema = {
-  name: 'Message',
-  primaryKey: 'username',
+Chat.schema = {
+  name: 'Chat',
+  primaryKey: 'id',
+  properties: {
+    id: 'string', // unique chat id (uuid4)
+    name: 'string',
+    owner: 'string',
+    members: 'string[]',
+    shortName: 'string?',
+    avatar: 'data?',
+    lastMessage: 'ChatMessage?',
+    unreadCount: {type: 'int', default: 0},
+    sort: {type: 'int', default: 0},
+    pin: {type: 'int', default: 0},
+    isMuted: {type: 'bool', default: false},
+    isDeleted: {type: 'bool', default: false},
+    dateCreate: 'date',
+    dateUpdate: 'date',
+  }
+};
+
+/**
+ * Chat message schema
+ */
+class ChatMessage {
+}
+
+ChatMessage.schema = {
+  name: 'ChatMessage',
+  properties: {
+    username: 'string',
+    from: 'string',
+    text: 'string',
+    dateCreate: 'date',
+    dateUpdate: 'date',
+  }
+};
+
+/**
+ * Group/channel schema
+ */
+class Group {
+}
+
+Group.schema = {
+  name: 'Group',
+  primaryKey: 'id',
+  properties: {
+    id: 'string', // unique group id (uuid4)
+    link: 'string', // unique group link
+    type: 'string', // group_chat/channel
+    name: 'string',
+    description: 'string',
+    owner: 'string',
+    members: 'string?[]',
+    shortName: 'string?',
+    avatar: 'data?',
+    lastMessage: 'GroupMessage?',
+    unreadCount: {type: 'int', default: 0},
+    sort: {type: 'int', default: 0},
+    pin: {type: 'int', default: 0},
+    isMuted: {type: 'bool', default: false},
+    isDeleted: {type: 'bool', default: false},
+    dateCreate: 'date',
+    dateUpdate: 'date',
+  }
+};
+
+/**
+ * Group/channel message schema
+ */
+class GroupMessage {
+}
+
+GroupMessage.schema = {
+  name: 'GroupMessage',
   properties: {
     username: 'string',
     from: 'string',
@@ -118,5 +191,8 @@ export default [
   RsaKey,
   Account,
   Contact,
-  Message,
+  ChatMessage,
+  Chat,
+  GroupMessage,
+  Group,
 ];
