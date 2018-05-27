@@ -3,12 +3,20 @@ import {get, isString} from 'lodash';
 
 const DATE_FORMAT = 'YYYY-MM-DDTHH:mm:ss.SSSZ';
 
+const getDate = (date) => {
+  if (date) {
+    return moment(date).toDate();
+  }
+
+  return moment().toDate();
+};
+
 /**
  * Datetime in RFC3339MilliSec
  * @param date
  * @returns {string}
  */
-const getDate = (date) => {
+const getRfcDate = (date) => {
   if (date) {
     return moment(date).format(DATE_FORMAT);
   }
@@ -44,15 +52,15 @@ const parseDate = (date, format = DATE_FORMAT) => {
 };
 
 /**
- * Get timeSend from object or current time
+ * Get dateSend from object or current time
  * @param data
  * @returns {*|moment.Moment}
  */
-const getTimeSend = (data) => {
-  const timeSend = get(data, 'timeSend', null);
+const getDateSend = (data) => {
+  const dateSend = get(data, 'dateSend', null);
 
-  if (timeSend) {
-    return parseDate(timeSend);
+  if (dateSend) {
+    return parseDate(dateSend);
   }
 
   return moment();
@@ -60,7 +68,8 @@ const getTimeSend = (data) => {
 
 export default {
   getDate,
+  getRfcDate,
   getTimestamp,
   parseDate,
-  getTimeSend,
+  getDateSend,
 };

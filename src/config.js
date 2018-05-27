@@ -11,4 +11,7 @@ export default {
     schemaVersion: 1,
     deleteRealmIfMigrationNeeded: true,
   },
+  message: {
+    protocol: '1.0.0',
+  },
 };

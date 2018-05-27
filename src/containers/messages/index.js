@@ -16,6 +16,28 @@ import {
 } from './styles';
 
 export default class Messages extends PureComponent {
+  componentDidMount() {
+
+  }
+
+  loadChatList = () => {
+
+  };
+
+  loadChatMessages = () => {
+
+  };
+
+  createChat = async (members) => {
+    for (let i = 0; i < members.length; i++) {
+
+    }
+  };
+
+  sendChatMessage = () => {
+
+  };
+
   searchFavorite = () => {
   };
 

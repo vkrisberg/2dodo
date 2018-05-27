@@ -4,18 +4,19 @@ import {types} from './actions';
 const initState = {
   list: [],
   current: {
-    username: '', // login@hostname
-    nickname: '', // login
-    phones: [],
-    firstName: '',
-    secondName: '',
-    bio: '',
-    avatar: '',
-    sound: '',
-    notification: true,
-    isBlocked: false,
-    settings: '',
-    publicKey: '',
+    chatId: '',
+    type: 'text', // [text, audio, video, image, call]
+    username: '',
+    from: '',
+    text: '',
+    fileUrl: '',
+    user: {},
+    quote: {},
+    status: 'sending', // [sending, send, received, read, error]
+    isOwn: false,
+    isFavorite: false,
+    salt: '',
+    dateSend: null,
     dateCreate: null,
     dateUpdate: null,
   },

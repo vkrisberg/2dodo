@@ -4,18 +4,18 @@ import {types} from './actions';
 const initState = {
   list: [],
   current: {
-    username: '', // login@hostname
-    nickname: '', // login
-    phones: [],
-    firstName: '',
-    secondName: '',
-    bio: '',
+    id: '', // unique chat id (uuid4)
+    name: '',
+    owner: '',
+    members: [],
+    shortName: '',
     avatar: '',
-    sound: '',
-    notification: true,
-    isBlocked: false,
-    settings: '',
-    publicKey: '',
+    lastMessage: {},
+    unreadCount: 0,
+    sort: 0,
+    pin: 0,
+    isMuted: false,
+    isDeleted: false,
     dateCreate: null,
     dateUpdate: null,
   },

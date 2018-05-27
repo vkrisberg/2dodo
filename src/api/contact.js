@@ -1,11 +1,12 @@
 import {services} from '../utils';
+import {actionEnum} from '../enums';
 
 export default {
   getOpenKey: (usernames = []) => {
     const websocket = services.getWebsocket();
     const sendData = {
       type: 'server_message',
-      action: 'get_open_key',
+      action: actionEnum.getOpenKey,
       data: usernames,
       to: null
     };

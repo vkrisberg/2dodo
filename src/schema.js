@@ -21,7 +21,7 @@ User.schema = {
     secondName: 'string?',
     bio: 'string?',
     avatar: 'data?',
-  }
+  },
 };
 
 /**
@@ -38,7 +38,7 @@ RsaKey.schema = {
     publicKey: 'string',
     privateKey: 'string',
     hashKey: 'string',
-  }
+  },
 };
 
 /**
@@ -58,7 +58,7 @@ Account.schema = {
     hostname: 'string',
     dateCreate: 'date',
     dateUpdate: 'date',
-  }
+  },
 };
 
 /**
@@ -80,6 +80,7 @@ Contact.schema = {
   properties: {
     username: 'string', // login@hostname
     nickname: 'string', // login
+    deviceId: 'string?',
     phones: 'string?[]',
     firstName: {type: 'string', optional: true, indexed: true},
     secondName: {type: 'string', optional: true, indexed: true},
@@ -92,7 +93,7 @@ Contact.schema = {
     publicKey: 'string?',
     dateCreate: 'date',
     dateUpdate: 'date',
-  }
+  },
 };
 
 /**
@@ -119,7 +120,7 @@ Chat.schema = {
     isDeleted: {type: 'bool', default: false},
     dateCreate: 'date',
     dateUpdate: 'date',
-  }
+  },
 };
 
 /**
@@ -131,12 +132,22 @@ class ChatMessage {
 ChatMessage.schema = {
   name: 'ChatMessage',
   properties: {
-    username: 'string',
-    from: 'string',
-    text: 'string',
+    chatId: {type: 'string', indexed: true},
+    type: {type: 'string', indexed: true, default: 'text'}, // [text, audio, video, image, call]
+    username: {type: 'string', indexed: true}, // login@hostname
+    from: 'string?', // login@hostname@deviceId
+    text: 'string?',
+    fileUrl: 'string?',
+    user: 'Contact?',
+    quote: 'ChatMessage?',
+    status: {type: 'string', default: 'sending'}, // [sending, sent, received, read, error]
+    isOwn: {type: 'bool', default: false},
+    isFavorite: {type: 'bool', indexed: true, default: false},
+    salt: 'string',
+    dateSend: 'date',
     dateCreate: 'date',
     dateUpdate: 'date',
-  }
+  },
 };
 
 /**
@@ -150,9 +161,9 @@ Group.schema = {
   primaryKey: 'id',
   properties: {
     id: 'string', // unique group id (uuid4)
-    link: 'string', // unique group link
-    type: 'string', // group_chat/channel
-    name: 'string',
+    link: {type: 'string', indexed: true}, // unique group link
+    type: {type: 'string', indexed: true}, // group_chat/channel
+    name: {type: 'string', indexed: true},
     description: 'string',
     owner: 'string',
     members: 'string?[]',
@@ -166,7 +177,7 @@ Group.schema = {
     isDeleted: {type: 'bool', default: false},
     dateCreate: 'date',
     dateUpdate: 'date',
-  }
+  },
 };
 
 /**
@@ -178,12 +189,23 @@ class GroupMessage {
 GroupMessage.schema = {
   name: 'GroupMessage',
   properties: {
-    username: 'string',
-    from: 'string',
-    text: 'string',
+    groupId: {type: 'string', indexed: true},
+    groupLink: 'string',
+    groupType: 'string',
+    type: {type: 'string', indexed: true, default: 'text'}, // [text, audio, video, image, call]
+    username: {type: 'string', indexed: true}, // login@hostname
+    from: 'string', // login@hostname@deviceId
+    text: 'string?',
+    fileUrl: 'string?',
+    user: 'Contact?',
+    quote: 'GroupMessage?',
+    status: {type: 'string', default: 'sending'}, // [sending, sent, received, read, error]
+    isOwn: {type: 'bool', default: false},
+    isFavorite: {type: 'bool', indexed: true, default: false},
+    dateSend: 'date',
     dateCreate: 'date',
     dateUpdate: 'date',
-  }
+  },
 };
 
 export default [

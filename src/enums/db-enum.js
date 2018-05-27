@@ -3,5 +3,8 @@ export default {
   Contact: 'Contact',
   User: 'User',
   RsaKey: 'RsaKey',
-  Message: 'Message',
+  Chat: 'Chat',
+  ChatMessage: 'ChatMessage',
+  Group: 'Group',
+  GroupMessage: 'GroupMessage',
 };
