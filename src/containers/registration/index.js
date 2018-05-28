@@ -110,8 +110,7 @@ class Registration extends Component {
     return (
       <BackgroundContainer image={backgroundImage}>
         {page === 1 && <MainForm defaultServer={server} onSubmit={this.nextPage}/>}
-        {page === 2 && <EmailPhoneForm previousPage={this.previousPage} onSubmit={this.nextPage}/>}
-        {page === 3 && <SettingsForm previousPage={this.previousPage} onSubmit={this.registration}/>}
+        {page === 2 && <EmailPhoneForm previousPage={this.previousPage} onSubmit={this.registration}/>}
       </BackgroundContainer>
     );
   }
