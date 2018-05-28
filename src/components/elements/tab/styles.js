@@ -8,7 +8,7 @@ export const Container = styled.TouchableOpacity`
 `;
 
 export const StyledText = styled.Text`
-  font-size: ${props => props.fontSize}
+  font-size: 11;
   color: ${props => props.color};
   position: absolute;
   bottom: 10;

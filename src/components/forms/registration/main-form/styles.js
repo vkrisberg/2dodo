@@ -25,3 +25,7 @@ export const ServerInput = styled(Field)`
   margin-top: 10;
   margin-bottom: 30;
 `;
+
+export const NicknameView = styled.View`
+  margin-bottom: 20px;
+`;

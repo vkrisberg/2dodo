@@ -1,18 +1,17 @@
 import React, {Component} from 'react';
-import {AsyncStorage} from 'react-native';
 import {connect} from 'react-redux';
 import {withNavigation} from 'react-navigation';
 import PropTypes from 'prop-types';
+import {Alert} from 'react-native';
 
 import MainForm from '../../components/forms/registration/main-form';
 import EmailPhoneForm from '../../components/forms/registration/email-phone-form';
-import SettingsForm from '../../components/forms/registration/settings-form';
 import BackgroundContainer from '../background-container';
 import {accountActions} from '../../store/actions';
 import {services} from '../../utils';
 import routeEnum from '../../enums/route-enum';
 import {dbEnum} from '../../enums';
-import backgroundImage from './img/background.png';
+import backgroundImage from './img/bg.png';
 
 class Registration extends Component {
   static propTypes = {
@@ -34,8 +33,10 @@ class Registration extends Component {
     this.realm = services.getRealm();
   }
 
-  nextPage = () => {
-    return this.setState({page: this.state.page + 1});
+  nextPage = (data) => {
+    return data.nickname
+      ? this.setState({page: this.state.page + 1})
+      : Alert.alert('Fill nickname field');
   };
 
   previousPage = () => {
@@ -43,19 +44,20 @@ class Registration extends Component {
   };
 
   saveToDatabase = () => {
-    const {username} = this.props.account.user;
-    const {deviceId, hostname} = this.props.account;
+    const {account} = this.props;
+    const {username} = account.user;
+    const {deviceId, hostname} = account;
     const dateCreate = new Date();
     const dateUpdate = new Date();
     const user = {
-      ...this.props.account.user,
+      ...account.user,
       username,
     };
     const keys = {
-      ...this.props.account.keys,
+      ...account.keys,
       username,
     };
-    const account = {
+    const resultAccount = {
       username,
       user,
       keys,
@@ -66,15 +68,23 @@ class Registration extends Component {
     };
 
     this.realm.write(() => {
-      this.realm.create(dbEnum.Account, account, true);
+      this.realm.create(dbEnum.Account, resultAccount, true);
     });
   };
 
   registration = async (data) => {
     const {account, dispatch} = this.props;
 
+    if (data.email && this.checkEmail(data.email)) {
+      Alert.alert('Invalid email address');
+      
+      return null;
+    }
+
     if (account.loading) {
-      return;
+      Alert.alert('Account is loading');
+      
+      return null;
     }
 
     const sendData = {
@@ -90,17 +100,23 @@ class Registration extends Component {
 
     dispatch(accountActions.register(sendData))
       .then(() => {
-        console.log('registration success', this.props.account);
+        Alert.alert('Registration success');
+        console.error('registration success', this.props.account);
         this.saveToDatabase();
         this.props.navigation.navigate(routeEnum.Login);
       })
       .catch((error) => {
-        console.log('registration error', error.response.data);
+        Alert.alert('Registration error');
+        console.error('registration error', error.response.data);
         if (error.response.status === 400) {
           this.props.navigation.navigate(routeEnum.Login);
         }
       });
   };
+
+  checkEmail = (value) => {
+    return !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value);
+  }
 
   render() {
     const {page} = this.state;

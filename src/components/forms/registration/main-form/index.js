@@ -4,12 +4,12 @@ import {Field, reduxForm} from 'redux-form';
 import PropTypes from 'prop-types';
 
 import Button from '../../../elements/button';
-import Checkbox from '../../../elements/checkbox';
 import Input from '../../../elements/input';
 import {
   Description,
   StyledTitle,
-  DescriptionWrapper
+  DescriptionWrapper,
+  NicknameView
 } from './styles';
 import Title from '../../../elements/title';
 
@@ -40,14 +40,14 @@ class MainForm extends Component {
             During registration, the application will create security key for recovery
           </Description>
         </DescriptionWrapper>
-        <View>
+        <NicknameView>
           <Field
             name="nickname"
             focusedColor="#7bb2ff"
             component={Input}
             placeholder="Create login"
           />
-        </View>
+        </NicknameView>
         <Button color="black" onPress={this.props.handleSubmit}>Continue</Button>
       </View>
     );

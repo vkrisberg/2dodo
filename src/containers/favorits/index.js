@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import {TouchableWithoutFeedback} from 'react-native';
 
-import {TabsContainer} from '../index';
-import {routeEnum} from '../../enums';
+import {Wrapper} from '../../components/layouts';
 import {FavoritsDotsIcon, EmptyFavoritsIcon} from '../../components/icons';
 import {FavoritsNav} from '../../components/elements';
 import {
@@ -47,7 +46,7 @@ export default class Favorits extends Component {
 
   render() {
     return (
-      <TabsContainer selected={routeEnum.Favorits}>
+      <Wrapper scrolled>
         <Header>
           <TitleContainer>
             <StyledIcon>
@@ -65,7 +64,7 @@ export default class Favorits extends Component {
         </Header>
         <FavoritsNav />
         {this.getFavorits()}
-      </TabsContainer>
+      </Wrapper>
     );
   }
 }

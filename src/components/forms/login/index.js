@@ -3,14 +3,9 @@ import {Field, reduxForm} from 'redux-form';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
-import Input from '../../elements/input';
-import Checkbox from '../../elements/checkbox';
-import Button from '../../elements/button';
+import {Input, Button} from '../../elements';
 import {
-  Security,
-  StyledCheckbox,
-  Container,
-  SecurityContainer
+  Container
 } from './styles';
 
 class LoginForm extends Component {
@@ -23,26 +18,20 @@ class LoginForm extends Component {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      isChecked: false
-    };
   }
 
-  toggleNewKey = () => {
-    this.setState({isChecked: !this.state.isChecked});
-  };
-
   render() {
+    const {handleSubmit, placeholder} = this.props;
+
     return (
       <Container>
         <Field
           textColor="white"
           component={Input}
           name="username"
-          placeholder={this.props.placeholder}
+          placeholder={placeholder}
         />
-        <Button onPress={this.props.handleSubmit}>Enter</Button>
+        <Button onPress={handleSubmit}>Enter</Button>
       </Container>
     );
   }

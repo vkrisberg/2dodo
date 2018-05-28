@@ -17,3 +17,4 @@ export {default as AudioIcon} from './audio-icon';
 export {default as DocsIcon} from './docs-icon';
 export {default as VideoIcon} from './video-icon';
 export {default as LinksIcon} from './links-icon';
+export {default as ArrowIcon} from './arrow-icon';

@@ -3,9 +3,8 @@ import {connect} from 'react-redux';
 import {withNavigation} from 'react-navigation';
 import PropTypes from 'prop-types';
 import {
-  AsyncStorage,
   View,
-  TouchableWithoutFeedback
+  Alert
 } from 'react-native';
 
 import Link from '../../components/elements/link';
@@ -20,9 +19,11 @@ import {
   StyledText,
   StyledLink,
   StyledRegistration,
-  StyledKeysImport,
   RegistrationLabel
 } from './styles';
+
+const logoStyle = {marginTop: 120};
+const linkStyle = {fontWeight: 'bold'};
 
 class Login extends Component {
 
@@ -54,12 +55,17 @@ class Login extends Component {
     const {username} = data;
 
     if (!username) {
-      return false;
+      Alert.alert('Fill username field');
+      
+      return null;
     }
+
     const account = this.realm.objectForPrimaryKey(dbEnum.Account, username.toLowerCase());
+
     if (!account) {
-      console.log('login error: account is not found');
-      return false;
+      Alert.alert('Wrong username');
+
+      return null;
     }
 
     const {deviceId, user, keys} = account;
@@ -68,7 +74,9 @@ class Login extends Component {
         this.wsConnect({deviceId, user, keys});
       })
       .catch((error) => {
-        console.log('login error', error);
+        Alert.alert('Login error');
+
+        console.error('login error', error);
       });
   };
 
@@ -81,18 +89,15 @@ class Login extends Component {
 
     return (
       <BackgroundContainer image={backgroundImage}>
-        <Logo flex={false}/>
+        <Logo style={logoStyle} flex={false}/>
         <StyledText>{t('Welcome')}</StyledText>
         <LoginForm placeholder={t('LoginPlaceholder')} onSubmit={this.login}/>
         <View>
           <StyledLink to={routeEnum.ForgotPassword}>{t('ForgetPassword')}</StyledLink>
           <StyledRegistration>
             <RegistrationLabel>{t('FirstTimeInApp')}</RegistrationLabel>
-            <Link color="#4d8fdb" to={routeEnum.Registration}>{t('Registration')}</Link>
+            <Link style={linkStyle} color="white" to={routeEnum.Registration}>{t('Registration')}</Link>
           </StyledRegistration>
-          <TouchableWithoutFeedback  onPress={this.toKeyImport}>
-            <StyledKeysImport>{t('KeysImport')}</StyledKeysImport>
-          </TouchableWithoutFeedback>
         </View>
       </BackgroundContainer>
     );
