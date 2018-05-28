@@ -178,12 +178,12 @@ export default {
         const realm = services.getRealm();
         const {account} = getState();
         const dateNow = new Date();
-        const payload = get(message, 'data.payload', {});
-        if (!payload) {
-          throw new Error('payload is null');
+        const dataPayload = get(message, 'data.payload', {});
+        if (!dataPayload) {
+          throw new Error('data.payload is null');
         }
         const decryptedData = await wsMessage.decryptClientMessage({
-          data: payload,
+          data: dataPayload,
           privateKey: account.keys.privateKey
         });
         const chatData = {

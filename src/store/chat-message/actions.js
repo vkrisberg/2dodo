@@ -198,8 +198,8 @@ export default {
         if (!meta) {
           throw new Error('data.meta is null');
         }
-        const payload = get(message, 'data.payload', null);
-        if (!payload) {
+        const dataPayload = get(message, 'data.payload', null);
+        if (!dataPayload) {
           throw new Error('data.payload is null');
         }
         const error = get(message, 'error', null);
@@ -214,7 +214,7 @@ export default {
           throw new Error('hashKey not found or more than one');
         }
         const decryptedData = await wsMessage.decryptChatMessage({
-          data: payload,
+          data: dataPayload,
           hashKey: hashKeys[0],
         });
         const messageData = {

@@ -176,11 +176,11 @@ const hashFromMessage = (message) => {
 
 /**
  * Convert dateSend to js Date
- * @param dateSend
+ * @param date
  * @returns {*|Date}
  */
-const dateSendToDate = (dateSend) => {
-  const dateSend = datetime.parseDate(dateSend);
+const dateSendToDate = (date) => {
+  const dateSend = datetime.parseDate(date);
 
   return dateSend.toDate();
 };
