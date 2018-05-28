@@ -102,10 +102,11 @@ Contact.schema = {
 class HashKey {
 }
 
-RsaKey.schema = {
+HashKey.schema = {
   name: 'HashKey',
   properties: {
     chatId: {type: 'string', indexed: true},
+    messageId: {type: 'string', optional: true, indexed: true},
     hashKey: 'string',
     dateSend: {type: 'date', indexed: true},
   },
@@ -148,7 +149,9 @@ class ChatMessage {
 
 ChatMessage.schema = {
   name: 'ChatMessage',
+  primaryKey: 'id',
   properties: {
+    id: 'string', // unique message id (uuid4)
     chatId: {type: 'string', indexed: true},
     type: {type: 'string', indexed: true, default: 'text'}, // [text, audio, video, image, call]
     username: {type: 'string', indexed: true}, // login@hostname
@@ -205,7 +208,9 @@ class GroupMessage {
 
 GroupMessage.schema = {
   name: 'GroupMessage',
+  primaryKey: 'id',
   properties: {
+    id: 'string', // unique message id (uuid4)
     groupId: {type: 'string', indexed: true},
     groupLink: 'string',
     groupType: 'string',
@@ -230,6 +235,7 @@ export default [
   RsaKey,
   Account,
   Contact,
+  HashKey,
   ChatMessage,
   Chat,
   GroupMessage,

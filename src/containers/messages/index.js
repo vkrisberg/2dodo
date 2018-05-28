@@ -1,6 +1,7 @@
 import React, {PureComponent} from 'react';
 import {TouchableWithoutFeedback} from 'react-native';
 
+import {chatActions, chatMessageActions} from '../../store/actions';
 import TabsContainer from '../tabs-container';
 import {routeEnum} from '../../enums';
 import {FavoritsDotsIcon, EmptyMessagesIcon, AddIcon} from '../../components/icons';
@@ -21,21 +22,19 @@ export default class Messages extends PureComponent {
   }
 
   loadChatList = () => {
+    return this.props.dispatch(chatActions.loadList());
+  };
 
+  createChat = async (contacts) => {
+    return this.props.dispatch(chatActions.create(contacts));
   };
 
   loadChatMessages = () => {
-
+    return this.props.dispatch(chatMessageActions.loadList());
   };
 
-  createChat = async (members) => {
-    for (let i = 0; i < members.length; i++) {
-
-    }
-  };
-
-  sendChatMessage = () => {
-
+  sendChatMessage = ({data, contacts, timeDead}) => {
+    return this.props.dispatch(chatMessageActions.send({data, contacts, timeDead}));
   };
 
   searchFavorite = () => {

@@ -48,11 +48,12 @@ const getChatMessage = async ({action, data, members, timeDead, encryptTime, has
 
   const encodedData = JSON.stringify(data);
   const encryptedData = aeslib.encrypt(hashKey, encodedData);
+  const to = members[0].username ? map(members, 'username') : members;
   const params = {
     action,
+    to,
     data: {meta, payload: encryptedData},
-    to: map(members, 'username'),
-    encrypt_time: encryptTime,
+    encrypt_time: datetime.getRfcDate(encryptTime),
     time_dead: timeDead,
   };
 
@@ -192,6 +193,30 @@ const generateUuid = () => {
   return aeslib.salt();
 };
 
+/**
+ * Get short name from contacts
+ * @param contacts
+ * @returns {string}
+ */
+const getShortName = (contacts = []) => {
+  let shortName = '';
+  const count = contacts.length;
+
+  if (!count) {
+    return shortName;
+  }
+
+  if (count === 1) {
+    shortName = contacts[0].firstName && contacts[0].secondName
+      ? contacts[0].firstName.substr(0, 1) + contacts[0].secondName.substr(0, 1)
+      : contacts[0].nickname.substr(0, 2);
+  } else {
+    shortName = 'G' + contacts[count - 1].nickname.substr(0, 1);
+  }
+
+  return shortName.toUpperCase();
+};
+
 export default {
   getChatMessage,
   getClientMessage,
@@ -201,4 +226,5 @@ export default {
   hashFromMessage,
   dateSendToDate,
   generateUuid,
+  getShortName,
 };

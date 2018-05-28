@@ -76,6 +76,96 @@ export default reducer(initState, {
     };
   },
 
+  [types.RESEND]: (state, action) => {
+    return {
+      ...state,
+      loading: true,
+      error: null
+    };
+  },
+
+  [types.RESEND_SUCCESS]: (state, action) => {
+    const list = state.list.map((item) => {
+      if (item.id === action.payload.id) {
+        return action.payload;
+      }
+      return item;
+    });
+
+    return {
+      ...state,
+      list,
+      loading: false,
+    };
+  },
+
+  [types.RESEND_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      loading: false,
+      error: action.error,
+    };
+  },
+
+  [types.EDIT]: (state, action) => {
+    return {
+      ...state,
+      loading: true,
+      error: null
+    };
+  },
+
+  [types.EDIT_SUCCESS]: (state, action) => {
+    const list = state.list.map((item) => {
+      if (item.id === action.payload.id) {
+        return action.payload;
+      }
+      return item;
+    });
+
+    return {
+      ...state,
+      list,
+      loading: false,
+    };
+  },
+
+  [types.EDIT_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      loading: false,
+      error: action.error,
+    };
+  },
+
+  [types.DELETE]: (state, action) => {
+    return {
+      ...state,
+      loading: true,
+      error: null
+    };
+  },
+
+  [types.DELETE_SUCCESS]: (state, action) => {
+    const list = state.list.filter((item) => {
+      return item.id !== action.payload;
+    });
+
+    return {
+      ...state,
+      list,
+      loading: false,
+    };
+  },
+
+  [types.DELETE_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      loading: false,
+      error: action.error,
+    };
+  },
+
   [types.RECEIVE_MESSAGE_SUCCESS]: (state, action) => {
     return {
       ...state,

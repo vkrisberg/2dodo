@@ -7,7 +7,7 @@ export default {
     const websocket = services.getWebsocket();
     const meta = {
       ...CONFIG.message,
-      chatId: data.id,
+      id: data.id,
     };
     const clientMessage = await wsMessage.getClientMessage({
       action: actionEnum.createChat,
@@ -27,6 +27,7 @@ export default {
     const websocket = services.getWebsocket();
     const meta = {
       ...CONFIG.message,
+      id: data.id,
       chatId: data.chatId,
     };
     const chatMessage = await wsMessage.getChatMessage({

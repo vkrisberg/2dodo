@@ -97,7 +97,7 @@ export default {
           name: map(contacts, 'nickname').join(', '),
           owner: account.user.username,
           members: map(contacts, 'username'),
-          shortName: `G${contacts.length}`.substr(0, 2),
+          shortName: wsMessage.getShortName(contacts),
           salt: wsMessage.generateUuid(),
           dateSend: dateNow,
         };
@@ -108,7 +108,7 @@ export default {
         };
         let chat = {};
         await realm.write(() => {
-          chat = realm.create(dbEnum.Chat, chatData, true);
+          chat = realm.create(dbEnum.Chat, chatData, false);
         });
         const payload = {...chat};
         // console.log('chat created', chat);
@@ -140,6 +140,7 @@ export default {
         const chat = realm.objectForPrimaryKey(dbEnum.Chat, data.id);
         const payload = {...chat};
         // console.log('chat updated', chat);
+        // TODO - send updated chat to members
         dispatch({type: types.UPDATE_SUCCESS, payload});
         return payload;
       } catch (e) {
