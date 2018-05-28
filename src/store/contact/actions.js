@@ -76,7 +76,7 @@ export default {
         data.dateCreate = new Date();
         data.dateUpdate = data.dateCreate;
         await realm.write(() => {
-          realm.create(dbEnum.Contact, data, true);
+          realm.create(dbEnum.Contact, data, false);
         });
         const contact = realm.objectForPrimaryKey(dbEnum.Contact, data.username);
         const payload = {...contact};
