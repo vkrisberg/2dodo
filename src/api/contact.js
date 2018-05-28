@@ -1,16 +1,14 @@
-import {services} from '../utils';
+import {services, wsMessage} from '../utils';
 import {actionEnum} from '../enums';
 
 export default {
-  getOpenKey: (usernames = []) => {
+  getOpenKey: async (usernames = []) => {
     const websocket = services.getWebsocket();
-    const sendData = {
-      type: 'server_message',
+    const serverMessage = await wsMessage.getServerMessage({
       action: actionEnum.getOpenKey,
       data: usernames,
-      to: null
-    };
+    });
 
-    return websocket.send(JSON.stringify(sendData));
+    return websocket.send(JSON.stringify(serverMessage.message));
   },
 };

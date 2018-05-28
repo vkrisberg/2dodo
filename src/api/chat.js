@@ -1,14 +1,19 @@
 import {services, wsMessage} from '../utils';
-import {aeslib} from '../utils/encrypt';
 import {actionEnum} from '../enums';
+import CONFIG from '../config';
 
 export default {
   createChat: async (data, contacts) => {
     const websocket = services.getWebsocket();
+    const meta = {
+      ...CONFIG.message,
+      chatId: data.id,
+    };
     const clientMessage = await wsMessage.getClientMessage({
       action: actionEnum.createChat,
       members: contacts,
       data,
+      meta,
     });
 
     for (let i = 0; i < clientMessage.messages.length; i++) {
@@ -20,6 +25,10 @@ export default {
 
   sendChatMessage: async ({data, contacts, timeDead, encryptTime, hashKey}) => {
     const websocket = services.getWebsocket();
+    const meta = {
+      ...CONFIG.message,
+      chatId: data.chatId,
+    };
     const chatMessage = await wsMessage.getChatMessage({
       action: actionEnum.chatMessage,
       members: contacts,
@@ -27,6 +36,7 @@ export default {
       timeDead,
       encryptTime,
       hashKey,
+      meta,
     });
 
     websocket.send(JSON.stringify(chatMessage.message));

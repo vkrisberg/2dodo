@@ -6,6 +6,7 @@ export default {
   baseUrl: '/api',
   isSecure: true,
   storagePrefix: '@2dodo',
+  maxHashCount: 10,
   realm: {
     schema: Schema,
     schemaVersion: 1,

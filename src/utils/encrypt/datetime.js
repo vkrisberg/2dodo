@@ -3,14 +3,6 @@ import {get, isString} from 'lodash';
 
 const DATE_FORMAT = 'YYYY-MM-DDTHH:mm:ss.SSSZ';
 
-const getDate = (date) => {
-  if (date) {
-    return moment(date).toDate();
-  }
-
-  return moment().toDate();
-};
-
 /**
  * Datetime in RFC3339MilliSec
  * @param date
@@ -25,19 +17,6 @@ const getRfcDate = (date) => {
 };
 
 /**
- * Timestamp in milliseconds
- * @param date
- * @returns {number}
- */
-const getTimestamp = (date) => {
-  if (date) {
-    return moment(date).valueOf();
-  }
-
-  return moment().valueOf();
-};
-
-/**
  * Parse date to Moment object
  * @param date
  * @param format
@@ -49,6 +28,32 @@ const parseDate = (date, format = DATE_FORMAT) => {
   }
 
   return moment(date, format);
+};
+
+/**
+ * Get js Date
+ * @param date
+ * @returns {Date}
+ */
+const getDate = (date) => {
+  if (date) {
+    return parseDate(date).toDate();
+  }
+
+  return moment().toDate();
+};
+
+/**
+ * Timestamp in milliseconds
+ * @param date
+ * @returns {number}
+ */
+const getTimestamp = (date) => {
+  if (date) {
+    return parseDate(date).valueOf();
+  }
+
+  return moment().valueOf();
 };
 
 /**
@@ -67,9 +72,9 @@ const getDateSend = (data) => {
 };
 
 export default {
-  getDate,
   getRfcDate,
-  getTimestamp,
   parseDate,
+  getDate,
+  getTimestamp,
   getDateSend,
 };

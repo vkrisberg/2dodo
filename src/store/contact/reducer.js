@@ -190,6 +190,4 @@ export default reducer(initState, {
       error: action.error,
     };
   },
-
-
 });

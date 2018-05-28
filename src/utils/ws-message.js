@@ -29,11 +29,12 @@ const defaultServiceStruct = {
  * @param timeDead
  * @param encryptTime
  * @param hashKey
- * @returns {Promise<{message: string, encryptTime: number, hash: *}>}
+ * @param meta
+ * @returns {Promise<{message: *, hashKey: *}>}
  */
-const getChatMessage = async ({action, data, members, timeDead, encryptTime, hashKey}) => {
-  if (!isObject(data)) {
-    throw new Error('\'data\' is not an object');
+const getChatMessage = async ({action, data, members, timeDead, encryptTime, hashKey, meta}) => {
+  if (isNil(data) || !isObject(data)) {
+    throw new Error('\'data\' is not an object or empty');
   }
 
   if (!isArray(members) || isEmpty(members)) {
@@ -41,43 +42,43 @@ const getChatMessage = async ({action, data, members, timeDead, encryptTime, has
   }
 
   const dateSend = datetime.getDateSend(data);
-  const salt = aeslib.salt();
+  const salt = data.salt || aeslib.salt();
   set(data, 'dateSend', datetime.getRfcDate(dateSend));
   set(data, 'salt', salt);
 
   const encodedData = JSON.stringify(data);
   const encryptedData = aeslib.encrypt(hashKey, encodedData);
   const params = {
-    data: encryptedData,
     action,
+    data: {meta, payload: encryptedData},
     to: map(members, 'username'),
     encrypt_time: encryptTime,
     time_dead: timeDead,
   };
 
-  const encryptTime = datetime.getTimestamp(dateSend);
-  const hashData = encryptTime + encodedData + salt;
-  const hash = hashlib.hexSha256(hashData);
+  const nextEncryptTime = datetime.getTimestamp(dateSend);
+  const hashData = nextEncryptTime + encodedData + salt;
+  const nextHashKey = hashlib.hexSha256(hashData);
 
   let message = assignIn({}, defaultChatStruct, params);
   message = omitBy(message, isNil);
 
   return {
     message,
-    hash,
-    dateSend: datetime.getDate(dateSend),
+    hashKey: nextHashKey,
   };
 };
 
 /**
- * Get client message structure
+ * Get encrypted client message structure
  * @param type
  * @param action
  * @param data
  * @param members - [{username: 'login@hostname', publicKey: 'string'}, {...}, ...]
+ * @param meta
  * @returns {Promise<{}>}
  */
-const getClientMessage = async ({type = 'client_message', action, data, members}) => {
+const getClientMessage = async ({type = 'client_message', action, data, members, meta}) => {
   if (isNil(data) || !isObject(data)) {
     throw new Error('\'data\' is not an object or empty');
   }
@@ -89,7 +90,7 @@ const getClientMessage = async ({type = 'client_message', action, data, members}
   let messages = [];
 
   const dateSend = datetime.getDateSend(data);
-  const salt = aeslib.salt();
+  const salt = data.salt || aeslib.salt();
   set(data, 'dateSend', datetime.getRfcDate(dateSend));
   set(data, 'salt', salt);
   const encodedData = JSON.stringify(data);
@@ -100,7 +101,7 @@ const getClientMessage = async ({type = 'client_message', action, data, members}
     const message = {
       type,
       action,
-      data: encryptedData,
+      data: {meta, payload: encryptedData},
       to: [member.username],
     };
     messages.push(message);
@@ -108,22 +109,21 @@ const getClientMessage = async ({type = 'client_message', action, data, members}
 
   const encryptTime = datetime.getTimestamp(dateSend);
   const hashData = encryptTime + encodedData + salt;
-  const hash = hashlib.hexSha256(hashData);
+  const nextHashKey = hashlib.hexSha256(hashData);
 
   return {
     messages,
-    hash,
-    dateSend: datetime.getDate(dateSend),
+    hashKey: nextHashKey,
   };
 };
 
 /**
- * Get server message structure
+ * Get non-encrypted server message structure
  * @param type
  * @param action
  * @param data
  * @param to
- * @returns {Promise<string>}
+ * @returns {Promise<{}>}
  */
 const getServerMessage = async ({type = 'server_message', action, data, to}) => {
   let params = {type, action, data, to};
@@ -131,17 +131,31 @@ const getServerMessage = async ({type = 'server_message', action, data, to}) => 
   let message = assignIn({}, defaultServiceStruct, params);
   message = omitBy(message, isNil);
 
-  return JSON.stringify(message);
+  return {
+    message,
+  };
 };
 
 /**
  * Decrypt chat message
  * @param data
  * @param hashKey
- * @returns {any}
+ * @returns {Promise<any>}
  */
-const decryptChatMessage = ({data, hashKey}) => {
+const decryptChatMessage = async ({data, hashKey}) => {
   const message = aeslib.decrypt(hashKey, data);
+
+  return JSON.parse(message);
+};
+
+/**
+ * Decrypt client message
+ * @param data
+ * @param privateKey
+ * @returns {Promise<any>}
+ */
+const decryptClientMessage = async ({data, privateKey}) => {
+  const message = await pgplib.decrypt(privateKey, data);
 
   return JSON.parse(message);
 };
@@ -159,10 +173,32 @@ const hashFromMessage = (message) => {
   return hashlib.hexSha256(hashData);
 };
 
+/**
+ * Convert dateSend to js Date
+ * @param dateSend
+ * @returns {*|Date}
+ */
+const dateSendToDate = (dateSend) => {
+  const dateSend = datetime.parseDate(dateSend);
+
+  return dateSend.toDate();
+};
+
+/**
+ * Generate uuid4 string
+ * @returns {*}
+ */
+const generateUuid = () => {
+  return aeslib.salt();
+};
+
 export default {
   getChatMessage,
   getClientMessage,
   getServerMessage,
   decryptChatMessage,
+  decryptClientMessage,
   hashFromMessage,
+  dateSendToDate,
+  generateUuid,
 };

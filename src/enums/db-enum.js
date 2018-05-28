@@ -7,4 +7,5 @@ export default {
   ChatMessage: 'ChatMessage',
   Group: 'Group',
   GroupMessage: 'GroupMessage',
+  HashKey: 'HashKey',
 };

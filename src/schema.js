@@ -97,6 +97,21 @@ Contact.schema = {
 };
 
 /**
+ * Hash key schema
+ */
+class HashKey {
+}
+
+RsaKey.schema = {
+  name: 'HashKey',
+  properties: {
+    chatId: {type: 'string', indexed: true},
+    hashKey: 'string',
+    dateSend: {type: 'date', indexed: true},
+  },
+};
+
+/**
  * Chat schema
  */
 class Chat {
@@ -117,8 +132,10 @@ Chat.schema = {
     sort: {type: 'int', default: 0},
     pin: {type: 'int', default: 0},
     isMuted: {type: 'bool', default: false},
-    isDeleted: {type: 'bool', default: false},
-    dateCreate: 'date',
+    isDeleted: {type: 'bool', indexed: true, default: false},
+    salt: 'string?',
+    dateSend: 'date?',
+    dateCreate: {type: 'date', indexed: true},
     dateUpdate: 'date',
   },
 };
@@ -144,8 +161,8 @@ ChatMessage.schema = {
     isOwn: {type: 'bool', default: false},
     isFavorite: {type: 'bool', indexed: true, default: false},
     salt: 'string',
-    dateSend: 'date',
-    dateCreate: 'date',
+    dateSend: {type: 'date', indexed: true},
+    dateCreate: {type: 'date', indexed: true},
     dateUpdate: 'date',
   },
 };
@@ -174,8 +191,8 @@ Group.schema = {
     sort: {type: 'int', default: 0},
     pin: {type: 'int', default: 0},
     isMuted: {type: 'bool', default: false},
-    isDeleted: {type: 'bool', default: false},
-    dateCreate: 'date',
+    isDeleted: {type: 'bool', indexed: true, default: false},
+    dateCreate: {type: 'date', indexed: true},
     dateUpdate: 'date',
   },
 };
@@ -202,8 +219,8 @@ GroupMessage.schema = {
     status: {type: 'string', default: 'sending'}, // [sending, sent, received, read, error]
     isOwn: {type: 'bool', default: false},
     isFavorite: {type: 'bool', indexed: true, default: false},
-    dateSend: 'date',
-    dateCreate: 'date',
+    dateSend: {type: 'date', indexed: true},
+    dateCreate: {type: 'date', indexed: true},
     dateUpdate: 'date',
   },
 };

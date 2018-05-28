@@ -1,39 +1,55 @@
-import apiContact from '../../api/contact';
-import {services} from '../../utils';
+import {get, map} from 'lodash';
+
+import apiChat from '../../api/chat';
+import {services, wsMessage} from '../../utils';
 import {dbEnum} from '../../enums';
+import CONFIG from '../../config';
 
 export const types = {
   LOAD: 'LOAD',
   LOAD_SUCCESS: 'LOAD_SUCCESS',
   LOAD_FAILURE: 'LOAD_FAILURE',
 
-  LOAD_ONE: 'LOAD_ONE',
-  LOAD_ONE_SUCCESS: 'LOAD_ONE_SUCCESS',
-  LOAD_ONE_FAILURE: 'LOAD_ONE_FAILURE',
+  SEND: 'SEND',
+  SEND_SUCCESS: 'SEND_SUCCESS',
+  SEND_FAILURE: 'SEND_FAILURE',
 
-  CREATE: 'CREATE',
-  CREATE_SUCCESS: 'CREATE_SUCCESS',
-  CREATE_FAILURE: 'CREATE_FAILURE',
+  RECEIVE_MESSAGE_SUCCESS: 'RECEIVE_MESSAGE_SUCCESS',
+  RECEIVE_MESSAGE_FAILURE: 'RECEIVE_MESSAGE_FAILURE',
 
-  UPDATE: 'UPDATE',
-  UPDATE_SUCCESS: 'UPDATE_SUCCESS',
-  UPDATE_FAILURE: 'UPDATE_FAILURE',
+  RECEIVE_STATUS_SUCCESS: 'RECEIVE_STATUS_SUCCESS',
+  RECEIVE_STATUS_FAILURE: 'RECEIVE_STATUS_FAILURE',
+};
+
+const hashKeyAdd = async (data) => {
+  const realm = services.getRealm();
+  await realm.write(() => {
+    realm.create(dbEnum.HashKey, data, true);
+  });
+  const hashKeys = realm.objects(dbEnum.HashKey)
+    .sorted('dateSend')
+    .filtered(`chatId = ${data.chatId}`);
+  if (hashKeys.length > CONFIG.maxHashCount) {
+    await realm.write(() => {
+      realm.delete(hashKeys[0]);
+    });
+  }
 };
 
 export default {
 
-  loadList: (filter = '', sort = 'username', descending = false) => {
+  loadList: (filter = '', sort = 'dateCreate', descending = false) => {
     return async dispatch => {
       dispatch({type: types.LOAD});
       try {
         const realm = services.getRealm();
-        let contacts = realm.objects(dbEnum.Contact)
+        let messages = realm.objects(dbEnum.ChatMessage)
           .sorted(sort, descending);
         if (filter) {
-          contacts = contacts.filtered(filter);
+          messages = messages.filtered(filter);
         }
-        // console.log('contacts loaded', contacts.length);
-        const payload = [...contacts];
+        // console.log('chat messages loaded', messages.length);
+        const payload = [...messages];
         dispatch({type: types.LOAD_SUCCESS, payload});
         return payload;
       } catch (e) {
@@ -43,64 +59,99 @@ export default {
     };
   },
 
-  loadOne: (username) => {
+  send: ({data, contacts, timeDead}) => {
     return async dispatch => {
-      dispatch({type: types.LOAD_ONE});
+      dispatch({type: types.SEND});
       try {
         const realm = services.getRealm();
-        const contact = realm.objectForPrimaryKey(dbEnum.Contact, username);
-        // console.log('contact loaded', contact);
-        const payload = {...contact};
-        dispatch({type: types.LOAD_ONE_SUCCESS, payload});
+        const dateNow = new Date();
+        const sendData = {
+          ...data,
+          salt: wsMessage.generateUuid(),
+          dateSend: dateNow,
+        };
+        const messageData = {
+          ...data,
+          isOwn: true,
+          dateCreate: dateNow,
+          dateUpdate: dateNow,
+        };
+        let message = {};
+        await realm.write(() => {
+          message = realm.create(dbEnum.Chat, messageData, true);
+        });
+        const payload = {...message};
+        // console.log('chat message created', message);
+        const apiResult = apiChat.sendChatMessage({data: sendData, contacts, timeDead});
+        const hashKeyData = {
+          chatId: message.chatId,
+          hashKey: apiResult.hashKey,
+          dateSend: message.dateSend,
+        };
+        await hashKeyAdd(hashKeyData);
+        dispatch({type: types.SEND_SUCCESS, payload});
         return payload;
       } catch (e) {
-        dispatch({type: types.LOAD_ONE_FAILURE, error: e});
+        dispatch({type: types.SEND_FAILURE, error: e});
         throw e;
       }
     };
   },
 
-  create: (data) => {
+  receiveMessage: (message) => {
     return async dispatch => {
-      dispatch({type: types.CREATE});
       try {
         const realm = services.getRealm();
-        data.dateCreate = new Date();
-        data.dateUpdate = data.dateCreate;
-        await realm.write(() => {
-          realm.create(dbEnum.Contact, data, true);
+        const dateNow = new Date();
+        const meta = get(message, 'data.meta', null);
+        if (!meta) {
+          throw new Error('data.meta is null');
+        }
+        const payload = get(message, 'data.payload', null);
+        if (!payload) {
+          throw new Error('data.payload is null');
+        }
+        let encryptTime = get(message, 'encrypt_time', null);
+        encryptTime = wsMessage.dateSendToDate(encryptTime);
+        const hashKeys = realm.objects(dbEnum.HashKey)
+          .filtered(`chatId = ${meta.chatId} AND dateSend = ${encryptTime}`);
+        if (!hashKeys.length || hashKeys.length > 1) {
+          throw new Error('hashKey not found or more than one');
+        }
+        const decryptedData = await wsMessage.decryptChatMessage({
+          data: payload,
+          hashKey: hashKeys[0],
         });
-        const contact = realm.objectForPrimaryKey(dbEnum.Contact, data.username);
-        const payload = {...contact};
-        // console.log('contact created', contact);
-        apiContact.getOpenKey([payload.username]);
-        dispatch({type: types.CREATE_SUCCESS, payload});
+        const messageData = {
+          ...decryptedData,
+          isOwn: false,
+          dateSend: wsMessage.dateSendToDate(decryptedData.dateSend),
+          dateCreate: dateNow,
+          dateUpdate: dateNow,
+        };
+        let message = {};
+        await realm.write(() => {
+          message = realm.create(dbEnum.ChatMessage, messageData, true);
+        });
+        const payload = {...message};
+        // console.log('chat message received', message);
+        const hashKeyData = {
+          chatId: message.chatId,
+          hashKey: wsMessage.hashFromMessage(decryptedData),
+          dateSend: message.dateSend,
+        };
+        await hashKeyAdd(hashKeyData);
+        dispatch({type: types.RECEIVE_MESSAGE_SUCCESS, payload});
         return payload;
       } catch (e) {
-        dispatch({type: types.CREATE_FAILURE, error: e});
+        dispatch({type: types.RECEIVE_MESSAGE_FAILURE, error: e});
         throw e;
       }
     };
   },
 
-  update: (data) => {
+  receiveMessageStatus: (message) => {
     return async dispatch => {
-      dispatch({type: types.UPDATE});
-      try {
-        const realm = services.getRealm();
-        data.dateUpdate = new Date();
-        await realm.write(() => {
-          realm.create(dbEnum.Contact, data, true);
-        });
-        const contact = realm.objectForPrimaryKey(dbEnum.Contact, data.username);
-        const payload = {...contact};
-        // console.log('contact updated', contact);
-        dispatch({type: types.UPDATE_SUCCESS, payload});
-        return payload;
-      } catch (e) {
-        dispatch({type: types.UPDATE_FAILURE, error: e});
-        throw e;
-      }
     };
   },
 };
