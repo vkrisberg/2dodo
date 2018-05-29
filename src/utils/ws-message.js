@@ -102,8 +102,9 @@ const getClientMessage = async ({type = 'client_message', action, data, members,
     const message = {
       type,
       action,
-      data: {meta, payload: encryptedData},
       to: [member.username],
+      data: {meta, payload: encryptedData},
+      encrypt_time: data.dateSend,
     };
     messages.push(message);
   }
