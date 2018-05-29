@@ -2,6 +2,7 @@ import moment from 'moment';
 import {get, isString} from 'lodash';
 
 const DATE_FORMAT = 'YYYY-MM-DDTHH:mm:ss.SSSZ';
+const REALM_FORMAT = 'YYYY-MM-DD@HH:mm:ss:SSSSSSSSS';
 
 /**
  * Datetime in RFC3339MilliSec
@@ -14,6 +15,19 @@ const getRfcDate = (date) => {
   }
 
   return moment().format(DATE_FORMAT);
+};
+
+/**
+ * Realm DB timestamp
+ * @param date
+ * @returns {string}
+ */
+const getRealmDate = (date) => {
+  if (date) {
+    return moment(date).utcOffset(0).format(REALM_FORMAT);
+  }
+
+  return moment().utcOffset(0).format(REALM_FORMAT);
 };
 
 /**
@@ -73,6 +87,7 @@ const getDateSend = (data) => {
 
 export default {
   getRfcDate,
+  getRealmDate,
   parseDate,
   getDate,
   getTimestamp,

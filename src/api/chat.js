@@ -23,7 +23,7 @@ export default {
     return clientMessage;
   },
 
-  sendChatMessage: async ({data, contacts, timeDead, encryptTime, hashKey}) => {
+  sendChatMessage: async ({data, members, timeDead, encryptTime, hashKey}) => {
     const websocket = services.getWebsocket();
     const meta = {
       ...CONFIG.message,
@@ -32,7 +32,7 @@ export default {
     };
     const chatMessage = await wsMessage.getChatMessage({
       action: actionEnum.chatMessage,
-      members: contacts,
+      members,
       data,
       timeDead,
       encryptTime,

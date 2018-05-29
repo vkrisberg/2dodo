@@ -1,4 +1,4 @@
-import {get, map} from 'lodash';
+import {get, map, filter} from 'lodash';
 
 import apiChat from '../../api/chat';
 import {services, wsMessage} from '../../utils';
@@ -44,7 +44,7 @@ const hashKeyAdd = async (data) => {
   });
   const hashKeys = realm.objects(dbEnum.HashKey)
     .sorted('dateSend')
-    .filtered(`chatId = ${data.chatId}`);
+    .filtered(`chatId = '${data.chatId}'`);
   if (hashKeys.length > CONFIG.maxHashCount) {
     await realm.write(() => {
       realm.delete(hashKeys[0]);
@@ -64,7 +64,7 @@ export default {
         if (filter) {
           messages = messages.filtered(filter);
         }
-        // console.log('chat messages loaded', messages.length);
+        console.log('chat messages loaded', messages.length);
         const payload = [...messages];
         dispatch({type: types.LOAD_SUCCESS, payload});
         return payload;
@@ -75,39 +75,52 @@ export default {
     };
   },
 
-  send: ({data, contacts, timeDead}) => {
-    return async dispatch => {
+  send: ({data, chatId, timeDead}) => {
+    return async (dispatch, getState) => {
       dispatch({type: types.SEND});
       try {
         const realm = services.getRealm();
+        const {account} = getState();
         const dateNow = new Date();
+        const chat = realm.objectForPrimaryKey(dbEnum.Chat, chatId);
+        if (!chat) {
+          throw new Error(`chat '${chatId}' is not found`);
+        }
+        const members = filter(chat.members, (username) => username !== account.user.username);
         const sendData = {
           ...data,
+          chatId,
           id: wsMessage.generateUuid(),
           salt: wsMessage.generateUuid(),
           dateSend: dateNow,
         };
         const messageData = {
-          ...data,
+          ...sendData,
           isOwn: true,
           dateCreate: dateNow,
           dateUpdate: dateNow,
         };
         let chatMessage = {};
         await realm.write(() => {
-          chatMessage = realm.create(dbEnum.Chat, messageData, false);
+          chatMessage = realm.create(dbEnum.ChatMessage, messageData, false);
         });
         const payload = {...chatMessage};
         // console.log('chat message created', chatMessage);
         const hashKeys = realm.objects(dbEnum.HashKey)
           .sorted('dateSend', true)
-          .filtered(`chatId = ${meta.chatId}`);
+          .filtered(`chatId = '${chatId}'`);
         if (!hashKeys.length) {
-          throw new Error(`hashKeys is empty for chatId = ${meta.chatId}`);
+          throw new Error(`hashKeys is empty for chatId = ${chatId}`);
         }
         const encryptTime = hashKeys[0].dateSend;
         const hashKey = hashKeys[0].hashKey;
-        const apiResult = apiChat.sendChatMessage({data: sendData, contacts, timeDead, encryptTime, hashKey});
+        const apiResult = await apiChat.sendChatMessage({
+          data: sendData,
+          members,
+          timeDead,
+          encryptTime,
+          hashKey,
+        });
         const hashKeyData = {
           chatId: chatMessage.chatId,
           messageId: chatMessage.id,
@@ -125,17 +138,29 @@ export default {
   },
 
   resend: (id, timeDead) => {
-    return async dispatch => {
+    return async (dispatch, getState) => {
       dispatch({type: types.RESEND});
       try {
         const realm = services.getRealm();
+        const {account} = getState();
         const chatMessage = realm.objectForPrimaryKey(dbEnum.ChatMessage, id);
+        const chat = realm.objectForPrimaryKey(dbEnum.Chat, chatMessage.chatId);
+        const members = filter(chat.members, (username) => username !== account.user.username);
         await realm.write(() => {
           chatMessage.status = messageEnum.sending;
         });
         const payload = {...chatMessage};
-        // console.log('chat message resend', chatMessage);
-        apiChat.sendChatMessage({data: chatMessage, contacts: chatMessage.members, timeDead});
+        // console.log('chat message resend', payload);
+        const dateSend = wsMessage.dateToRealm(chatMessage.dateSend);
+        const hashKeys = realm.objects(dbEnum.HashKey)
+          .sorted('dateSend', true)
+          .filtered(`chatId = '${chatMessage.chatId}' AND dateSend < ${dateSend}`);
+        if (!hashKeys.length) {
+          throw new Error(`hashKeys is empty for chatId = ${chatMessage.chatId}`);
+        }
+        const encryptTime = hashKeys[0].dateSend;
+        const hashKey = hashKeys[0].hashKey;
+        await apiChat.sendChatMessage({data: payload, members, timeDead, encryptTime, hashKey});
         dispatch({type: types.RESEND_SUCCESS, payload});
         return payload;
       } catch (e) {
@@ -179,7 +204,7 @@ export default {
         await realm.write(() => {
           realm.delete(chatMessage);
         });
-        // console.log('chat message deleted', chatMessage);
+        // console.log('chat message deleted', id);
         dispatch({type: types.DELETE_SUCCESS, payload: id});
         return true;
       } catch (e) {
@@ -207,9 +232,9 @@ export default {
           throw new Error({type: 'server', error});
         }
         let encryptTime = get(message, 'encrypt_time', null);
-        encryptTime = wsMessage.dateSendToDate(encryptTime);
+        encryptTime = wsMessage.dateSendToRealm(encryptTime);
         const hashKeys = realm.objects(dbEnum.HashKey)
-          .filtered(`chatId = ${meta.chatId} AND dateSend = ${encryptTime}`);
+          .filtered(`chatId = '${meta.chatId}' AND dateSend = ${encryptTime}`);
         if (!hashKeys.length || hashKeys.length > 1) {
           throw new Error('hashKey not found or more than one');
         }

@@ -186,6 +186,35 @@ const dateSendToDate = (date) => {
 };
 
 /**
+ * Convert dateSend to Realm DB timestamp
+ * @param date
+ * @returns {string}
+ */
+const dateSendToRealm = (date) => {
+  const dateSend = datetime.parseDate(date);
+
+  return datetime.getRealmDate(dateSend);
+};
+
+/**
+ * Convert date to RFC3339MilliSec
+ * @param date
+ * @returns {string}
+ */
+const dateToRfc = (date) => {
+  return datetime.getRfcDate(date);
+};
+
+/**
+ * Convert date to Realm DB timestamp
+ * @param date
+ * @returns {string}
+ */
+const dateToRealm = (date) => {
+  return datetime.getRealmDate(date);
+};
+
+/**
  * Generate uuid4 string
  * @returns {*}
  */
@@ -200,7 +229,7 @@ const generateUuid = () => {
  */
 const getShortName = (contacts = []) => {
   let shortName = '';
-  const count = contacts.length;
+  const count = contacts && contacts.length;
 
   if (!count) {
     return shortName;
@@ -225,6 +254,9 @@ export default {
   decryptClientMessage,
   hashFromMessage,
   dateSendToDate,
+  dateSendToRealm,
+  dateToRfc,
+  dateToRealm,
   generateUuid,
   getShortName,
 };

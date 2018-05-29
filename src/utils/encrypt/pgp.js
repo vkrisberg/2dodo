@@ -42,11 +42,11 @@ const generateKey = ({name = 'Example', email = 'example@example.com', passphras
 const encrypt = (publicKey, data) => {
   const options = {
     data,
-    publicKeys: openpgp.key.readArmored(publicKey).keys,
+    publicKeys: openpgp.readArmoredKey(publicKey).keys,
   };
 
   return openpgp.encrypt(options).then((ciphertext) => {
-    return ciphertext;
+    return ciphertext.data;
   });
 };
 
@@ -58,12 +58,12 @@ const encrypt = (publicKey, data) => {
  */
 const decrypt = (privateKey, data) => {
   const options = {
-    message: openpgp.message.readArmored(data),
-    privateKeys: openpgp.key.readArmored(privateKey).keys,
+    message: openpgp.readMessage(data),
+    privateKeys: openpgp.readArmoredKey(privateKey).keys,
   };
 
   return openpgp.decrypt(options).then((plaintext) => {
-    return plaintext;
+    return plaintext.data;
   });
 };
 

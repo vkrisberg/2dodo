@@ -37,7 +37,8 @@ const hashKeyAdd = async (data) => {
   });
   const hashKeys = realm.objects(dbEnum.HashKey)
     .sorted('dateSend')
-    .filtered(`chatId = ${data.chatId}`);
+    .filtered(`chatId = '${data.chatId}'`);
+  // console.log('hashKeys', hashKeys);
   if (hashKeys.length > CONFIG.maxHashCount) {
     await realm.write(() => {
       realm.delete(hashKeys[0]);
@@ -57,7 +58,7 @@ export default {
         if (filter) {
           chatList = chatList.filtered(filter);
         }
-        // console.log('chat list loaded', chatList.length);
+        console.log('chat list loaded', chatList.length);
         const payload = [...chatList];
         dispatch({type: types.LOAD_SUCCESS, payload});
         return payload;
@@ -92,11 +93,16 @@ export default {
         const realm = services.getRealm();
         const {account} = getState();
         const dateNow = new Date();
+        if (!contacts || !contacts.length) {
+          throw new Error('contacts is empty');
+        }
+        const members = map(contacts, 'username');
+        members.push(account.user.username);
         const sendData = {
           id: wsMessage.generateUuid(),
           name: map(contacts, 'nickname').join(', '),
           owner: account.user.username,
-          members: map(contacts, 'username'),
+          members,
           shortName: wsMessage.getShortName(contacts),
           salt: wsMessage.generateUuid(),
           dateSend: dateNow,
@@ -112,7 +118,7 @@ export default {
         });
         const payload = {...chat};
         // console.log('chat created', chat);
-        const apiResult = apiChat.createChat(sendData, contacts);
+        const apiResult = await apiChat.createChat(sendData, contacts);
         const hashKeyData = {
           chatId: chat.id,
           hashKey: apiResult.hashKey,
@@ -134,10 +140,10 @@ export default {
       try {
         const realm = services.getRealm();
         data.dateUpdate = new Date();
+        let chat = {};
         await realm.write(() => {
-          realm.create(dbEnum.Chat, data, true);
+          chat = realm.create(dbEnum.Chat, data, true);
         });
-        const chat = realm.objectForPrimaryKey(dbEnum.Chat, data.id);
         const payload = {...chat};
         // console.log('chat updated', chat);
         // TODO - send updated chat to members
@@ -155,6 +161,7 @@ export default {
       dispatch({type: types.DELETE});
       try {
         const realm = services.getRealm();
+        // const chat = realm.objects(dbEnum.Chat); // remove all chats for testing
         const chat = realm.objectForPrimaryKey(dbEnum.Chat, id);
         if (!chat) {
           throw new Error('delete failed: chat is not found');
@@ -162,7 +169,7 @@ export default {
         await realm.write(() => {
           realm.delete(chat);
         });
-        // console.log('chat deleted', chat);
+        console.log('chat deleted', id);
         dispatch({type: types.DELETE_SUCCESS, payload: id});
         return true;
       } catch (e) {

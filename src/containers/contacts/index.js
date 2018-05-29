@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {TouchableWithoutFeedback, Text} from 'react-native';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
 import {contactActions} from '../../store/actions';
 import {routeEnum} from '../../enums';
@@ -17,6 +18,15 @@ import {
 } from './styles';
 
 class Contacts extends Component {
+
+  static propTypes = {
+    contact: PropTypes.object,
+    dispatch: PropTypes.func.isRequired,
+  };
+
+  static contextTypes = {
+    t: PropTypes.func.isRequired,
+  };
 
   componentDidMount() {
     this.loadContactList();

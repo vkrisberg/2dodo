@@ -16,7 +16,7 @@ export default class TabsContainer extends Component {
   }
 
   static propTypes = {
-    selected: PropTypes.number,
+    selected: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     activeColor: PropTypes.string,
     unActiveColor: PropTypes.string,
     onTabChange: PropTypes.func,
