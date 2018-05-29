@@ -21,7 +21,7 @@ User.schema = {
     secondName: 'string?',
     bio: 'string?',
     avatar: 'data?',
-  }
+  },
 };
 
 /**
@@ -38,7 +38,7 @@ RsaKey.schema = {
     publicKey: 'string',
     privateKey: 'string',
     hashKey: 'string',
-  }
+  },
 };
 
 /**
@@ -58,7 +58,7 @@ Account.schema = {
     hostname: 'string',
     dateCreate: 'date',
     dateUpdate: 'date',
-  }
+  },
 };
 
 /**
@@ -80,6 +80,7 @@ Contact.schema = {
   properties: {
     username: 'string', // login@hostname
     nickname: 'string', // login
+    deviceId: 'string?',
     phones: 'string?[]',
     firstName: {type: 'string', optional: true, indexed: true},
     secondName: {type: 'string', optional: true, indexed: true},
@@ -92,25 +93,141 @@ Contact.schema = {
     publicKey: 'string?',
     dateCreate: 'date',
     dateUpdate: 'date',
-  }
+  },
+};
+
+/**
+ * Hash key schema
+ */
+class HashKey {
+}
+
+HashKey.schema = {
+  name: 'HashKey',
+  properties: {
+    chatId: {type: 'string', indexed: true},
+    messageId: {type: 'string', optional: true, indexed: true},
+    hashKey: 'string',
+    dateSend: {type: 'date', indexed: true},
+  },
+};
+
+/**
+ * Chat schema
+ */
+class Chat {
+}
+
+Chat.schema = {
+  name: 'Chat',
+  primaryKey: 'id',
+  properties: {
+    id: 'string', // unique chat id (uuid4)
+    name: 'string',
+    owner: 'string',
+    members: 'string[]',
+    shortName: 'string?',
+    avatar: 'data?',
+    lastMessage: 'ChatMessage?',
+    unreadCount: {type: 'int', default: 0},
+    sort: {type: 'int', default: 0},
+    pin: {type: 'int', default: 0},
+    isMuted: {type: 'bool', default: false},
+    isDeleted: {type: 'bool', indexed: true, default: false},
+    salt: 'string?',
+    dateSend: 'date?',
+    dateCreate: {type: 'date', indexed: true},
+    dateUpdate: 'date',
+  },
 };
 
 /**
  * Chat message schema
  */
-class Message {
+class ChatMessage {
 }
 
-Message.schema = {
-  name: 'Message',
-  primaryKey: 'username',
+ChatMessage.schema = {
+  name: 'ChatMessage',
+  primaryKey: 'id',
   properties: {
-    username: 'string',
-    from: 'string',
-    text: 'string',
-    dateCreate: 'date',
+    id: 'string', // unique message id (uuid4)
+    chatId: {type: 'string', indexed: true},
+    type: {type: 'string', indexed: true, default: 'text'}, // [text, audio, video, image, call]
+    username: {type: 'string', indexed: true}, // login@hostname
+    from: 'string?', // login@hostname@deviceId
+    text: 'string?',
+    fileUrl: 'string?',
+    user: 'Contact?',
+    quote: 'ChatMessage?',
+    status: {type: 'string', default: 'sending'}, // [sending, sent, received, read, error]
+    isOwn: {type: 'bool', default: false},
+    isFavorite: {type: 'bool', indexed: true, default: false},
+    salt: 'string',
+    dateSend: {type: 'date', indexed: true},
+    dateCreate: {type: 'date', indexed: true},
     dateUpdate: 'date',
-  }
+  },
+};
+
+/**
+ * Group/channel schema
+ */
+class Group {
+}
+
+Group.schema = {
+  name: 'Group',
+  primaryKey: 'id',
+  properties: {
+    id: 'string', // unique group id (uuid4)
+    link: {type: 'string', indexed: true}, // unique group link
+    type: {type: 'string', indexed: true}, // group_chat/channel
+    name: {type: 'string', indexed: true},
+    description: 'string',
+    owner: 'string',
+    members: 'string?[]',
+    shortName: 'string?',
+    avatar: 'data?',
+    lastMessage: 'GroupMessage?',
+    unreadCount: {type: 'int', default: 0},
+    sort: {type: 'int', default: 0},
+    pin: {type: 'int', default: 0},
+    isMuted: {type: 'bool', default: false},
+    isDeleted: {type: 'bool', indexed: true, default: false},
+    dateCreate: {type: 'date', indexed: true},
+    dateUpdate: 'date',
+  },
+};
+
+/**
+ * Group/channel message schema
+ */
+class GroupMessage {
+}
+
+GroupMessage.schema = {
+  name: 'GroupMessage',
+  primaryKey: 'id',
+  properties: {
+    id: 'string', // unique message id (uuid4)
+    groupId: {type: 'string', indexed: true},
+    groupLink: 'string',
+    groupType: 'string',
+    type: {type: 'string', indexed: true, default: 'text'}, // [text, audio, video, image, call]
+    username: {type: 'string', indexed: true}, // login@hostname
+    from: 'string', // login@hostname@deviceId
+    text: 'string?',
+    fileUrl: 'string?',
+    user: 'Contact?',
+    quote: 'GroupMessage?',
+    status: {type: 'string', default: 'sending'}, // [sending, sent, received, read, error]
+    isOwn: {type: 'bool', default: false},
+    isFavorite: {type: 'bool', indexed: true, default: false},
+    dateSend: {type: 'date', indexed: true},
+    dateCreate: {type: 'date', indexed: true},
+    dateUpdate: 'date',
+  },
 };
 
 export default [
@@ -118,5 +235,9 @@ export default [
   RsaKey,
   Account,
   Contact,
-  Message,
+  HashKey,
+  ChatMessage,
+  Chat,
+  GroupMessage,
+  Group,
 ];

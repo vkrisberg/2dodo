@@ -5,12 +5,12 @@ import {withNavigation} from 'react-navigation';
 import {Container, StyledText} from './styles';
 
 class Tab extends PureComponent {
-  
+
   static propTypes = {
-    name: PropTypes.string.isRequired,
+    name: PropTypes.string,
     label: PropTypes.string,
     fontStyle: PropTypes.object,
-    selected: PropTypes.number,
+    selected: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     activeColor: PropTypes.string,
     unActiveColor: PropTypes.string,
     icon: PropTypes.node,
@@ -22,7 +22,7 @@ class Tab extends PureComponent {
     navigation: PropTypes.shape({}),
     activeIcon: PropTypes.node
   }
-  
+
   _handleTabPress = () => {
     const { text, navigation } = this.props;
 
@@ -41,7 +41,7 @@ class Tab extends PureComponent {
 
     return "#a4a7ae";
   }
-  
+
   render() {
     const {
       pressOpacity,

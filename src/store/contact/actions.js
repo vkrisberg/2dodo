@@ -40,7 +40,7 @@ export default {
         if (filter) {
           contacts = contacts.filtered(filter);
         }
-        // console.log('contacts loaded', contacts.length);
+        console.log('contacts loaded', contacts.length);
         const payload = [...contacts];
         dispatch({type: types.LOAD_SUCCESS, payload});
         return payload;
@@ -75,10 +75,10 @@ export default {
         const realm = services.getRealm();
         data.dateCreate = new Date();
         data.dateUpdate = data.dateCreate;
+        let contact = {};
         await realm.write(() => {
-          realm.create(dbEnum.Contact, data, true);
+          contact = realm.create(dbEnum.Contact, data, false);
         });
-        const contact = realm.objectForPrimaryKey(dbEnum.Contact, data.username);
         const payload = {...contact};
         // console.log('contact created', contact);
         apiContact.getOpenKey([payload.username]);
@@ -97,10 +97,10 @@ export default {
       try {
         const realm = services.getRealm();
         data.dateUpdate = new Date();
+        let contact = {};
         await realm.write(() => {
-          realm.create(dbEnum.Contact, data, true);
+          contact = realm.create(dbEnum.Contact, data, true);
         });
-        const contact = realm.objectForPrimaryKey(dbEnum.Contact, data.username);
         const payload = {...contact};
         // console.log('contact updated', contact);
         dispatch({type: types.UPDATE_SUCCESS, payload});
@@ -124,7 +124,7 @@ export default {
         await realm.write(() => {
           realm.delete(contact);
         });
-        // console.log('contact deleted', contact);
+        // console.log('contact deleted', username);
         dispatch({type: types.DELETE_SUCCESS, payload: username});
         return true;
       } catch (e) {

@@ -2,13 +2,14 @@ import moment from 'moment';
 import {get, isString} from 'lodash';
 
 const DATE_FORMAT = 'YYYY-MM-DDTHH:mm:ss.SSSZ';
+const REALM_FORMAT = 'YYYY-MM-DD@HH:mm:ss:SSSSSSSSS';
 
 /**
  * Datetime in RFC3339MilliSec
  * @param date
  * @returns {string}
  */
-const getDate = (date) => {
+const getRfcDate = (date) => {
   if (date) {
     return moment(date).format(DATE_FORMAT);
   }
@@ -17,16 +18,16 @@ const getDate = (date) => {
 };
 
 /**
- * Timestamp in milliseconds
+ * Realm DB timestamp
  * @param date
- * @returns {number}
+ * @returns {string}
  */
-const getTimestamp = (date) => {
+const getRealmDate = (date) => {
   if (date) {
-    return moment(date).valueOf();
+    return moment(date).utcOffset(0).format(REALM_FORMAT);
   }
 
-  return moment().valueOf();
+  return moment().utcOffset(0).format(REALM_FORMAT);
 };
 
 /**
@@ -44,23 +45,51 @@ const parseDate = (date, format = DATE_FORMAT) => {
 };
 
 /**
- * Get timeSend from object or current time
+ * Get js Date
+ * @param date
+ * @returns {Date}
+ */
+const getDate = (date) => {
+  if (date) {
+    return parseDate(date).toDate();
+  }
+
+  return moment().toDate();
+};
+
+/**
+ * Timestamp in milliseconds
+ * @param date
+ * @returns {number}
+ */
+const getTimestamp = (date) => {
+  if (date) {
+    return parseDate(date).valueOf();
+  }
+
+  return moment().valueOf();
+};
+
+/**
+ * Get dateSend from object or current time
  * @param data
  * @returns {*|moment.Moment}
  */
-const getTimeSend = (data) => {
-  const timeSend = get(data, 'timeSend', null);
+const getDateSend = (data) => {
+  const dateSend = get(data, 'dateSend', null);
 
-  if (timeSend) {
-    return parseDate(timeSend);
+  if (dateSend) {
+    return parseDate(dateSend);
   }
 
   return moment();
 };
 
 export default {
+  getRfcDate,
+  getRealmDate,
+  parseDate,
   getDate,
   getTimestamp,
-  parseDate,
-  getTimeSend,
+  getDateSend,
 };

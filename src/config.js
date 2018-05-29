@@ -6,9 +6,13 @@ export default {
   baseUrl: '/api',
   isSecure: true,
   storagePrefix: '@2dodo',
+  maxHashCount: 10,
   realm: {
     schema: Schema,
-    schemaVersion: 2,
+    schemaVersion: 1,
     deleteRealmIfMigrationNeeded: true,
+  },
+  message: {
+    protocol: '1.0.0',
   },
 };

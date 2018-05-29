@@ -6,3 +6,4 @@ export {default as realm} from './realm';
 export {default as reducer} from './reducer';
 export {default as themeClasses} from './theme-classes';
 export {default as services} from './services';
+export {default as wsMessage} from './ws-message';

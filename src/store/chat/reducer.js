@@ -4,23 +4,24 @@ import {types} from './actions';
 const initState = {
   list: [],
   current: {
-    username: '', // login@hostname
-    nickname: '', // login
-    phones: [],
-    firstName: '',
-    secondName: '',
-    bio: '',
+    id: '', // unique chat id (uuid4)
+    name: '',
+    owner: '',
+    members: [],
+    shortName: '',
     avatar: '',
-    sound: '',
-    notification: true,
-    isBlocked: false,
-    settings: '',
-    publicKey: '',
+    lastMessage: {},
+    unreadCount: 0,
+    sort: 0,
+    pin: 0,
+    isMuted: false,
+    isDeleted: false,
     dateCreate: null,
     dateUpdate: null,
   },
   loading: false,
   error: null,
+  receiveError: null,
 };
 
 export default reducer(initState, {
@@ -83,12 +84,9 @@ export default reducer(initState, {
   },
 
   [types.CREATE_SUCCESS]: (state, action) => {
-    const list = state.list.filter((item) => item.username !== action.payload.username);
-    list.push(action.payload);
-
     return {
       ...state,
-      list,
+      list: [action.payload, ...state.list],
       loading: false,
     };
   },
@@ -111,7 +109,7 @@ export default reducer(initState, {
 
   [types.UPDATE_SUCCESS]: (state, action) => {
     const list = state.list.map((item) => {
-      if (item.username === action.payload.username) {
+      if (item.id === action.payload.id) {
         return action.payload;
       }
       return item;
@@ -142,7 +140,7 @@ export default reducer(initState, {
 
   [types.DELETE_SUCCESS]: (state, action) => {
     const list = state.list.filter((item) => {
-      return item.username !== action.payload;
+      return item.id !== action.payload;
     });
 
     return {
@@ -160,34 +158,18 @@ export default reducer(initState, {
     };
   },
 
-  [types.UPDATE_PUBKEY]: (state, action) => {
+  [types.RECEIVE_CHAT_SUCCESS]: (state, action) => {
     return {
       ...state,
-      loading: true,
-      error: null
+      list: [action.payload, ...state.list],
+      receiveError: null,
     };
   },
 
-  [types.UPDATE_PUBKEY_SUCCESS]: (state, action) => {
-    const list = state.list.map((item) => {
-      if (item.username === action.payload.username) {
-        return action.payload;
-      }
-      return item;
-    });
-
+  [types.RECEIVE_CHAT_FAILURE]: (state, action) => {
     return {
       ...state,
-      list,
-      loading: false,
-    };
-  },
-
-  [types.UPDATE_PUBKEY_FAILURE]: (state, action) => {
-    return {
-      ...state,
-      loading: false,
-      error: action.error,
+      receiveError: action.error,
     };
   },
 });
