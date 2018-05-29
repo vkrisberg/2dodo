@@ -9,6 +9,7 @@ const defaults = {
   ts: 64,
   mode: 'ccm',
   cipher: 'aes',
+  salt: '',
 };
 
 /**

@@ -240,10 +240,11 @@ export default {
         }
         const decryptedData = await wsMessage.decryptChatMessage({
           data: dataPayload,
-          hashKey: hashKeys[0],
+          hashKey: hashKeys[0].hashKey,
         });
         const messageData = {
           ...decryptedData,
+          status: messageEnum.received,
           isOwn: false,
           dateSend: wsMessage.dateSendToDate(decryptedData.dateSend),
           dateCreate: dateNow,

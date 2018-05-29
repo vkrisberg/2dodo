@@ -100,15 +100,15 @@ export default {
         members.push(account.user.username);
         const sendData = {
           id: wsMessage.generateUuid(),
-          name: map(contacts, 'nickname').join(', '),
           owner: account.user.username,
           members,
-          shortName: wsMessage.getShortName(contacts),
           salt: wsMessage.generateUuid(),
           dateSend: dateNow,
         };
         const chatData = {
           ...sendData,
+          name: map(contacts, 'nickname').join(', '),
+          shortName: wsMessage.getShortName(contacts),
           dateCreate: dateNow,
           dateUpdate: dateNow,
         };
@@ -169,7 +169,7 @@ export default {
         await realm.write(() => {
           realm.delete(chat);
         });
-        console.log('chat deleted', id);
+        // console.log('chat deleted', id);
         dispatch({type: types.DELETE_SUCCESS, payload: id});
         return true;
       } catch (e) {
