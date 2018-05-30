@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {
-  addNavigationHelpers,
   StackNavigator,
   DrawerNavigator
 } from 'react-navigation';
@@ -23,7 +22,7 @@ import {
   Messages
 } from './containers';
 
-const MainStack = StackNavigator({
+export const MainStack = StackNavigator({
   Main: {
     screen: Main,
   },
@@ -61,8 +60,9 @@ const MainStack = StackNavigator({
     screen: Favorits
   }
 }, {
-  initialRouteName: 'Preload',
-  gesturesEnabled: true,
+  headerMode: 'none',
+  initialRouteName: 'Registration',
+  gesturesEnabled: false,
   drawerLockMode: 'locked-closed',
   navigationOptions: {
     header:false,
@@ -70,12 +70,6 @@ const MainStack = StackNavigator({
   }
 });
 
-
-export const AppNavigator = DrawerNavigator({
-  MainStack: {
-    screen: MainStack,
-  },
-});
 
 class AppWithNavigationState extends Component {
   static propTypes = {
@@ -87,12 +81,12 @@ class AppWithNavigationState extends Component {
     const {dispatch, nav} = this.props;
 
     return (
-      <AppNavigator
-        navigation={addNavigationHelpers({
-          dispatch,
-          state: nav,
-          addListener,
-        })}
+      <MainStack
+        // navigation={{
+        //   dispatch,
+        //   state: nav,
+        //   addListener,
+        // }}
       />
     );
   }

@@ -41,24 +41,6 @@ class LoginForm extends Component {
           name="username"
           placeholder="Login"
         />
-        <Field
-          textColor="white"
-          component={Input}
-          name="password"
-          placeholder="Password"
-        />
-        <SecurityContainer>
-          <Security>For best security</Security>
-          <StyledCheckbox
-            name="createNewKey"
-            component={Checkbox}
-            color="white"
-            labelPadding={10}
-            checked={this.state.isChecked}
-            onPress={this.toggleNewKey}
-            label="Create a new key"
-          />
-        </SecurityContainer>
         <Button onPress={this.props.handleSubmit}>Enter</Button>
       </Container>
     );
