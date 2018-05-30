@@ -19,7 +19,8 @@ import {
   Settings,
   Groups,
   Favorits,
-  Messages
+  Messages,
+  PrivateChat,
 } from './containers';
 
 export const MainStack = StackNavigator({
@@ -58,10 +59,13 @@ export const MainStack = StackNavigator({
   },
   Favorits: {
     screen: Favorits
+  },
+  PrivateChat: {
+    screen: PrivateChat
   }
 }, {
   headerMode: 'none',
-  initialRouteName: 'Registration',
+  initialRouteName: 'Preload',
   gesturesEnabled: false,
   drawerLockMode: 'locked-closed',
   navigationOptions: {

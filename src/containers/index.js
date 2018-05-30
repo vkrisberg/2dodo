@@ -13,3 +13,4 @@ export {default as Groups} from './groups';
 export {default as Main} from './main';
 export {default as Messages} from './messages';
 export {default as PasswordApprove} from './password-approve';
+export {default as PrivateChat} from './private-chat';

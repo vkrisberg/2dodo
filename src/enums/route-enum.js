@@ -12,4 +12,6 @@ export default {
   Settings: 'Settings',
   Favorits: 'Favorits',
   PasswordApprove: 'PasswordApprove',
+  PrivateChat: 'PrivateChat',
+  GroupChat: 'GroupChat',
 };

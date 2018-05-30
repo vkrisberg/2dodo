@@ -7,17 +7,17 @@ import PropTypes from 'prop-types';
 import {Container, StyledButton, ButtonText} from './styles';
 
 export default class Button extends PureComponent {
-  
+
   static propTypes = {
     onPress: PropTypes.func.isRequired,
-    children: PropTypes.string,
+    children: PropTypes.any,
     title: PropTypes.string,
     style: ViewPropTypes.style,
     wrapperStyle: ViewPropTypes.style,
     textStyle: ViewPropTypes.style,
     color: PropTypes.string
   }
-  
+
   render() {
     const {
       onPress,
