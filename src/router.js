@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {
-  addNavigationHelpers,
   StackNavigator,
   DrawerNavigator
 } from 'react-navigation';
@@ -20,10 +19,11 @@ import {
   Settings,
   Groups,
   Favorits,
-  Messages
+  Messages,
+  PrivateChat,
 } from './containers';
 
-const MainStack = StackNavigator({
+export const MainStack = StackNavigator({
   Main: {
     screen: Main,
   },
@@ -59,10 +59,14 @@ const MainStack = StackNavigator({
   },
   Favorits: {
     screen: Favorits
+  },
+  PrivateChat: {
+    screen: PrivateChat
   }
 }, {
+  headerMode: 'none',
   initialRouteName: 'Preload',
-  gesturesEnabled: true,
+  gesturesEnabled: false,
   drawerLockMode: 'locked-closed',
   navigationOptions: {
     header:false,
@@ -70,12 +74,6 @@ const MainStack = StackNavigator({
   }
 });
 
-
-export const AppNavigator = DrawerNavigator({
-  MainStack: {
-    screen: MainStack,
-  },
-});
 
 class AppWithNavigationState extends Component {
   static propTypes = {
@@ -87,12 +85,12 @@ class AppWithNavigationState extends Component {
     const {dispatch, nav} = this.props;
 
     return (
-      <AppNavigator
-        navigation={addNavigationHelpers({
-          dispatch,
-          state: nav,
-          addListener,
-        })}
+      <MainStack
+        // navigation={{
+        //   dispatch,
+        //   state: nav,
+        //   addListener,
+        // }}
       />
     );
   }

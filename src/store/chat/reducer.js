@@ -172,4 +172,11 @@ export default reducer(initState, {
       receiveError: action.error,
     };
   },
+
+  [types.SET_CURRENT_CHAT]: (state, action) => {
+    return {
+      ...state,
+      current: action.payload,
+    };
+  },
 });

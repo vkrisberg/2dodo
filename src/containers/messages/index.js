@@ -1,12 +1,14 @@
 import React, {PureComponent} from 'react';
-import {TouchableWithoutFeedback} from 'react-native';
+import {ScrollView, Text, TouchableWithoutFeedback} from 'react-native';
+import {connect} from 'react-redux';
+import {withNavigation} from 'react-navigation';
 import PropTypes from 'prop-types';
 
 import {chatActions, chatMessageActions, contactActions} from '../../store/actions';
 import TabsContainer from '../tabs-container';
 import {routeEnum} from '../../enums';
 import {FavoritsDotsIcon, EmptyMessagesIcon, AddIcon} from '../../components/icons';
-import {SearchInput} from '../../components/elements';
+import {Button, SearchInput} from '../../components/elements';
 import {
   Header,
   StyledTitle,
@@ -16,7 +18,6 @@ import {
   EmptyFavoritsView,
   BoldText
 } from './styles';
-import {connect} from 'react-redux';
 
 class Messages extends PureComponent {
 
@@ -26,45 +27,51 @@ class Messages extends PureComponent {
     chatMessage: PropTypes.object,
     contact: PropTypes.object,
     dispatch: PropTypes.func.isRequired,
+    navigation: PropTypes.shape({navigate: PropTypes.func}),
   };
 
   static contextTypes = {
     t: PropTypes.func.isRequired,
   };
 
-  componentDidMount() {
-    this.loadChatList();
+  state = {
+    page: 'chatList', // [chatList, createChat]
+  };
 
-    // TODO - remove after tests
+  componentDidMount() {
     const {account} = this.props;
-    this.loadChatMessages();
-    this.loadContactList().then((contactList) => {
-      const contacts = [contactList[0]];
-      this.createChat(contacts).then((chat) => {
-        // chat.name = 'New Chat';
-        // this.updateChat(chat);
-        // this.deleteChat(chat.id);
-        const messageData = {
-          username: account.user.username,
-          text: 'Hello World!',
-        };
-        this.sendChatMessage({data: messageData, chatId: chat.id}).then((message) => {
-          // this.resendChatMessage(message.id);
-          // message.text = 'Text Modified!!!';
-          // this.editChatMessage(message);
-          // this.deleteChatMessage(message.id);
-        });
-      });
-      this.loadChatList();
-    });
+
+    this.loadChatList();
+    this.loadContactList();
+    // TODO - remove after tests
+    // const {account} = this.props;
+    // this.loadChatMessages();
+    // this.loadContactList().then((contactList) => {
+    //   const contacts = [contactList[0]];
+    //   this.createChat(contacts).then((chat) => {
+    //     // chat.name = 'New Chat';
+    //     // this.updateChat(chat);
+    //     // this.deleteChat(chat.id);
+    //     const messageData = {
+    //       username: account.user.username,
+    //       text: 'Hello World!',
+    //     };
+    //     this.sendChatMessage({data: messageData, chatId: chat.id}).then((message) => {
+    //       // this.resendChatMessage(message.id);
+    //       // message.text = 'Text Modified!!!';
+    //       // this.editChatMessage(message);
+    //       // this.deleteChatMessage(message.id);
+    //     });
+    //   });
+    // });
   }
 
   loadContactList = (filter, sort, descending) => {
     return this.props.dispatch(contactActions.loadList(filter, sort, descending));
   };
 
-  loadChatList = () => {
-    return this.props.dispatch(chatActions.loadList());
+  loadChatList = (filter, sort, descending) => {
+    return this.props.dispatch(chatActions.loadList(filter, sort, descending));
   };
 
   createChat = async (contacts) => {
@@ -99,19 +106,74 @@ class Messages extends PureComponent {
     return this.props.dispatch(chatMessageActions.delete(id));
   };
 
-  searchFavorite = () => {
+  searchChats = (text) => {
+    const filter = `name CONTAINS[c] '${text}' OR shortName CONTAINS[c] '${text}' OR owner CONTAINS[c] '${text}'`;
+    return this.loadChatList(filter);
   };
 
-  getFavorits = () => {
+  onCreate = () => {
+    this.setState({
+      page: 'createChat',
+    });
+  };
+
+  onSelect(chat) {
+    return () => {
+      this.props.navigation.navigate(routeEnum.PrivateChat, {chat});
+    }
+  };
+
+  onSelectContact(contact) {
+    return () => {
+      this.createChat([contact]).then((chat) => {
+        this.props.navigation.navigate(routeEnum.PrivateChat, {chat});
+      });
+    };
+  }
+
+  getChatList = () => {
+    const {chat} = this.props;
+
+    if (!chat.list.length) {
+      return (
+        <EmptyFavoritsView>
+          <EmptyMessagesIcon/>
+          <BoldText>Your have not chats yet</BoldText>
+        </EmptyFavoritsView>
+      );
+    }
+
+    return chat.list.map((item, index) => {
+      return (
+        <Button key={index} onPress={this.onSelect(item)} color={'black'}>
+          <Text>{item.shortName} - {item.name} - {item.owner}</Text>
+        </Button>
+      );
+    });
+  };
+
+  getCreateChat = () => {
+    const {contact} = this.props;
+
+    const contacts = contact.list.map((item, index) => {
+        return (
+          <Button key={index} onPress={this.onSelectContact(item)} color={'black'}>
+            <Text>{item.username} {item.firstName} {item.secondName}</Text>
+          </Button>
+        );
+      }
+    );
+
     return (
-      <EmptyFavoritsView>
-        <EmptyMessagesIcon/>
-        <BoldText>Your have not chats yet</BoldText>
-      </EmptyFavoritsView>
+      <ScrollView>
+        {contacts}
+      </ScrollView>
     );
   };
 
   render() {
+    const {page} = this.state;
+
     return (
       <TabsContainer selected={routeEnum.Messages}>
         <Header>
@@ -123,14 +185,15 @@ class Messages extends PureComponent {
               Messages
             </StyledTitle>
           </TitleContainer>
-          <AddContact>
-            <TouchableWithoutFeedback onPress={this.searchFavorite}>
-              <AddIcon/>
-            </TouchableWithoutFeedback>
-          </AddContact>
+          <TouchableWithoutFeedback onPress={this.onCreate}>
+            <AddContact>
+                <AddIcon/>
+            </AddContact>
+          </TouchableWithoutFeedback>
         </Header>
-        <SearchInput placeholder="Search in chats"/>
-        {this.getFavorits()}
+        <SearchInput placeholder="Search in chats" onChange={this.searchChats}/>
+        {page === 'chatList' && this.getChatList()}
+        {page === 'createChat' && this.getCreateChat()}
       </TabsContainer>
     );
   }
@@ -141,4 +204,4 @@ export default connect(state => ({
   chat: state.chat,
   chatMessage: state.chatMessage,
   contact: state.contact,
-}))(Messages);
+}))(withNavigation(Messages));

@@ -54,23 +54,17 @@ class EmailPhoneForm extends Component {
         />
         <Field
           focusedColor="#7bb2ff"
+          name="firstName"
           component={Input}
-          name="phone"
-          placeholder="Phone"
+          placeholder="Name"
         />
-        <SecurityContainer>
-          <Security>For best security</Security>
-          <StyledCheckbox
-            name="createNewKey"
-            component={Checkbox}
-            labelPadding={10}
-            checked={this.state.isKeyCopy}
-            onPress={this.toggleKeyCopy}
-            label="Create a new key"
-          />
-        </SecurityContainer>
-        <Button color="black" onPress={this.props.handleSubmit}>Continue</Button>
-        <Skip marginTop={90} color="#9fa3ae" onSkip={this.props.handleSubmit}>Skip this step</Skip>
+        <Field
+          focusedColor="#7bb2ff"
+          name="secondName"
+          component={Input}
+          placeholder="Second Name"
+        />
+        <Button color="black" onPress={this.props.handleSubmit}>Done</Button>
       </Container>
     );
   }

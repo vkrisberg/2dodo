@@ -1,4 +1,4 @@
-import {get, map, filter} from 'lodash';
+import {get, map, filter, uniqBy} from 'lodash';
 
 import apiChat from '../../api/chat';
 import {services, wsMessage} from '../../utils';
@@ -6,35 +6,35 @@ import {dbEnum, messageEnum} from '../../enums';
 import CONFIG from '../../config';
 
 export const types = {
-  LOAD: 'LOAD',
-  LOAD_SUCCESS: 'LOAD_SUCCESS',
-  LOAD_FAILURE: 'LOAD_FAILURE',
+  LOAD: Symbol('LOAD'),
+  LOAD_SUCCESS: Symbol('LOAD_SUCCESS'),
+  LOAD_FAILURE: Symbol('LOAD_FAILURE'),
 
-  SEND: 'SEND',
-  SEND_SUCCESS: 'SEND_SUCCESS',
-  SEND_FAILURE: 'SEND_FAILURE',
+  SEND: Symbol('SEND'),
+  SEND_SUCCESS: Symbol('SEND_SUCCESS'),
+  SEND_FAILURE: Symbol('SEND_FAILURE'),
 
-  RESEND: 'RESEND',
-  RESEND_SUCCESS: 'RESEND_SUCCESS',
-  RESEND_FAILURE: 'RESEND_FAILURE',
+  RESEND: Symbol('RESEND'),
+  RESEND_SUCCESS: Symbol('RESEND_SUCCESS'),
+  RESEND_FAILURE: Symbol('RESEND_FAILURE'),
 
-  EDIT: 'EDIT',
-  EDIT_SUCCESS: 'EDIT_SUCCESS',
-  EDIT_FAILURE: 'EDIT_FAILURE',
+  EDIT: Symbol('EDIT'),
+  EDIT_SUCCESS: Symbol('EDIT_SUCCESS'),
+  EDIT_FAILURE: Symbol('EDIT_FAILURE'),
 
-  DELETE: 'DELETE',
-  DELETE_SUCCESS: 'DELETE_SUCCESS',
-  DELETE_FAILURE: 'DELETE_FAILURE',
+  DELETE: Symbol('DELETE'),
+  DELETE_SUCCESS: Symbol('DELETE_SUCCESS'),
+  DELETE_FAILURE: Symbol('DELETE_FAILURE'),
 
-  RECEIVE_MESSAGE_SUCCESS: 'RECEIVE_MESSAGE_SUCCESS',
-  RECEIVE_MESSAGE_FAILURE: 'RECEIVE_MESSAGE_FAILURE',
+  RECEIVE_MESSAGE_SUCCESS: Symbol('RECEIVE_MESSAGE_SUCCESS'),
+  RECEIVE_MESSAGE_FAILURE: Symbol('RECEIVE_MESSAGE_FAILURE'),
 
-  RECEIVE_STATUS_SUCCESS: 'RECEIVE_STATUS_SUCCESS',
-  RECEIVE_STATUS_FAILURE: 'RECEIVE_STATUS_FAILURE',
+  RECEIVE_STATUS_SUCCESS: Symbol('RECEIVE_STATUS_SUCCESS'),
+  RECEIVE_STATUS_FAILURE: Symbol('RECEIVE_STATUS_FAILURE'),
 
-  SEND_MEDIA: 'SEND_MEDIA',
-  SEND_MEDIA_SUCCESS: 'SEND_MEDIA_SUCCESS',
-  SEND_MEDIA_FAILURE: 'SEND_MEDIA_FAILURE',
+  SEND_MEDIA: Symbol('SEND_MEDIA'),
+  SEND_MEDIA_SUCCESS: Symbol('SEND_MEDIA_SUCCESS'),
+  SEND_MEDIA_FAILURE: Symbol('SEND_MEDIA_FAILURE'),
 };
 
 const hashKeyAdd = async (data) => {
@@ -54,13 +54,20 @@ const hashKeyAdd = async (data) => {
 
 export default {
 
-  loadList: (filter = '', sort = 'dateCreate', descending = false) => {
+  loadList: (chatId = '', filter = '', sort = 'dateCreate', descending = false) => {
     return async dispatch => {
       dispatch({type: types.LOAD});
       try {
         const realm = services.getRealm();
         let messages = realm.objects(dbEnum.ChatMessage)
           .sorted(sort, descending);
+        // TODO - remove after tests
+        // await realm.write(() => {
+        //   realm.delete(messages);
+        // });
+        if (chatId) {
+          messages = messages.filtered(`chatId = '${chatId}'`);
+        }
         if (filter) {
           messages = messages.filtered(filter);
         }
@@ -86,7 +93,11 @@ export default {
         if (!chat) {
           throw new Error(`chat '${chatId}' is not found`);
         }
-        const members = filter(chat.members, (username) => username !== account.user.username);
+        let members = filter(chat.members, (username) => username !== account.user.username);
+        // when send a message to yourself
+        if (!members.length) {
+          members = [chat.members[0]];
+        }
         const sendData = {
           ...data,
           chatId,
@@ -233,11 +244,14 @@ export default {
         }
         let encryptTime = get(message, 'encrypt_time', null);
         encryptTime = wsMessage.dateSendToRealm(encryptTime);
-        const hashKeys = realm.objects(dbEnum.HashKey)
+        let hashKeys = realm.objects(dbEnum.HashKey)
           .filtered(`chatId = '${meta.chatId}' AND dateSend = ${encryptTime}`);
+        // when send a message to yourself
+        hashKeys = uniqBy(hashKeys, 'hashKey');
         if (!hashKeys.length || hashKeys.length > 1) {
           throw new Error('hashKey not found or more than one');
         }
+
         const decryptedData = await wsMessage.decryptChatMessage({
           data: dataPayload,
           hashKey: hashKeys[0].hashKey,

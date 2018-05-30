@@ -6,28 +6,30 @@ import {dbEnum} from '../../enums';
 import CONFIG from '../../config';
 
 export const types = {
-  LOAD: 'LOAD',
-  LOAD_SUCCESS: 'LOAD_SUCCESS',
-  LOAD_FAILURE: 'LOAD_FAILURE',
+  LOAD: Symbol('LOAD'),
+  LOAD_SUCCESS: Symbol('LOAD_SUCCESS'),
+  LOAD_FAILURE: Symbol('LOAD_FAILURE'),
 
-  LOAD_ONE: 'LOAD_ONE',
-  LOAD_ONE_SUCCESS: 'LOAD_ONE_SUCCESS',
-  LOAD_ONE_FAILURE: 'LOAD_ONE_FAILURE',
+  LOAD_ONE: Symbol('LOAD_ONE'),
+  LOAD_ONE_SUCCESS: Symbol('LOAD_ONE_SUCCESS'),
+  LOAD_ONE_FAILURE: Symbol('LOAD_ONE_FAILURE'),
 
-  CREATE: 'CREATE',
-  CREATE_SUCCESS: 'CREATE_SUCCESS',
-  CREATE_FAILURE: 'CREATE_FAILURE',
+  CREATE: Symbol('CREATE'),
+  CREATE_SUCCESS: Symbol('CREATE_SUCCESS'),
+  CREATE_FAILURE: Symbol('CREATE_FAILURE'),
 
-  UPDATE: 'UPDATE',
-  UPDATE_SUCCESS: 'UPDATE_SUCCESS',
-  UPDATE_FAILURE: 'UPDATE_FAILURE',
+  UPDATE: Symbol('UPDATE'),
+  UPDATE_SUCCESS: Symbol('UPDATE_SUCCESS'),
+  UPDATE_FAILURE: Symbol('UPDATE_FAILURE'),
 
-  DELETE: 'DELETE',
-  DELETE_SUCCESS: 'DELETE_SUCCESS',
-  DELETE_FAILURE: 'DELETE_FAILURE',
+  DELETE: Symbol('DELETE'),
+  DELETE_SUCCESS: Symbol('DELETE_SUCCESS'),
+  DELETE_FAILURE: Symbol('DELETE_FAILURE'),
 
-  RECEIVE_CHAT_SUCCESS: 'RECEIVE_CHAT_SUCCESS',
-  RECEIVE_CHAT_FAILURE: 'RECEIVE_CHAT_FAILURE',
+  RECEIVE_CHAT_SUCCESS: Symbol('RECEIVE_CHAT_SUCCESS'),
+  RECEIVE_CHAT_FAILURE: Symbol('RECEIVE_CHAT_FAILURE'),
+
+  SET_CURRENT_CHAT: Symbol('SET_CURRENT_CHAT'),
 };
 
 const hashKeyAdd = async (data) => {
@@ -58,6 +60,10 @@ export default {
         if (filter) {
           chatList = chatList.filtered(filter);
         }
+        // TODO - remove after tests
+        // await realm.write(() => {
+        //   realm.delete(chatList);
+        // });
         console.log('chat list loaded', chatList.length);
         const payload = [...chatList];
         dispatch({type: types.LOAD_SUCCESS, payload});
@@ -219,5 +225,9 @@ export default {
         throw e;
       }
     };
+  },
+
+  setCurrentChat: (data) => {
+    return {type: types.SET_CURRENT_CHAT, payload: data};
   },
 };
