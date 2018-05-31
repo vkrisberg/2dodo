@@ -44,6 +44,12 @@ class Contacts extends Component {
       firstName: 'Ramil',
       secondName: 'Z.',
     });
+    this.createContact({
+      username: 'vova@api.2do.do',
+      nickname: 'vova',
+      firstName: 'Vladimir',
+      secondName: 'Sh.',
+    });
     // this.createContact({
     //   username: 'test@api.2do.do',
     //   nickname: 'test',
