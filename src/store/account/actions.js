@@ -49,6 +49,8 @@ export default {
         }
 
         const account = realm.objectForPrimaryKey(dbEnum.Account, username);
+        // console.log('account', account);
+
         // TODO - remove after test
         // const pubKey = '';
         // const prvKey = '';
@@ -58,7 +60,7 @@ export default {
         //   keys.privateKey = prvKey;
         //   account.keys = keys;
         // });
-        // console.log('account', account);
+
         if (!account || !account.user || !account.keys) {
           throw new Error('remind failed: user or keys is empty in storage');
         }

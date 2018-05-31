@@ -32,24 +32,24 @@ class Contacts extends Component {
     this.loadContactList();
 
     // TODO - remove after tests
-    this.createContact({
-      username: 'test@api.2do.do',
-      nickname: 'test',
-      firstName: 'John',
-      secondName: 'Smith',
-    });
-    this.createContact({
-      username: 'ramil@api.2do.do',
-      nickname: 'ramil',
-      firstName: 'Ramil',
-      secondName: 'Z.',
-    });
-    this.createContact({
-      username: 'vova@api.2do.do',
-      nickname: 'vova',
-      firstName: 'Vladimir',
-      secondName: 'Sh.',
-    });
+    // this.createContact({
+    //   username: 'test@api.2do.do',
+    //   nickname: 'test',
+    //   firstName: 'John',
+    //   secondName: 'Smith',
+    // });
+    // this.createContact({
+    //   username: 'ramil@api.2do.do',
+    //   nickname: 'ramil',
+    //   firstName: 'Ramil',
+    //   secondName: 'Z.',
+    // });
+    // this.createContact({
+    //   username: 'vova@api.2do.do',
+    //   nickname: 'vova',
+    //   firstName: 'Vladimir',
+    //   secondName: 'Sh.',
+    // });
     // this.createContact({
     //   username: 'test@api.2do.do',
     //   nickname: 'test',

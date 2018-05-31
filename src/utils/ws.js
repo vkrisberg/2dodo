@@ -50,10 +50,9 @@ const init = function ({store, navigation}) {
  * @returns {*}
  */
 const connect = function ({deviceId, username, password, url}) {
-  const wsUrl = url || _url;
   const wsHeaders = getHeaders({deviceId, username, password});
 
-  _ws = new WebSocket(wsUrl, '', {headers: wsHeaders});
+  _ws = new WebSocket(url, '', {headers: wsHeaders});
 
   _ws.onopen = () => {
     onOpen({store: _store, navigation: _navigation});
