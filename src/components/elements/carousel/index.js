@@ -102,7 +102,7 @@ class Carousel extends PureComponent {
         <BarContainer>
           { barArray }
         </BarContainer>
-        <Skip onSkip={this.toLogin}>
+        <Skip onSkip={this.props.onSkip}>
           Skip this feature
         </Skip>
       </BackgroundContainer>

@@ -16,6 +16,7 @@ import {
 class LoginForm extends Component {
 
   static propTypes = {
+    placeholder: PropTypes.string,
     onSubmit: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
   };
@@ -39,7 +40,7 @@ class LoginForm extends Component {
           textColor="white"
           component={Input}
           name="username"
-          placeholder="Login"
+          placeholder={this.props.placeholder}
         />
         <Button onPress={this.props.handleSubmit}>Enter</Button>
       </Container>

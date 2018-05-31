@@ -45,7 +45,6 @@ class PrivateChat extends PureComponent {
     this.props.dispatch(chatActions.setCurrentChat(currentChat));
     this.loadChatMessages(this.chatId);
     this.loadContactList();
-    console.log('currentChat', currentChat);
   }
 
   loadContactList = (filter, sort, descending) => {

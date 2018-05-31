@@ -60,10 +60,12 @@ export default {
         if (filter) {
           chatList = chatList.filtered(filter);
         }
+
         // TODO - remove after tests
         // await realm.write(() => {
         //   realm.delete(chatList);
         // });
+
         console.log('chat list loaded', chatList.length);
         const payload = [...chatList];
         dispatch({type: types.LOAD_SUCCESS, payload});

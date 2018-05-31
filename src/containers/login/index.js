@@ -83,7 +83,7 @@ class Login extends Component {
       <BackgroundContainer image={backgroundImage}>
         <Logo flex={false}/>
         <StyledText>{t('Welcome')}</StyledText>
-        <LoginForm onSubmit={this.login}/>
+        <LoginForm placeholder={t('LoginPlaceholder')} onSubmit={this.login}/>
         <View>
           <StyledLink to={routeEnum.ForgotPassword}>{t('ForgetPassword')}</StyledLink>
           <StyledRegistration>
