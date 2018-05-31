@@ -59,7 +59,7 @@ const encrypt = (publicKey, data) => {
 const decrypt = (privateKey, data) => {
   const options = {
     message: openpgp.readMessage(data),
-    privateKeys: openpgp.readArmoredKey(privateKey).keys,
+    privateKey: openpgp.readArmoredKey(privateKey).keys[0],
   };
 
   return openpgp.decrypt(options).then((plaintext) => {

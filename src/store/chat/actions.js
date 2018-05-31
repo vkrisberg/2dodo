@@ -1,4 +1,4 @@
-import {get, map} from 'lodash';
+import {get, map, filter} from 'lodash';
 
 import apiChat from '../../api/chat';
 import {services, wsMessage} from '../../utils';
@@ -199,8 +199,17 @@ export default {
           data: dataPayload,
           privateKey: account.keys.privateKey
         });
+        const members = filter(decryptedData.members, (username) => username !== account.user.username);
+        const contacts = map(members, (username) => {
+          return {
+            username: username,
+            nickname: username.split('@')[0],
+          };
+        });
         const chatData = {
           ...decryptedData,
+          name: map(contacts, 'nickname').join(', '),
+          shortName: wsMessage.getShortName(contacts),
           isShown: false,
           dateSend: wsMessage.dateSendToDate(decryptedData.dateSend),
           dateCreate: dateNow,
