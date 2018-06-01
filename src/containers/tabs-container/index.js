@@ -93,7 +93,6 @@ export default class TabsContainer extends Component {
         <Wrapper scrolled={scrolled}>
           {children}
         </Wrapper>
-        {this.getMenuItems()}
       </View>
     );
   }
