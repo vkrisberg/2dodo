@@ -30,7 +30,7 @@ export const MainStack = createStackNavigator({
   ForgotPassword: {
     screen: ForgotPassword
   },
-  Contacts: {
+  Messages: {
     screen: Tabs
   },
   AddContact: {
@@ -47,7 +47,7 @@ export const MainStack = createStackNavigator({
   }
 }, {
   headerMode: 'none',
-  initialRouteName: 'Contacts',
+  initialRouteName: 'Preload',
   gesturesEnabled: false,
   drawerLockMode: 'locked-closed',
   navigationOptions: {

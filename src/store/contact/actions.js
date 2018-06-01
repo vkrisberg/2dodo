@@ -37,6 +37,12 @@ export default {
         const realm = services.getRealm();
         let contacts = realm.objects(dbEnum.Contact)
           .sorted(sort, descending);
+
+        // TODO - remove after tests
+        // await realm.write(() => {
+        //   realm.delete(contacts);
+        // });
+
         if (filter) {
           contacts = contacts.filtered(filter);
         }

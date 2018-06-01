@@ -6,10 +6,11 @@ import {Header, TitleContainer, StyledTitle} from '../styles';
 import Wrapper from '../../../components/layouts/wrapper';
 import {ArrowIcon} from '../../../components/icons';
 import {SearchInput, Button} from '../../../components/elements';
+import {AddContact as AddContactForm} from '../../../components/forms';
 import {contactActions} from '../../../store/actions';
 
-class AddContacts extends Component {
-  
+class AddContact extends Component {
+
   state = {
     value: null
   }
@@ -20,9 +21,14 @@ class AddContacts extends Component {
     return this.setState({value});
   }
 
-  addContact = () => {
-    return this.props.dispatch(contactActions.create(this.state.value));
-  }
+  addContact = (data) => {
+    data.username = data.username.toLowerCase();
+    data.nickname = data.username.split('@')[0];
+
+    this.props.dispatch(contactActions.create(data)).then(() => {
+      this.props.navigation.goBack();
+    });
+  };
 
   render() {
     return (
@@ -38,12 +44,10 @@ class AddContacts extends Component {
           </TitleContainer>
         </Header>
         <SearchInput placeholder="Search contacts for @nickname" onChange={this.onSearchChange}/>
-        <Button style={{marginTop: 30}} color="black" onPress={() => {}}>
-          Add contact
-        </Button>
+        <AddContactForm onSubmit={this.addContact}/>
       </Wrapper>
     );
   }
 }
 
-export default connect()(AddContacts);
+export default connect()(AddContact);
