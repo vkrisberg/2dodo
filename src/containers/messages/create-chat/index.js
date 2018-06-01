@@ -4,18 +4,31 @@ import {connect} from 'react-redux';
 
 import Wrapper from '../../../components/layouts/wrapper';
 import {ArrowIcon} from '../../../components/icons';
-import {SearchInput, Button} from '../../../components/elements';
+import {SearchInput, ContactsBody} from '../../../components/elements';
 import {AddContact as AddContactForm} from '../../../components/forms';
 import {contactActions} from '../../../store/actions';
 import {Header, TitleContainer, StyledTitle} from '../styles';
 
-class AddContact extends Component {
+class CreateChat extends Component {
+
+  componentDidMount() {
+    this.loadContactList();
+  }
+
+  loadContactList = (filter, sort, descending) => {
+    return this.props.dispatch(contactActions.loadList(filter, sort, descending));
+  };
+
+  searchContacts = (text) => {
+    const filter = `username CONTAINS[c] '${text}' OR firstName CONTAINS[c] '${text}' OR secondName CONTAINS[c] '${text}'`;
+    return this.loadContactList(filter);
+  };
 
   goBack = () => this.props.navigation.goBack();
 
-  onSearchChange = (value) => {
-    return this.setState({value});
-  }
+  onSearchChange = (text) => {
+    this.searchContacts(text);
+  };
 
   addContact = (data) => {
     if (!data.username) {
@@ -32,23 +45,27 @@ class AddContact extends Component {
   };
 
   render() {
+    const {contact} = this.props;
+
     return (
       <Wrapper scrolled>
         <Header>
-          <TitleContainer width="70%">
+          <TitleContainer width="100%">
             <TouchableOpacity onPress={this.goBack}>
               <ArrowIcon />
             </TouchableOpacity>
             <StyledTitle marginLeft={20}>
-              Add contact
+              Create chat with
             </StyledTitle>
           </TitleContainer>
         </Header>
-        <SearchInput placeholder="Search contacts for @nickname" onChange={this.onSearchChange}/>
-        <AddContactForm onSubmit={this.addContact}/>
+        <SearchInput placeholder="Search in contacts" onChange={this.onSearchChange}/>
+        <ContactsBody contacts={contact.list}/>
       </Wrapper>
     );
   }
 }
 
-export default connect()(AddContact);
+export default connect(state => ({
+  contact: state.contact,
+}))(CreateChat);

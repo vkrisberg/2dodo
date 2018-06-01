@@ -15,6 +15,7 @@ import {
   PasswordApprove
 } from './containers';
 import {AddContact} from './containers/contacts';
+import {CreateChat} from './containers/messages';
 
 
 export const MainStack = createStackNavigator({
@@ -33,9 +34,6 @@ export const MainStack = createStackNavigator({
   Messages: {
     screen: Tabs
   },
-  AddContact: {
-    screen: AddContact
-  },
   Events: {
     screen: Events
   },
@@ -44,7 +42,13 @@ export const MainStack = createStackNavigator({
   },
   PasswordApprove: {
     screen: PasswordApprove
-  }
+  },
+  AddContact: {
+    screen: AddContact
+  },
+  CreateChat: {
+    screen: CreateChat
+  },
 }, {
   headerMode: 'none',
   initialRouteName: 'Preload',

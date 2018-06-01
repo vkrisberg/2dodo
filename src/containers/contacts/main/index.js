@@ -4,11 +4,10 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import {contactActions} from '../../../store/actions';
-import {AddIcon} from '../../../components/icons/';
+import {AddIcon, FavoritsDotsIcon} from '../../../components/icons/';
 import {SearchInput, ContactsBody} from '../../../components/elements';
 import {Wrapper} from '../../../components/layouts';
-import {AddContact} from './styles';
-import {Header, StyledTitle, TitleContainer} from '../styles';
+import {Header, StyledTitle, TitleContainer, StyledIcon, AddButton} from '../styles';
 
 class Contacts extends Component {
 
@@ -47,7 +46,6 @@ class Contacts extends Component {
 
   onCreate = (data) => {
     this.props.navigation.navigate('AddContact');
-    // this.createContact(data);
   };
 
   onUpdate = (username) => {
@@ -67,18 +65,21 @@ class Contacts extends Component {
     return (
       <Wrapper scrolled>
         <Header>
-          <TitleContainer>
-            <StyledTitle>
+          <TitleContainer width={'60%'}>
+            <StyledIcon>
+              <FavoritsDotsIcon/>
+            </StyledIcon>
+            <StyledTitle marginLeft={30}>
               Contacts
             </StyledTitle>
           </TitleContainer>
-          <AddContact>
+          <AddButton>
             <TouchableOpacity onPress={this.onCreate}>
               <AddIcon/>
             </TouchableOpacity>
-          </AddContact>
+          </AddButton>
         </Header>
-        <SearchInput placeholder="Search contacts" onChange={this.onSearchChange}/>
+        <SearchInput placeholder="Search in contacts" onChange={this.onSearchChange}/>
         <ContactsBody contacts={contact.list}/>
       </Wrapper>
     );

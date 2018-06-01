@@ -4,7 +4,7 @@ export const StyledTitle = styled.Text`
   font-weight: bold;
   font-size: 30px;
   color: #333;
-  padding: 30px 0 30px 50px;
+  margin-left: ${props => props.marginLeft || 0};
 `;
 
 export const Header = styled.View`
@@ -13,14 +13,17 @@ export const Header = styled.View`
 `;
 
 export const TitleContainer = styled.View`
-  width: 53%;
+  width: ${props => props.width || '50%'};
+  padding: 30px 20px;
+  flex-direction: row;
+  align-items: center;
 `;
 
 export const AddContact = styled.View`
-  width: 43.5%;
+  width: 40%;
   justify-content: center;
   align-items: flex-end;
-  padding-right: 3.5%;
+  padding-right: 20;
 `;
 
 export const SearchText = styled.Text`
@@ -34,6 +37,3 @@ export const StyledIcon = styled.View`
   top: 40px;
   left: 20px;
 `;
-
-
-
