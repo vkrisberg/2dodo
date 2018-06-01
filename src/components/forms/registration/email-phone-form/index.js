@@ -2,18 +2,11 @@ import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import PropTypes from 'prop-types';
 
-import Title from '../../../elements/title';
-import Input from '../../../elements/input';
-import Button from '../../../elements/button';
-import Checkbox from '../../../elements/checkbox';
-import Skip from '../../../elements/skip';
+import {Title, Input, Button} from '../../../elements';
 import {
   Description,
   StyledTitle,
   DescriptionWrapper,
-  Security,
-  SecurityContainer,
-  StyledCheckbox,
   Container
 } from './styles';
 
@@ -25,19 +18,9 @@ class EmailPhoneForm extends Component {
     handleSubmit: PropTypes.func.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isKeyCopy: false
-    };
-  }
-
-  toggleKeyCopy = () => {
-    this.setState({isKeyCopy: !this.state.isKeyCopy});
-  };
-
   render() {
+    const {handleSubmit} = this.props;
+
     return (
       <Container>
         <Title style={StyledTitle}>Registration</Title>
@@ -64,7 +47,7 @@ class EmailPhoneForm extends Component {
           component={Input}
           placeholder="Second Name"
         />
-        <Button color="black" onPress={this.props.handleSubmit}>Done</Button>
+        <Button style={{marginTop: 10}} color="black" onPress={handleSubmit}>Done</Button>
       </Container>
     );
   }

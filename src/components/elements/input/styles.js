@@ -9,10 +9,10 @@ const inputFocused = (props) => ({
 
 export const StyledInput = styled.TextInput`
   width: 300;
-  height: 45;
+  height: 50;
   border-color: #ced9e8;
   border-width: 1;
-  margin-bottom: 15;
+  margin-bottom: 20;
   color: ${props => props.textColor || 'black'};
   padding: 15px;
   border-radius: 40;

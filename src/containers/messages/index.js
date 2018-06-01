@@ -5,7 +5,7 @@ import {withNavigation} from 'react-navigation';
 import PropTypes from 'prop-types';
 
 import {chatActions, chatMessageActions, contactActions} from '../../store/actions';
-import TabsContainer from '../tabs-container';
+import {Wrapper} from '../../components/layouts';
 import {routeEnum} from '../../enums';
 import {FavoritsDotsIcon, EmptyMessagesIcon, AddIcon} from '../../components/icons';
 import {Button, SearchInput} from '../../components/elements';
@@ -14,10 +14,9 @@ import {
   StyledTitle,
   TitleContainer,
   AddContact,
-  StyledIcon,
-  EmptyFavoritsView,
-  BoldText
+  StyledIcon
 } from './styles';
+import {BoldText, EmptyFavoritsView} from './components/styles';
 
 class Messages extends PureComponent {
 
@@ -39,7 +38,6 @@ class Messages extends PureComponent {
   };
 
   componentDidMount() {
-    const {account} = this.props;
 
     this.loadChatList();
     this.loadContactList();
@@ -120,8 +118,8 @@ class Messages extends PureComponent {
   onSelect(chat) {
     return () => {
       this.props.navigation.navigate(routeEnum.PrivateChat, {chat});
-    }
-  };
+    };
+  }
 
   onSelectContact(contact) {
     return () => {
@@ -156,12 +154,12 @@ class Messages extends PureComponent {
     const {contact} = this.props;
 
     const contacts = contact.list.map((item, index) => {
-        return (
-          <Button key={index} onPress={this.onSelectContact(item)} color={'black'}>
-            <Text>{item.username} {item.firstName} {item.secondName}</Text>
-          </Button>
-        );
-      }
+      return (
+        <Button key={index} onPress={this.onSelectContact(item)} color={'black'}>
+          <Text>{item.username} {item.firstName} {item.secondName}</Text>
+        </Button>
+      );
+    }
     );
 
     return (
@@ -175,7 +173,7 @@ class Messages extends PureComponent {
     const {page} = this.state;
 
     return (
-      <TabsContainer selected={routeEnum.Messages}>
+      <Wrapper scrolled>
         <Header>
           <TitleContainer>
             <StyledIcon>
@@ -187,14 +185,14 @@ class Messages extends PureComponent {
           </TitleContainer>
           <TouchableWithoutFeedback onPress={this.onCreate}>
             <AddContact>
-                <AddIcon/>
+              <AddIcon/>
             </AddContact>
           </TouchableWithoutFeedback>
         </Header>
         <SearchInput placeholder="Search in chats" onChange={this.searchChats}/>
         {page === 'chatList' && this.getChatList()}
         {page === 'createChat' && this.getCreateChat()}
-      </TabsContainer>
+      </Wrapper>
     );
   }
 }

@@ -14,27 +14,36 @@ export default class SearchInput extends Component {
     super(props);
 
     this.state = {
-      isFocused: false
+      isFocused: false,
+      value: null
     };
   }
 
   onFocus = () => !this.state.isFocused && this.setState({isFocused: true});
 
-  onBlur = () => this.state.isFocused && this.setState({isFocused: false});
+  onBlur = () => {
+    const {isFocused, value} = this.state;
+
+    isFocused && this.setState({isFocused: false});
+  }
 
   onChange = (value) => {
     if (this.props.onChange) {
       this.props.onChange(value);
     }
+
+    this.setState({value});
   };
 
   render() {
+    const {isFocused, value} = this.state;
+
     return (
       <SearchInputView>
         <IconContainer>
           <SearchIcon />
         </IconContainer>
-        {!this.state.isFocused && <StyledText>{this.props.placeholder}</StyledText>}
+        {!isFocused && !value && <StyledText>{this.props.placeholder}</StyledText>}
         <InputView>
           <StyledInput
             underlineColorAndroid="transparent"

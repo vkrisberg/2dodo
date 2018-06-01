@@ -17,7 +17,7 @@ export const IconContainer = styled.View`
 
 export const InputView = styled.View`
   position: absolute;
-  top: 1;
+  top: 2;
   align-items: center;
   width: 220;
 `;

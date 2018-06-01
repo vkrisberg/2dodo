@@ -18,7 +18,6 @@ class Tab extends PureComponent {
     onTabPress: PropTypes.func,
     tabIndex: PropTypes.number,
     pressOpacity: PropTypes.number,
-    fontSize: PropTypes.number,
     navigation: PropTypes.shape({}),
     activeIcon: PropTypes.node
   }
@@ -46,7 +45,6 @@ class Tab extends PureComponent {
     const {
       pressOpacity,
       icon,
-      fontSize,
       text,
       activeIcon,
       selected
@@ -58,7 +56,7 @@ class Tab extends PureComponent {
         activeOpacity={pressOpacity}
       >
         {selected === text ? activeIcon : icon}
-        <StyledText color={this._getColor()} fontSize={fontSize}>
+        <StyledText color={this._getColor()}>
           {text}
         </StyledText>
       </Container>

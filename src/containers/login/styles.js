@@ -1,7 +1,6 @@
-import { StyleSheet } from 'react-native';
 import styled from 'styled-components';
 
-import Link from '../../components/elements/link';
+import {Link} from '../../components/elements';
 
 export const StyledText = styled.Text`
   color: white;
