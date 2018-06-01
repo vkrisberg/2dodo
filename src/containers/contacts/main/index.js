@@ -1,16 +1,20 @@
 import React, {Component} from 'react';
 import {TouchableOpacity, Text} from 'react-native';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
 import {contactActions} from '../../../store/actions';
 import {AddIcon} from '../../../components/icons/';
-import {SearchInput} from '../../../components/elements';
+import {SearchInput, ContactsBody} from '../../../components/elements';
 import {Wrapper} from '../../../components/layouts';
 import {AddContact} from './styles';
 import {Header, StyledTitle, TitleContainer} from '../styles';
-import ContactsBody from './components/contacts-body';
 
 class Contacts extends Component {
+
+  static propTypes = {
+    contact: PropTypes.object,
+  };
 
   componentDidMount() {
     this.loadContactList();
@@ -58,6 +62,8 @@ class Contacts extends Component {
   };
 
   render() {
+    const {contact} = this.props;
+
     return (
       <Wrapper scrolled>
         <Header>
@@ -73,7 +79,7 @@ class Contacts extends Component {
           </AddContact>
         </Header>
         <SearchInput placeholder="Search contacts" onChange={this.onSearchChange}/>
-        <ContactsBody />
+        <ContactsBody contacts={contact.list}/>
       </Wrapper>
     );
   }

@@ -1,7 +1,7 @@
-import React, { PureComponent } from 'react';
-import { TouchableOpacity, Text, ViewPropTypes } from 'react-native';
+import React, {PureComponent} from 'react';
+import {TouchableOpacity, Text} from 'react-native';
 import PropTypes from 'prop-types';
-import { withNavigation } from 'react-navigation';
+import {withNavigation} from 'react-navigation';
 
 class Link extends PureComponent {
 
@@ -11,21 +11,21 @@ class Link extends PureComponent {
     to: PropTypes.string.isRequired,
     navigation: PropTypes.shape({}),
     color: PropTypes.string,
-    style: ViewPropTypes.style
+    style: PropTypes.any,
   }
 
   handleLink = () => {
-    const { navigation, to } = this.props;
+    const {navigation, to} = this.props;
 
     return navigation.navigate(`${to}`);
   }
 
   render() {
-    const { label, children, color, style } = this.props;
+    const {label, children, color, style} = this.props;
 
     return (
       <TouchableOpacity onPress={this.handleLink}>
-        <Text style={[style, {color: color || 'white'}]}>{ label || children }</Text>
+        <Text style={[style, {color: color || 'white'}]}>{label || children}</Text>
       </TouchableOpacity>
     );
   }

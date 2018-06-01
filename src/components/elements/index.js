@@ -12,3 +12,4 @@ export {default as Tab} from './tab';
 export {default as FavoritsNav} from './favorits-nav';
 export {default as ChatItem} from './chat-item';
 export {default as ContactItem} from './contact-item';
+export {default as ContactsBody} from './contacts-body';

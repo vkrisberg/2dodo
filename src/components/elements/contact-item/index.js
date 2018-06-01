@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {TouchableOpacity} from 'react-native';
+import PropTypes from 'prop-types';
 
 import Checkbox from '../checkbox';
 import {AvatarIcon} from '../../icons';
@@ -15,8 +16,18 @@ import {
 
 class ContactItem extends Component {
 
+  static propTypes = {
+    contact: PropTypes.object.isRequired,
+    checked: PropTypes.bool,
+    onCheckboxPress: PropTypes.func,
+    onLongPress: PropTypes.func,
+  };
+
   render() {
-    const {checked, onCheckboxPress, onLongPress} = this.props;
+    const {contact, checked, onCheckboxPress, onLongPress} = this.props;
+    const name = contact.firstName || contact.secondName
+      ? `${contact.firstName} ${contact.secondName}`
+      : contact.username;
 
     return (
       <TouchableOpacity onLongPress={onLongPress}>
@@ -27,10 +38,10 @@ class ContactItem extends Component {
           </ContactImage>
           <ContactBody>
             <ContactName>
-              Gomer Simpson
+              {name}
             </ContactName>
             <ContactMessage>
-              online
+              {contact.username}
             </ContactMessage>
           </ContactBody>
         </Contact>
