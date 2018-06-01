@@ -30,7 +30,7 @@ class Preload extends Component {
     const {authorized} = this.props.account;
 
     if (authorized) {
-      navigation.navigate(routeEnum.Main);
+      navigation.replace(routeEnum.Messages);
     } else {
       dispatch(accountActions.remind())
         .then(() => {
@@ -46,10 +46,10 @@ class Preload extends Component {
         .catch(async () => {
           const skipEvents = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.skipEvents}`);
           if (skipEvents) {
-            setTimeout(() => navigation.navigate(routeEnum.Login), 2000);
+            setTimeout(() => navigation.replace(routeEnum.Login), 2000);
             return;
           }
-          navigation.navigate(routeEnum.Events);
+          navigation.replace(routeEnum.Events);
         });
     }
   }

@@ -11,7 +11,7 @@ export default class Events extends Component {
   onSkip = () => {
     const {navigation} = this.props;
     AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.skipEvents}`, 'true');
-    navigation.navigate(routeEnum.Login);
+    navigation.replace(routeEnum.Login);
   }
 
   render() {

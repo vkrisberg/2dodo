@@ -1,4 +1,4 @@
-import {createTabNavigator} from 'react-navigation';
+import {createBottomTabNavigator} from 'react-navigation';
 import React from 'react';
 
 import {
@@ -16,7 +16,7 @@ import {
   MessagesIcon
 } from './components/icons';
 
-export default createTabNavigator({
+export default createBottomTabNavigator({
   Contacts: {
     screen: Contacts,
     navigationOptions: {

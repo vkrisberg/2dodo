@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {TouchableOpacity} from 'react-native';
+import PropTypes from 'prop-types';
 
 import Checkbox from '../checkbox';
 import {AvatarIcon} from '../../icons';
@@ -19,9 +20,16 @@ import {
 
 class ChatItem extends Component {
 
+  static propTypes = {
+    chat: PropTypes.object.isRequired,
+    checked: PropTypes.bool,
+    onCheckboxPress: PropTypes.func,
+    onLongPress: PropTypes.func,
+  };
+
   state = {
-    chosen: false
-  }
+    chosen: false,
+  };
 
   onLongPress = () => {
     const {onLongPress} = this.props;
@@ -32,7 +40,7 @@ class ChatItem extends Component {
   }
 
   render() {
-    const {checked, onCheckboxPress, onLongPress} = this.props;
+    const {chat, checked, onCheckboxPress, onLongPress} = this.props;
 
     return (
       <TouchableOpacity onLongPress={this.onLongPress}>
@@ -40,7 +48,7 @@ class ChatItem extends Component {
           { this.state.chosen && <Checkbox
             checked={checked}
             style={ChatChosen}
-            onPress={onCheckboxPress} 
+            onPress={onCheckboxPress}
           />
           }
           <ChatImage>
@@ -48,7 +56,7 @@ class ChatItem extends Component {
           </ChatImage>
           <ChatBody>
             <ChatName>
-              Gomer Simpson
+              {chat.name}
             </ChatName>
             <ChatMessage>
               Send your a video...
@@ -60,7 +68,7 @@ class ChatItem extends Component {
             </ChatMessageDate>
             <ChatNotReadenMessage>
               <ChatNotReadenMessageText>
-                12
+                {chat.unreadCount}
               </ChatNotReadenMessageText>
             </ChatNotReadenMessage>
           </ChatInformation>

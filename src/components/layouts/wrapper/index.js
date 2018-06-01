@@ -5,7 +5,7 @@ import {Container, ScrolledContainer} from './styles';
 
 const ViewWrap = (props) => (
   props.scrolled
-    ? <ScrollView contentContainerStyle={ScrolledContainer}>{props.children}</ScrollView>
+    ? <ScrollView alwaysBounceVertical={false} contentContainerStyle={ScrolledContainer}>{props.children}</ScrollView>
     : <Container>{props.children}</Container>
 );
 

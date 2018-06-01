@@ -1,14 +1,18 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 
 import {EmptyFavoritsView, BoldText} from './styles';
 import {EmptyMessagesIcon} from '../../../components/icons';
 import {ChatItem} from '../../../components/elements';
 
 export default class MessagesBody extends Component {
-  
+
+  static propTypes = {
+    chatList: PropTypes.array.isRequired,
+  };
+
   state = {
-    messages: [1, 2, 3, 4, 5, 6],
-    chosenMessages: []
+    chosenMessages: [],
   };
 
   componentDidMount() {
@@ -30,14 +34,15 @@ export default class MessagesBody extends Component {
   }
 
   render() {
-    const {messages} = this.state;
+    const {chatList} = this.props;
 
-    if (messages.length) {
-      return messages.map (message => (
+    if (chatList.length) {
+      return chatList.map((chat, index) => (
         <ChatItem
-          key={message}
-          checked={() => this.isChatChosen(message)}
-          onCheckboxPress={() => this.onCheckboxPress(message)}
+          key={index}
+          chat={chat}
+          checked={this.isChatChosen(chat)}
+          onCheckboxPress={() => this.onCheckboxPress(chat)}
         />
       ));
     }

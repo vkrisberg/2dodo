@@ -10,5 +10,5 @@ export default function ({store, navigation}) {
   AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`, 'true');
   AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.username}`, username);
   store.dispatch({type: types.LOGIN_SUCCESS});
-  navigation.navigate(routeEnum.Messages);
+  navigation.replace(routeEnum.Messages);
 };
