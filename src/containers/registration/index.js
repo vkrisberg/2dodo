@@ -77,13 +77,13 @@ class Registration extends Component {
 
     if (data.email && this.checkEmail(data.email)) {
       Alert.alert('Invalid email address');
-      
+
       return null;
     }
 
     if (account.loading) {
       Alert.alert('Account is loading');
-      
+
       return null;
     }
 

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity, KeyboardAvoidingView} from 'react-native';
 import {connect} from 'react-redux';
 
 import Wrapper from '../../../components/layouts/wrapper';
@@ -8,6 +8,7 @@ import {SearchInput, Button} from '../../../components/elements';
 import {AddContact as AddContactForm} from '../../../components/forms';
 import {contactActions} from '../../../store/actions';
 import {Header, TitleContainer, StyledTitle} from '../styles';
+import {MessageStyles} from '../../messages/styles';
 
 class AddContact extends Component {
 
@@ -45,7 +46,9 @@ class AddContact extends Component {
           </TitleContainer>
         </Header>
         <SearchInput placeholder="Search contacts for @nickname" onChange={this.onSearchChange}/>
-        <AddContactForm onSubmit={this.addContact}/>
+        <KeyboardAvoidingView behavior="padding" enabled>
+          <AddContactForm onSubmit={this.addContact}/>
+        </KeyboardAvoidingView>
       </Wrapper>
     );
   }

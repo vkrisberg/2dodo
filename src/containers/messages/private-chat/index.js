@@ -1,17 +1,18 @@
 import React, {PureComponent} from 'react';
-import {View, ScrollView, Text, TouchableOpacity} from 'react-native';
+import {View, ScrollView, Text, TouchableOpacity, KeyboardAvoidingView} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import {chatActions, chatMessageActions, contactActions} from '../../../store/actions';
 import Wrapper from '../../../components/layouts/wrapper';
 import {ArrowIcon} from '../../../components/icons';
-import {Input, Button, SearchInput} from '../../../components/elements';
+import {Input, Button, SearchInput, MessageListItem, MessageInput} from '../../../components/elements';
+import {MessageList} from '../../../components/lists';
 import {
   Header,
   StyledTitle,
   TitleContainer,
-  SendMessageView,
+  MessageStyles,
 } from '../styles';
 
 class PrivateChat extends PureComponent {
@@ -29,15 +30,16 @@ class PrivateChat extends PureComponent {
     t: PropTypes.func.isRequired,
   };
 
-  state = {
-    text: '',
-  };
+  constructor(props) {
+    super(props);
+
+    this.chat = {};
+  }
 
   componentDidMount() {
-    const currentChat = this.props.navigation.getParam('chat');
-    this.chatId = currentChat.id;
-    this.props.dispatch(chatActions.setCurrentChat(currentChat));
-    this.loadChatMessages(this.chatId);
+    this.chat = this.props.navigation.getParam('chat');
+    this.props.dispatch(chatActions.setCurrentChat(this.chat));
+    this.loadChatMessages(this.chat.id);
     this.loadContactList();
   }
 
@@ -67,55 +69,42 @@ class PrivateChat extends PureComponent {
 
   goBack = () => this.props.navigation.goBack();
 
-  onTextChange = (text) => {
-    this.setState({text});
+  onSearchChange = (text) => {
+    const filter = `text CONTAINS[c] '${text}' OR username CONTAINS[c] '${text}'`;
+    return this.loadChatMessages(this.chat.id, filter);
   };
 
-  onTextSubmit = () => {
+  onMessagePress = (message) => {
+    // console.log('onMessagePress', message);
+  };
+
+  onSubmitText = (text) => {
     const {account} = this.props;
     const messageData = {
       username: account.user.username,
-      text: this.state.text,
+      text,
     };
 
-    this.sendChatMessage({data: messageData, chatId: this.chatId}).then(() => {
+    this.sendChatMessage({data: messageData, chatId: this.chat.id}).then(() => {
       this.setState({text: ''});
     });
   };
 
-  onSearchChange = (text) => {
-    const filter = `text CONTAINS[c] '${text}' OR username CONTAINS[c] '${text}'`;
-    return this.loadChatMessages(this.chatId, filter);
-  };
-
-  getMessages = () => {
-    const {chatMessage} = this.props;
-    const messages = chatMessage.list.map((item, index) => {
-      return (
-        <Text key={index}>{item.username} - {item.text}</Text>
-      );
-    });
-
+  renderMessage = ({item}) => {
     return (
-      <ScrollView>
-        {messages}
-      </ScrollView>
+      <MessageListItem item={item} onPress={this.onMessagePress}/>
     );
   };
 
   render() {
-    const {chat} = this.props;
-    const input = {
-      value: this.state.text,
-      onChange: this.onTextChange,
-    };
+    const {chat, chatMessage} = this.props;
 
     return (
-      <Wrapper scrolled>
+      <Wrapper scrolled={false}>
         <Header>
           <TitleContainer width="100%">
             <TouchableOpacity onPress={this.goBack}>
-              <ArrowIcon />
+              <ArrowIcon/>
             </TouchableOpacity>
             <StyledTitle marginLeft={20}>
               {chat.current.name}
@@ -123,11 +112,10 @@ class PrivateChat extends PureComponent {
           </TitleContainer>
         </Header>
         <SearchInput placeholder="Search in messages" onChange={this.onSearchChange}/>
-        {this.getMessages()}
-        <SendMessageView>
-          <Input input={input} focusedColor={'gray'}/>
-          <Button onPress={this.onTextSubmit} color={'black'}>Отправить</Button>
-        </SendMessageView>
+        <KeyboardAvoidingView style={MessageStyles.container} behavior="padding" enabled>
+          <MessageList data={chatMessage.list} verticalOffset={116} renderItem={this.renderMessage}/>
+          <MessageInput onSubmitText={this.onSubmitText}/>
+        </KeyboardAvoidingView>
       </Wrapper>
     );
   }

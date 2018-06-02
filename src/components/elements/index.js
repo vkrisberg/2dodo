@@ -14,5 +14,6 @@ export {default as ContactItem} from './contact-item';
 export {default as ContactsBody} from './contacts-body';
 export {default as ChatItem} from './chat-item';
 export {default as ChatsBody} from './chats-body';
-export {default as MessageItem} from './message-item';
+export {default as MessageListItem} from './message-list-item';
+export {default as MessageInput} from './message-input';
 export {default as MessagesBody} from './messages-body';

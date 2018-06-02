@@ -14,7 +14,7 @@ export default class Button extends PureComponent {
     title: PropTypes.string,
     style: ViewPropTypes.style,
     wrapperStyle: ViewPropTypes.style,
-    textStyle: ViewPropTypes.style,
+    textStyle: PropTypes.any,
     color: PropTypes.string
   }
 
