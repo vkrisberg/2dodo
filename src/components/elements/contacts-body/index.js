@@ -9,6 +9,7 @@ export default class ContactsBody extends Component {
 
   static propTypes = {
     contacts: PropTypes.array.isRequired,
+    onContactPress: PropTypes.func,
   };
 
   state = {
@@ -33,6 +34,12 @@ export default class ContactsBody extends Component {
     return this.state.chosenContacts.find(item => item === contact);
   };
 
+  onContactPress(contact) {
+    return () => {
+      this.props.onContactPress && this.props.onContactPress(contact);
+    }
+  };
+
   render() {
     const {contacts} = this.props;
 
@@ -42,6 +49,7 @@ export default class ContactsBody extends Component {
           key={index}
           contact={contact}
           checked={this.isContactChosen(contact)}
+          onPress={this.onContactPress(contact)}
           onCheckboxPress={() => this.onCheckboxPress(contact)}
         />
       ));

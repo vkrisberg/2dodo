@@ -1,3 +1,4 @@
+import {StyleSheet} from "react-native";
 import styled from 'styled-components';
 
 export const StyledTitle = styled.Text`
@@ -37,3 +38,18 @@ export const StyledIcon = styled.View`
   top: 40px;
   left: 20px;
 `;
+
+export const SendMessageView = styled.View`
+  align-items: flex-end;
+  justify-content: flex-start;
+  position: relative;
+  height: 200;
+`;
+
+export const MessageStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+  },
+});
+

@@ -4,7 +4,7 @@ import {withNavigation} from 'react-navigation';
 import PropTypes from 'prop-types';
 import {
   View,
-  Alert
+  Alert,
 } from 'react-native';
 
 import Link from '../../components/elements/link';
@@ -56,7 +56,7 @@ class Login extends Component {
 
     if (!username) {
       Alert.alert('Fill username field');
-      
+
       return null;
     }
 

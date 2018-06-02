@@ -20,17 +20,18 @@ class ContactItem extends Component {
     contact: PropTypes.object.isRequired,
     checked: PropTypes.bool,
     onCheckboxPress: PropTypes.func,
+    onPress: PropTypes.func,
     onLongPress: PropTypes.func,
   };
 
   render() {
-    const {contact, checked, onCheckboxPress, onLongPress} = this.props;
+    const {contact, checked, onCheckboxPress, onPress, onLongPress} = this.props;
     const name = contact.firstName || contact.secondName
       ? `${contact.firstName} ${contact.secondName}`
       : contact.username;
 
     return (
-      <TouchableOpacity onLongPress={onLongPress}>
+      <TouchableOpacity onPress={onPress} onLongPress={onLongPress}>
         <Contact>
           {/* <Checkbox checked={checked} style={ChatChosen} onPress={onCheckboxPress} /> */}
           <ContactImage>

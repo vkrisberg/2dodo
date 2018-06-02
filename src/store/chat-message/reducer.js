@@ -1,9 +1,12 @@
 import reducer from '../../utils/reducer';
 import {types} from './actions';
+import {types as chatTypes} from '../chat/actions';
 
 const initState = {
+  chat: '', // current chat
   list: [],
   current: {
+    id: '',
     chatId: '',
     type: 'text', // [text, audio, video, image, call]
     username: '',
@@ -167,6 +170,10 @@ export default reducer(initState, {
   },
 
   [types.RECEIVE_MESSAGE_SUCCESS]: (state, action) => {
+    if (action.payload.chatId !== state.chat.id) {
+      return state;
+    }
+
     return {
       ...state,
       list: [...state.list, action.payload],
@@ -192,6 +199,14 @@ export default reducer(initState, {
     return {
       ...state,
       receiveError: action.error,
+    };
+  },
+
+  // Chat types
+  [chatTypes.SET_CURRENT_CHAT]: (state, action) => {
+    return {
+      ...state,
+      chat: action.payload,
     };
   },
 });

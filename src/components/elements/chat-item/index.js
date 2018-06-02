@@ -18,12 +18,13 @@ import {
   ChatInformation
 } from './styles';
 
-class ChatItem extends Component {
+export default class ChatItem extends Component {
 
   static propTypes = {
     chat: PropTypes.object.isRequired,
     checked: PropTypes.bool,
     onCheckboxPress: PropTypes.func,
+    onPress: PropTypes.func,
     onLongPress: PropTypes.func,
   };
 
@@ -37,13 +38,13 @@ class ChatItem extends Component {
     onLongPress && onLongPress();
 
     return !this.state.chosen && this.setState({chosen: true});
-  }
+  };
 
   render() {
-    const {chat, checked, onCheckboxPress, onLongPress} = this.props;
+    const {chat, checked, onCheckboxPress, onPress} = this.props;
 
     return (
-      <TouchableOpacity onLongPress={this.onLongPress}>
+      <TouchableOpacity onPress={onPress} onLongPress={this.onLongPress}>
         <Chat>
           { this.state.chosen && <Checkbox
             checked={checked}
@@ -77,5 +78,3 @@ class ChatItem extends Component {
     );
   }
 }
-
-export default connect()(ChatItem);
