@@ -5,9 +5,9 @@ import {connect} from 'react-redux';
 import Wrapper from '../../../components/layouts/wrapper';
 import {ArrowIcon} from '../../../components/icons';
 import {SearchInput, ContactsBody} from '../../../components/elements';
-import {AddContact as AddContactForm} from '../../../components/forms';
-import {contactActions} from '../../../store/actions';
+import {chatActions, contactActions} from '../../../store/actions';
 import {Header, TitleContainer, StyledTitle} from '../styles';
+import {routeEnum} from '../../../enums';
 
 class CreateChat extends Component {
 
@@ -16,12 +16,20 @@ class CreateChat extends Component {
   }
 
   loadContactList = (filter, sort, descending) => {
-    return this.props.dispatch(contactActions.loadList(filter, sort, descending));
+    return this.props.dispatch(
+      contactActions.loadList(filter, sort, descending)
+    );
   };
 
   searchContacts = (text) => {
     const filter = `username CONTAINS[c] '${text}' OR firstName CONTAINS[c] '${text}' OR secondName CONTAINS[c] '${text}'`;
     return this.loadContactList(filter);
+  };
+
+  createChat = (contacts) => {
+    return this.props.dispatch(
+      chatActions.create(contacts)
+    );
   };
 
   goBack = () => this.props.navigation.goBack();
@@ -30,17 +38,10 @@ class CreateChat extends Component {
     this.searchContacts(text);
   };
 
-  addContact = (data) => {
-    if (!data.username) {
+  onCreateChat = (contact) => {
+    this.createChat([contact]).then((chat) => {
       this.goBack();
-      return;
-    }
-
-    data.username = data.username.toLowerCase();
-    data.nickname = data.username.split('@')[0];
-
-    this.props.dispatch(contactActions.create(data)).then(() => {
-      this.goBack();
+      // this.props.navigation.navigate(routeEnum.PrivateChat, {chat});
     });
   };
 
@@ -60,7 +61,7 @@ class CreateChat extends Component {
           </TitleContainer>
         </Header>
         <SearchInput placeholder="Search in contacts" onChange={this.onSearchChange}/>
-        <ContactsBody contacts={contact.list}/>
+        <ContactsBody contacts={contact.list} onContactPress={this.onCreateChat}/>
       </Wrapper>
     );
   }
