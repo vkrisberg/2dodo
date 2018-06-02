@@ -1,24 +1,18 @@
 import React, {PureComponent} from 'react';
-import {View, ScrollView, Text, TouchableWithoutFeedback} from 'react-native';
+import {View, ScrollView, Text, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
-import {withNavigation} from 'react-navigation';
 import PropTypes from 'prop-types';
 
-import {chatActions, chatMessageActions, contactActions} from '../../store/actions';
-import TabsContainer from '../tabs-container';
-import {routeEnum} from '../../enums';
-import {FavoritsDotsIcon, EmptyMessagesIcon, AddIcon} from '../../components/icons';
-import {Input, Button, SearchInput} from '../../components/elements';
+import {chatActions, chatMessageActions, contactActions} from '../../../store/actions';
+import Wrapper from '../../../components/layouts/wrapper';
+import {ArrowIcon} from '../../../components/icons';
+import {Input, Button, SearchInput} from '../../../components/elements';
 import {
   Header,
   StyledTitle,
   TitleContainer,
-  AddContact,
-  StyledIcon,
-  EmptyFavoritsView,
-  BoldText,
   SendMessageView,
-} from './styles';
+} from '../styles';
 
 class PrivateChat extends PureComponent {
 
@@ -71,6 +65,8 @@ class PrivateChat extends PureComponent {
     return this.props.dispatch(chatMessageActions.delete(id));
   };
 
+  goBack = () => this.props.navigation.goBack();
+
   onTextChange = (text) => {
     this.setState({text});
   };
@@ -87,7 +83,7 @@ class PrivateChat extends PureComponent {
     });
   };
 
-  searchMessages = (text) => {
+  onSearchChange = (text) => {
     const filter = `text CONTAINS[c] '${text}' OR username CONTAINS[c] '${text}'`;
     return this.loadChatMessages(this.chatId, filter);
   };
@@ -115,29 +111,24 @@ class PrivateChat extends PureComponent {
     };
 
     return (
-      <TabsContainer selected={routeEnum.Messages}>
+      <Wrapper scrolled>
         <Header>
-          <TitleContainer>
-            <StyledIcon>
-              <FavoritsDotsIcon/>
-            </StyledIcon>
-            <StyledTitle>
+          <TitleContainer width="100%">
+            <TouchableOpacity onPress={this.goBack}>
+              <ArrowIcon />
+            </TouchableOpacity>
+            <StyledTitle marginLeft={20}>
               {chat.current.name}
             </StyledTitle>
           </TitleContainer>
-          <AddContact>
-            <TouchableWithoutFeedback>
-              <AddIcon/>
-            </TouchableWithoutFeedback>
-          </AddContact>
         </Header>
-        <SearchInput placeholder="Search in messages" onChange={this.searchMessages}/>
+        <SearchInput placeholder="Search in messages" onChange={this.onSearchChange}/>
         {this.getMessages()}
         <SendMessageView>
           <Input input={input} focusedColor={'gray'}/>
           <Button onPress={this.onTextSubmit} color={'black'}>Отправить</Button>
         </SendMessageView>
-      </TabsContainer>
+      </Wrapper>
     );
   }
 }
@@ -147,4 +138,4 @@ export default connect(state => ({
   chat: state.chat,
   chatMessage: state.chatMessage,
   contact: state.contact,
-}))(withNavigation(PrivateChat));
+}))(PrivateChat);

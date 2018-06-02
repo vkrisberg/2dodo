@@ -8,7 +8,7 @@ import {chatActions, chatMessageActions, contactActions} from '../../../store/ac
 import {Wrapper} from '../../../components/layouts';
 import {routeEnum} from '../../../enums';
 import {FavoritsDotsIcon, AddIcon} from '../../../components/icons';
-import {Button, SearchInput, MessagesBody} from '../../../components/elements';
+import {SearchInput, ChatsBody} from '../../../components/elements';
 import {
   Header,
   StyledTitle,
@@ -112,59 +112,9 @@ class Messages extends PureComponent {
     this.props.navigation.navigate('CreateChat');
   };
 
-  onSelect(chat) {
-    return () => {
-      this.props.navigation.navigate(routeEnum.PrivateChat, {chat});
-    };
-  }
-
-  onSelectContact(contact) {
-    return () => {
-      this.createChat([contact]).then((chat) => {
-        this.props.navigation.navigate(routeEnum.PrivateChat, {chat});
-      });
-    };
-  }
-
-  // getChatList = () => {
-  //   const {chat} = this.props;
-  //
-  //   if (!chat.list.length) {
-  //     return (
-  //       <EmptyFavoritsView>
-  //         <EmptyMessagesIcon/>
-  //         <BoldText>Your have not chats yet</BoldText>
-  //       </EmptyFavoritsView>
-  //     );
-  //   }
-  //
-  //   return chat.list.map((item, index) => {
-  //     return (
-  //       <Button key={index} onPress={this.onSelect(item)} color={'black'}>
-  //         <Text>{item.shortName} - {item.name} - {item.owner}</Text>
-  //       </Button>
-  //     );
-  //   });
-  // };
-  //
-  // getCreateChat = () => {
-  //   const {contact} = this.props;
-  //
-  //   const contacts = contact.list.map((item, index) => {
-  //     return (
-  //       <Button key={index} onPress={this.onSelectContact(item)} color={'black'}>
-  //         <Text>{item.username} {item.firstName} {item.secondName}</Text>
-  //       </Button>
-  //     );
-  //   }
-  //   );
-  //
-  //   return (
-  //     <ScrollView>
-  //       {contacts}
-  //     </ScrollView>
-  //   );
-  // };
+  onChatPress = (chat) => {
+    this.props.navigation.navigate(routeEnum.PrivateChat, {chat});
+  };
 
   render() {
     const {chat} = this.props;
@@ -187,7 +137,7 @@ class Messages extends PureComponent {
           </TouchableWithoutFeedback>
         </Header>
         <SearchInput placeholder="Search in chats" onChange={this.searchChats}/>
-        <MessagesBody chatList={chat.list}/>
+        <ChatsBody chatList={chat.list} onChatPress={this.onChatPress}/>
       </Wrapper>
     );
   }

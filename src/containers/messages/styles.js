@@ -37,3 +37,10 @@ export const StyledIcon = styled.View`
   top: 40px;
   left: 20px;
 `;
+
+export const SendMessageView = styled.View`
+  align-items: flex-end;
+  justify-content: flex-start;
+  position: relative;
+  height: 200;
+`;

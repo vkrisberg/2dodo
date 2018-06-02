@@ -15,7 +15,7 @@ import {
   PasswordApprove
 } from './containers';
 import {AddContact} from './containers/contacts';
-import {CreateChat} from './containers/messages';
+import {CreateChat, PrivateChat} from './containers/messages';
 
 
 export const MainStack = createStackNavigator({
@@ -48,6 +48,9 @@ export const MainStack = createStackNavigator({
   },
   CreateChat: {
     screen: CreateChat
+  },
+  PrivateChat: {
+    screen: PrivateChat
   },
 }, {
   headerMode: 'none',

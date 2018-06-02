@@ -34,7 +34,7 @@ export default class ContactsBody extends Component {
     return this.state.chosenContacts.find(item => item === contact);
   };
 
-  onPress(contact) {
+  onContactPress(contact) {
     return () => {
       this.props.onContactPress && this.props.onContactPress(contact);
     }
@@ -49,7 +49,7 @@ export default class ContactsBody extends Component {
           key={index}
           contact={contact}
           checked={this.isContactChosen(contact)}
-          onPress={this.onPress(contact)}
+          onPress={this.onContactPress(contact)}
           onCheckboxPress={() => this.onCheckboxPress(contact)}
         />
       ));

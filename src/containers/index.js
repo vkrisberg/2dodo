@@ -11,6 +11,5 @@ export {default as ForgotPassword} from './forgot-password';
 export {default as Groups} from './groups';
 export {default as Main} from './main';
 export {default as PasswordApprove} from './password-approve';
-export {default as PrivateChat} from './private-chat';
 export {Contacts} from './contacts';
 export {Messages} from './messages';
