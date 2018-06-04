@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import {KeyboardAvoidingView} from 'react-native';
 import {withNavigation} from 'react-navigation';
+import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {
   View,
@@ -21,6 +22,7 @@ import {
   StyledRegistration,
   RegistrationLabel
 } from './styles';
+import {LoginStyles} from './styles';
 
 const logoStyle = {marginTop: 120};
 const linkStyle = {fontWeight: 'bold'};
@@ -56,7 +58,6 @@ class Login extends Component {
 
     if (!username) {
       Alert.alert('Fill username field');
-
       return null;
     }
 
@@ -64,7 +65,6 @@ class Login extends Component {
 
     if (!account) {
       Alert.alert('Wrong username');
-
       return null;
     }
 
@@ -72,11 +72,11 @@ class Login extends Component {
     dispatch(accountActions.login({deviceId, user, keys}))
       .then(() => {
         this.wsConnect({deviceId, user, keys});
+        this.props.navigation.replace(routeEnum.Messages);
       })
       .catch((error) => {
-        Alert.alert('Login error');
-
         console.error('login error', error);
+        Alert.alert('Login error');
       });
   };
 
@@ -89,9 +89,11 @@ class Login extends Component {
 
     return (
       <BackgroundContainer image={backgroundImage}>
-        <Logo style={logoStyle} flex={false}/>
-        <StyledText>{t('Welcome')}</StyledText>
-        <LoginForm placeholder={t('LoginPlaceholder')} onSubmit={this.login}/>
+        <KeyboardAvoidingView style={LoginStyles.container} behavior="position" enabled>
+          <Logo style={logoStyle} flex={false}/>
+          <StyledText>{t('Welcome')}</StyledText>
+          <LoginForm placeholder={t('LoginPlaceholder')} onSubmit={this.login}/>
+        </KeyboardAvoidingView>
         <View>
           <StyledLink to={routeEnum.ForgotPassword}>{t('ForgetPassword')}</StyledLink>
           <StyledRegistration>

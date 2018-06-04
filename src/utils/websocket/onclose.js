@@ -10,7 +10,7 @@ export default function ({event, store, navigation}) {
     AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
     AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
     store.dispatch({type: types.LOGOUT_SUCCESS});
-    navigation.navigate(routeEnum.Login);
+    navigation.replace(routeEnum.Login);
   } else {
     store.dispatch({type: types.LOGIN_FAILURE});
     console.log('websocket failed');

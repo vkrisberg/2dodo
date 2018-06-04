@@ -26,7 +26,7 @@ export default class Favorits extends Component {
   }
 
   searchFavorite = () => {
-    
+
   }
 
   getFavorits = () => {
@@ -36,7 +36,7 @@ export default class Favorits extends Component {
       return (
         <EmptyFavoritsView>
           <EmptyFavoritsIcon />
-          <BoldText>No {title.toLowerCase()} in favorits</BoldText>
+          <BoldText>No {title.toLowerCase()} in favorites</BoldText>
         </EmptyFavoritsView>
       );
     }
@@ -53,7 +53,7 @@ export default class Favorits extends Component {
               <FavoritsDotsIcon />
             </StyledIcon>
             <StyledTitle>
-              Favorits
+              Favorites
             </StyledTitle>
           </TitleContainer>
           <AddContact>

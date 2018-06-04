@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 
 export const LogoContainer = styled.View`
-  height: 80;
-  width: 80;
   align-items: center;
   justify-content: center;
   margin-top: ${props => props.isFlex ? 0 : 80};

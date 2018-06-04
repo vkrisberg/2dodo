@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
-import {View} from 'react-native';
+import {KeyboardAvoidingView} from 'react-native';
 import {Field, reduxForm} from 'redux-form';
 import PropTypes from 'prop-types';
 
 import Button from '../../../elements/button';
 import Input from '../../../elements/input';
 import {
+  Container,
   Description,
-  StyledTitle,
   DescriptionWrapper,
   NicknameView
 } from './styles';
@@ -33,23 +33,25 @@ class MainForm extends Component {
 
   render() {
     return (
-      <View>
-        <Title style={StyledTitle}>Registration</Title>
-        <DescriptionWrapper>
-          <Description>
-            During registration, the application will create security key for recovery
-          </Description>
-        </DescriptionWrapper>
-        <NicknameView>
-          <Field
-            name="nickname"
-            focusedColor="#7bb2ff"
-            component={Input}
-            placeholder="Create login"
-          />
-        </NicknameView>
+      <Container>
+        <KeyboardAvoidingView behavior="position" enabled>
+          <Title>Registration</Title>
+          <DescriptionWrapper>
+            <Description>
+              During registration, the application will create security key for recovery
+            </Description>
+          </DescriptionWrapper>
+          <NicknameView>
+            <Field
+              name="nickname"
+              focusedColor="#7bb2ff"
+              component={Input}
+              placeholder="Create login"
+            />
+          </NicknameView>
+        </KeyboardAvoidingView>
         <Button color="black" onPress={this.props.handleSubmit}>Continue</Button>
-      </View>
+      </Container>
     );
   }
 }

@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import PropTypes from 'prop-types';
 
 import {Input, Button} from '../../../components/elements';
-import {Wrapper} from './styles';
+import {Container} from './styles';
 
 export default class AddContact extends Component {
 
@@ -31,14 +31,14 @@ export default class AddContact extends Component {
 
   render() {
     return (
-      <Wrapper>
+      <Container alwaysBounceVertical={false}>
         <Input input={{onChange: this.onChange('username')}} placeholder={'test@api.2do.do'} focusedColor={'gray'}/>
         <Input input={{onChange: this.onChange('firstName')}} placeholder={'First name'} focusedColor={'gray'}/>
         <Input input={{onChange: this.onChange('secondName')}} placeholder={'Second name'} focusedColor={'gray'}/>
         <Button style={{marginTop: 15}} color="black" onPress={this.onSubmit}>
           Add contact
         </Button>
-      </Wrapper>
+      </Container>
     );
   }
 }

@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
+import {Alert, KeyboardAvoidingView} from 'react-native';
 import {connect} from 'react-redux';
 import {withNavigation} from 'react-navigation';
 import PropTypes from 'prop-types';
-import {Alert} from 'react-native';
 
 import MainForm from '../../components/forms/registration/main-form';
 import EmailPhoneForm from '../../components/forms/registration/email-phone-form';
@@ -12,6 +12,7 @@ import {services} from '../../utils';
 import routeEnum from '../../enums/route-enum';
 import {dbEnum} from '../../enums';
 import backgroundImage from './img/bg.png';
+import {LoginStyles} from '../login/styles';
 
 class Registration extends Component {
   static propTypes = {

@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import { reduxForm, Field } from 'redux-form';
+import React, {Component} from 'react';
+import {KeyboardAvoidingView} from 'react-native';
+import {reduxForm, Field} from 'redux-form';
 import PropTypes from 'prop-types';
 
 import {Title, Input, Button} from '../../../elements';
 import {
   Description,
-  StyledTitle,
   DescriptionWrapper,
   Container
 } from './styles';
@@ -23,7 +23,8 @@ class EmailPhoneForm extends Component {
 
     return (
       <Container>
-        <Title style={StyledTitle}>Registration</Title>
+        <KeyboardAvoidingView behavior="position" enabled>
+        <Title>Registration</Title>
         <DescriptionWrapper>
           <Description>
             Phone or mail is required to restore access to your account
@@ -47,6 +48,7 @@ class EmailPhoneForm extends Component {
           component={Input}
           placeholder="Second Name"
         />
+        </KeyboardAvoidingView>
         <Button style={{marginTop: 10}} color="black" onPress={handleSubmit}>Done</Button>
       </Container>
     );
