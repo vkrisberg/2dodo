@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const StyledTitle = styled.Text`
   font-weight: bold;
-  font-size: 30px;
+  font-size: 26px;
   color: #333;
   padding: 30px 0 30px 50px;
 `;
@@ -31,7 +31,7 @@ export const SearchText = styled.Text`
 
 export const StyledIcon = styled.View`
   position: absolute;
-  top: 40px;
+  top: 36px;
   left: 20px;
 `;
 

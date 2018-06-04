@@ -8,9 +8,9 @@ import Wrapper from '../../components/layouts/wrapper';
 export default class BackgroundContainer extends PureComponent{
   render() {
     const { children, image, barHidden } = this.props;
-    
+
     return (
-      <Wrapper barHidden={barHidden}>
+      <Wrapper barHidden={barHidden} scrolled={true}>
         <Background source={image ? image : backgroundImage} />
         { children }
         <Waves source={wavesImage} />

@@ -35,7 +35,7 @@ class Preload extends Component {
       dispatch(accountActions.remind())
         .then(() => {
           const {deviceId, user, keys} = this.props.account;
-          dispatch(accountActions.login({navigation, deviceId, user, keys}))
+          dispatch(accountActions.login({deviceId, user, keys}))
             .then(() => {
               this.wsConnect({deviceId, user, keys});
             })

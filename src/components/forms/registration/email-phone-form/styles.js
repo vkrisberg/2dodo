@@ -1,10 +1,5 @@
-
 import styled from 'styled-components';
 import {Field} from 'redux-form';
-
-export const StyledTitle = {
-  'padding-top': '100px'
-};
 
 export const Description = styled.Text`
   align-self: center;
@@ -35,6 +30,7 @@ export const SecurityContainer = styled.View`
 
 export const Container = styled.View`
   align-items: center;
+  padding-top: 100;
 `;
 
 export const SkipWrapper = styled.View`

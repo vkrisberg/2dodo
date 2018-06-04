@@ -16,7 +16,7 @@ export default class Input extends Component {
   static propTypes = {
     placeholder: PropTypes.string,
     input: PropTypes.shape({}),
-    style: ViewPropTypes.style,
+    style: PropTypes.any,
     focusedColor: PropTypes.string,
     textColor: PropTypes.string
   };

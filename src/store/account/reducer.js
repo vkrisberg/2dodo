@@ -106,6 +106,7 @@ export default reducer(initState, {
   [types.REMIND_SUCCESS]: (state, action) => {
     return {
       ...state,
+      deviceId: action.payload.deviceId,
       user: {
         ...action.payload.user,
       },

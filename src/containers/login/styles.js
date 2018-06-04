@@ -1,8 +1,10 @@
+import {StyleSheet} from 'react-native';
 import styled from 'styled-components';
 
 import {Link} from '../../components/elements';
 
 export const StyledText = styled.Text`
+  text-align: center;
   color: white;
   margin-bottom: 20;
   margin-top: 80;
@@ -32,3 +34,11 @@ export const RegistrationLabel = styled.Text`
   margin-right: 10;
   color: #ced9e8;
 `;
+
+export const LoginStyles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+
+  },
+});

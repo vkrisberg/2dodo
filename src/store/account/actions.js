@@ -65,10 +65,7 @@ export default {
           throw new Error('remind failed: user or keys is empty in storage');
         }
 
-        const payload = {
-          user: {...account.user},
-          keys: {...account.keys},
-        };
+        const payload = {...account};
         dispatch({type: types.REMIND_SUCCESS, payload});
         return payload;
       } catch (e) {
