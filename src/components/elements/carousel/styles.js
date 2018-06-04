@@ -10,9 +10,8 @@ export const TowersImage = styled.Image`
 `;
 
 export const BarContainer = styled.View`
-  position: absolute;
   zIndex: 2;
-  bottom: 140;
+  margin-vertical: 50;
   flex-direction: row;
 `;
 
