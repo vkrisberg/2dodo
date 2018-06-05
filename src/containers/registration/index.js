@@ -102,13 +102,13 @@ class Registration extends Component {
     dispatch(accountActions.register(sendData))
       .then(() => {
         Alert.alert('Registration success');
-        console.error('registration success', this.props.account);
+        console.log('registration success', this.props.account);
         this.saveToDatabase();
         this.props.navigation.navigate(routeEnum.Login);
       })
       .catch((error) => {
         Alert.alert('Registration error');
-        console.error('registration error', error.response.data);
+        console.log('registration error', error.response.data);
         if (error.response.status === 400) {
           this.props.navigation.navigate(routeEnum.Login);
         }
