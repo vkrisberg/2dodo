@@ -5,7 +5,7 @@ const defaults = {
   userIds: [
     {name:'', email:''},
   ],
-  numBits: 2048,
+  numBits: 1024,
   passphrase: '',
 };
 
