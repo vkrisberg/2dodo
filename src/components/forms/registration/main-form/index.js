@@ -49,8 +49,8 @@ class MainForm extends Component {
               placeholder="Create login"
             />
           </NicknameView>
+          <Button color="black" onPress={this.props.handleSubmit}>Continue</Button>
         </KeyboardAvoidingView>
-        <Button color="black" onPress={this.props.handleSubmit}>Continue</Button>
       </Container>
     );
   }

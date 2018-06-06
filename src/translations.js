@@ -10,11 +10,11 @@ const translations = {
     'KeysImport': 'Импортировать ключи'
   },
   'en': {
-    'LoginPlaceholder': 'test@api.2do.do',
+    'LoginPlaceholder': 'nickname',
     'PasswordPlaceholder': 'Password',
     'Security': 'For best security',
-    'Welcome': 'Please enter your username',
-    'ForgetPassword': 'Forget password?',
+    'Welcome': 'Please enter your nickname',
+    'ForgetPassword': 'Forgot password',
     'FirstTimeInApp': 'First time in app?',
     'Registration': 'Registration',
     'KeysImport': 'Keys import'

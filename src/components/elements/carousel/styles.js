@@ -1,5 +1,10 @@
+import {Animated, StyleSheet} from 'react-native';
 import styled from 'styled-components';
-import {Animated} from 'react-native';
+
+export const Container = styled.View`
+  flex: 1;
+  align-items: center;
+`;
 
 export const TowersImage = styled.Image`
   position: absolute;
@@ -12,7 +17,7 @@ export const TowersImage = styled.Image`
 export const BarContainer = styled.View`
   position: absolute;
   zIndex: 2;
-  bottom: 140;
+  bottom: ${props => props.isSmall ? '112' : '140'};
   flex-direction: row;
 `;
 

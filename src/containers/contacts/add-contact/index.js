@@ -19,13 +19,15 @@ class AddContact extends Component {
   }
 
   addContact = (data) => {
-    if (!data.username) {
+    const {account} = this.props;
+
+    if (!data.nickname) {
       this.goBack();
       return;
     }
 
-    data.username = data.username.toLowerCase();
-    data.nickname = data.username.split('@')[0];
+    data.nickname = data.nickname.trim().toLowerCase();
+    data.username = `${data.nickname}@${account.hostname}`;
 
     this.props.dispatch(contactActions.create(data)).then(() => {
       this.goBack();
@@ -46,12 +48,12 @@ class AddContact extends Component {
           </TitleContainer>
         </Header>
         <SearchInput placeholder="Search contacts for @nickname" onChange={this.onSearchChange}/>
-        <KeyboardAvoidingView behavior="padding" enabled>
-          <AddContactForm onSubmit={this.addContact}/>
-        </KeyboardAvoidingView>
+        <AddContactForm onSubmit={this.addContact}/>
       </Wrapper>
     );
   }
 }
 
-export default connect()(AddContact);
+export default connect(state => ({
+  account: state.account,
+}))(AddContact);

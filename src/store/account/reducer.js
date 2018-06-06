@@ -23,7 +23,7 @@ const initState = {
   deviceId: '',
   deviceName: '',
   platform: '',
-  hostname: CONFIG.httpHost,
+  hostname: CONFIG.hostname,
   isSecure: CONFIG.isSecure,
 
   loading: false,
