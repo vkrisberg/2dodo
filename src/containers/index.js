@@ -4,7 +4,6 @@ export {default as Registration} from './registration';
 export {default as Profile} from './profile';
 export {default as Login} from './login';
 export {default as Preload} from './preload';
-export {default as BackgroundContainer} from './background-container';
 export {default as Events} from './events';
 export {default as Favorits} from './favorits';
 export {default as ForgotPassword} from './forgot-password';

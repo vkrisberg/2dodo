@@ -4,9 +4,9 @@ import {connect} from 'react-redux';
 import {withNavigation} from 'react-navigation';
 import PropTypes from 'prop-types';
 
+import {BackgroundLayout, DismissKeyboardLayout} from '../../components/layouts';
 import MainForm from '../../components/forms/registration/main-form';
 import EmailPhoneForm from '../../components/forms/registration/email-phone-form';
-import BackgroundContainer from '../background-container';
 import {accountActions} from '../../store/actions';
 import {services} from '../../utils';
 import routeEnum from '../../enums/route-enum';
@@ -89,8 +89,8 @@ class Registration extends Component {
     }
 
     const sendData = {
-      name: (data.nickname || '').toLowerCase(),
-      email: (data.email || '').toLowerCase(),
+      name: (data.nickname || '').trim().toLowerCase(),
+      email: (data.email || '').trim().toLowerCase(),
       device_id: account.deviceId,
       device_name: account.deviceName,
       platform: account.platform,
@@ -125,10 +125,12 @@ class Registration extends Component {
     const server = `http${isSecure ? 's' : ''}://${hostname}`;
 
     return (
-      <BackgroundContainer image={backgroundImage}>
+      <BackgroundLayout image={backgroundImage}>
+        <DismissKeyboardLayout>
         {page === 1 && <MainForm defaultServer={server} onSubmit={this.nextPage}/>}
         {page === 2 && <EmailPhoneForm previousPage={this.previousPage} onSubmit={this.registration}/>}
-      </BackgroundContainer>
+        </DismissKeyboardLayout>
+      </BackgroundLayout>
     );
   }
 }

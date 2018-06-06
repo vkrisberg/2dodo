@@ -1,17 +1,15 @@
-import React, {PureComponent} from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {
+  View,
   Animated,
   Dimensions,
   ScrollView
 } from 'react-native';
-import {withNavigation} from 'react-navigation';
 
 
 import Title from '../title';
-import routeEnum from '../../../enums/route-enum';
 import castleTowers from './img/castle-towers.png';
-import BackgroundContainer from '../../../containers/background-container';
 import Skip from '../skip';
 import {
   TowersImage,
@@ -21,14 +19,25 @@ import {
   ItemText,
   ItemTitle,
   ItemWrap,
-  Bar
+  Bar,
+  Container,
 } from './styles';
 
 const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
+const isSmallScreen = deviceHeight < 667;
 const barWidth = 110;
 const barSpace = 11;
 
-class Carousel extends PureComponent {
+export default class Carousel extends Component {
+  static propTypes = {
+    data: PropTypes.array,
+    onSkip: PropTypes.func,
+    navigation: PropTypes.shape({
+      navigate: PropTypes.func
+    })
+  };
+
   constructor(props) {
     super(props);
 
@@ -37,26 +46,27 @@ class Carousel extends PureComponent {
     this.animVal = new Animated.Value(0);
   }
 
-  static propTypes = {
-    data: PropTypes.array,
-    onSkip: PropTypes.func,
-    navigation: PropTypes.shape({
-      navigate: PropTypes.func
-    })
-  }
+  isActive = (index) => {
+    // console.log('ind', index)
+  };
 
-  toLogin = () => this.props.navigation.navigate(routeEnum.Login)
+  handleScroll = (data) => {
+    console.log('ONSCR', data);
+    // Animated.event(
+    //   [{nativeEvent: {contentOffset: {x: this.animVal}}}]
+    // )
+  };
 
   render() {
-    const { data } = this.props;
+    const {data} = this.props;
     let imageArray = [];
     let barArray = [];
 
     data.forEach((item, i) => {
       const thisItem = (
         <ItemWrap key={`item${i}`} width={deviceWidth}>
-          <TowersImage source={castleTowers} />
-          <ItemImage source={item.image} />
+          <TowersImage source={castleTowers}/>
+          <ItemImage source={item.image}/>
           <Title textStyle={ItemTitle}>{item.title}</Title>
           <ItemText>
             {item.text}
@@ -77,15 +87,15 @@ class Carousel extends PureComponent {
           key={`bar${i}`}
           marginLeft={i === 0 ? 0 : barSpace}
         >
-          <Bar translateX={scrollBarVal} />
+          <Bar/>
         </Track>
       );
 
       barArray.push(thisBar);
     });
 
-    return(
-      <BackgroundContainer>
+    return (
+      <Container>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -97,17 +107,15 @@ class Carousel extends PureComponent {
             )
           }
         >
-          { imageArray }
+          {imageArray}
         </ScrollView>
-        <BarContainer>
-          { barArray }
+        <BarContainer isSmall={isSmallScreen}>
+          {barArray}
         </BarContainer>
         <Skip onSkip={this.props.onSkip}>
           Skip this feature
         </Skip>
-      </BackgroundContainer>
+      </Container>
     );
   }
 }
-
-export default withNavigation(Carousel);

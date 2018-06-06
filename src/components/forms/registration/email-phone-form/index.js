@@ -24,32 +24,32 @@ class EmailPhoneForm extends Component {
     return (
       <Container>
         <KeyboardAvoidingView behavior="position" enabled>
-        <Title>Registration</Title>
-        <DescriptionWrapper>
-          <Description>
-            Phone or mail is required to restore access to your account
-          </Description>
-        </DescriptionWrapper>
-        <Field
-          focusedColor="#7bb2ff"
-          component={Input}
-          name="email"
-          placeholder="Email"
-        />
-        <Field
-          focusedColor="#7bb2ff"
-          name="firstName"
-          component={Input}
-          placeholder="Name"
-        />
-        <Field
-          focusedColor="#7bb2ff"
-          name="secondName"
-          component={Input}
-          placeholder="Second Name"
-        />
+          <Title>Registration</Title>
+          <DescriptionWrapper>
+            <Description>
+              Phone or mail is required to restore access to your account
+            </Description>
+          </DescriptionWrapper>
+          <Field
+            focusedColor="#7bb2ff"
+            component={Input}
+            name="email"
+            placeholder="Email"
+          />
+          <Field
+            focusedColor="#7bb2ff"
+            name="firstName"
+            component={Input}
+            placeholder="Name"
+          />
+          <Field
+            focusedColor="#7bb2ff"
+            name="secondName"
+            component={Input}
+            placeholder="Second Name"
+          />
+          <Button style={{marginTop: 10}} color="black" onPress={handleSubmit}>Done</Button>
         </KeyboardAvoidingView>
-        <Button style={{marginTop: 10}} color="black" onPress={handleSubmit}>Done</Button>
       </Container>
     );
   }

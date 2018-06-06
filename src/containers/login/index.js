@@ -8,11 +8,11 @@ import {
   Alert,
 } from 'react-native';
 
+import {BackgroundLayout, DismissKeyboardLayout} from '../../components/layouts';
 import Link from '../../components/elements/link';
 import LoginForm from '../../components/forms/login';
 import {routeEnum, dbEnum} from '../../enums';
 import Logo from '../../components/elements/logo';
-import BackgroundContainer from '../background-container';
 import {services} from '../../utils';
 import {accountActions} from '../../store/actions';
 import backgroundImage from './img/background.png';
@@ -23,6 +23,7 @@ import {
   RegistrationLabel
 } from './styles';
 import {LoginStyles} from './styles';
+import CONFIG from '../../config';
 
 const logoStyle = {marginTop: 120};
 const linkStyle = {fontWeight: 'bold'};
@@ -61,7 +62,8 @@ class Login extends Component {
       return null;
     }
 
-    const account = this.realm.objectForPrimaryKey(dbEnum.Account, username.toLowerCase());
+    const _username = `${username.trim().toLowerCase()}@${CONFIG.hostname}`;
+    const account = this.realm.objectForPrimaryKey(dbEnum.Account, _username);
 
     if (!account) {
       Alert.alert('Wrong username');
@@ -80,28 +82,24 @@ class Login extends Component {
       });
   };
 
-  toKeyImport = () => {
-    // return this.props.navigation.navigate(routeEnum.ImportKey);
-  };
-
   render() {
-    const { t } = this.context;
+    const {t} = this.context;
 
     return (
-      <BackgroundContainer image={backgroundImage}>
-        <KeyboardAvoidingView style={LoginStyles.container} behavior="position" enabled>
-          <Logo style={logoStyle} flex={false}/>
-          <StyledText>{t('Welcome')}</StyledText>
-          <LoginForm placeholder={t('LoginPlaceholder')} onSubmit={this.login}/>
-        </KeyboardAvoidingView>
-        <View>
-          <StyledLink to={routeEnum.ForgotPassword}>{t('ForgetPassword')}</StyledLink>
-          <StyledRegistration>
-            <RegistrationLabel>{t('FirstTimeInApp')}</RegistrationLabel>
-            <Link style={linkStyle} color="white" to={routeEnum.Registration}>{t('Registration')}</Link>
-          </StyledRegistration>
-        </View>
-      </BackgroundContainer>
+      <BackgroundLayout image={backgroundImage}>
+        <DismissKeyboardLayout>
+          <KeyboardAvoidingView style={LoginStyles.container} behavior="position" enabled>
+            <Logo style={logoStyle} flex={false}/>
+            <StyledText>{t('Welcome')}</StyledText>
+            <LoginForm placeholder={t('LoginPlaceholder')} onSubmit={this.login}/>
+            {/*<StyledLink to={routeEnum.ForgotPassword}>{t('ForgetPassword')}</StyledLink>*/}
+            <StyledRegistration>
+              <RegistrationLabel>{t('FirstTimeInApp')}</RegistrationLabel>
+              <Link style={linkStyle} color="white" to={routeEnum.Registration}>{t('Registration')}</Link>
+            </StyledRegistration>
+          </KeyboardAvoidingView>
+        </DismissKeyboardLayout>
+      </BackgroundLayout>
     );
   }
 }
