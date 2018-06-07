@@ -1,20 +1,62 @@
 import React, {PureComponent} from 'react';
+import {StatusBar, View, ScrollView, Image, Dimensions} from 'react-native';
+import PropTypes from 'prop-types';
 
-import {Background, Waves} from './styles';
-import backgroundImage from './img/background.jpg';
-import wavesImage from './img/waves.png';
-import {Wrapper} from '../index';
+import styles from './styles';
 
-export default class BackgroundContainer extends PureComponent {
+import BG_LOGIN from './img/bg_login.png';
+import BG_PRELOAD from './img/bg_preload.png';
+import BG_REGISTRATION from './img/bg_registration.png';
+
+const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
+const registrationRatio = 0.341333333333333;
+
+export default class BackgroundLayout extends PureComponent {
+  static propTypes = {
+    background: PropTypes.string,
+    barHidden: PropTypes.bool,
+    barStyle: PropTypes.string,
+  };
+
+  static defaultProps = {
+    background: 'preload', // [preload, login, registration]
+    barHidden: false,
+    barStyle: 'light-content'
+  };
+
+  getBackground = () => {
+    switch (this.props.background) {
+      case 'login':
+        return BG_LOGIN;
+      case 'registration':
+        return BG_REGISTRATION;
+      default:
+        return BG_PRELOAD;
+    }
+  };
+
+  getImageHeight = () => {
+    return this.props.background === 'registration'
+      ? deviceWidth * registrationRatio
+      : deviceHeight;
+  };
+
   render() {
-    const {children, image, barHidden} = this.props;
-
     return (
-      <Wrapper barHidden={barHidden} scrolled={false}>
-        <Background source={image ? image : backgroundImage}/>
-        {children}
-        <Waves source={wavesImage}/>
-      </Wrapper>
+      <View style={styles.container}>
+        <StatusBar
+          animated={true}
+          translucent={true}
+          backgroundColor="rgba(0, 0, 0, 0)"
+          hidden={this.props.barHidden}
+          barStyle={this.props.barStyle}/>
+        <Image style={styles.image}
+               source={this.getBackground()}
+               width={deviceWidth}
+               height={this.getImageHeight()}/>
+        {this.props.children}
+      </View>
     );
   }
 }

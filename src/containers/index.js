@@ -1,7 +1,5 @@
-export {default as TabsContainer} from './tabs-container';
 export {default as Settings} from './settings';
 export {default as Registration} from './registration';
-export {default as Profile} from './profile';
 export {default as Login} from './login';
 export {default as Preload} from './preload';
 export {default as Events} from './events';

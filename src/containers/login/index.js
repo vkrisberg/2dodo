@@ -15,7 +15,6 @@ import {routeEnum, dbEnum} from '../../enums';
 import Logo from '../../components/elements/logo';
 import {services} from '../../utils';
 import {accountActions} from '../../store/actions';
-import backgroundImage from './img/background.png';
 import {
   StyledText,
   StyledLink,
@@ -86,7 +85,7 @@ class Login extends Component {
     const {t} = this.context;
 
     return (
-      <BackgroundLayout image={backgroundImage}>
+      <BackgroundLayout background="login">
         <DismissKeyboardLayout>
           <KeyboardAvoidingView style={LoginStyles.container} behavior="position" enabled>
             <Logo style={logoStyle} flex={false}/>

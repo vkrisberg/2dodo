@@ -17,7 +17,7 @@ export const TowersImage = styled.Image`
 export const BarContainer = styled.View`
   position: absolute;
   zIndex: 2;
-  bottom: ${props => props.isSmall ? '112' : '140'};
+  bottom: ${props => props.isSmall ? '110' : '140'};
   flex-direction: row;
 `;
 
@@ -45,6 +45,7 @@ export const ItemWrap = styled.View`
 
 export const Bar = Animated.createAnimatedComponent(styled.View`
   background-color: white;
+  opacity: ${props => props.isActive ? '1' : '0.3'};
   width: 9;
   height: 9;
   position: absolute;
