@@ -11,8 +11,6 @@ import {accountActions} from '../../store/actions';
 import {services} from '../../utils';
 import routeEnum from '../../enums/route-enum';
 import {dbEnum} from '../../enums';
-import backgroundImage from './img/bg.png';
-import {LoginStyles} from '../login/styles';
 
 class Registration extends Component {
   static propTypes = {
@@ -125,7 +123,7 @@ class Registration extends Component {
     const server = `http${isSecure ? 's' : ''}://${hostname}`;
 
     return (
-      <BackgroundLayout image={backgroundImage}>
+      <BackgroundLayout background="registration">
         <DismissKeyboardLayout>
         {page === 1 && <MainForm defaultServer={server} onSubmit={this.nextPage}/>}
         {page === 2 && <EmailPhoneForm previousPage={this.previousPage} onSubmit={this.registration}/>}

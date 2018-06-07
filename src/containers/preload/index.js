@@ -64,7 +64,7 @@ class Preload extends Component {
 
   render() {
     return (
-      <BackgroundLayout barHidden>
+      <BackgroundLayout background="preload" barHidden={true}>
         <Logo/>
         <StyledText>
           Do what you want

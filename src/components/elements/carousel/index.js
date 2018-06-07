@@ -38,33 +38,26 @@ export default class Carousel extends Component {
     })
   };
 
-  constructor(props) {
-    super(props);
+  state = {
+    page: 0,
+  };
 
-    this.numItems = props.data.length;
-    this.itemWidth = (barWidth / this.numItems) - ((this.numItems - 1) * barSpace);
-    this.animVal = new Animated.Value(0);
-  }
+  onScrollEnd = (event) => {
+    const xOffset = event.nativeEvent.contentOffset.x;
+
+    this.setState({
+      page: Math.floor(xOffset / deviceWidth),
+    });
+  };
 
   isActive = (index) => {
-    // console.log('ind', index)
+    return this.state.page === index;
   };
 
-  handleScroll = (data) => {
-    console.log('ONSCR', data);
-    // Animated.event(
-    //   [{nativeEvent: {contentOffset: {x: this.animVal}}}]
-    // )
-  };
-
-  render() {
-    const {data} = this.props;
-    let imageArray = [];
-    let barArray = [];
-
-    data.forEach((item, i) => {
-      const thisItem = (
-        <ItemWrap key={`item${i}`} width={deviceWidth}>
+  renderImages = () => {
+    return this.props.data.map((item, i) => {
+      return (
+        <ItemWrap key={i} width={deviceWidth}>
           <TowersImage source={castleTowers}/>
           <ItemImage source={item.image}/>
           <Title textStyle={ItemTitle}>{item.title}</Title>
@@ -73,27 +66,22 @@ export default class Carousel extends Component {
           </ItemText>
         </ItemWrap>
       );
+    });
+  };
 
-      imageArray.push(thisItem);
-
-      const scrollBarVal = this.animVal.interpolate({
-        inputRange: [deviceWidth * (i - 1), deviceWidth * (i + 1)],
-        outputRange: [-this.itemWidth, this.itemWidth],
-        extrapolate: 'clamp',
-      });
-
-      const thisBar = (
+  renderDots = () => {
+    return this.props.data.map((item, i) => {
+      return (
         <Track
-          key={`bar${i}`}
-          marginLeft={i === 0 ? 0 : barSpace}
-        >
-          <Bar/>
+          key={i}
+          marginLeft={i === 0 ? 0 : barSpace}>
+          <Bar isActive={this.isActive(i)}/>
         </Track>
       );
-
-      barArray.push(thisBar);
     });
+  };
 
+  render() {
     return (
       <Container>
         <ScrollView
@@ -101,18 +89,13 @@ export default class Carousel extends Component {
           showsHorizontalScrollIndicator={false}
           scrollEventThrottle={1}
           pagingEnabled
-          onScroll={
-            Animated.event(
-              [{ nativeEvent: { contentOffset: { x: this.animVal } } }]
-            )
-          }
-        >
-          {imageArray}
+          onMomentumScrollEnd={this.onScrollEnd}>
+          {this.renderImages()}
         </ScrollView>
         <BarContainer isSmall={isSmallScreen}>
-          {barArray}
+          {this.renderDots()}
         </BarContainer>
-        <Skip onSkip={this.props.onSkip}>
+        <Skip onSkip={this.props.onSkip} marginBottom={50}>
           Skip this feature
         </Skip>
       </Container>

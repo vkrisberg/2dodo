@@ -1,13 +1,15 @@
-import styled from 'styled-components';
+import {StyleSheet} from 'react-native';
+import {color} from '../../../styles';
 
-export const Background = styled.Image`
-  position: absolute;
-  resizeMode: cover;
-`;
+export default StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: color.white,
+  },
 
-export const Waves = styled.Image`
-  position: absolute;
-  height: 35;
-  resizeMode: center;
-  bottom: 0;
-`;
+  image: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  },
+});
