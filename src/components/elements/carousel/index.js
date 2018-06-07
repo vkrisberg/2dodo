@@ -9,10 +9,9 @@ import {
 
 
 import Title from '../title';
-import castleTowers from './img/castle-towers.png';
 import Skip from '../skip';
 import {
-  TowersImage,
+  TitleText,
   Track,
   BarContainer,
   ItemImage,
@@ -26,12 +25,11 @@ import {
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 const isSmallScreen = deviceHeight < 667;
-const barWidth = 110;
-const barSpace = 11;
+const barSpace = 7;
 
 export default class Carousel extends Component {
   static propTypes = {
-    data: PropTypes.array,
+    items: PropTypes.array,
     onSkip: PropTypes.func,
     navigation: PropTypes.shape({
       navigate: PropTypes.func
@@ -55,22 +53,19 @@ export default class Carousel extends Component {
   };
 
   renderImages = () => {
-    return this.props.data.map((item, i) => {
+    return this.props.items.map((item, i) => {
       return (
         <ItemWrap key={i} width={deviceWidth}>
-          <TowersImage source={castleTowers}/>
           <ItemImage source={item.image}/>
-          <Title textStyle={ItemTitle}>{item.title}</Title>
-          <ItemText>
-            {item.text}
-          </ItemText>
+          <TitleText>{item.title}</TitleText>
+          <ItemText>{item.text}</ItemText>
         </ItemWrap>
       );
     });
   };
 
   renderDots = () => {
-    return this.props.data.map((item, i) => {
+    return this.props.items.map((item, i) => {
       return (
         <Track
           key={i}
