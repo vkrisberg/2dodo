@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {AsyncStorage} from 'react-native';
+import {AsyncStorage, Text} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -7,9 +7,9 @@ import {BackgroundLayout} from '../../components/layouts';
 import {accountActions} from '../../store/actions';
 import Logo from '../../components/elements/logo';
 import {routeEnum, storageEnum} from '../../enums';
-import {StyledText} from './styles';
 import {services} from '../../utils';
 import CONFIG from '../../config';
+import styles from './styles';
 
 class Preload extends Component {
 
@@ -64,11 +64,9 @@ class Preload extends Component {
 
   render() {
     return (
-      <BackgroundLayout background="preload" barHidden={true}>
+      <BackgroundLayout style={styles.container} background="preload" barHidden={true}>
         <Logo/>
-        <StyledText>
-          Do what you want
-        </StyledText>
+        <Text style={styles.text}>Do what you want</Text>
       </BackgroundLayout>
     );
   }

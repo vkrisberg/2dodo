@@ -24,7 +24,7 @@ import {
 import {LoginStyles} from './styles';
 import CONFIG from '../../config';
 
-const logoStyle = {marginTop: 120};
+const logoStyle = {marginTop: 58};
 const linkStyle = {fontWeight: 'bold'};
 
 class Login extends Component {

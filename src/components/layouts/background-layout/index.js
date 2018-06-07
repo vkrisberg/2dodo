@@ -13,10 +13,12 @@ const deviceHeight = Dimensions.get('window').height;
 const registrationRatio = 0.341333333333333;
 
 export default class BackgroundLayout extends PureComponent {
+
   static propTypes = {
     background: PropTypes.string,
     barHidden: PropTypes.bool,
     barStyle: PropTypes.string,
+    style: PropTypes.any,
   };
 
   static defaultProps = {
@@ -44,7 +46,7 @@ export default class BackgroundLayout extends PureComponent {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, this.props.style]}>
         <StatusBar
           animated={true}
           translucent={true}

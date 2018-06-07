@@ -1,23 +1,22 @@
 import React, {PureComponent} from 'react';
+import {View, Image} from 'react-native';
+import PropTypes from 'prop-types';
 
-import {LogoContainer, LogoIcon, LogoTitleIcon} from './styles';
-import logoIcon from './img/logo.png';
-import logoTitleIcon from './img/title.png';
+import styles from './styles';
+
+import IMG_LOGO from './img/logo.png';
 
 export default class Logo extends PureComponent {
 
-  static defaultProps = {
-    flex: true
-  }
+  static propTypes = {
+    style: PropTypes.any,
+  };
 
   render() {
-    const {flex, style} = this.props;
-
     return (
-      <LogoContainer isFlex={flex} style={style}>
-        <LogoIcon source={logoIcon}/>
-        <LogoTitleIcon source={logoTitleIcon}/>
-      </LogoContainer>
+      <View style={[styles.container, this.props.style]}>
+        <Image style={styles.image} source={IMG_LOGO}/>
+      </View>
     );
   }
 }

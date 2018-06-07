@@ -1,7 +1,17 @@
-import styled from 'styled-components';
+import {StyleSheet} from 'react-native';
+import {color} from '../../styles';
 
-export const StyledText = styled.Text`
-  align-self: center;
-  color: white;
-  bottom: 75;
-`;
+export default StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  text: {
+    position: 'absolute',
+    alignSelf: 'center',
+    color: color.white,
+    bottom: 65,
+  },
+});

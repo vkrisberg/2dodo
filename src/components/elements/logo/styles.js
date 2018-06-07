@@ -1,20 +1,11 @@
-import styled from 'styled-components';
+import {StyleSheet} from 'react-native';
 
-export const LogoContainer = styled.View`
-  align-items: center;
-  justify-content: center;
-  margin-top: ${props => props.isFlex ? 0 : 80};
-  flex: ${props => props.isFlex ? 1 : 0}
-  ${({style}) => style && style}
-`;
+export default StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 
-export const LogoIcon = styled.Image`
-  width: 80;
-  height: 80;
-  margin-bottom: 20;
-`;
-
-export const LogoTitleIcon = styled.Image`
-  width: 122;
-  height: 31;
-`;
+  image: {
+  },
+});

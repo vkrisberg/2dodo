@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import styles from './styles';
 
 export default class StatusBarLayout extends PureComponent {
+
   static propTypes = {
     barHidden: PropTypes.bool,
     barStyle: PropTypes.string,
@@ -25,7 +26,6 @@ export default class StatusBarLayout extends PureComponent {
           hidden={this.props.barHidden}
           barStyle={this.props.barStyle}
         />
-        <Image style={} source={this.getBackground()}/>
         {this.props.children}
       </View>
     );
