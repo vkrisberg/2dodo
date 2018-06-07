@@ -15,9 +15,8 @@ export const TowersImage = styled.Image`
 `;
 
 export const BarContainer = styled.View`
-  position: absolute;
   zIndex: 2;
-  bottom: ${props => props.isSmall ? '112' : '140'};
+  margin-vertical: 50;
   flex-direction: row;
 `;
 
