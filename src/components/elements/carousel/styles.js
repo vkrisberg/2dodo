@@ -7,7 +7,7 @@ export const Container = styled.View`
 `;
 
 export const ItemImage = styled.Image`
-  margin-top: 160;
+  margin-top: ${props => props.isSmall ? '100' : '160'};
 `;
 
 export const TitleText = styled.Text`
