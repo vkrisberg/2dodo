@@ -30,6 +30,8 @@ class LoginForm extends Component {
           component={Input}
           name="username"
           placeholder={placeholder}
+          autoCapitalize={'none'}
+          autoCorrect={false}
         />
         <Button onPress={handleSubmit}>Enter</Button>
       </Container>

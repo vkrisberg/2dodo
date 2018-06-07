@@ -47,6 +47,8 @@ class MainForm extends Component {
               focusedColor="#7bb2ff"
               component={Input}
               placeholder="Create login"
+              autoCapitalize={'none'}
+              autoCorrect={false}
             />
           </NicknameView>
           <Button color="black" onPress={this.props.handleSubmit}>Continue</Button>
