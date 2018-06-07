@@ -56,7 +56,7 @@ export default class Carousel extends Component {
     return this.props.items.map((item, i) => {
       return (
         <ItemWrap key={i} width={deviceWidth}>
-          <ItemImage source={item.image}/>
+          <ItemImage source={item.image} isSmall={isSmallScreen}/>
           <TitleText>{item.title}</TitleText>
           <ItemText>{item.text}</ItemText>
         </ItemWrap>
