@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 
 import Checkbox from '../checkbox';
 import {AvatarIcon} from '../../icons';
@@ -60,12 +61,12 @@ export default class ChatItem extends Component {
               {chat.name}
             </ChatName>
             <ChatMessage>
-              Send your a video...
+              You have a message...
             </ChatMessage>
           </ChatBody>
           <ChatInformation>
             <ChatMessageDate>
-              21:30
+              {moment().format('HH:mm')}
             </ChatMessageDate>
             <ChatNotReadenMessage>
               <ChatNotReadenMessageText>

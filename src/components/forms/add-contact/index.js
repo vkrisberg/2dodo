@@ -33,7 +33,9 @@ export default class AddContact extends Component {
     return (
       <KeyboardAvoidingView behavior="padding" enabled>
         <ScrollContainer alwaysBounceVertical={false}>
-          <Input input={{onChange: this.onChange('nickname')}} placeholder={'nickname'} focusedColor={'gray'}/>
+          <Input input={{onChange: this.onChange('nickname')}} placeholder={'nickname'} focusedColor={'gray'}
+                 autoCapitalize={'none'}
+                 autoCorrect={false}/>
           <Input input={{onChange: this.onChange('firstName')}} placeholder={'First name'} focusedColor={'gray'}/>
           <Input input={{onChange: this.onChange('secondName')}} placeholder={'Second name'} focusedColor={'gray'}/>
           <Button style={{marginTop: 15}} color="black" onPress={this.onSubmit}>
