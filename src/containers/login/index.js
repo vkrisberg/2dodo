@@ -9,19 +9,19 @@ import {
 } from 'react-native';
 
 import {MainLayout, BackgroundLayout, DismissKeyboardLayout} from '../../components/layouts';
-import Link from '../../components/elements/link';
 import LoginForm from '../../components/forms/login';
 import {routeEnum, dbEnum} from '../../enums';
-import Logo from '../../components/elements/logo';
+import {Logo, Button, Link} from '../../components/elements';
 import {services} from '../../utils';
 import {accountActions} from '../../store/actions';
 import {
   StyledText,
-  StyledLink,
   StyledRegistration,
   RegistrationLabel,
+  StyledKeysImport,
   LoginStyles,
 } from './styles';
+import {colors, sizes} from '../../styles';
 import CONFIG from '../../config';
 
 class Login extends Component {
@@ -79,6 +79,10 @@ class Login extends Component {
       });
   };
 
+  keysImport = () => {
+
+  };
+
   render() {
     const {account} = this.props;
     const {t} = this.context;
@@ -89,21 +93,28 @@ class Login extends Component {
       createKey: t('LoginCreateKey'),
       enter: t('LoginEnter'),
     };
+    const forgotLinkColor = sizes.isIphone5 ? colors.blue : colors.white;
 
     return (
       <MainLayout netOffline={!account.net.connected}>
         <BackgroundLayout background="login">
           <DismissKeyboardLayout>
             <KeyboardAvoidingView style={LoginStyles.container} behavior="position" enabled>
-              <Logo style={LoginStyles.logo} flex={false}/>
+              <Logo style={LoginStyles.logo}/>
               <StyledText>{t('LoginWelcome')}</StyledText>
               <LoginForm labels={labels} onSubmit={this.login}/>
-              {/*<StyledLink to={routeEnum.ForgotPassword}>{t('ForgetPassword')}</StyledLink>*/}
-              <StyledRegistration>
-                <RegistrationLabel>{t('FirstTimeInApp')}</RegistrationLabel>
-                <Link style={LoginStyles.link} color="white" to={routeEnum.Registration}>{t('Registration')}</Link>
-              </StyledRegistration>
             </KeyboardAvoidingView>
+            <Link style={LoginStyles.forgot}
+                  to={routeEnum.ForgotPassword}
+                  color={forgotLinkColor}>{t('ForgotPassword')}</Link>
+            <StyledRegistration>
+              <RegistrationLabel>{t('FirstTimeInApp')}</RegistrationLabel>
+              <Link to={routeEnum.Registration}
+                    color={colors.blue}>{t('Registration')}</Link>
+            </StyledRegistration>
+            <Button wrapperStyle={LoginStyles.keysImport} color={colors.whiteSmoke} onPress={this.keysImport}>
+              <StyledKeysImport>{t('KeysImport')}</StyledKeysImport>
+            </Button>
           </DismissKeyboardLayout>
         </BackgroundLayout>
       </MainLayout>

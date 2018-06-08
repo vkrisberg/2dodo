@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
   ViewPropTypes
 } from 'react-native';
@@ -32,7 +32,7 @@ export default class Button extends PureComponent {
     return (
       <Container style={style}>
         <StyledButton style={wrapperStyle} onPress={onPress} {...this.props} >
-          <ButtonText color={color} style={textStyle}>{ children || title }</ButtonText>
+          <ButtonText color={color} style={textStyle}>{children || title}</ButtonText>
         </StyledButton>
       </Container>
     );

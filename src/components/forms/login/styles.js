@@ -10,7 +10,7 @@ export const SecurityContainer = styled.View`
   flex-direction: row;
   align-items: center;
   margin-top: 0;
-  margin-bottom: 20;
+  margin-bottom: 25;
 `;
 
 export const SecurityText = styled.Text`
@@ -27,5 +27,5 @@ export const SecurityLabel = styled.Text`
   font-weight: 600;
   color: ${colors.white};
   margin-left: 15;
-  margin-right: 5;
+  margin-right: 10;
 `;

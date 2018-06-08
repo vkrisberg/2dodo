@@ -11,7 +11,10 @@ Dimensions.IS_IPHONE_PLUS = Dimensions.get('window').width > 375;
 const colors = {
   white: '#ffffff',
   black: '#000000',
+  whiteSmoke: '#f4f4f4',
+  gray: '#808694',
   red: '#ff0000',
+  blue: '#1e72d1',
 };
 
 const fonts = {

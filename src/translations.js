@@ -8,8 +8,7 @@ const translations = {
     'LoginEnterError': 'Неверный логин или пароль',
     'LoginSecurity': 'Для лучшей безопасности',
     'LoginCreateKey': 'Создать новый ключ',
-
-    'ForgetPassword': 'Восстановление пароля',
+    'ForgotPassword': 'Восстановление пароля',
     'FirstTimeInApp': 'Первый раз в приложении?',
     'Registration': 'Регистрация',
     'KeysImport': 'Импортировать ключи'
@@ -23,8 +22,7 @@ const translations = {
     'LoginEnterError': 'Wrong username or password',
     'LoginSecurity': 'For best security',
     'LoginCreateKey': 'Create a new key',
-
-    'ForgetPassword': 'Forgot password',
+    'ForgotPassword': 'Forgot password',
     'FirstTimeInApp': 'First time in app?',
     'Registration': 'Registration',
     'KeysImport': 'Keys import'

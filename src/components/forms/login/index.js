@@ -3,13 +3,14 @@ import {Field, reduxForm} from 'redux-form';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
-import {Input, Button, CheckboxSvg} from '../../elements';
+import {Input, Button, Checkbox} from '../../elements';
 import {
   Container,
   SecurityContainer,
   SecurityText,
   SecurityLabel,
 } from './styles';
+import {colors} from '../../../styles';
 
 class LoginForm extends Component {
 
@@ -35,6 +36,7 @@ class LoginForm extends Component {
           placeholder={labels.login}
           autoCapitalize={'none'}
           autoCorrect={false}
+          multiline={false}
         />
         <Field
           textColor="white"
@@ -43,13 +45,15 @@ class LoginForm extends Component {
           placeholder={labels.password}
           autoCapitalize={'none'}
           autoCorrect={false}
+          multiline={false}
         />
         <SecurityContainer>
           <SecurityText>{labels.security}</SecurityText>
           <SecurityLabel>{labels.createKey}</SecurityLabel>
           <Field
-            component={CheckboxSvg}
+            component={Checkbox}
             name="createNewKey"
+            color={colors.white}
           />
         </SecurityContainer>
         <Button onPress={handleSubmit}>{labels.enter}</Button>
