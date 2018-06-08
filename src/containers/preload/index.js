@@ -46,7 +46,7 @@ class Preload extends Component {
         .catch(async () => {
           const skipEvents = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.skipEvents}`);
           if (skipEvents) {
-            setTimeout(() => navigation.replace(routeEnum.Login), 2000);
+            setTimeout(() => navigation.replace(routeEnum.Login), 20000);
             return;
           }
           navigation.replace(routeEnum.Events);

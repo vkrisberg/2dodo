@@ -1,5 +1,6 @@
 import {Animated, StyleSheet} from 'react-native';
 import styled from 'styled-components';
+import {fonts} from '../../../styles';
 
 export const Container = styled.View`
   flex: 1;
@@ -11,14 +12,16 @@ export const ItemImage = styled.Image`
 `;
 
 export const TitleText = styled.Text`
+  font-family: '${fonts.main}';
   font-size: 18;
-  font-weight: 800;
+  font-weight: 700;
   margin-top: 30;
   text-align: center;
   color: white;
 `;
 
 export const ItemText = styled.Text`
+  font-family: '${fonts.main}';
   font-size: 15;
   font-weight: 600;
   margin-top: 12;
