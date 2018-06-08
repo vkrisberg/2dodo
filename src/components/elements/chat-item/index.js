@@ -4,7 +4,7 @@ import {TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
-import Checkbox from '../checkbox';
+import Checkbox from '../checkbox-svg';
 import {AvatarIcon} from '../../icons';
 import {
   Chat,

@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
 
-import Checkbox from '../checkbox';
+import Checkbox from '../checkbox-svg';
 import {AvatarIcon} from '../../icons';
 import {
   Contact,
