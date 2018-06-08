@@ -283,6 +283,7 @@ export default {
         dispatch({type: types.RECEIVE_MESSAGE_SUCCESS, payload});
         return payload;
       } catch (e) {
+        console.log('chat message received error', e);
         if (e.type === 'server') {
           // TODO - find and update message status in DB (message.status = 'error')
           dispatch({type: types.RECEIVE_MESSAGE_FAILURE, error: e.error});
