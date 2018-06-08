@@ -19,13 +19,10 @@ import {
   StyledText,
   StyledLink,
   StyledRegistration,
-  RegistrationLabel
+  RegistrationLabel,
+  LoginStyles,
 } from './styles';
-import {LoginStyles} from './styles';
 import CONFIG from '../../config';
-
-const logoStyle = {marginTop: 58};
-const linkStyle = {fontWeight: 'bold'};
 
 class Login extends Component {
 
@@ -54,18 +51,19 @@ class Login extends Component {
 
   login = async (data) => {
     const {dispatch} = this.props;
-    const {username} = data;
+    const {t} = this.context;
+    const {login, password} = data;
 
-    if (!username) {
-      Alert.alert('Fill username field');
+    if (!login || !password) {
+      Alert.alert(t('LoginEmptyError'));
       return null;
     }
 
-    const _username = `${username.trim().toLowerCase()}@${CONFIG.hostname}`;
+    const _username = `${login.trim().toLowerCase()}@${CONFIG.hostname}`;
     const account = this.realm.objectForPrimaryKey(dbEnum.Account, _username);
 
     if (!account) {
-      Alert.alert('Wrong username');
+      Alert.alert(t('LoginEnterError'));
       return null;
     }
 
@@ -84,19 +82,26 @@ class Login extends Component {
   render() {
     const {account} = this.props;
     const {t} = this.context;
+    const labels = {
+      login: t('LoginPlaceholder'),
+      password: t('PasswordPlaceholder'),
+      security: t('LoginSecurity'),
+      createKey: t('LoginCreateKey'),
+      enter: t('LoginEnter'),
+    };
 
     return (
       <MainLayout netOffline={!account.net.connected}>
         <BackgroundLayout background="login">
           <DismissKeyboardLayout>
             <KeyboardAvoidingView style={LoginStyles.container} behavior="position" enabled>
-              <Logo style={logoStyle} flex={false}/>
-              <StyledText>{t('Welcome')}</StyledText>
-              <LoginForm placeholder={t('LoginPlaceholder')} onSubmit={this.login}/>
+              <Logo style={LoginStyles.logo} flex={false}/>
+              <StyledText>{t('LoginWelcome')}</StyledText>
+              <LoginForm labels={labels} onSubmit={this.login}/>
               {/*<StyledLink to={routeEnum.ForgotPassword}>{t('ForgetPassword')}</StyledLink>*/}
               <StyledRegistration>
                 <RegistrationLabel>{t('FirstTimeInApp')}</RegistrationLabel>
-                <Link style={linkStyle} color="white" to={routeEnum.Registration}>{t('Registration')}</Link>
+                <Link style={LoginStyles.link} color="white" to={routeEnum.Registration}>{t('Registration')}</Link>
               </StyledRegistration>
             </KeyboardAvoidingView>
           </DismissKeyboardLayout>

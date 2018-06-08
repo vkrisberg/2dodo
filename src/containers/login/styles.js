@@ -1,14 +1,17 @@
 import {StyleSheet} from 'react-native';
 import styled from 'styled-components';
 
+import {colors, fonts} from '../../styles';
 import {Link} from '../../components/elements';
 
 export const StyledText = styled.Text`
+  color: ${colors.white};
+  font-family: '${fonts.main}';
+  font-size: 15;
+  font-weight: 600;
   text-align: center;
-  color: white;
-  margin-bottom: 20;
-  margin-top: 80;
-  font-size: 18;
+  margin-top: 20;
+  margin-bottom: 30;
 `;
 
 export const StyledLink = styled(Link)`
@@ -39,6 +42,13 @@ export const LoginStyles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
+  },
 
+  logo: {
+    marginTop: 60,
+  },
+
+  link: {
+    fontWeight: 'bold',
   },
 });

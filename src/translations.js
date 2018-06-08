@@ -1,19 +1,29 @@
 const translations = {
   'ru': {
-    'LoginPlaceholder': 'nickname',
+    'LoginWelcome': 'Введите ваш логин и пароль',
+    'LoginPlaceholder': 'Логин',
     'PasswordPlaceholder': 'Пароль',
-    'Security': 'Безопасность',
-    'Welcome': 'Введите ваш никнэйм',
+    'LoginEnter': 'Войти',
+    'LoginEmptyError': 'Заполните поля логин и пароль',
+    'LoginEnterError': 'Неверный логин или пароль',
+    'LoginSecurity': 'Для лучшей безопасности',
+    'LoginCreateKey': 'Создать новый ключ',
+
     'ForgetPassword': 'Восстановление пароля',
     'FirstTimeInApp': 'Первый раз в приложении?',
     'Registration': 'Регистрация',
     'KeysImport': 'Импортировать ключи'
   },
   'en': {
-    'LoginPlaceholder': 'nickname',
+    'LoginWelcome': 'Please enter your login and pass',
+    'LoginPlaceholder': 'Login',
     'PasswordPlaceholder': 'Password',
-    'Security': 'For best security',
-    'Welcome': 'Please enter your nickname',
+    'LoginEnter': 'Enter',
+    'LoginEmptyError': 'Fill login and password fields',
+    'LoginEnterError': 'Wrong username or password',
+    'LoginSecurity': 'For best security',
+    'LoginCreateKey': 'Create a new key',
+
     'ForgetPassword': 'Forgot password',
     'FirstTimeInApp': 'First time in app?',
     'Registration': 'Registration',

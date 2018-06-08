@@ -3,15 +3,18 @@ import {Field, reduxForm} from 'redux-form';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
-import {Input, Button} from '../../elements';
+import {Input, Button, CheckboxSvg} from '../../elements';
 import {
-  Container
+  Container,
+  SecurityContainer,
+  SecurityText,
+  SecurityLabel,
 } from './styles';
 
 class LoginForm extends Component {
 
   static propTypes = {
-    placeholder: PropTypes.string,
+    labels: PropTypes.object,
     onSubmit: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
   };
@@ -21,19 +24,35 @@ class LoginForm extends Component {
   }
 
   render() {
-    const {handleSubmit, placeholder} = this.props;
+    const {handleSubmit, labels} = this.props;
 
     return (
       <Container>
         <Field
           textColor="white"
           component={Input}
-          name="username"
-          placeholder={placeholder}
+          name="login"
+          placeholder={labels.login}
           autoCapitalize={'none'}
           autoCorrect={false}
         />
-        <Button onPress={handleSubmit}>Enter</Button>
+        <Field
+          textColor="white"
+          component={Input}
+          name="password"
+          placeholder={labels.password}
+          autoCapitalize={'none'}
+          autoCorrect={false}
+        />
+        <SecurityContainer>
+          <SecurityText>{labels.security}</SecurityText>
+          <SecurityLabel>{labels.createKey}</SecurityLabel>
+          <Field
+            component={CheckboxSvg}
+            name="createNewKey"
+          />
+        </SecurityContainer>
+        <Button onPress={handleSubmit}>{labels.enter}</Button>
       </Container>
     );
   }

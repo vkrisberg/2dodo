@@ -1,6 +1,7 @@
 import styled from 'styled-components';
+import {colors, fonts} from '../../../styles';
 
-const getColor = ({focusedColor}) => focusedColor ? focusedColor : 'white';
+const getColor = ({focusedColor}) => focusedColor ? focusedColor : colors.white;
 
 const inputFocused = (props) => ({
   'border-width': 2,
@@ -8,14 +9,17 @@ const inputFocused = (props) => ({
 });
 
 export const StyledInput = styled.TextInput`
-  width: 300;
-  height: 50;
-  border-color: #ced9e8;
+  font-family: '${fonts.main}';
+  font-size: 15;
+  font-weight: 600;
+  height: 40;
+  width: 100%;
   border-width: 1;
-  margin-bottom: 20;
-  color: ${props => props.textColor || 'black'};
-  padding: 15px;
-  border-radius: 40;
+  border-radius: 20;
+  border-color: #8bb3eb;
+  margin-bottom: 15;
+  color: ${props => props.textColor || colors.black};
+  padding-horizontal: 20;
   ${props => props.focused && inputFocused(props)}
   ${props => props.style && props.style}
 `;

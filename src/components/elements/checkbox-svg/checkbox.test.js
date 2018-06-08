@@ -2,7 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import { Text } from 'react-native';
 
-import Checkbox from './';
+import Checkbox from './index';
 let checkbox, checkboxInstance;
 
 beforeEach(() => {
@@ -42,7 +42,7 @@ describe('<Checkbox />', () => {
     checkboxInstance.handlePress();
 
     expect(initialState.componentIsVisible).toBe(true);
-    
+
     checkboxInstance.handlePress();
 
     expect(initialState.componentIsVisible).toBe(false);
