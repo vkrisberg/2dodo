@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
-import { TextInput, ViewPropTypes } from 'react-native';
+import React, {Component} from 'react';
+import {TextInput, ViewPropTypes} from 'react-native';
 import PropTypes from 'prop-types';
 
+import {colors} from '../../../styles';
 import {StyledInput} from './styles';
 
 export default class Input extends Component {
@@ -14,16 +15,16 @@ export default class Input extends Component {
   }
 
   static propTypes = {
-    placeholder: PropTypes.string,
     input: PropTypes.shape({}),
-    style: PropTypes.any,
+    placeholder: PropTypes.string,
     focusedColor: PropTypes.string,
-    textColor: PropTypes.string
+    textColor: PropTypes.string,
+    style: PropTypes.any,
   };
 
-  handleFocus = () => this.setState({ focused: true });
+  handleFocus = () => this.setState({focused: true});
 
-  handleBlur = () => this.setState({ focused: false });
+  handleBlur = () => this.setState({focused: false});
 
   render() {
     const {
@@ -38,15 +39,15 @@ export default class Input extends Component {
     return (
       <StyledInput
         underlineColorAndroid="transparent"
-        placeholderTextColor="#ced9e8"
-        onChangeText={input.onChange}
-        focused={this.state.focused}
-        focusedColor={focusedColor}
-        textColor={textColor}
-        selectionColor={focusedColor ? focusedColor : 'white'}
-        style={style}
-        placeholder={placeholder}
+        placeholderTextColor="#5c94dd"
         value={input.value}
+        placeholder={placeholder}
+        onChangeText={input.onChange}
+        focusedColor={focusedColor}
+        textColor={textColor || colors.white}
+        selectionColor={focusedColor ? focusedColor : colors.white}
+        style={style}
+        focused={this.state.focused}
         onBlur={this.handleBlur}
         onFocus={this.handleFocus}
         {...inputProps}

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
   Svg,
   G,
@@ -9,7 +9,7 @@ import MarkIcon from '../../icons/mark-icon';
 
 export default class Icon extends PureComponent {
   render() {
-    const { checked, color } = this.props;
+    const {checked, color} = this.props;
 
     return (
       <Svg height="30" width="30">
@@ -18,13 +18,12 @@ export default class Icon extends PureComponent {
             cx="16"
             cy="12"
             r="11"
-            stroke={checked ? "#62a3ff" : color || 'black'}
+            stroke={checked ? '#62a3ff' : color || '#6a7686'}
             strokeWidth="2"
-            fill={checked ? '#62a3ff': 'transparent'}
+            fill={checked ? '#62a3ff' : 'transparent'}
           />
         </G>
-        {checked && <MarkIcon />}
-        
+        {checked && <MarkIcon/>}
       </Svg>
     );
   }

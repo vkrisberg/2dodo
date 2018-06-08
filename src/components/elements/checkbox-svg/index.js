@@ -1,11 +1,12 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import {View, Image, TouchableWithoutFeedback} from 'react-native';
+import {
+  View,
+  TouchableWithoutFeedback,
+} from 'react-native';
 
+import Icon from './icon';
 import styles from './styles';
-
-import IMG_CHECKBOX_OFF from './img/checkbox.png';
-import IMG_CHECKBOX_ON from './img/checkbox_active.png';
 
 const hitSlop = {
   top: 8,
@@ -14,7 +15,7 @@ const hitSlop = {
   right: 8
 };
 
-export default class Checkbox extends PureComponent {
+export default class CheckboxSvg extends PureComponent {
 
   static propTypes = {
     input: PropTypes.shape({}),
@@ -53,19 +54,11 @@ export default class Checkbox extends PureComponent {
       color,
       style,
     } = this.props;
-    const imageStyles = [styles.image];
-
-    if (!this.state.checked && color) {
-      imageStyles.push({tintColor: color});
-    }
 
     return (
       <TouchableWithoutFeedback hitSlop={hitSlop} onPress={this.onPress}>
         <View style={[styles.container, style]}>
-          <Image
-            style={imageStyles}
-            tintColor={!this.state.checked && color}
-            source={this.state.checked ? IMG_CHECKBOX_ON : IMG_CHECKBOX_OFF}/>
+          <Icon color={color} checked={this.state.checked}/>
         </View>
       </TouchableWithoutFeedback>
     );

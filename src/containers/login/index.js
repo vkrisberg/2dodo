@@ -9,23 +9,20 @@ import {
 } from 'react-native';
 
 import {MainLayout, BackgroundLayout, DismissKeyboardLayout} from '../../components/layouts';
-import Link from '../../components/elements/link';
 import LoginForm from '../../components/forms/login';
 import {routeEnum, dbEnum} from '../../enums';
-import Logo from '../../components/elements/logo';
+import {Logo, Button, Link} from '../../components/elements';
 import {services} from '../../utils';
 import {accountActions} from '../../store/actions';
 import {
   StyledText,
-  StyledLink,
   StyledRegistration,
-  RegistrationLabel
+  RegistrationLabel,
+  StyledKeysImport,
+  LoginStyles,
 } from './styles';
-import {LoginStyles} from './styles';
+import {colors, sizes} from '../../styles';
 import CONFIG from '../../config';
-
-const logoStyle = {marginTop: 58};
-const linkStyle = {fontWeight: 'bold'};
 
 class Login extends Component {
 
@@ -54,18 +51,19 @@ class Login extends Component {
 
   login = async (data) => {
     const {dispatch} = this.props;
-    const {username} = data;
+    const {t} = this.context;
+    const {login, password} = data;
 
-    if (!username) {
-      Alert.alert('Fill username field');
+    if (!login || !password) {
+      Alert.alert(t('LoginEmptyError'));
       return null;
     }
 
-    const _username = `${username.trim().toLowerCase()}@${CONFIG.hostname}`;
+    const _username = `${login.trim().toLowerCase()}@${CONFIG.hostname}`;
     const account = this.realm.objectForPrimaryKey(dbEnum.Account, _username);
 
     if (!account) {
-      Alert.alert('Wrong username');
+      Alert.alert(t('LoginEnterError'));
       return null;
     }
 
@@ -81,24 +79,42 @@ class Login extends Component {
       });
   };
 
+  keysImport = () => {
+
+  };
+
   render() {
     const {account} = this.props;
     const {t} = this.context;
+    const labels = {
+      login: t('LoginPlaceholder'),
+      password: t('PasswordPlaceholder'),
+      security: t('LoginSecurity'),
+      createKey: t('LoginCreateKey'),
+      enter: t('LoginEnter'),
+    };
+    const forgotLinkColor = sizes.isIphone5 ? colors.blue : colors.white;
 
     return (
       <MainLayout netOffline={!account.net.connected}>
         <BackgroundLayout background="login">
           <DismissKeyboardLayout>
             <KeyboardAvoidingView style={LoginStyles.container} behavior="position" enabled>
-              <Logo style={logoStyle} flex={false}/>
-              <StyledText>{t('Welcome')}</StyledText>
-              <LoginForm placeholder={t('LoginPlaceholder')} onSubmit={this.login}/>
-              {/*<StyledLink to={routeEnum.ForgotPassword}>{t('ForgetPassword')}</StyledLink>*/}
-              <StyledRegistration>
-                <RegistrationLabel>{t('FirstTimeInApp')}</RegistrationLabel>
-                <Link style={linkStyle} color="white" to={routeEnum.Registration}>{t('Registration')}</Link>
-              </StyledRegistration>
+              <Logo style={LoginStyles.logo}/>
+              <StyledText>{t('LoginWelcome')}</StyledText>
+              <LoginForm labels={labels} onSubmit={this.login}/>
             </KeyboardAvoidingView>
+            <Link style={LoginStyles.forgot}
+                  to={routeEnum.ForgotPassword}
+                  color={forgotLinkColor}>{t('ForgotPassword')}</Link>
+            <StyledRegistration>
+              <RegistrationLabel>{t('FirstTimeInApp')}</RegistrationLabel>
+              <Link to={routeEnum.Registration}
+                    color={colors.blue}>{t('Registration')}</Link>
+            </StyledRegistration>
+            <Button wrapperStyle={LoginStyles.keysImport} color={colors.whiteSmoke} onPress={this.keysImport}>
+              <StyledKeysImport>{t('KeysImport')}</StyledKeysImport>
+            </Button>
           </DismissKeyboardLayout>
         </BackgroundLayout>
       </MainLayout>
