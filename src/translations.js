@@ -1,9 +1,9 @@
 const translations = {
   'ru': {
-    'LoginPlaceholder': 'test@api.2do.do',
+    'LoginPlaceholder': 'nickname',
     'PasswordPlaceholder': 'Пароль',
     'Security': 'Безопасность',
-    'Welcome': 'Введите ваш логин',
+    'Welcome': 'Введите ваш никнэйм',
     'ForgetPassword': 'Восстановление пароля',
     'FirstTimeInApp': 'Первый раз в приложении?',
     'Registration': 'Регистрация',
