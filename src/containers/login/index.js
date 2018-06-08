@@ -8,7 +8,7 @@ import {
   Alert,
 } from 'react-native';
 
-import {BackgroundLayout, DismissKeyboardLayout} from '../../components/layouts';
+import {MainLayout, BackgroundLayout, DismissKeyboardLayout} from '../../components/layouts';
 import Link from '../../components/elements/link';
 import LoginForm from '../../components/forms/login';
 import {routeEnum, dbEnum} from '../../enums';
@@ -82,23 +82,26 @@ class Login extends Component {
   };
 
   render() {
+    const {account} = this.props;
     const {t} = this.context;
 
     return (
-      <BackgroundLayout background="login">
-        <DismissKeyboardLayout>
-          <KeyboardAvoidingView style={LoginStyles.container} behavior="position" enabled>
-            <Logo style={logoStyle} flex={false}/>
-            <StyledText>{t('Welcome')}</StyledText>
-            <LoginForm placeholder={t('LoginPlaceholder')} onSubmit={this.login}/>
-            {/*<StyledLink to={routeEnum.ForgotPassword}>{t('ForgetPassword')}</StyledLink>*/}
-            <StyledRegistration>
-              <RegistrationLabel>{t('FirstTimeInApp')}</RegistrationLabel>
-              <Link style={linkStyle} color="white" to={routeEnum.Registration}>{t('Registration')}</Link>
-            </StyledRegistration>
-          </KeyboardAvoidingView>
-        </DismissKeyboardLayout>
-      </BackgroundLayout>
+      <MainLayout netOffline={!account.net.connected}>
+        <BackgroundLayout background="login">
+          <DismissKeyboardLayout>
+            <KeyboardAvoidingView style={LoginStyles.container} behavior="position" enabled>
+              <Logo style={logoStyle} flex={false}/>
+              <StyledText>{t('Welcome')}</StyledText>
+              <LoginForm placeholder={t('LoginPlaceholder')} onSubmit={this.login}/>
+              {/*<StyledLink to={routeEnum.ForgotPassword}>{t('ForgetPassword')}</StyledLink>*/}
+              <StyledRegistration>
+                <RegistrationLabel>{t('FirstTimeInApp')}</RegistrationLabel>
+                <Link style={linkStyle} color="white" to={routeEnum.Registration}>{t('Registration')}</Link>
+              </StyledRegistration>
+            </KeyboardAvoidingView>
+          </DismissKeyboardLayout>
+        </BackgroundLayout>
+      </MainLayout>
     );
   }
 }

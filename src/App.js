@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform, Text} from 'react-native';
+import {NetInfo, Platform, Text} from 'react-native';
 import {Provider} from 'react-redux';
 import RNDeviceInfo from 'react-native-device-info';
 import RNLanguages from 'react-native-languages';
@@ -12,6 +12,7 @@ import {services} from './utils';
 import AppWithNavigationState from './router';
 
 export default class App extends Component {
+
   constructor(props) {
     super(props);
 
@@ -38,6 +39,23 @@ export default class App extends Component {
     store.dispatch(setTranslations(translations));
 
     await services.init(store);
+  }
+
+  componentDidMount() {
+    NetInfo.getConnectionInfo().then((connectionInfo) => {
+      console.log('Initial, type: ' + connectionInfo.type + ', effectiveType: ' + connectionInfo.effectiveType);
+      store.dispatch(accountActions.netUpdate(connectionInfo));
+    });
+    NetInfo.addEventListener('connectionChange', this.handleConnectivityChange);
+  }
+
+  componentWillUnmount() {
+    NetInfo.removeEventListener('connectionChange', this.handleConnectivityChange);
+  }
+
+  handleConnectivityChange = (connectionInfo) => {
+    console.log('First change, type: ' + connectionInfo.type + ', effectiveType: ' + connectionInfo.effectiveType);
+    store.dispatch(accountActions.netUpdate(connectionInfo));
   }
 
   render() {

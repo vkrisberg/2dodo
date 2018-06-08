@@ -24,6 +24,8 @@ export const types = {
   REGISTER: Symbol('REGISTER'),
   REGISTER_SUCCESS: Symbol('REGISTER_SUCCESS'),
   REGISTER_FAILURE: Symbol('REGISTER_FAILURE'),
+
+  NET_UPDATE: Symbol('NET_UPDATE'),
 };
 
 export default {
@@ -122,5 +124,9 @@ export default {
         throw e;
       }
     };
-  }
+  },
+
+  netUpdate: (connectionInfo) => {
+    return {type: types.NET_UPDATE, payload: connectionInfo};
+  },
 };

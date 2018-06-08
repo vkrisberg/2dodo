@@ -20,7 +20,7 @@ export default class MainLayout extends PureComponent {
   renderNetInfo = () => {
     return (
       <View style={styles.netinfo}>
-        <Text style={styles.netinfoText}>Network Error</Text>
+        <Text style={styles.netinfoText}>Network Error: device is offline</Text>
       </View>
     );
   };
@@ -28,7 +28,7 @@ export default class MainLayout extends PureComponent {
   renderScrollView = () => {
     return (
       <ScrollView style={[styles.container, this.props.style]}>
-        {this.renderNetInfo()}
+        {this.props.netOffline && this.renderNetInfo()}
         {this.props.children}
       </ScrollView>
     );
@@ -41,7 +41,7 @@ export default class MainLayout extends PureComponent {
 
     return (
       <View style={[styles.container, this.props.style]}>
-        {this.renderNetInfo()}
+        {this.props.netOffline && this.renderNetInfo()}
         {this.props.children}
       </View>
     );

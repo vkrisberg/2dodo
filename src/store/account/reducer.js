@@ -26,6 +26,11 @@ const initState = {
   hostname: CONFIG.hostname,
   isSecure: CONFIG.isSecure,
 
+  net: {
+    info: {type: '', effectiveType: ''},
+    connected: true,
+  },
+
   loading: false,
   error: null,
 };
@@ -194,6 +199,16 @@ export default reducer(initState, {
       ..._state,
       loading: false,
       error: action.error,
+    };
+  },
+
+  [types.NET_UPDATE]: (state, action) => {
+    return {
+      ...state,
+      net: {
+        info: action.payload,
+        connected: action.payload.type === 'wifi' || action.payload.type === 'cellular',
+      },
     };
   },
 });
