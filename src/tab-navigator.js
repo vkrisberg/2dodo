@@ -20,32 +20,31 @@ export default createBottomTabNavigator({
   Contacts: {
     screen: Contacts,
     navigationOptions: {
-      tabBarIcon: ({ focused }) => <ContactsIcon active={focused} />
+      tabBarIcon: ({focused}) => <ContactsIcon active={focused}/>
     }
   },
   Favorits: {
     screen: Favorits,
     navigationOptions: {
-      tabBarIcon: ({ focused }) => <FavoritsIcon active={focused} />
+      tabBarIcon: ({focused}) => <FavoritsIcon active={focused}/>
     }
   },
   Messages: {
     screen: Messages,
     navigationOptions: {
-      tabBarLabel: 'Messages',
-      tabBarIcon: ({ focused }) => <MessagesIcon active={focused} />
+      tabBarIcon: ({focused}) => <MessagesIcon active={focused}/>
     }
   },
   Groups: {
     screen: Groups,
     navigationOptions: {
-      tabBarIcon: ({ focused }) => <GroupsIcon active={focused} />
+      tabBarIcon: ({focused}) => <GroupsIcon active={focused}/>
     }
   },
   Settings: {
     screen: Settings,
     navigationOptions: {
-      tabBarIcon: ({ focused }) => <SettingsIcon active={focused} />
+      tabBarIcon: ({focused}) => <SettingsIcon active={focused}/>
     }
   }
 }, {
@@ -54,7 +53,7 @@ export default createBottomTabNavigator({
   tabBarOptions: {
     showIcon: true,
     activeTintColor: '#68a7ff',
-    inactiveTintColor:'#a4a7ae',
+    inactiveTintColor: '#a4a7ae',
     upperCaseLabel: false,
     style: {
       backgroundColor: '#ffffff',
@@ -77,7 +76,7 @@ export default createBottomTabNavigator({
       justifyContent: 'center',
       paddingBottom: 25
     },
-    iconStyle :{
+    iconStyle: {
       height: 27
     }
   }

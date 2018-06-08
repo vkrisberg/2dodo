@@ -91,7 +91,7 @@ export default class Carousel extends Component {
           {this.renderDots()}
         </BarContainer>
         <Skip onSkip={this.props.onSkip} marginBottom={50}>
-          Skip this feature
+          Skip all features
         </Skip>
       </Container>
     );

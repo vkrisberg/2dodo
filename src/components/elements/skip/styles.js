@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
 import styled from 'styled-components';
+import {fonts} from '../../../styles';
 
 export const SkipWrapper = styled.View`
   margin-bottom: ${({marginBottom}) => marginBottom || 0};
@@ -8,12 +9,14 @@ export const SkipWrapper = styled.View`
 `;
 
 export const StyledSkip = styled.Text`
+  font-family: '${fonts.main}';
+  font-weight: 600;
   margin-right: 8;
   color: ${({color}) => color || 'white'};
 `;
 
 export const SvgWrapper = styled.View`
-  margin-top: 4;
+  margin-top: 6;
 `;
 
 export const Styles = StyleSheet.create({
