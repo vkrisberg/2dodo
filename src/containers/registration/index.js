@@ -93,8 +93,8 @@ class Registration extends Component {
       device_name: account.deviceName,
       platform: account.platform,
       settings: null,
-      firstName: data.firstName.trim(),
-      secondName: data.secondName.trim(),
+      firstName: (data.firstName || '').trim(),
+      secondName: (data.secondName || '').trim(),
     };
 
     dispatch(accountActions.register(sendData))
