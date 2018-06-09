@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {fonts} from '../../../styles';
+import {fonts, weights} from '../../../styles';
 
 const getColor = ({color}) => color || 'white';
 
@@ -24,6 +24,6 @@ export const ButtonText = styled.Text`
   color: ${props => getColor(props)};
   font-family: '${fonts.main}';
   font-size: 16;
-  font-weight: 600;
+  font-weight: ${weights.medium};
   ${props => props.textStyle && props.textStyle}
 `;

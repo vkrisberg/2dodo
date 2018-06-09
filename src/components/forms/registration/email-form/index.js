@@ -10,7 +10,7 @@ import {
   Container
 } from './styles';
 
-class EmailPhoneForm extends Component {
+class RegistrationEmailForm extends Component {
 
   static propTypes = {
     previousPage: PropTypes.func.isRequired,
@@ -59,4 +59,4 @@ export default reduxForm({
   form: 'registration',
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true
-})(EmailPhoneForm);
+})(RegistrationEmailForm);

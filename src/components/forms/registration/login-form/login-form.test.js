@@ -25,7 +25,7 @@ describe('<MainForm />', () => {
   it('contains 3 required <Field /> components', () => {
     expect(mainForm.root.findAllByType(Field).length).toEqual(3);
   });
-  
+
   it('contains one <Checkbox /> component', () => {
     expect(mainForm.root.findAllByType(Checkbox).length).toEqual(1);
   });

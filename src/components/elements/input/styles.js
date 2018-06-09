@@ -1,24 +1,22 @@
 import styled from 'styled-components';
-import {colors, fonts} from '../../../styles';
-
-const getColor = ({focusedColor}) => focusedColor ? focusedColor : colors.light.white;
+import {fonts, weights} from '../../../styles';
 
 const inputFocused = (props) => ({
   'border-width': 2,
-  'border-color': `${getColor(props)}`
+  'border-color': props.focusedColor,
 });
 
-export const StyledInput = styled.TextInput`
+export const StyledTextInput = styled.TextInput`
   font-family: '${fonts.main}';
   font-size: 15;
-  font-weight: 600;
+  font-weight: ${weights.medium};
   height: 40;
   width: 100%;
   border-width: 1;
   border-radius: 20;
-  border-color: #8bb3eb;
+  border-color: ${props => props.borderColor};
   margin-bottom: 15;
-  color: ${props => props.textColor || colors.light.black};
+  color: ${props => props.textColor};
   padding-horizontal: 20;
   ${props => props.focused && inputFocused(props)}
   ${props => props.style && props.style}

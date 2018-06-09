@@ -87,13 +87,13 @@ class Login extends Component {
     const {account} = this.props;
     const {t} = this.context;
     const labels = {
-      login: t('LoginPlaceholder'),
-      password: t('PasswordPlaceholder'),
-      security: t('LoginSecurity'),
-      createKey: t('LoginCreateKey'),
-      enter: t('LoginEnter'),
+      login: t('Login'),
+      password: t('Password'),
+      security: t('ForBestSecurity'),
+      createKey: t('CreateNewKey'),
+      enter: t('Enter'),
     };
-    const forgotLinkColor = sizes.isIphone5 ? colors.light.blue : colors.light.white;
+    const forgotLinkColor = sizes.isIphone5 ? colors.light.blueDarker : colors.light.white;
 
     return (
       <MainLayout netOffline={!account.net.connected}>
@@ -110,7 +110,7 @@ class Login extends Component {
             <StyledRegistration>
               <RegistrationLabel>{t('FirstTimeInApp')}</RegistrationLabel>
               <Link to={routeEnum.Registration}
-                    color={colors.light.blue}>{t('Registration')}</Link>
+                    color={colors.light.blueDarker}>{t('Registration')}</Link>
             </StyledRegistration>
             <Button wrapperStyle={LoginStyles.keysImport} color={colors.light.whiteSmoke} onPress={this.keysImport}>
               <StyledKeysImport>{t('KeysImport')}</StyledKeysImport>

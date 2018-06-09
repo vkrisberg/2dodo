@@ -1,26 +1,40 @@
-import React, {Component} from 'react';
-import {TextInput, ViewPropTypes} from 'react-native';
+import React, {PureComponent} from 'react';
+// import {TextInput} from 'react-native';
 import PropTypes from 'prop-types';
 
+import {StyledTextInput} from './styles';
 import {colors} from '../../../styles';
-import {StyledInput} from './styles';
+import {themeEnum} from '../../../enums';
 
-export default class Input extends Component {
+export default class Input extends PureComponent {
+
+  static propTypes = {
+    theme: PropTypes.string,
+    input: PropTypes.shape({}),
+    placeholder: PropTypes.string,
+    textColor: PropTypes.string,
+    focusedColor: PropTypes.string,
+    borderColor: PropTypes.string,
+    placeholderColor: PropTypes.string,
+    style: PropTypes.any,
+  };
+
+  static defaultProps = {
+    theme: themeEnum.light,
+    placeholder: '',
+    textColor: colors.light.black,
+    focusedColor: colors.light.blue,
+    borderColor: colors.light.gray,
+    placeholderColor: colors.light.grayPlaceholder,
+  };
+
   constructor(props) {
     super(props);
 
     this.state = {
-      focused: false
+      focused: false,
     };
   }
-
-  static propTypes = {
-    input: PropTypes.shape({}),
-    placeholder: PropTypes.string,
-    focusedColor: PropTypes.string,
-    textColor: PropTypes.string,
-    style: PropTypes.any,
-  };
 
   handleFocus = () => this.setState({focused: true});
 
@@ -30,24 +44,27 @@ export default class Input extends Component {
     const {
       input,
       placeholder,
-      style,
-      focusedColor,
       textColor,
+      focusedColor,
+      borderColor,
+      placeholderColor,
+      style,
       ...inputProps
     } = this.props;
 
     return (
-      <StyledInput
+      <StyledTextInput
         underlineColorAndroid="transparent"
-        placeholderTextColor="#5c94dd"
         value={input.value}
         placeholder={placeholder}
-        onChangeText={input.onChange}
+        placeholderTextColor={placeholderColor}
+        textColor={textColor}
         focusedColor={focusedColor}
-        textColor={textColor || colors.light.white}
-        selectionColor={focusedColor ? focusedColor : colors.light.white}
+        borderColor={borderColor}
+        selectionColor={focusedColor}
         style={style}
         focused={this.state.focused}
+        onChangeText={input.onChange}
         onBlur={this.handleBlur}
         onFocus={this.handleFocus}
         {...inputProps}

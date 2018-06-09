@@ -1,5 +1,6 @@
 export {default as Arrow} from './arrow';
 export {default as Button} from './button';
+export {default as TextLabel} from './text-label';
 export {default as Carousel} from './carousel';
 export {default as Checkbox} from './checkbox';
 export {default as CheckboxSvg} from './checkbox-svg';

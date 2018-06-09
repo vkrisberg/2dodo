@@ -17,7 +17,7 @@ import {
   Container
 } from './styles';
 
-class SettingsForm extends Component {
+class RegistrationSettingsForm extends Component {
   static propTypes = {
     previousPage: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
@@ -77,4 +77,4 @@ export default reduxForm({
   form: 'registration',
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true
-})(withNavigation(SettingsForm));
+})(withNavigation(RegistrationSettingsForm));
