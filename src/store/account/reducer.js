@@ -12,6 +12,7 @@ const initState = {
     secondName: '',
     email: '',
     avatar: '',
+    theme: 'light', // [light, night]
   },
 
   keys: {

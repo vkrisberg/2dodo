@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import {colors, fonts, sizes} from '../../styles';
 
 export const StyledText = styled.Text`
-  color: ${colors.white};
+  color: ${colors.light.white};
   font-family: '${fonts.main}';
   font-size: 15;
   font-weight: 600;
@@ -21,14 +21,14 @@ export const StyledRegistration = styled.View`
 `;
 
 export const RegistrationLabel = styled.Text`
-  color: ${colors.gray};
+  color: ${colors.light.gray};
   font-family: '${fonts.main}';
   font-size: 15;
   font-weight: 600;
 `;
 
 export const StyledKeysImport = styled.Text`
-  color: ${colors.gray};
+  color: ${colors.light.gray};
   font-family: '${fonts.main}';
   font-size: 15;
   font-weight: 600;
@@ -49,7 +49,7 @@ export const LoginStyles = StyleSheet.create({
   },
 
   keysImport: {
-    backgroundColor: colors.whiteSmoke,
+    backgroundColor: colors.light.whiteSmoke,
     width: 132,
     height: 37,
     marginTop: sizes.isIphone5 ? 0 : 10,

@@ -7,7 +7,7 @@ export default StyleSheet.create({
   },
 
   netinfo: {
-    backgroundColor: colors.red,
+    backgroundColor: colors.light.red,
     position: 'absolute',
     top: 0,
     left: 0,
@@ -21,7 +21,7 @@ export default StyleSheet.create({
   },
 
   netinfoText: {
-    color: colors.white,
+    color: colors.light.white,
     fontFamily: fonts.main,
     fontSize: 18,
     fontWeight: 'bold',
