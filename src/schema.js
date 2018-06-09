@@ -21,6 +21,7 @@ User.schema = {
     secondName: 'string?',
     bio: 'string?',
     avatar: 'data?',
+    theme: 'string',
   },
 };
 

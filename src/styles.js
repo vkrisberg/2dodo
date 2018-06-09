@@ -8,19 +8,6 @@ Dimensions.IS_IPHONE_5 = Dimensions.get('window').width < 375;
 Dimensions.IS_IPHONE_6 = Dimensions.get('window').width === 375;
 Dimensions.IS_IPHONE_PLUS = Dimensions.get('window').width > 375;
 
-const colors = {
-  white: '#ffffff',
-  black: '#000000',
-  whiteSmoke: '#f4f4f4',
-  gray: '#808694',
-  red: '#ff0000',
-  blue: '#1e72d1',
-};
-
-const fonts = {
-  main: 'Exo 2',
-};
-
 const sizes = {
   appbarHeight: Dimensions.APPBAR_HEIGHT,
   navbarHeight: Dimensions.NAVBAR_HEIGHT,
@@ -32,8 +19,31 @@ const sizes = {
   windowHeight: Dimensions.get('window').height,
 };
 
+const fonts = {
+  main: 'Exo 2',
+};
+
+const colors = {
+  light: {
+    white: '#ffffff',
+    black: '#000000',
+    whiteSmoke: '#f4f4f4',
+    gray: '#808694',
+    red: '#ff0000',
+    blue: '#1e72d1',
+  },
+  night: {
+    white: '#ffffff',
+    black: '#000000',
+    whiteSmoke: '#f4f4f4',
+    gray: '#808694',
+    red: '#ff0000',
+    blue: '#1e72d1',
+  },
+};
+
 export {
-  colors,
-  fonts,
   sizes,
+  fonts,
+  colors,
 }

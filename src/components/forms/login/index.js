@@ -53,7 +53,7 @@ class LoginForm extends Component {
           <Field
             component={Checkbox}
             name="createNewKey"
-            color={colors.white}
+            color={colors.light.white}
           />
         </SecurityContainer>
         <Button onPress={handleSubmit}>{labels.enter}</Button>

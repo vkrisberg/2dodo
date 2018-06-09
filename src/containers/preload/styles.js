@@ -11,7 +11,7 @@ export default StyleSheet.create({
   text: {
     position: 'absolute',
     alignSelf: 'center',
-    color: colors.white,
+    color: colors.light.white,
     fontFamily: fonts.main,
     fontSize: 14,
     fontWeight: '600',

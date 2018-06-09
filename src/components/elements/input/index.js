@@ -44,8 +44,8 @@ export default class Input extends Component {
         placeholder={placeholder}
         onChangeText={input.onChange}
         focusedColor={focusedColor}
-        textColor={textColor || colors.white}
-        selectionColor={focusedColor ? focusedColor : colors.white}
+        textColor={textColor || colors.light.white}
+        selectionColor={focusedColor ? focusedColor : colors.light.white}
         style={style}
         focused={this.state.focused}
         onBlur={this.handleBlur}

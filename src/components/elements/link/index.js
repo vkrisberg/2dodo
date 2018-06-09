@@ -29,7 +29,7 @@ class Link extends PureComponent {
 
     return (
       <TouchableOpacity style={[styles.container, style]} onPress={this.handleLink}>
-        <Text style={[styles.link, textStyle, {color: color || colors.white}]}>{label || children}</Text>
+        <Text style={[styles.link, textStyle, {color: color || colors.light.white}]}>{label || children}</Text>
       </TouchableOpacity>
     );
   }

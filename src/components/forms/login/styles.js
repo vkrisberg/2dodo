@@ -17,7 +17,7 @@ export const SecurityText = styled.Text`
   font-family: '${fonts.main}';
   font-size: 15;
   font-weight: 600;
-  color: ${colors.white};
+  color: ${colors.light.white};
   opacity: .6;
 `;
 
@@ -25,7 +25,7 @@ export const SecurityLabel = styled.Text`
   font-family: '${fonts.main}';
   font-size: 15;
   font-weight: 600;
-  color: ${colors.white};
+  color: ${colors.light.white};
   margin-left: 15;
   margin-right: 10;
 `;
