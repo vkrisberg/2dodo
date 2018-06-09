@@ -30,18 +30,24 @@ class LoginForm extends Component {
     return (
       <Container>
         <Field
-          textColor="white"
           component={Input}
           name="login"
+          textColor={colors.light.white}
+          focusedColor={colors.light.white}
+          borderColor={colors.light.blueInputBorder}
+          placeholderColor={colors.light.bluePlaceholder}
           placeholder={labels.login}
           autoCapitalize={'none'}
           autoCorrect={false}
           multiline={false}
         />
         <Field
-          textColor="white"
           component={Input}
           name="password"
+          textColor={colors.light.white}
+          focusedColor={colors.light.white}
+          borderColor={colors.light.blueInputBorder}
+          placeholderColor={colors.light.bluePlaceholder}
           placeholder={labels.password}
           autoCapitalize={'none'}
           autoCorrect={false}

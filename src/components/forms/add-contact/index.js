@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import {Input, Button} from '../../../components/elements';
 import {ScrollContainer} from './styles';
 
-export default class AddContact extends Component {
+export default class AddContactForm extends Component {
 
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,

@@ -56,7 +56,7 @@ export default class App extends Component {
   handleConnectivityChange = (connectionInfo) => {
     console.log('First change, type: ' + connectionInfo.type + ', effectiveType: ' + connectionInfo.effectiveType);
     store.dispatch(accountActions.netUpdate(connectionInfo));
-  }
+  };
 
   render() {
     console.disableYellowBox = true;

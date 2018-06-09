@@ -1,13 +1,13 @@
 import {StyleSheet} from 'react-native';
 import styled from 'styled-components';
 
-import {colors, fonts, sizes} from '../../styles';
+import {colors, fonts, sizes, weights} from '../../styles';
 
 export const StyledText = styled.Text`
   color: ${colors.light.white};
   font-family: '${fonts.main}';
   font-size: 15;
-  font-weight: 600;
+  font-weight: ${weights.medium};
   text-align: center;
   margin-top: 18;
   margin-bottom: 30;
@@ -21,17 +21,17 @@ export const StyledRegistration = styled.View`
 `;
 
 export const RegistrationLabel = styled.Text`
-  color: ${colors.light.gray};
+  color: ${colors.light.grayDarker};
   font-family: '${fonts.main}';
   font-size: 15;
-  font-weight: 600;
+  font-weight: ${weights.medium};
 `;
 
 export const StyledKeysImport = styled.Text`
-  color: ${colors.light.gray};
+  color: ${colors.light.grayDarker};
   font-family: '${fonts.main}';
   font-size: 15;
-  font-weight: 600;
+  font-weight: ${weights.medium};
 `;
 
 export const LoginStyles = StyleSheet.create({

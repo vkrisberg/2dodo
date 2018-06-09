@@ -23,27 +23,50 @@ const fonts = {
   main: 'Exo 2',
 };
 
+const weights = {
+  thin: '100',
+  ultraLight: '200',
+  light: '300',
+  regular: '400',
+  medium: '500',
+  semiBold: '600',
+  bold: '700',
+  heavy: '800',
+  black: '900',
+};
+
 const colors = {
   light: {
     white: '#ffffff',
     black: '#000000',
     whiteSmoke: '#f4f4f4',
-    gray: '#808694',
+    gray: '#c1c1c1',
+    grayDarker: '#808694',
+    grayPlaceholder: '#bec2c9',
     red: '#ff0000',
-    blue: '#1e72d1',
+    blue: '#62a3ff',
+    blueDarker: '#1e72d1',
+    bluePlaceholder: '#a8cbf0',
+    blueInputBorder: '#7eace8',
   },
   night: {
     white: '#ffffff',
     black: '#000000',
     whiteSmoke: '#f4f4f4',
-    gray: '#808694',
+    gray: '#c1c1c1',
+    grayDarker: '#808694',
+    grayPlaceholder: '#bec2c9',
     red: '#ff0000',
-    blue: '#1e72d1',
+    blue: '#62a3ff',
+    blueDarker: '#1e72d1',
+    bluePlaceholder: '#a8cbf0',
+    blueInputBorder: '#7eace8',
   },
 };
 
 export {
   sizes,
   fonts,
+  weights,
   colors,
 }

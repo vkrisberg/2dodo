@@ -1,21 +1,18 @@
 import React, {Component} from 'react';
-import {Alert, KeyboardAvoidingView} from 'react-native';
+import {Alert} from 'react-native';
 import {connect} from 'react-redux';
-import {withNavigation} from 'react-navigation';
 import PropTypes from 'prop-types';
 
 import {BackgroundLayout, DismissKeyboardLayout} from '../../components/layouts';
-import MainForm from '../../components/forms/registration/main-form';
-import EmailPhoneForm from '../../components/forms/registration/email-phone-form';
+import {RegistrationForm} from '../../components/forms';
 import {accountActions} from '../../store/actions';
+import {routeEnum, dbEnum} from '../../enums';
 import {services} from '../../utils';
-import routeEnum from '../../enums/route-enum';
-import {dbEnum} from '../../enums';
 
 class Registration extends Component {
   static propTypes = {
     account: PropTypes.object,
-    dispatch: PropTypes.func.isRequired,
+    dispatch: PropTypes.func,
     navigation: PropTypes.shape({navigate: PropTypes.func})
   };
 
@@ -23,24 +20,10 @@ class Registration extends Component {
     t: PropTypes.func.isRequired,
   };
 
-  state = {
-    page: 1,
-  };
-
   constructor(props) {
     super(props);
     this.realm = services.getRealm();
   }
-
-  nextPage = (data) => {
-    return data.nickname
-      ? this.setState({page: this.state.page + 1})
-      : Alert.alert('Fill nickname field');
-  };
-
-  previousPage = () => {
-    return this.setState({page: this.state.page - 1});
-  };
 
   saveToDatabase = () => {
     const {account} = this.props;
@@ -69,6 +52,15 @@ class Registration extends Component {
     this.realm.write(() => {
       this.realm.create(dbEnum.Account, resultAccount, true);
     });
+  };
+
+  loginPassword = (data) => {
+    if (!data.login) {
+      Alert.alert('Fill login field');
+      return false;
+    }
+
+    return true;
   };
 
   registration = async (data) => {
@@ -113,21 +105,25 @@ class Registration extends Component {
       });
   };
 
+  updateSettings = (data) => {
+
+  };
+
   checkEmail = (value) => {
     return !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value);
-  }
+  };
 
   render() {
-    const {page} = this.state;
     const {hostname, isSecure} = this.props.account;
     const server = `http${isSecure ? 's' : ''}://${hostname}`;
 
     return (
       <BackgroundLayout background="registration">
-        <DismissKeyboardLayout>
-        {page === 1 && <MainForm defaultServer={server} onSubmit={this.nextPage}/>}
-        {page === 2 && <EmailPhoneForm previousPage={this.previousPage} onSubmit={this.registration}/>}
-        </DismissKeyboardLayout>
+        <RegistrationForm context={this.context}
+                          account={this.props.account}
+                          onLoginPass={this.loginPassword}
+                          onRegister={this.registration}
+                          onSettings={this.updateSettings}/>
       </BackgroundLayout>
     );
   }
@@ -135,4 +131,4 @@ class Registration extends Component {
 
 export default connect(state => ({
   account: state.account,
-}))(withNavigation(Registration));
+}))(Registration);
