@@ -32,6 +32,7 @@ export default class RegistrationForm extends PureComponent {
   render() {
     const {context, account, onLoginPass, onRegister, onSettings} = this.props;
     const {theme} = account.user;
+    const server = `http${account.isSecure ? 's' : ''}://${account.hostname}`;
 
     return (
       <ScrollView
@@ -43,9 +44,10 @@ export default class RegistrationForm extends PureComponent {
 
         <RegistrationLoginForm theme={theme}
                                context={context}
-                               defaultServer={account.hostname}/>
-        <RegistrationEmailForm/>
-        <RegistrationSettingsForm/>
+                               defaultServer={server}
+                               onSubmit={onLoginPass}/>
+        {/*<RegistrationEmailForm/>*/}
+        {/*<RegistrationSettingsForm/>*/}
 
       </ScrollView>
     );

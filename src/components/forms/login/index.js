@@ -62,7 +62,7 @@ class LoginForm extends Component {
             color={colors.light.white}
           />
         </SecurityContainer>
-        <Button onPress={handleSubmit}>{labels.enter}</Button>
+        <Button color={colors.light.white} onPress={handleSubmit}>{labels.enter}</Button>
       </Container>
     );
   }

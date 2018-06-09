@@ -48,8 +48,14 @@ export const LoginStyles = StyleSheet.create({
     marginTop: 15,
   },
 
-  keysImport: {
+  keysImportContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  keysImportButton: {
     backgroundColor: colors.light.whiteSmoke,
+    borderColor: colors.light.whiteSmoke,
     width: 132,
     height: 37,
     marginTop: sizes.isIphone5 ? 0 : 10,

@@ -3,7 +3,7 @@ import {View, KeyboardAvoidingView} from 'react-native';
 import {Field, reduxForm} from 'redux-form';
 import PropTypes from 'prop-types';
 
-import {Button, Input, TextLabel} from '../../../elements';
+import {Button, Checkbox, Input, TextLabel} from '../../../elements';
 import {themeEnum} from '../../../../enums';
 import {weights} from '../../../../styles';
 import styles from './styles';
@@ -22,12 +22,26 @@ class RegistrationLoginForm extends Component {
     theme: themeEnum.light,
   };
 
-  constructor(props) {
-    super(props);
-  }
+  state = {
+    checked: false,
+  };
 
-  toggleServerInput = () => {
-    this.setState({isChecked: !this.state.isChecked});
+  toggleServerInput = (checked) => {
+    this.setState({checked});
+  };
+
+  renderServerInput = (_styles) => {
+    if (this.state.checked) {
+      return (
+        <Field
+          name="server"
+          component={Input}
+          placeholder={this.props.defaultServer}
+          style={_styles.serverInput}
+          autoCapitalize={'none'}
+          autoCorrect={false}/>
+      );
+    }
   };
 
   render() {
@@ -65,7 +79,14 @@ class RegistrationLoginForm extends Component {
               autoCapitalize={'none'}
               autoCorrect={false}/>
           </View>
-          <Button color="black" onPress={this.props.handleSubmit}>Continue</Button>
+          <View style={_styles.checkboxContainer}>
+            <TextLabel theme={theme}>{context.t('UseSpecialServerParams')}</TextLabel>
+            <Checkbox input={{onChange: this.toggleServerInput}}/>
+          </View>
+          {this.renderServerInput(_styles)}
+          <View style={_styles.buttonContainer}>
+            <Button color="black" onPress={this.props.handleSubmit}>Continue</Button>
+          </View>
         </KeyboardAvoidingView>
       </View>
     );
