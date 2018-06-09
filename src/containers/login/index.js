@@ -112,9 +112,14 @@ class Login extends Component {
               <Link to={routeEnum.Registration}
                     color={colors.light.blueDarker}>{t('Registration')}</Link>
             </StyledRegistration>
-            <Button wrapperStyle={LoginStyles.keysImport} color={colors.light.whiteSmoke} onPress={this.keysImport}>
-              <StyledKeysImport>{t('KeysImport')}</StyledKeysImport>
-            </Button>
+            <View style={LoginStyles.keysImportContainer}>
+              <Button style={LoginStyles.keysImportButton}
+                      color={colors.light.grayDarker}
+                      bgColor={colors.light.whiteSmoke}
+                      onPress={this.keysImport}>
+                {t('KeysImport')}
+              </Button>
+            </View>
           </DismissKeyboardLayout>
         </BackgroundLayout>
       </MainLayout>

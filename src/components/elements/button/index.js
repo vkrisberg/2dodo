@@ -1,33 +1,24 @@
 import React, {PureComponent} from 'react';
-import {
-  ViewPropTypes
-} from 'react-native';
+import {TouchableOpacity, Text} from 'react-native';
 import PropTypes from 'prop-types';
 
-import {Container, StyledButton, ButtonText} from './styles';
-import {colors} from '../../../styles';
 import {themeEnum} from '../../../enums';
+import styles from './styles';
 
 export default class Button extends PureComponent {
 
   static propTypes = {
     theme: PropTypes.string,
-    onPress: PropTypes.func,
-    children: PropTypes.any,
-    title: PropTypes.string,
-    style: ViewPropTypes.style,
-    wrapperStyle: ViewPropTypes.style,
+    color: PropTypes.string,
+    bgColor: PropTypes.string,
+    disabled: PropTypes.bool,
     textStyle: PropTypes.any,
-    color: PropTypes.string
+    style: PropTypes.any,
+    onPress: PropTypes.func,
   };
 
   static defaultProps = {
     theme: themeEnum.light,
-    placeholder: '',
-    textColor: colors.light.black,
-    focusedColor: colors.light.blue,
-    borderColor: colors.light.gray,
-    placeholderColor: colors.light.grayPlaceholder,
   };
 
   onPress = () => {
@@ -36,22 +27,28 @@ export default class Button extends PureComponent {
     onPress && onPress();
   };
 
+  renderText(_style) {
+    const {textStyle} = this.props;
+
+    if (typeof this.props.children === 'string') {
+      return (
+        <Text style={[_style.text, textStyle]}>{this.props.children}</Text>
+      );
+    }
+
+    return this.props.children;
+  }
+
   render() {
-    const {
-      children,
-      title,
-      style,
-      wrapperStyle,
-      textStyle,
-      color
-    } = this.props;
+    const {theme, color, bgColor, disabled, style} = this.props;
+    const _style = styles({theme, color, bgColor});
 
     return (
-      <Container style={style}>
-        <StyledButton style={wrapperStyle} onPress={this.onPress} {...this.props} >
-          <ButtonText color={color} style={textStyle}>{children || title}</ButtonText>
-        </StyledButton>
-      </Container>
+      <TouchableOpacity style={[_style.container, style]}
+                        disabled={disabled}
+                        onPress={this.onPress}>
+        {this.renderText(_style)}
+      </TouchableOpacity>
     );
   }
 }

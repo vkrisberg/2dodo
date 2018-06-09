@@ -3,7 +3,7 @@ import {Alert} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
-import {BackgroundLayout, DismissKeyboardLayout} from '../../components/layouts';
+import {MainLayout, BackgroundLayout, DismissKeyboardLayout} from '../../components/layouts';
 import {RegistrationForm} from '../../components/forms';
 import {accountActions} from '../../store/actions';
 import {routeEnum, dbEnum} from '../../enums';
@@ -114,17 +114,18 @@ class Registration extends Component {
   };
 
   render() {
-    const {hostname, isSecure} = this.props.account;
-    const server = `http${isSecure ? 's' : ''}://${hostname}`;
+    const {account} = this.props;
 
     return (
-      <BackgroundLayout background="registration">
-        <RegistrationForm context={this.context}
-                          account={this.props.account}
-                          onLoginPass={this.loginPassword}
-                          onRegister={this.registration}
-                          onSettings={this.updateSettings}/>
-      </BackgroundLayout>
+      <MainLayout netOffline={!account.net.connected}>
+        <BackgroundLayout background="registration">
+          <RegistrationForm context={this.context}
+                            account={account}
+                            onLoginPass={this.loginPassword}
+                            onRegister={this.registration}
+                            onSettings={this.updateSettings}/>
+        </BackgroundLayout>
+      </MainLayout>
     );
   }
 }

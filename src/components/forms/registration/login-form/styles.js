@@ -7,19 +7,36 @@ export default (theme) => {
       height: sizes.windowHeight,
       width: sizes.windowWidth,
       alignItems: 'center',
-      paddingHorizontal: 45,
+      paddingHorizontal: 40,
     },
 
     title: {
-      marginTop: 100,
+      marginTop: 95,
     },
 
     description: {
+      marginTop: 10,
+    },
+
+    serverInput: {
       marginTop: 15,
+      marginBottom: 0,
     },
 
     inputContainer: {
       marginTop: 25,
+    },
+
+    checkboxContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginTop: 10,
+    },
+
+    buttonContainer: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginTop: 30,
     },
   });
 }
