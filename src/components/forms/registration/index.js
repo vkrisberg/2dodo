@@ -15,6 +15,7 @@ export default class RegistrationForm extends PureComponent {
     onLoginPass: PropTypes.func,
     onRegister: PropTypes.func,
     onSettings: PropTypes.func,
+    onTheme: PropTypes.func,
   };
 
   state = {
@@ -30,7 +31,7 @@ export default class RegistrationForm extends PureComponent {
   };
 
   render() {
-    const {context, account, onLoginPass, onRegister, onSettings} = this.props;
+    const {context, account, onLoginPass, onRegister, onSettings, onTheme} = this.props;
     const {theme} = account.user;
     const server = `http${account.isSecure ? 's' : ''}://${account.hostname}`;
 
@@ -50,8 +51,9 @@ export default class RegistrationForm extends PureComponent {
                                context={context}
                                onSubmit={onRegister}/>
         <RegistrationSettingsForm theme={theme}
-                               context={context}
-                               onSubmit={onSettings}/>
+                                  context={context}
+                                  onTheme={onTheme}
+                                  onSubmit={onSettings}/>
 
       </ScrollView>
     );

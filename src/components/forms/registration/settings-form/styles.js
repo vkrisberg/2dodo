@@ -21,25 +21,34 @@ export default (theme) => {
       marginTop: 10,
     },
 
-    serverInput: {
-      marginTop: 15,
-      marginBottom: 0,
+    avatarContainer: {
+      marginTop: 25,
+      alignItems: 'center',
+    },
+
+    avatarLabel: {
+      marginTop: 5,
+    },
+
+    themeContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginTop: 30,
     },
 
     inputContainer: {
-      marginTop: 25,
-    },
-
-    checkboxContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      marginTop: 10,
+      marginTop: 30,
     },
 
     buttonContainer: {
       alignItems: 'center',
       justifyContent: 'center',
-      marginTop: 30,
+      marginTop: 15,
+    },
+
+    button: {
+      marginTop: 25,
     },
   });
 }

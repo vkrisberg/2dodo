@@ -109,6 +109,10 @@ class Registration extends Component {
 
   };
 
+  changeTheme = (theme) => {
+    this.props.dispatch(accountActions.changeTheme(theme));
+  };
+
   checkEmail = (value) => {
     return !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value);
   };
@@ -123,7 +127,8 @@ class Registration extends Component {
                             account={account}
                             onLoginPass={this.loginPassword}
                             onRegister={this.registration}
-                            onSettings={this.updateSettings}/>
+                            onSettings={this.updateSettings}
+                            onTheme={this.changeTheme}/>
         </BackgroundLayout>
       </MainLayout>
     );

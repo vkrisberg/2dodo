@@ -1,18 +1,21 @@
 import React, {Component} from 'react';
-import {View, KeyboardAvoidingView} from 'react-native';
+import {View, KeyboardAvoidingView, TouchableOpacity} from 'react-native';
 import {Field, reduxForm} from 'redux-form';
 import PropTypes from 'prop-types';
 
-import {Button, Checkbox, Input, TextLabel} from '../../../elements';
+import {Button, Input, TextLabel, Avatar} from '../../../elements';
 import {themeEnum} from '../../../../enums';
 import {colors, weights} from '../../../../styles';
 import styles from './styles';
+import ThemeButton from '../../../elements/theme-button';
 
 class RegistrationSettingsForm extends Component {
 
   static propTypes = {
     theme: PropTypes.string,
     context: PropTypes.object,
+    onAvatar: PropTypes.func,
+    onTheme: PropTypes.func,
     onSubmit: PropTypes.func,
     handleSubmit: PropTypes.func.isRequired,
   };
@@ -21,9 +24,11 @@ class RegistrationSettingsForm extends Component {
     theme: themeEnum.light,
   };
 
-  state = {
-    checked: false,
-  };
+  onThemeChange(theme) {
+    return () => {
+      this.props.onTheme && this.props.onTheme(theme);
+    };
+  }
 
   render() {
     const {theme, context} = this.props;
@@ -41,30 +46,38 @@ class RegistrationSettingsForm extends Component {
                      color={colors[theme].blackText}
                      textAlign={'center'}
                      style={_styles.description}>{context.t('RegistrationSettingsDescription')}</TextLabel>
+          <View style={_styles.avatarContainer}>
+            <Avatar onPress={this.props.onAvatar}/>
+            <TextLabel style={_styles.avatarLabel}
+                       color={colors[theme].blueDarker}>{context.t('SetYourPhoto')}</TextLabel>
+          </View>
+          <View style={_styles.themeContainer}>
+            <ThemeButton context={context}
+                         theme={theme}
+                         type={themeEnum.light}
+                         onPress={this.onThemeChange(themeEnum.light)}/>
+            <ThemeButton context={context}
+                         theme={theme}
+                         type={themeEnum.night}
+                         onPress={this.onThemeChange(themeEnum.night)}/>
+          </View>
           <View style={_styles.inputContainer}>
             <Field
-              name="login"
+              name="name"
               component={Input}
-              placeholder={context.t('CreateLogin')}
-              autoCapitalize={'none'}
+              placeholder={context.t('Name')}
               autoCorrect={false}/>
             <Field
-              name="password"
+              name="secondName"
               component={Input}
-              placeholder={context.t('Password')}
-              secureTextEntry={true}
-              autoCapitalize={'none'}
-              autoCorrect={false}/>
-            <Field
-              name="repeatPassword"
-              component={Input}
-              placeholder={context.t('RepeatPassword')}
-              secureTextEntry={true}
-              autoCapitalize={'none'}
+              placeholder={context.t('SecondName')}
               autoCorrect={false}/>
           </View>
           <View style={_styles.buttonContainer}>
-            <Button color="black" onPress={this.props.handleSubmit}>{context.t('Continue')}</Button>
+            <TextLabel theme={theme}
+                       color={colors[theme].blackText}
+                       textAlign={'center'}>{context.t('GetAccessToPushNotifications')}</TextLabel>
+            <Button color="black" style={_styles.button} onPress={this.props.handleSubmit}>{context.t('GoToApp')}</Button>
           </View>
         </KeyboardAvoidingView>
       </View>
