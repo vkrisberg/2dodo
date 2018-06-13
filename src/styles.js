@@ -39,6 +39,7 @@ const colors = {
   light: {
     white: '#ffffff',
     black: '#000000',
+    blackText: '#1f2225',
     whiteSmoke: '#f4f4f4',
     gray: '#c1c1c1',
     grayDarker: '#808694',
@@ -52,6 +53,7 @@ const colors = {
   night: {
     white: '#ffffff',
     black: '#000000',
+    blackText: '#1f2225',
     whiteSmoke: '#f4f4f4',
     gray: '#c1c1c1',
     grayDarker: '#808694',

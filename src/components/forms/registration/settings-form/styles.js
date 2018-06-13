@@ -1,39 +1,45 @@
-import styled from 'styled-components';
+import {StyleSheet} from 'react-native';
+import {colors, fonts, sizes} from '../../../../styles';
 
-export const StyledTitle = {
-  'padding-top': '80px'
-};
+export default (theme) => {
+  return StyleSheet.create({
+    container: {
+      height: sizes.windowHeight,
+      width: sizes.windowWidth,
+      alignItems: 'center',
+    },
 
-export const Description = styled.Text`
-  align-self: center;
-  text-align: center;
-  margin: 0 26px;
-  width: 280;
-  margin-bottom: ${props => props.marginBottom || 0}
-`;
+    wrapper: {
+      width: 280,
+    },
 
-export const DescriptionWrapper = styled.View`
-  width: 100;
-  margin-bottom: 25;
-`;
+    title: {
+      marginTop: 95,
+    },
 
-export const ButtonWrapper = styled.View`
-  flex-wrap: wrap;
-  align-items: flex-start;
-  flex-direction: row;
-  margin-bottom: 30;
-`;
+    description: {
+      marginTop: 10,
+    },
 
-export const StyledImage = styled.View`
-  width: 70;
-  height: 70;
-  background-color: #e4e4e4;
-  margin-bottom: 15;
-  border-radius: 70;
-  align-items: center;
-  justify-content: center;
-`;
+    serverInput: {
+      marginTop: 15,
+      marginBottom: 0,
+    },
 
-export const Container = styled.View`
-  align-items: center;
-`;
+    inputContainer: {
+      marginTop: 25,
+    },
+
+    checkboxContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginTop: 10,
+    },
+
+    buttonContainer: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginTop: 30,
+    },
+  });
+}

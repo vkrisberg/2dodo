@@ -46,8 +46,12 @@ export default class RegistrationForm extends PureComponent {
                                context={context}
                                defaultServer={server}
                                onSubmit={onLoginPass}/>
-        {/*<RegistrationEmailForm/>*/}
-        {/*<RegistrationSettingsForm/>*/}
+        <RegistrationEmailForm theme={theme}
+                               context={context}
+                               onSubmit={onRegister}/>
+        <RegistrationSettingsForm theme={theme}
+                               context={context}
+                               onSubmit={onSettings}/>
 
       </ScrollView>
     );
