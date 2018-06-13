@@ -14,7 +14,7 @@ export const ItemImage = styled.Image`
 export const TitleText = styled.Text`
   font-family: '${fonts.main}';
   font-size: 18;
-  font-weight: '${weights.bold}';
+  font-weight: ${weights.bold};
   margin-top: 30;
   text-align: center;
   color: white;
