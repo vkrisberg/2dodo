@@ -1,13 +1,15 @@
 import React, {PureComponent} from 'react';
-import {TouchableOpacity, Text} from 'react-native';
+import {TouchableOpacity, Text, Image} from 'react-native';
 import PropTypes from 'prop-types';
 
+import AvatarIcon from '../../icons/avatar-icon';
 import {themeEnum} from '../../../enums';
 import styles from './styles';
 
-export default class Button extends PureComponent {
+export default class Avatar extends PureComponent {
 
   static propTypes = {
+    source: PropTypes.any,
     theme: PropTypes.string,
     color: PropTypes.string,
     bgColor: PropTypes.string,
@@ -26,8 +28,14 @@ export default class Button extends PureComponent {
     onPress && onPress();
   };
 
-  renderText(_styles) {
-    const {textStyle} = this.props;
+  renderAvatar(_styles) {
+    const {source, textStyle} = this.props;
+
+    if (source) {
+      return (
+        <Image style={style.avatar} source={source}/>
+      );
+    }
 
     if (typeof this.props.children === 'string') {
       return (
@@ -35,7 +43,7 @@ export default class Button extends PureComponent {
       );
     }
 
-    return this.props.children;
+    return <AvatarIcon/>;
   }
 
   render() {
@@ -46,7 +54,7 @@ export default class Button extends PureComponent {
       <TouchableOpacity style={[_styles.container, style]}
                         disabled={disabled}
                         onPress={this.onPress}>
-        {this.renderText(_styles)}
+        {this.renderAvatar()}
       </TouchableOpacity>
     );
   }

@@ -1,5 +1,7 @@
 export {default as Arrow} from './arrow';
 export {default as Button} from './button';
+export {default as SkipButton} from './skip-button';
+export {default as Avatar} from './avatar';
 export {default as TextLabel} from './text-label';
 export {default as Carousel} from './carousel';
 export {default as Checkbox} from './checkbox';

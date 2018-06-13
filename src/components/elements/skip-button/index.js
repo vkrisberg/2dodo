@@ -4,7 +4,7 @@ import {TouchableWithoutFeedback} from 'react-native';
 import {SkipWrapper, StyledSkip, SvgWrapper} from './styles';
 import Icon from './icon';
 
-export default class Skip extends PureComponent {
+export default class SkipButton extends PureComponent {
   render() {
     const {
       onSkip,

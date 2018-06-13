@@ -1,5 +1,6 @@
 import reducer from '../../utils/reducer';
 import {types} from './actions';
+import {themeEnum} from '../../enums'
 import CONFIG from '../../config';
 
 const initState = {
@@ -12,7 +13,7 @@ const initState = {
     secondName: '',
     email: '',
     avatar: '',
-    theme: 'light', // [light, night]
+    theme: themeEnum.light, // [light, night]
   },
 
   keys: {
@@ -209,6 +210,16 @@ export default reducer(initState, {
       net: {
         info: action.payload,
         connected: action.payload.type === 'wifi' || action.payload.type === 'cellular',
+      },
+    };
+  },
+
+  [types.THEME_CHANGE]: (state, action) => {
+    return {
+      ...state,
+      user: {
+        ...state.user,
+        theme: action.payload,
       },
     };
   },

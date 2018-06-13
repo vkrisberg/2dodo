@@ -26,6 +26,7 @@ export const types = {
   REGISTER_FAILURE: Symbol('REGISTER_FAILURE'),
 
   NET_UPDATE: Symbol('NET_UPDATE'),
+  THEME_CHANGE: Symbol('THEME_CHANGE'),
 };
 
 export default {
@@ -128,5 +129,9 @@ export default {
 
   netUpdate: (connectionInfo) => {
     return {type: types.NET_UPDATE, payload: connectionInfo};
+  },
+
+  changeTheme: (theme) => {
+    return {type: types.THEME_CHANGE, payload: theme};
   },
 };

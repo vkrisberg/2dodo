@@ -44,6 +44,7 @@ class LoginForm extends Component {
         <Field
           component={Input}
           name="password"
+          secureTextEntry={true}
           textColor={colors.light.white}
           focusedColor={colors.light.white}
           borderColor={colors.light.blueInputBorder}

@@ -7,9 +7,7 @@ import {
   ScrollView
 } from 'react-native';
 
-
-import Title from '../title';
-import Skip from '../skip';
+import {SkipButton} from '../index';
 import {
   TitleText,
   Track,
@@ -90,9 +88,9 @@ export default class Carousel extends Component {
         <BarContainer isSmall={isSmallScreen}>
           {this.renderDots()}
         </BarContainer>
-        <Skip onSkip={this.props.onSkip} marginBottom={50}>
+        <SkipButton onSkip={this.props.onSkip} marginBottom={50}>
           Skip all features
-        </Skip>
+        </SkipButton>
       </Container>
     );
   }

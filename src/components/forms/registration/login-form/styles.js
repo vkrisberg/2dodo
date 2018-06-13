@@ -7,7 +7,10 @@ export default (theme) => {
       height: sizes.windowHeight,
       width: sizes.windowWidth,
       alignItems: 'center',
-      paddingHorizontal: 40,
+    },
+
+    wrapper: {
+      width: 280,
     },
 
     title: {
