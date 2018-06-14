@@ -12,7 +12,7 @@ const initState = {
     firstName: '',
     secondName: '',
     email: '',
-    avatar: '',
+    avatar: '', // in base64
     theme: themeEnum.light, // [light, night]
   },
 
@@ -34,6 +34,7 @@ const initState = {
   },
 
   loading: false,
+  updating: false,
   error: null,
 };
 
@@ -221,6 +222,33 @@ export default reducer(initState, {
         ...state.user,
         theme: action.payload,
       },
+    };
+  },
+
+  [types.AVATAR_UPDATE]: (state, action) => {
+    return {
+      ...state,
+      updating: true,
+      error: null
+    };
+  },
+
+  [types.AVATAR_UPDATE_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      user: {
+        ...state.user,
+        avatar: action.payload,
+      },
+      updating: false,
+    };
+  },
+
+  [types.AVATAR_UPDATE_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      updating: false,
+      error: action.error,
     };
   },
 });

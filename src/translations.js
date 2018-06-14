@@ -36,6 +36,11 @@ const translations = {
     'Name': 'Имя',
     'SecondName': 'Фамилия',
     'GetAccessToPushNotifications': 'Дайте доступ 2dodo для push-уведомлений для получения сообщений',
+    'ChooseYourPhoto': 'Choose your photo',
+    'ChooseFromGallery': 'Choose from gallery',
+    'FullscreenPhoto': 'Fullscreen photo',
+    'DeletePhoto': 'Delete photo',
+    'Cancel': 'Cancel',
   },
   'en': {
     // Events
@@ -74,6 +79,11 @@ const translations = {
     'Name': 'Name',
     'SecondName': 'Second name',
     'GetAccessToPushNotifications': 'Get 2dodo access to push notifications to receive a messages',
+    'ChooseYourPhoto': 'Choose your photo',
+    'ChooseFromGallery': 'Choose from gallery',
+    'FullscreenPhoto': 'Fullscreen photo',
+    'DeletePhoto': 'Delete photo',
+    'Cancel': 'Cancel',
   },
 };
 

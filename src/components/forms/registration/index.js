@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {ScrollView} from 'react-native';
+import {View, ScrollView} from 'react-native';
 import PropTypes from 'prop-types';
 
 import RegistrationLoginForm from './login-form';
@@ -15,6 +15,7 @@ export default class RegistrationForm extends PureComponent {
     onLoginPass: PropTypes.func,
     onRegister: PropTypes.func,
     onSettings: PropTypes.func,
+    onAvatar: PropTypes.func,
     onTheme: PropTypes.func,
   };
 
@@ -22,40 +23,84 @@ export default class RegistrationForm extends PureComponent {
     page: 0,
   };
 
-  onScrollEnd = (event) => {
-    const xOffset = event.nativeEvent.contentOffset.x;
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.page !== this.state.page) {
+      this.scrollView.scrollTo({
+        x: this.state.page * sizes.windowWidth,
+        y: 0,
+        animated: true,
+      });
+    }
+  }
 
-    this.setState({
-      page: Math.floor(xOffset / sizes.windowWidth),
-    });
+  previousPage = () => {
+    this.setState({page: this.state.page - 1});
+  };
+
+  nextPage = () => {
+    this.setState({page: this.state.page + 1});
+  };
+
+  onScrollStart = (event) => {
+    this.startX = event.nativeEvent.locationX;
+  };
+
+  onScrollEnd = (event) => {
+    const direction = event.nativeEvent.locationX > this.startX ? 'back' : 'forward';
+
+    if (this.state.page > 0 && direction === 'back') {
+      this.previousPage();
+    }
+  };
+
+  onLoginPass = (data) => {
+    if (this.props.onLoginPass && this.props.onLoginPass(data)) {
+      this.nextPage();
+    }
+  };
+
+  onRegister = (data) => {
+    if (this.props.onRegister) {
+      this.props.onRegister(data).then((result) => {
+        result && this.nextPage();
+      });
+    }
   };
 
   render() {
-    const {context, account, onLoginPass, onRegister, onSettings, onTheme} = this.props;
+    const {context, account, onSettings, onAvatar, onTheme} = this.props;
     const {theme} = account.user;
     const server = `http${account.isSecure ? 's' : ''}://${account.hostname}`;
 
     return (
-      <ScrollView
-        horizontal={true}
-        pagingEnabled={true}
-        showsHorizontalScrollIndicator={false}
-        scrollEventThrottle={0}
-        onMomentumScrollEnd={this.onScrollEnd}>
+      <View onStartShouldSetResponder={() => true}
+            onResponderGrant={this.onScrollStart}
+            onResponderRelease={this.onScrollEnd}>
+        <ScrollView
+          ref={ref => this.scrollView = ref}
+          horizontal={true}
+          pagingEnabled={true}
+          scrollEnabled={false}
+          showsHorizontalScrollIndicator={false}
+          scrollEventThrottle={0}>
 
-        <RegistrationLoginForm theme={theme}
-                               context={context}
-                               defaultServer={server}
-                               onSubmit={onLoginPass}/>
-        <RegistrationEmailForm theme={theme}
-                               context={context}
-                               onSubmit={onRegister}/>
-        <RegistrationSettingsForm theme={theme}
-                                  context={context}
-                                  onTheme={onTheme}
-                                  onSubmit={onSettings}/>
+          <RegistrationLoginForm theme={theme}
+                                 context={context}
+                                 defaultServer={server}
+                                 onSubmit={this.onLoginPass}/>
+          <RegistrationEmailForm theme={theme}
+                                 context={context}
+                                 onSubmit={this.onRegister}/>
+          <RegistrationSettingsForm theme={theme}
+                                    context={context}
+                                    user={account.user}
+                                    initialValues={account.user}
+                                    onAvatar={onAvatar}
+                                    onTheme={onTheme}
+                                    onSubmit={onSettings}/>
 
-      </ScrollView>
+        </ScrollView>
+      </View>
     );
   }
 }

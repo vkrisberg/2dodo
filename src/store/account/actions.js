@@ -1,7 +1,7 @@
 import {AsyncStorage} from 'react-native';
 
 import apiAccount from '../../api/account';
-import {services} from '../../utils';
+import {services, wsMessage} from '../../utils';
 import {pgplib, hashlib} from '../../utils/encrypt';
 import {storageEnum, dbEnum} from '../../enums';
 import CONFIG from '../../config';
@@ -24,6 +24,10 @@ export const types = {
   REGISTER: Symbol('REGISTER'),
   REGISTER_SUCCESS: Symbol('REGISTER_SUCCESS'),
   REGISTER_FAILURE: Symbol('REGISTER_FAILURE'),
+
+  AVATAR_UPDATE: Symbol('AVATAR_UPDATE'),
+  AVATAR_UPDATE_SUCCESS: Symbol('AVATAR_UPDATE_SUCCESS'),
+  AVATAR_UPDATE_FAILURE: Symbol('AVATAR_UPDATE_FAILURE'),
 
   NET_UPDATE: Symbol('NET_UPDATE'),
   THEME_CHANGE: Symbol('THEME_CHANGE'),
@@ -133,5 +137,30 @@ export default {
 
   changeTheme: (theme) => {
     return {type: types.THEME_CHANGE, payload: theme};
+  },
+
+  updateAvatar: (avatarBase64) => {
+    return async (dispatch, getState) => {
+      dispatch({type: types.AVATAR_UPDATE});
+      try {
+        const realm = services.getRealm();
+        const {account} = getState();
+        const dateNow = new Date();
+        const realmAccount = realm.objectForPrimaryKey(dbEnum.Account, account.user.username);
+        if (realmAccount) {
+          await realm.write(() => {
+            realmAccount.user.avatar = avatarBase64;
+            realmAccount.dateUpdate = dateNow;
+          });
+          // console.log('avatar updated', realmAccount);
+          // TODO - send avatar to server
+        }
+        dispatch({type: types.AVATAR_UPDATE_SUCCESS, payload: avatarBase64});
+        return realmAccount;
+      } catch (e) {
+        dispatch({type: types.AVATAR_UPDATE_FAILURE, error: e});
+        throw e;
+      }
+    };
   },
 };

@@ -31,9 +31,15 @@ export default class Avatar extends PureComponent {
   renderAvatar(_styles) {
     const {source, textStyle} = this.props;
 
-    if (source) {
+    if (source && typeof source === 'object') {
       return (
-        <Image style={style.avatar} source={source}/>
+        <Image style={_styles.avatar} source={source}/>
+      );
+    }
+
+    if (source && typeof source === 'string') {
+      return (
+        <Image style={_styles.avatar} source={{uri: `data:image/jpeg;base64,${source}`}}/>
       );
     }
 
@@ -54,7 +60,7 @@ export default class Avatar extends PureComponent {
       <TouchableOpacity style={[_styles.container, style]}
                         disabled={disabled}
                         onPress={this.onPress}>
-        {this.renderAvatar()}
+        {this.renderAvatar(_styles)}
       </TouchableOpacity>
     );
   }
