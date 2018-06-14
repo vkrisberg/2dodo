@@ -14,6 +14,8 @@ class RegistrationSettingsForm extends Component {
   static propTypes = {
     theme: PropTypes.string,
     context: PropTypes.object,
+    user: PropTypes.object,
+    initialValues: PropTypes.object,
     onAvatar: PropTypes.func,
     onTheme: PropTypes.func,
     onSubmit: PropTypes.func,
@@ -31,7 +33,7 @@ class RegistrationSettingsForm extends Component {
   }
 
   render() {
-    const {theme, context} = this.props;
+    const {theme, context, user} = this.props;
     const _styles = styles(theme);
 
     return (
@@ -47,7 +49,7 @@ class RegistrationSettingsForm extends Component {
                      textAlign={'center'}
                      style={_styles.description}>{context.t('RegistrationSettingsDescription')}</TextLabel>
           <View style={_styles.avatarContainer}>
-            <Avatar onPress={this.props.onAvatar}/>
+            <Avatar source={user.avatar} onPress={this.props.onAvatar}/>
             <TextLabel style={_styles.avatarLabel}
                        color={colors[theme].blueDarker}>{context.t('SetYourPhoto')}</TextLabel>
           </View>
@@ -63,7 +65,7 @@ class RegistrationSettingsForm extends Component {
           </View>
           <View style={_styles.inputContainer}>
             <Field
-              name="name"
+              name="firstName"
               component={Input}
               placeholder={context.t('Name')}
               autoCorrect={false}/>
@@ -88,5 +90,5 @@ class RegistrationSettingsForm extends Component {
 export default reduxForm({
   form: 'registration',
   destroyOnUnmount: false,
-  forceUnregisterOnUnmount: true
+  forceUnregisterOnUnmount: true,
 })(RegistrationSettingsForm);

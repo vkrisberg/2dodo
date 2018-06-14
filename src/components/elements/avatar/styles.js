@@ -19,5 +19,10 @@ export default ({theme, color, bgColor}) => {
       fontSize: 16,
       fontWeight: weights.semiBold,
     },
+
+    avatar: {
+      width: 65,
+      height: 65,
+    },
   });
 }

@@ -15,8 +15,9 @@ import {colors} from '../../../styles';
 class LoginForm extends Component {
 
   static propTypes = {
-    labels: PropTypes.object,
-    onSubmit: PropTypes.func.isRequired,
+    context: PropTypes.object,
+    errors: PropTypes.object,
+    onSubmit: PropTypes.func,
     handleSubmit: PropTypes.func.isRequired,
   };
 
@@ -25,18 +26,20 @@ class LoginForm extends Component {
   }
 
   render() {
-    const {handleSubmit, labels} = this.props;
+    const {handleSubmit, context, errors} = this.props;
 
     return (
       <Container>
         <Field
           component={Input}
           name="login"
-          textColor={colors.light.white}
+          color={colors.light.white}
           focusedColor={colors.light.white}
           borderColor={colors.light.blueInputBorder}
           placeholderColor={colors.light.bluePlaceholder}
-          placeholder={labels.login}
+          placeholder={context.t('Login')}
+          error={errors && errors.login}
+          errorColor={colors.light.redInputBorder}
           autoCapitalize={'none'}
           autoCorrect={false}
           multiline={false}
@@ -45,29 +48,33 @@ class LoginForm extends Component {
           component={Input}
           name="password"
           secureTextEntry={true}
-          textColor={colors.light.white}
+          color={colors.light.white}
           focusedColor={colors.light.white}
           borderColor={colors.light.blueInputBorder}
           placeholderColor={colors.light.bluePlaceholder}
-          placeholder={labels.password}
+          placeholder={context.t('Password')}
+          error={errors && errors.password}
+          errorColor={colors.light.redInputBorder}
           autoCapitalize={'none'}
           autoCorrect={false}
           multiline={false}
         />
         <SecurityContainer>
-          <SecurityText>{labels.security}</SecurityText>
-          <SecurityLabel>{labels.createKey}</SecurityLabel>
+          <SecurityText>{context.t('ForBestSecurity')}</SecurityText>
+          <SecurityLabel>{context.t('CreateNewKey')}</SecurityLabel>
           <Field
             component={Checkbox}
             name="createNewKey"
             color={colors.light.white}
           />
         </SecurityContainer>
-        <Button color={colors.light.white} onPress={handleSubmit}>{labels.enter}</Button>
+        <Button color={colors.light.white} onPress={handleSubmit}>{context.t('Enter')}</Button>
       </Container>
     );
   }
 }
 
 
-export default connect()(reduxForm({form: 'login'})(LoginForm));
+export default connect()(reduxForm({
+  form: 'login',
+})(LoginForm));

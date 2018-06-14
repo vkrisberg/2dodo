@@ -67,7 +67,7 @@ export default class App extends Component {
 
     return (
       <Provider store={store}>
-        <I18n translations={{}} initialLang={this.language} fallbackLang='en' useReducer={true}>
+        <I18n translations={{}} initialLang={this.language} fallbackLang="en" useReducer={true}>
           <AppWithNavigationState/>
         </I18n>
       </Provider>

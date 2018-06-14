@@ -8,6 +8,7 @@ export {default as Checkbox} from './checkbox';
 export {default as CheckboxSvg} from './checkbox-svg';
 export {default as DrawerButton} from './drawer-button';
 export {default as Input} from './input';
+export {default as FieldError} from './field-error';
 export {default as Switch} from './switch';
 export {default as Link} from './link';
 export {default as ListItem} from './list-item';

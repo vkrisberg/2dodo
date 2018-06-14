@@ -16,7 +16,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 9,
-    opacity: .85,
+    opacity: .9,
     paddingTop: sizes.statusbarHeight,
   },
 

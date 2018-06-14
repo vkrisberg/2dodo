@@ -3,6 +3,7 @@ import {TouchableOpacity, Text} from 'react-native';
 import PropTypes from 'prop-types';
 
 import {themeEnum} from '../../../enums';
+import {colors} from '../../../styles';
 import styles from './styles';
 
 export default class Button extends PureComponent {
@@ -39,7 +40,11 @@ export default class Button extends PureComponent {
   }
 
   render() {
-    const {theme, color, bgColor, disabled, style} = this.props;
+    let {theme, color, bgColor, disabled, style} = this.props;
+    if (disabled) {
+      color = colors[theme].disableButtonText;
+      bgColor = colors[theme].disableButtonBg;
+    }
     const _styles = styles({theme, color, bgColor});
 
     return (

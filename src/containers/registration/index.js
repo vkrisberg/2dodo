@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Alert} from 'react-native';
+import ImagePicker from 'react-native-image-picker';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -23,6 +24,18 @@ class Registration extends Component {
   constructor(props) {
     super(props);
     this.realm = services.getRealm();
+  }
+
+  componentDidMount() {
+    this.imagePickerOptions = {
+      title: this.context.t('ChooseYourPhoto'),
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+      noData: false,
+      allowsEditing: true,
+    };
   }
 
   saveToDatabase = () => {
@@ -68,14 +81,12 @@ class Registration extends Component {
 
     if (data.email && this.checkEmail(data.email)) {
       Alert.alert('Invalid email address');
-
-      return null;
+      return false;
     }
 
     if (account.loading) {
       Alert.alert('Account is loading');
-
-      return null;
+      return false;
     }
 
     const sendData = {
@@ -89,24 +100,39 @@ class Registration extends Component {
       secondName: (data.secondName || '').trim(),
     };
 
-    dispatch(accountActions.register(sendData))
+    return await dispatch(accountActions.register(sendData))
       .then(() => {
         Alert.alert('Registration success');
         console.log('registration success', this.props.account);
         this.saveToDatabase();
-        this.props.navigation.navigate(routeEnum.Login);
+        return true;
+        // this.props.navigation.navigate(routeEnum.Login);
       })
       .catch((error) => {
         Alert.alert('Registration error');
         console.log('registration error', error.response.data);
         if (error.response.status === 400) {
-          this.props.navigation.navigate(routeEnum.Login);
+          // this.props.navigation.navigate(routeEnum.Login);
         }
+        return false;
       });
   };
 
   updateSettings = (data) => {
 
+  };
+
+  updateAvatar = () => {
+    ImagePicker.showImagePicker(this.imagePickerOptions, (response) => {
+      if (response.didCancel) {
+      }
+      else if (response.error) {
+        Alert.alert('Error', response.error);
+      }
+      else {
+        this.props.dispatch(accountActions.updateAvatar(response.data));
+      }
+    });
   };
 
   changeTheme = (theme) => {
@@ -128,6 +154,7 @@ class Registration extends Component {
                             onLoginPass={this.loginPassword}
                             onRegister={this.registration}
                             onSettings={this.updateSettings}
+                            onAvatar={this.updateAvatar}
                             onTheme={this.changeTheme}/>
         </BackgroundLayout>
       </MainLayout>

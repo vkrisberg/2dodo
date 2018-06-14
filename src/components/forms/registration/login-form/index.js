@@ -3,7 +3,7 @@ import {View, KeyboardAvoidingView} from 'react-native';
 import {Field, reduxForm} from 'redux-form';
 import PropTypes from 'prop-types';
 
-import {Button, Checkbox, Input, TextLabel} from '../../../elements';
+import {Button, Checkbox, Input, TextLabel, FieldError} from '../../../elements';
 import {themeEnum} from '../../../../enums';
 import {colors, weights} from '../../../../styles';
 import styles from './styles';
@@ -13,6 +13,7 @@ class RegistrationLoginForm extends Component {
   static propTypes = {
     theme: PropTypes.string,
     context: PropTypes.object,
+    errors: PropTypes.any,
     defaultServer: PropTypes.string,
     onSubmit: PropTypes.func,
     handleSubmit: PropTypes.func.isRequired,
@@ -20,6 +21,7 @@ class RegistrationLoginForm extends Component {
 
   static defaultProps = {
     theme: themeEnum.light,
+    errors: [],
   };
 
   state = {
@@ -45,8 +47,9 @@ class RegistrationLoginForm extends Component {
   };
 
   render() {
-    const {theme, context} = this.props;
+    const {theme, context, errors} = this.props;
     const _styles = styles(theme);
+    // const _errors = [{path: 'login', message: 'This name already used in app'}];
 
     return (
       <View style={_styles.container}>
@@ -67,6 +70,7 @@ class RegistrationLoginForm extends Component {
               placeholder={context.t('CreateLogin')}
               autoCapitalize={'none'}
               autoCorrect={false}/>
+            <FieldError theme={theme} errors={errors} path="login"/>
             <Field
               name="password"
               component={Input}
@@ -74,6 +78,7 @@ class RegistrationLoginForm extends Component {
               secureTextEntry={true}
               autoCapitalize={'none'}
               autoCorrect={false}/>
+            <FieldError theme={theme} errors={errors} path="password"/>
             <Field
               name="repeatPassword"
               component={Input}
@@ -81,6 +86,7 @@ class RegistrationLoginForm extends Component {
               secureTextEntry={true}
               autoCapitalize={'none'}
               autoCorrect={false}/>
+            <FieldError theme={theme} errors={errors} path="repeatPassword"/>
           </View>
           <View style={_styles.checkboxContainer}>
             <TextLabel theme={theme} color={colors[theme].blackText}>{context.t('UseSpecialServerParams')}</TextLabel>
@@ -88,7 +94,7 @@ class RegistrationLoginForm extends Component {
           </View>
           {this.renderServerInput(_styles)}
           <View style={_styles.buttonContainer}>
-            <Button color="black" onPress={this.props.handleSubmit}>{context.t('Continue')}</Button>
+            <Button onPress={this.props.handleSubmit}>{context.t('Continue')}</Button>
           </View>
         </KeyboardAvoidingView>
       </View>
