@@ -11,15 +11,10 @@ export default (theme) => {
     iconContainer: {
       width: 50,
       height: 50,
-      position: 'relative',
-      borderRadius: 50,
+      borderRadius: 25,
       backgroundColor: colors[theme].blue,
-    },
-
-    svgContainer: {
-      position: 'absolute',
-      top: '28%',
-      left: '20%',
+      alignItems: 'center',
+      justifyContent: 'center',
     },
 
     container: {

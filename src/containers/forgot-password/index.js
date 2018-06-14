@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {View, Text, Image} from 'react-native';
 import RNLanguages from 'react-native-languages';
@@ -30,14 +30,14 @@ class ForgotPassword extends Component {
       <MainLayout netOffline={!account.net.connected}>
         <BackgroundLayout background="registration">
           <DismissKeyboardLayout>
-            {/*<ForgotPasswordForm context={this.context}  account={account}/>*/}
+            <ForgotPasswordForm context={this.context} account={account}/>
             {/*<SuccessMessage*/}
-            {/*context={this.context}*/}
-            {/*email={account.user.email || 'example@yandex.ru'}*/}
-            {/*handleToLogin={this.returnToLogin}*/}
-            {/*lng={RNLanguages.language.substr(0, 2)}*/}
+              {/*context={this.context}*/}
+              {/*email={account.user.email || 'example@yandex.ru'}*/}
+              {/*handleToLogin={this.returnToLogin}*/}
+              {/*lng={RNLanguages.language.substr(0, 2)}*/}
             {/*/>*/}
-            <ForgotPassEnterKeyForm context={this.context}  account={account}/>
+            {/*<ForgotPassEnterKeyForm context={this.context} account={account}/>*/}
           </DismissKeyboardLayout>
         </BackgroundLayout>
       </MainLayout>

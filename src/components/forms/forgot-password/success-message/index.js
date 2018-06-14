@@ -21,11 +21,13 @@ class SuccessMessage extends Component {
 
   static defaultProps = {
     theme: themeEnum.light,
-    handleToLogin: () => {},
+    handleToLogin: () => {
+    },
   };
 
   constructor(props) {
     super(props);
+    this.timer = null;
     this.state = {
       time: 180000,
     };
@@ -35,18 +37,24 @@ class SuccessMessage extends Component {
     this._countDown();
   }
 
+  componentWillUnmount() {
+    if (this.timer) {
+      clearInterval(this.timer);
+    }
+  }
+
   handleToLogin = () => {
     this.props.handleToLogin();
   };
 
   _countDown = () => {
-    let timer = setInterval(() => {
+    this.timer = setInterval(() => {
       if (this.state.time > 0) {
         this.setState((prevState) => ({
           time: prevState.time - 1000,
         }));
       } else {
-        clearInterval(timer);
+        clearInterval(this.timer);
       }
     }, 1000);
   };
@@ -62,11 +70,7 @@ class SuccessMessage extends Component {
         <KeyboardAvoidingView style={_styles.wrapper} behavior="position" enabled>
           <View style={_styles.topBlock}>
             <View style={_styles.iconContainer}>
-              <View style={_styles.svgContainer}>
-                <Svg width="24" height="24">
-                  <MarkIcon color={colors[theme].white} />
-                </Svg>
-              </View>
+              <MarkIcon color={colors[theme].white}/>
             </View>
           </View>
           <TextLabel
@@ -88,7 +92,7 @@ class SuccessMessage extends Component {
             {email}
           </TextLabel>
           <View style={_styles.buttonContainer}>
-            <Button onPress={this.handleToLogin}>{context.t('Login')}</Button>
+            <Button onPress={this.handleToLogin}>{context.t('EnterKey')}</Button>
           </View>
           <View style={_styles.bottomBlock}>
             <TextLabel

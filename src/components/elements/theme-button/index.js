@@ -48,9 +48,7 @@ export default class ThemeButton extends PureComponent {
       <TouchableOpacity style={[_styles.container, style]}
                         onPress={this.onPress}>
         <Text style={_styles.text}>{text}</Text>
-        <Svg width="22" height="22">
-          {isActive && <MarkIcon color={color}/>}
-        </Svg>
+        {isActive && <MarkIcon color={color}/>}
       </TouchableOpacity>
     );
   }

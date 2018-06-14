@@ -3,11 +3,10 @@ import {View, KeyboardAvoidingView, TouchableOpacity} from 'react-native';
 import {Field, reduxForm} from 'redux-form';
 import PropTypes from 'prop-types';
 
-import {Button, Input, TextLabel, Avatar} from '../../../elements';
+import {Button, Input, TextLabel, Avatar, ThemeButton} from '../../../elements';
 import {themeEnum} from '../../../../enums';
 import {colors, weights} from '../../../../styles';
 import styles from './styles';
-import ThemeButton from '../../../elements/theme-button';
 
 class RegistrationSettingsForm extends Component {
 
