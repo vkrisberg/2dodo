@@ -8,7 +8,7 @@ import {themeEnum} from '../../../../enums';
 import {colors, weights} from '../../../../styles';
 import styles from './styles';
 
-class ForgotPassEmailForm extends Component {
+class ForgotPassEnterKeyForm extends Component {
 
   static propTypes = {
     theme: PropTypes.string,
@@ -35,27 +35,42 @@ class ForgotPassEmailForm extends Component {
             textAlign={'center'}
             style={_styles.title}
           >
-            {context.t('RecoverPass')}
+            {context.t('EnterKey')}
           </TextLabel>
-          <TextLabel
-            theme={theme}
-            color={colors[theme].blackText}
-            textAlign={'center'}
-            style={_styles.description}
-          >
-            {context.t('RecoverPassDescription')}
-          </TextLabel>
+          <View style={_styles.textContainer}>
+            <TextLabel
+              theme={theme}
+              color={colors[theme].blackText}
+              textAlign={'center'}
+              style={_styles.description}
+            >
+              {context.t('EnterKeyDescription')}
+            </TextLabel>
+          </View>
           <View style={_styles.inputContainer}>
             <Field
-              name="email"
+              name="key"
               component={Input}
-              placeholder={context.t('Email')}
-              keyboardType={'email-address'}
+              placeholder={context.t('EnterKey')}
+              autoCapitalize={'none'}
+              autoCorrect={false}/>
+            <Field
+              name="password"
+              component={Input}
+              placeholder={context.t('Password')}
+              secureTextEntry={true}
+              autoCapitalize={'none'}
+              autoCorrect={false}/>
+            <Field
+              name="repeatPassword"
+              component={Input}
+              placeholder={context.t('RepeatPassword')}
+              secureTextEntry={true}
               autoCapitalize={'none'}
               autoCorrect={false}/>
           </View>
           <View style={_styles.buttonContainer}>
-            <Button onPress={this.props.handleSubmit}>{context.t('Recover')}</Button>
+            <Button onPress={this.props.handleSubmit}>{context.t('Continue')}</Button>
           </View>
         </KeyboardAvoidingView>
       </View>
@@ -65,4 +80,4 @@ class ForgotPassEmailForm extends Component {
 
 export default reduxForm({
   form: 'forgotPassword',
-})(ForgotPassEmailForm);
+})(ForgotPassEnterKeyForm);

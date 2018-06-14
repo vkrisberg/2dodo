@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, Image } from 'react-native';
-import { connect } from 'react-redux';
+import {View, Text, Image} from 'react-native';
+import RNLanguages from 'react-native-languages';
+import {connect} from 'react-redux';
 
-import { MainLayout, BackgroundLayout, DismissKeyboardLayout } from '../../components/layouts';
-import ForgotPasswordForm from '../../components/forms/forgot-password';
+import {MainLayout, BackgroundLayout, DismissKeyboardLayout} from '../../components/layouts';
+import ForgotPasswordForm from '../../components/forms/forgot-password/email-form';
+import ForgotPassEnterKeyForm from '../../components/forms/forgot-password/enter-key-form';
+import SuccessMessage from '../../components/forms/forgot-password/success-message';
 import routeEnum from '../../enums/route-enum';
 
 class ForgotPassword extends Component {
   static propTypes = {
-    account: PropTypes.object
+    account: PropTypes.object,
   };
 
   static contextTypes = {
@@ -21,13 +24,20 @@ class ForgotPassword extends Component {
   );
 
   render() {
-    const { account } = this.props;
+    const {account} = this.props;
 
     return (
       <MainLayout netOffline={!account.net.connected}>
         <BackgroundLayout background="registration">
           <DismissKeyboardLayout>
-            <ForgotPasswordForm context={this.context}  account={account}/>
+            {/*<ForgotPasswordForm context={this.context}  account={account}/>*/}
+            {/*<SuccessMessage*/}
+            {/*context={this.context}*/}
+            {/*email={account.user.email || 'example@yandex.ru'}*/}
+            {/*handleToLogin={this.returnToLogin}*/}
+            {/*lng={RNLanguages.language.substr(0, 2)}*/}
+            {/*/>*/}
+            <ForgotPassEnterKeyForm context={this.context}  account={account}/>
           </DismissKeyboardLayout>
         </BackgroundLayout>
       </MainLayout>
@@ -36,5 +46,5 @@ class ForgotPassword extends Component {
 }
 
 export default connect(state => ({
-  account: state.account
+  account: state.account,
 }))(ForgotPassword);

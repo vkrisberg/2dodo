@@ -17,12 +17,17 @@ export default (theme) => {
       marginTop: 105,
     },
 
+    textContainer: {
+      alignItems: 'center',
+      marginTop: 10,
+    },
+
     description: {
-      marginTop: 15,
+      width: 205,
     },
 
     inputContainer: {
-      marginTop: 23,
+      marginTop: 20,
     },
 
     buttonContainer: {
