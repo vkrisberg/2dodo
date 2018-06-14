@@ -27,13 +27,6 @@ export const RegistrationLabel = styled.Text`
   font-weight: ${weights.medium};
 `;
 
-export const StyledKeysImport = styled.Text`
-  color: ${colors.light.grayDarker};
-  font-family: '${fonts.main}';
-  font-size: 15;
-  font-weight: ${weights.medium};
-`;
-
 export const LoginStyles = StyleSheet.create({
   container: {
     alignItems: 'center',

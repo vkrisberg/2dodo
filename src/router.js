@@ -3,7 +3,6 @@ import {createStackNavigator} from 'react-navigation';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
-import {addListener} from './utils/redux';
 import Tabs from './tab-navigator';
 import {
   Main,
@@ -16,7 +15,6 @@ import {
 } from './containers';
 import {AddContact} from './containers/contacts';
 import {CreateChat, PrivateChat} from './containers/messages';
-
 
 export const MainStack = createStackNavigator({
   Main: {
@@ -58,11 +56,10 @@ export const MainStack = createStackNavigator({
   gesturesEnabled: false,
   drawerLockMode: 'locked-closed',
   navigationOptions: {
-    header:false,
+    header: false,
     headerBackTitle: null
   }
 });
-
 
 class AppWithNavigationState extends Component {
   static propTypes = {

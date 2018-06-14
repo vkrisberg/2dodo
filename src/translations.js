@@ -14,6 +14,10 @@ const translations = {
     'ForgotPassword': 'Восстановление пароля',
     'FirstTimeInApp': 'Первый раз в приложении?',
     'KeysImport': 'Импортировать ключи',
+    'EnterKey': 'Enter key',
+    'ReadQrCode': 'Read QR-code',
+    'RestoreFromBackup': 'Restore from backup',
+    'Cancel': 'Cancel',
     // Registration
     'Registration': 'Регистрация',
     'RegistrationLoginDescription': 'Во время регистрации приложение создаст ключ безопасности для восстановления',
@@ -40,7 +44,6 @@ const translations = {
     'ChooseFromGallery': 'Choose from gallery',
     'FullscreenPhoto': 'Fullscreen photo',
     'DeletePhoto': 'Delete photo',
-    'Cancel': 'Cancel',
   },
   'en': {
     // Events
@@ -57,6 +60,10 @@ const translations = {
     'ForgotPassword': 'Forgot password',
     'FirstTimeInApp': 'First time in app?',
     'KeysImport': 'Keys import',
+    'EnterKey': 'Enter key',
+    'ReadQrCode': 'Read QR-code',
+    'RestoreFromBackup': 'Restore from backup',
+    'Cancel': 'Cancel',
     // Registration
     'Registration': 'Registration',
     'RegistrationLoginDescription': 'During registration, the application will create security key for recovery',
@@ -83,7 +90,6 @@ const translations = {
     'ChooseFromGallery': 'Choose from gallery',
     'FullscreenPhoto': 'Fullscreen photo',
     'DeletePhoto': 'Delete photo',
-    'Cancel': 'Cancel',
   },
 };
 

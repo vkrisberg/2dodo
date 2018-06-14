@@ -1,24 +1,19 @@
 import React, {Component} from 'react';
-import {KeyboardAvoidingView} from 'react-native';
+import {KeyboardAvoidingView, View, Alert, ActionSheetIOS} from 'react-native';
 import {withNavigation} from 'react-navigation';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {
-  View,
-  Alert,
-} from 'react-native';
 
 import {MainLayout, BackgroundLayout, DismissKeyboardLayout} from '../../components/layouts';
-import LoginForm from '../../components/forms/login';
-import {routeEnum, dbEnum} from '../../enums';
+import {LoginForm} from '../../components/forms';
 import {Logo, Button, Link} from '../../components/elements';
+import {routeEnum, dbEnum} from '../../enums';
 import {services} from '../../utils';
 import {accountActions} from '../../store/actions';
 import {
   StyledText,
   StyledRegistration,
   RegistrationLabel,
-  StyledKeysImport,
   LoginStyles,
 } from './styles';
 import {colors, sizes} from '../../styles';
@@ -80,7 +75,19 @@ class Login extends Component {
   };
 
   keysImport = () => {
+    const {t} = this.context;
+    const options = [t('EnterKey'), t('ReadQrCode'), t('RestoreFromBackup'), t('Cancel')];
+    const cancelButtonIndex = -1;
+    const destructiveButtonIndex = 3;
 
+    ActionSheetIOS.showActionSheetWithOptions({
+        options,
+        cancelButtonIndex,
+        destructiveButtonIndex,
+      },
+      (buttonIndex) => {
+        console.log('ActionSheetIOS', buttonIndex);
+      });
   };
 
   render() {
