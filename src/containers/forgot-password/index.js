@@ -1,35 +1,40 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { View, Text, Image } from 'react-native';
 import { connect } from 'react-redux';
 
-// import chatIcon from '../login/img/chat.png';
-import styles from './styles';
-import Title from '../../components/elements/title';
+import { MainLayout, BackgroundLayout, DismissKeyboardLayout } from '../../components/layouts';
 import ForgotPasswordForm from '../../components/forms/forgot-password';
-import Arrow from '../../components/elements/arrow';
 import routeEnum from '../../enums/route-enum';
 
 class ForgotPassword extends Component {
+  static propTypes = {
+    account: PropTypes.object
+  };
+
+  static contextTypes = {
+    t: PropTypes.func.isRequired,
+  };
 
   returnToLogin = () => (
     this.props.navigation.navigate(routeEnum.Login)
-  )
+  );
 
   render() {
+    const { account } = this.props;
+
     return (
-      <View style={styles.container}>
-        <Arrow onPress={this.returnToLogin} />
-        {/* <View style={styles.logo}>
-          <Image
-            source={chatIcon}
-          />
-        </View> */}
-        <Title>Забытый пароль</Title>
-        <Text style={styles.description}>Укажите адрес электронной почты связанный с вашей учетной записью</Text>
-        <ForgotPasswordForm />
-      </View>
+      <MainLayout netOffline={!account.net.connected}>
+        <BackgroundLayout background="registration">
+          <DismissKeyboardLayout>
+            <ForgotPasswordForm context={this.context}  account={account}/>
+          </DismissKeyboardLayout>
+        </BackgroundLayout>
+      </MainLayout>
     );
   }
 }
 
-export default connect()(ForgotPassword);
+export default connect(state => ({
+  account: state.account
+}))(ForgotPassword);
