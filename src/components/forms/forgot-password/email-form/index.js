@@ -64,5 +64,5 @@ class ForgotPassEmailForm extends Component {
 }
 
 export default reduxForm({
-  form: 'forgotPassword'
+  form: 'forgotPassword',
 })(ForgotPassEmailForm);

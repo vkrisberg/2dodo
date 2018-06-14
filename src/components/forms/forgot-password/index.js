@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { View } from 'react-native';
-import { reduxForm } from 'redux-form';
-import { withNavigation } from 'react-navigation';
+import {View} from 'react-native';
+import {reduxForm} from 'redux-form';
+import {withNavigation} from 'react-navigation';
 
 import account from '../../../api/account';
 import routeEnum from '../../../enums/route-enum';
@@ -20,7 +20,7 @@ class ForgotPasswordForm extends Component {
   };
 
   render() {
-    const { handleSubmit, context, account } = this.props;
+    const {handleSubmit, context, account} = this.props;
     const {theme} = account.user;
 
     return (

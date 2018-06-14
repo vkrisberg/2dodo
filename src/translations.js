@@ -38,7 +38,10 @@ const translations = {
     'GetAccessToPushNotifications': 'Дайте доступ 2dodo для push-уведомлений для получения сообщений',
     'Recover': 'Восстановить',
     'RecoverPass': 'Восстановление пароля',
-    'RecoverPassDescription': 'Введите адрес электронной почты, прикрепленный к вашей учетной записи'
+    'RecoverPassDescription': 'Введите адрес электронной почты, прикрепленный к вашей учетной записи',
+    'SuccessForgotPass': 'Пароль успешно восстановлен',
+    'SuccessForgotPassDescription': 'A letter with password recovery sent to ',
+    'SuccessForgotPassSubDescription': 'Запрос можно повторить через ',
   },
   'en': {
     // Events
@@ -79,7 +82,10 @@ const translations = {
     'GetAccessToPushNotifications': 'Get 2dodo access to push notifications to receive a messages',
     'Recover': 'Recover',
     'RecoverPass': 'Recover pass',
-    'RecoverPassDescription': 'Enter the email address associated with your account'
+    'RecoverPassDescription': 'Enter the email address associated with your account',
+    'SuccessForgotPass': 'Success',
+    'SuccessForgotPassDescription': 'A letter with password recovery sent to ',
+    'SuccessForgotPassSubDescription': 'Repeat the request in ',
   },
 };
 
