@@ -36,6 +36,9 @@ const translations = {
     'Name': 'Имя',
     'SecondName': 'Фамилия',
     'GetAccessToPushNotifications': 'Дайте доступ 2dodo для push-уведомлений для получения сообщений',
+    'Recover': 'Восстановить',
+    'RecoverPass': 'Восстановление пароля',
+    'RecoverPassDescription': 'Введите адрес электронной почты, прикрепленный к вашей учетной записи'
   },
   'en': {
     // Events
@@ -74,6 +77,9 @@ const translations = {
     'Name': 'Name',
     'SecondName': 'Second name',
     'GetAccessToPushNotifications': 'Get 2dodo access to push notifications to receive a messages',
+    'Recover': 'Recover',
+    'RecoverPass': 'Recover pass',
+    'RecoverPassDescription': 'Enter the email address associated with your account'
   },
 };
 
