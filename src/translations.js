@@ -42,6 +42,8 @@ const translations = {
     'SuccessForgotPass': 'Пароль успешно восстановлен',
     'SuccessForgotPassDescription': 'A letter with password recovery sent to ',
     'SuccessForgotPassSubDescription': 'Запрос можно повторить через ',
+    'EnterKey': 'Введите ключ',
+    'EnterKeyDescription': 'Введите ключ, чтобы продолжить восстановление данных своей учетной записи',
   },
   'en': {
     // Events
@@ -86,6 +88,8 @@ const translations = {
     'SuccessForgotPass': 'Success',
     'SuccessForgotPassDescription': 'A letter with password recovery sent to ',
     'SuccessForgotPassSubDescription': 'Repeat the request in ',
+    'EnterKey': 'Enter key',
+    'EnterKeyDescription': 'Enter key to continue recovery your account details',
   },
 };
 

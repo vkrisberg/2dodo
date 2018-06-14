@@ -5,7 +5,8 @@ import RNLanguages from 'react-native-languages';
 import {connect} from 'react-redux';
 
 import {MainLayout, BackgroundLayout, DismissKeyboardLayout} from '../../components/layouts';
-import ForgotPasswordForm from '../../components/forms/forgot-password';
+import ForgotPasswordForm from '../../components/forms/forgot-password/email-form';
+import ForgotPassEnterKeyForm from '../../components/forms/forgot-password/enter-key-form';
 import SuccessMessage from '../../components/forms/forgot-password/success-message';
 import routeEnum from '../../enums/route-enum';
 
@@ -30,12 +31,13 @@ class ForgotPassword extends Component {
         <BackgroundLayout background="registration">
           <DismissKeyboardLayout>
             {/*<ForgotPasswordForm context={this.context}  account={account}/>*/}
-            <SuccessMessage
-              context={this.context}
-              email={account.user.email || 'example@yandex.ru'}
-              handleToLogin={this.returnToLogin}
-              lng={RNLanguages.language.substr(0, 2)}
-            />
+            {/*<SuccessMessage*/}
+            {/*context={this.context}*/}
+            {/*email={account.user.email || 'example@yandex.ru'}*/}
+            {/*handleToLogin={this.returnToLogin}*/}
+            {/*lng={RNLanguages.language.substr(0, 2)}*/}
+            {/*/>*/}
+            <ForgotPassEnterKeyForm context={this.context}  account={account}/>
           </DismissKeyboardLayout>
         </BackgroundLayout>
       </MainLayout>
