@@ -70,7 +70,7 @@ class ForgotPassEnterKeyForm extends Component {
               autoCorrect={false}/>
           </View>
           <View style={_styles.buttonContainer}>
-            <Button onPress={this.props.handleSubmit}>{context.t('Continue')}</Button>
+            <Button onPress={this.props.handleSubmit}>{context.t('Done')}</Button>
           </View>
         </KeyboardAvoidingView>
       </View>
