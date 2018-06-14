@@ -31,6 +31,13 @@ class Login extends Component {
     t: PropTypes.func.isRequired,
   };
 
+  state = {
+    errors: {
+      login: false,
+      password: false,
+    },
+  };
+
   constructor(props) {
     super(props);
     this.realm = services.getRealm();
@@ -46,20 +53,30 @@ class Login extends Component {
 
   login = async (data) => {
     const {dispatch} = this.props;
-    const {t} = this.context;
     const {login, password} = data;
 
+    this.setState({
+      errors: {
+        login: !login,
+        password: !password,
+      },
+    });
+
     if (!login || !password) {
-      Alert.alert(t('LoginEmptyError'));
-      return null;
+      return false;
     }
 
     const _username = `${login.trim().toLowerCase()}@${CONFIG.hostname}`;
     const account = this.realm.objectForPrimaryKey(dbEnum.Account, _username);
 
     if (!account) {
-      Alert.alert(t('LoginEnterError'));
-      return null;
+      this.setState({
+        errors: {
+          login: true,
+          password: true,
+        },
+      });
+      return false;
     }
 
     const {deviceId, user, keys} = account;
@@ -70,7 +87,13 @@ class Login extends Component {
       })
       .catch((error) => {
         console.error('login error', error);
-        Alert.alert('Login error');
+        Alert.alert(this.context.t('LoginAuthError'));
+        this.setState({
+          errors: {
+            login: true,
+            password: true,
+          },
+        });
       });
   };
 
@@ -93,13 +116,6 @@ class Login extends Component {
   render() {
     const {account} = this.props;
     const {t} = this.context;
-    const labels = {
-      login: t('Login'),
-      password: t('Password'),
-      security: t('ForBestSecurity'),
-      createKey: t('CreateNewKey'),
-      enter: t('Enter'),
-    };
     const forgotLinkColor = sizes.isIphone5 ? colors.light.blueDarker : colors.light.white;
 
     return (
@@ -109,7 +125,7 @@ class Login extends Component {
             <KeyboardAvoidingView style={LoginStyles.container} behavior="position" enabled>
               <Logo style={LoginStyles.logo}/>
               <StyledText>{t('LoginWelcome')}</StyledText>
-              <LoginForm labels={labels} onSubmit={this.login}/>
+              <LoginForm context={this.context} errors={this.state.errors} onSubmit={this.login}/>
             </KeyboardAvoidingView>
             <Link style={LoginStyles.forgot}
                   to={routeEnum.ForgotPassword}

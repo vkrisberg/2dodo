@@ -130,27 +130,7 @@ class Registration extends Component {
         Alert.alert('Error', response.error);
       }
       else {
-        /* Upload avatar to server */
         this.props.dispatch(accountActions.updateAvatar(response.data));
-        // const fileExt = response.uri.substr(-4, 4);
-        // const file = {uri: response.uri, name: this.props.user.id + '_avatar' + fileExt.toLowerCase(), type: 'multipart/form-data'};
-        //
-        // this.props.dispatch(
-        //   accountActions.saveAvatar(this.props.user.id, file,
-        //     (uri) => {
-        //       this.props.dispatch(
-        //         accountActions.saveUserSettings({
-        //           ...this.state.user,
-        //           avatar: uri
-        //         })
-        //       );
-        //       this.props.navigator.setTabIcons({
-        //         tabIndex: global.tabIds.profile,
-        //         remoteIcon: {uri, width: 50, height: 50, scale: 2, radius: 25}
-        //       });
-        //     }
-        //   )
-        // );
       }
     });
   };
