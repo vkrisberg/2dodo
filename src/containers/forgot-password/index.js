@@ -1,35 +1,50 @@
 import React, { Component } from 'react';
-import { View, Text, Image } from 'react-native';
-import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import {View, Text, Image} from 'react-native';
+import RNLanguages from 'react-native-languages';
+import {connect} from 'react-redux';
 
-// import chatIcon from '../login/img/chat.png';
-import styles from './styles';
-import Title from '../../components/elements/title';
-import ForgotPasswordForm from '../../components/forms/forgot-password';
-import Arrow from '../../components/elements/arrow';
+import {MainLayout, BackgroundLayout, DismissKeyboardLayout} from '../../components/layouts';
+import ForgotPasswordForm from '../../components/forms/forgot-password/email-form';
+import ForgotPassEnterKeyForm from '../../components/forms/forgot-password/enter-key-form';
+import SuccessMessage from '../../components/forms/forgot-password/success-message';
 import routeEnum from '../../enums/route-enum';
 
 class ForgotPassword extends Component {
+  static propTypes = {
+    account: PropTypes.object,
+  };
+
+  static contextTypes = {
+    t: PropTypes.func.isRequired,
+  };
 
   returnToLogin = () => (
     this.props.navigation.navigate(routeEnum.Login)
-  )
+  );
 
   render() {
+    const {account} = this.props;
+
     return (
-      <View style={styles.container}>
-        <Arrow onPress={this.returnToLogin} />
-        {/* <View style={styles.logo}>
-          <Image
-            source={chatIcon}
-          />
-        </View> */}
-        <Title>Забытый пароль</Title>
-        <Text style={styles.description}>Укажите адрес электронной почты связанный с вашей учетной записью</Text>
-        <ForgotPasswordForm />
-      </View>
+      <MainLayout netOffline={!account.net.connected}>
+        <BackgroundLayout background="registration">
+          <DismissKeyboardLayout>
+            {/*<ForgotPasswordForm context={this.context}  account={account}/>*/}
+            {/*<SuccessMessage*/}
+            {/*context={this.context}*/}
+            {/*email={account.user.email || 'example@yandex.ru'}*/}
+            {/*handleToLogin={this.returnToLogin}*/}
+            {/*lng={RNLanguages.language.substr(0, 2)}*/}
+            {/*/>*/}
+            <ForgotPassEnterKeyForm context={this.context}  account={account}/>
+          </DismissKeyboardLayout>
+        </BackgroundLayout>
+      </MainLayout>
     );
   }
 }
 
-export default connect()(ForgotPassword);
+export default connect(state => ({
+  account: state.account,
+}))(ForgotPassword);
