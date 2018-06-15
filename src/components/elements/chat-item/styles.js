@@ -1,5 +1,5 @@
-import {colors, fonts, weights} from "../../../styles";
 import {StyleSheet} from "react-native";
+import {colors, fonts, weights, sizes} from "../../../styles";
 
 export const ChatChosen = {
   marginBottom: -6
