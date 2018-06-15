@@ -1,5 +1,4 @@
-import styled from 'styled-components';
-import {colors, fonts, weights, sizes} from "../../../styles";
+import {colors, fonts, weights} from "../../../styles";
 import {StyleSheet} from "react-native";
 
 export const ChatChosen = {

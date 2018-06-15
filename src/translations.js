@@ -58,6 +58,9 @@ const translations = {
     'HaveVideo': 'Отправил(а) вам видео...',
     'HaveImage': 'Отправил(а) вам изображение...',
     'HaveCall': 'Пропущенный звонок',
+    // Errors
+    'Required': 'Required',
+    'LoginRegexpError': 'Login must be minimum 2 characters long and only contain a-z, 0-9 and _',
   },
   'en': {
     // Events
@@ -118,6 +121,9 @@ const translations = {
     'HaveVideo': 'Send your a video...',
     'HaveImage': 'Send your an image...',
     'HaveCall': 'Missed call',
+    // Errors
+    'Required': 'Required',
+    'LoginRegexpError': 'Login must be minimum 2 characters long and only contain a-z, 0-9 and _',
   },
 };
 
