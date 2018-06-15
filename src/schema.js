@@ -123,8 +123,8 @@ Chat.schema = {
   properties: {
     id: 'string', // unique chat id (uuid4)
     name: 'string',
-    owner: 'string',
-    members: 'string[]',
+    owner: 'string', // login@hostname
+    members: 'string[]', // [login@hostname, ...]
     shortName: 'string?',
     avatar: 'string?',
     lastMessage: 'ChatMessage?',

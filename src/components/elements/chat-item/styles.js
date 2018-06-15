@@ -8,7 +8,7 @@ export const ChatChosen = {
 
 export default (theme) => {
   return StyleSheet.create({
-    avatarContainer: {
+    container: {
       width: 340,
       height: 50,
       marginVertical: 8,

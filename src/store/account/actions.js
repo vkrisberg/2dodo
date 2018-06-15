@@ -51,7 +51,9 @@ export default {
         const realm = services.getRealm();
         const authorized = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
         const username = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
-        if (!authorized || !username) {
+        const password = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
+
+        if (!authorized || !username || !password) {
           throw new Error('remind failed: user is not authorized');
         }
 
@@ -74,7 +76,7 @@ export default {
 
         const payload = {...account};
         dispatch({type: types.REMIND_SUCCESS, payload});
-        return payload;
+        return {...payload, password};
       } catch (e) {
         dispatch({type: types.REMIND_FAILURE, error: e});
         throw e;
@@ -82,10 +84,10 @@ export default {
     };
   },
 
-  login: ({deviceId, user, keys}) => {
+  login: ({deviceId, hostname, user, keys}) => {
     return async dispatch => {
       try {
-        dispatch({type: types.LOGIN, payload: {user, keys}});
+        dispatch({type: types.LOGIN, payload: {deviceId, hostname, user, keys}});
         // dispatch({type: types.LOGIN_SUCCESS});
       } catch (e) {
         dispatch({type: types.LOGIN_FAILURE, error: e});

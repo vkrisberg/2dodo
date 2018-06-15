@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {KeyboardAvoidingView, View, Alert, ActionSheetIOS} from 'react-native';
+import {KeyboardAvoidingView, View, Alert, ActionSheetIOS, AsyncStorage} from 'react-native';
 import {withNavigation} from 'react-navigation';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
@@ -18,6 +18,9 @@ import {
 } from './styles';
 import {colors, sizes} from '../../styles';
 import CONFIG from '../../config';
+import storageEnum from '../../enums/storage-enum';
+
+const loginRegexp = /^\w+(@[\w\.\-]+)?$/;
 
 class Login extends Component {
 
@@ -43,17 +46,27 @@ class Login extends Component {
     this.realm = services.getRealm();
   }
 
-  wsConnect = ({deviceId, user, keys}) => {
+  componentDidUpdate() {
+    if (this.state.errors.login || this.state.errors.password) {
+      setTimeout(() => this.setState({errors: {}}), 2000);
+    }
+  }
+
+  wsConnect = ({deviceId, hostname, user, keys, password}) => {
     services.websocketConnect({
       deviceId,
+      hostname,
       username: user.username,
-      password: keys.hashKey,
+      password,
+      hashKey: keys.hashKey,
     });
   };
 
   login = async (data) => {
-    const {dispatch} = this.props;
-    const {login, password} = data;
+    const {dispatch, account} = this.props;
+    const login = (data.login || '').trim().toLowerCase();
+    const password = (data.password || '').trim();
+    // const createNewKey = data.createNewKey || false;
 
     this.setState({
       errors: {
@@ -66,10 +79,25 @@ class Login extends Component {
       return false;
     }
 
-    const _username = `${login.trim().toLowerCase()}@${CONFIG.hostname}`;
-    const account = this.realm.objectForPrimaryKey(dbEnum.Account, _username);
+    if (!loginRegexp.test(login)) {
+      this.setState({
+        errors: {
+          login: true,
+          password: false,
+        },
+      });
+      return false;
+    }
 
-    if (!account) {
+    let username = login;
+
+    if (login.indexOf('@') === -1) {
+      username = `${login}@${account.hostname}`;
+    }
+
+    const realmAccount = this.realm.objectForPrimaryKey(dbEnum.Account, username);
+
+    if (!realmAccount) {
       this.setState({
         errors: {
           login: true,
@@ -79,10 +107,12 @@ class Login extends Component {
       return false;
     }
 
-    const {deviceId, user, keys} = account;
-    dispatch(accountActions.login({deviceId, user, keys}))
+    const {deviceId, hostname, user, keys} = realmAccount;
+    dispatch(accountActions.login({deviceId, hostname, user, keys}))
       .then(() => {
-        this.wsConnect({deviceId, user, keys});
+        AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.username}`, username);
+        AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.password}`, password);
+        this.wsConnect({deviceId, hostname, user, keys, password});
         this.props.navigation.replace(routeEnum.Messages);
       })
       .catch((error) => {
