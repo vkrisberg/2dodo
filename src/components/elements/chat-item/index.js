@@ -52,7 +52,7 @@ export default class ChatItem extends Component {
 
     return (
       <TouchableOpacity onPress={onPress} onLongPress={this.onLongPress}>
-        <View style={_styles.avatarContainer}>
+        <View style={_styles.container}>
           { this.state.chosen && <Checkbox
             checked={checked}
             style={ChatChosen}
@@ -68,13 +68,13 @@ export default class ChatItem extends Component {
             <Text style={_styles.name}>
               {chat.name}
             </Text>
-            <Text style={_styles.limitText}>
-              {chat.unreadCount > 0 && chat.lastMessage.type === 'text' && <Text>{context.t('HaveMessage')}</Text>}
-              {chat.unreadCount > 0 && chat.lastMessage.type === 'audio' && <Text>{context.t('HaveVoiceMessage')}</Text>}
-              {chat.unreadCount > 0 && chat.lastMessage.type === 'video' && <Text>{context.t('HaveVideo')}</Text>}
-              {chat.unreadCount > 0 && chat.lastMessage.type === 'image' && <Text>{context.t('HaveImage')}</Text>}
-              {chat.unreadCount > 0 && chat.lastMessage.type === 'call' && <Text>{context.t('HaveCall')}</Text>}
-              {chat.unreadCount === 0 && <Text>{chat.lastMessage.text}</Text>}
+            <Text style={_styles.limitText} numberOfLines={1} ellipsizeMode="tail">
+              {chat.unreadCount > 0 && chat.lastMessage.type === 'text' && context.t('HaveMessage')}
+              {chat.unreadCount > 0 && chat.lastMessage.type === 'audio' && context.t('HaveVoiceMessage')}
+              {chat.unreadCount > 0 && chat.lastMessage.type === 'video' && context.t('HaveVideo')}
+              {chat.unreadCount > 0 && chat.lastMessage.type === 'image' && context.t('HaveImage')}
+              {chat.unreadCount > 0 && chat.lastMessage.type === 'call' && context.t('HaveCall')}
+              {chat.unreadCount === 0 && chat.lastMessage.text}
             </Text>
           </View>
           <View style={_styles.information}>
