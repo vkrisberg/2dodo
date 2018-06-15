@@ -8,23 +8,36 @@ export const ChatChosen = {
 export default (theme) => {
   return StyleSheet.create({
     container: {
-      width: 340,
+      width: sizes.windowWidth,
+      paddingHorizontal: '7%',
       height: 50,
       marginVertical: 8,
       marginHorizontal: 'auto',
       flexDirection: 'row',
     },
 
+    checkboxBlock: {
+      justifyContent: 'center',
+      marginRight: 13,
+    },
+
     image: {
       width: 50,
       height: 50,
+      position: 'relative',
       flexShrink: 0,
       borderRadius: 50,
-      marginLeft: 10,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: colors[theme].blue,
       overflow: 'hidden',
+    },
+
+    avatarBg: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
     },
 
     avatar: {
@@ -40,9 +53,8 @@ export default (theme) => {
     },
 
     body: {
+      flex: 1,
       marginLeft: 15,
-      flexGrow: 0,
-      width: 205,
     },
 
     name: {
