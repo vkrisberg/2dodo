@@ -8,6 +8,18 @@ import {themeEnum} from '../../../../enums';
 import {colors, weights} from '../../../../styles';
 import styles from './styles';
 
+const validate = (values) => {
+  const errors = {}
+
+  if (!values.login) {
+    errors.login = 'Required'
+  } else if (!/^\w+$/.test(values.login)) {
+    errors.username = 'Login error'
+  }
+
+  return errors
+};
+
 class RegistrationLoginForm extends Component {
 
   static propTypes = {
@@ -44,6 +56,10 @@ class RegistrationLoginForm extends Component {
           autoCorrect={false}/>
       );
     }
+  };
+
+  renderField = () => {
+
   };
 
   render() {
@@ -105,5 +121,6 @@ class RegistrationLoginForm extends Component {
 export default reduxForm({
   form: 'registration',
   destroyOnUnmount: false,
-  forceUnregisterOnUnmount: true
+  forceUnregisterOnUnmount: true,
+  validate,
 })(RegistrationLoginForm);

@@ -20,6 +20,8 @@ import {colors, sizes} from '../../styles';
 import CONFIG from '../../config';
 import storageEnum from '../../enums/storage-enum';
 
+const loginRegexp = /^\w+(@[\w\.\-]+)?$/;
+
 class Login extends Component {
 
   static propTypes = {
@@ -44,6 +46,12 @@ class Login extends Component {
     this.realm = services.getRealm();
   }
 
+  componentDidUpdate() {
+    if (this.state.errors.login || this.state.errors.password) {
+      setTimeout(() => this.setState({errors: {}}), 2000);
+    }
+  }
+
   wsConnect = ({deviceId, hostname, user, keys, password}) => {
     services.websocketConnect({
       deviceId,
@@ -58,6 +66,7 @@ class Login extends Component {
     const {dispatch, account} = this.props;
     const login = (data.login || '').trim().toLowerCase();
     const password = (data.password || '').trim();
+    // const createNewKey = data.createNewKey || false;
 
     this.setState({
       errors: {
@@ -67,6 +76,16 @@ class Login extends Component {
     });
 
     if (!login || !password) {
+      return false;
+    }
+
+    if (!loginRegexp.test(login)) {
+      this.setState({
+        errors: {
+          login: true,
+          password: false,
+        },
+      });
       return false;
     }
 
