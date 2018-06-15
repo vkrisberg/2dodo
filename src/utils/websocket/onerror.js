@@ -7,5 +7,6 @@ export default async function ({error, store, navigation}) {
   console.log('websocket error');
   AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
   AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
+  AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
   navigation.navigate(routeEnum.Login);
 };

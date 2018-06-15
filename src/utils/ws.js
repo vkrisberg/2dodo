@@ -10,15 +10,19 @@ let _navigation = null;
  * @param deviceId
  * @param username
  * @param password
+ * @param hashKey
  * @returns {{Authorization: string}}
  */
-function getHeaders({deviceId, username, password}) {
-  const wsUsername = `${username}@${deviceId}`;
-  const wsUsernameBase64 = codeclib.base64Encode(
-    codeclib.utf8Decode(wsUsername)
+function getHeaders({deviceId, username, password, hashKey}) {
+  const usernameDevice = `${username}@${deviceId}`;
+  const usernameBase64 = codeclib.base64Encode(
+    codeclib.utf8Decode(usernameDevice)
+  );
+  const passwordBase64 = codeclib.base64Encode(
+    codeclib.utf8Decode(password)
   );
   const basicAuth = codeclib.base64Encode(
-    codeclib.utf8Decode(`${wsUsernameBase64}:${password}`)
+    codeclib.utf8Decode(`${usernameBase64}:${passwordBase64}:${hashKey}`)
   );
 
   return {
@@ -46,11 +50,12 @@ const init = function ({store, navigation}) {
  * @param deviceId
  * @param username
  * @param password
+ * @param hashKey
  * @param url
  * @returns {*}
  */
-const connect = function ({deviceId, username, password, url}) {
-  const wsHeaders = getHeaders({deviceId, username, password});
+const connect = function ({deviceId, username, password, hashKey, url}) {
+  const wsHeaders = getHeaders({deviceId, username, password, hashKey});
 
   _ws = new WebSocket(url, '', {headers: wsHeaders});
 

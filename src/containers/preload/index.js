@@ -33,11 +33,12 @@ class Preload extends Component {
       navigation.replace(routeEnum.Messages);
     } else {
       dispatch(accountActions.remind())
-        .then(() => {
-          const {deviceId, user, keys} = this.props.account;
-          dispatch(accountActions.login({deviceId, user, keys}))
+        .then((data) => {
+          const {deviceId, hostname, user, keys} = this.props.account;
+          const password = data.password;
+          dispatch(accountActions.login({deviceId, hostname, user, keys}))
             .then(() => {
-              this.wsConnect({deviceId, user, keys});
+              this.wsConnect({deviceId, hostname, user, keys, password});
             })
             .catch((error) => {
               console.log('login error', error);
@@ -54,11 +55,13 @@ class Preload extends Component {
     }
   }
 
-  wsConnect = ({deviceId, user, keys}) => {
+  wsConnect = ({deviceId, hostname, user, keys, password}) => {
     services.websocketConnect({
       deviceId,
+      hostname,
       username: user.username,
-      password: keys.hashKey,
+      password,
+      hashKey: keys.hashKey,
     });
   };
 
