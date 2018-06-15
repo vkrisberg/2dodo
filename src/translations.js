@@ -53,6 +53,11 @@ const translations = {
     'ChooseFromGallery': 'Choose from gallery',
     'FullscreenPhoto': 'Fullscreen photo',
     'DeletePhoto': 'Delete photo',
+    'HaveMessage': 'У вас новое сообщение...',
+    'HaveVoiceMessage': 'Отправил(а) вам аудиосообщение',
+    'HaveVideo': 'Отправил(а) вам видео...',
+    'HaveImage': 'Отправил(а) вам изображение...',
+    'HaveCall': 'Пропущенный звонок',
   },
   'en': {
     // Events
@@ -108,6 +113,11 @@ const translations = {
     'ChooseFromGallery': 'Choose from gallery',
     'FullscreenPhoto': 'Fullscreen photo',
     'DeletePhoto': 'Delete photo',
+    'HaveMessage': 'You have a new message...',
+    'HaveVoiceMessage': 'Send your a voice message',
+    'HaveVideo': 'Send your a video...',
+    'HaveImage': 'Send your an image...',
+    'HaveCall': 'Missed call',
   },
 };
 

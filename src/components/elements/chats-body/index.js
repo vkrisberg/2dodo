@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {View} from 'react-native';
 import PropTypes from 'prop-types';
 
 import {EmptyFavoritsView, BoldText} from './styles';
@@ -8,6 +9,7 @@ import {ChatItem} from '../../../components/elements';
 export default class ChatsBody extends Component {
 
   static propTypes = {
+    context: PropTypes.object,
     chatList: PropTypes.array.isRequired,
     onChatPress: PropTypes.func,
   };
@@ -24,11 +26,11 @@ export default class ChatsBody extends Component {
     }
 
     this.setState({chosenMessage: [...chosenMessages, message]});
-  }
+  };
 
   isChatChosen = (message) => {
     return this.state.chosenMessages.find(item => item === message);
-  }
+  };
 
   onChatPress(chat) {
     return () => {
@@ -37,18 +39,25 @@ export default class ChatsBody extends Component {
   }
 
   render() {
-    const {chatList} = this.props;
+    const {chatList, context} = this.props;
 
     if (chatList.length) {
-      return chatList.map((chat, index) => (
-        <ChatItem
-          key={index}
-          chat={chat}
-          checked={this.isChatChosen(chat)}
-          onPress={this.onChatPress(chat)}
-          onCheckboxPress={() => this.onCheckboxPress(chat)}
-        />
-      ));
+      return(
+        <View style={{marginVertical: 8}}>
+          {
+            chatList.map((chat, index) => (
+              <ChatItem
+                key={index}
+                context={context}
+                chat={chat}
+                checked={this.isChatChosen(chat)}
+                onPress={this.onChatPress(chat)}
+                onCheckboxPress={() => this.onCheckboxPress(chat)}
+              />
+            ))
+          }
+        </View>
+      );
     }
 
     return (

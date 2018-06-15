@@ -1,32 +1,27 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity, View, Image, Text} from 'react-native';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
 import Checkbox from '../checkbox-svg';
 import {AvatarIcon} from '../../icons';
-import {
-  Chat,
-  ChatChosen,
-  ChatImage,
-  ChatBody,
-  ChatName,
-  ChatMessage,
-  ChatMessageDate,
-  ChatNotReadenMessage,
-  ChatNotReadenMessageText,
-  ChatInformation
-} from './styles';
+import styles, {ChatChosen} from './styles';
+import {themeEnum} from '../../../enums';
 
 export default class ChatItem extends Component {
 
   static propTypes = {
+    theme: PropTypes.string,
+    context: PropTypes.object,
     chat: PropTypes.object.isRequired,
     checked: PropTypes.bool,
     onCheckboxPress: PropTypes.func,
     onPress: PropTypes.func,
     onLongPress: PropTypes.func,
+  };
+
+  static defaultProps = {
+    theme: themeEnum.light,
   };
 
   state = {
@@ -41,40 +36,61 @@ export default class ChatItem extends Component {
     return !this.state.chosen && this.setState({chosen: true});
   };
 
+  getInitials = (name) => {
+    const nameArr = name.split(' ');
+    let initials = [];
+    nameArr.map( item =>
+      initials.push(item[0].toUpperCase())
+    );
+    return initials.join('');
+  };
+
   render() {
-    const {chat, checked, onCheckboxPress, onPress} = this.props;
+    const {theme, chat, checked, onCheckboxPress, onPress, context} = this.props;
+    const _styles = styles(theme);
+    const isToday = moment(chat.dateUpdate).format('DD.MM.YY') === moment().format('DD.MM.YY');
 
     return (
       <TouchableOpacity onPress={onPress} onLongPress={this.onLongPress}>
-        <Chat>
+        <View style={_styles.avatarContainer}>
           { this.state.chosen && <Checkbox
             checked={checked}
             style={ChatChosen}
             onPress={onCheckboxPress}
           />
           }
-          <ChatImage>
-            <AvatarIcon/>
-          </ChatImage>
-          <ChatBody>
-            <ChatName>
+          <View style={_styles.image}>
+            {chat.avatar.length > 0 && <Image source={{uri: chat.avatar}} style={_styles.avatar}/>}
+            {!chat.avatar.length && chat.name && <Text style={_styles.avatarInitials}>{this.getInitials(chat.name)}</Text>}
+            {!chat.name && !chat.avatar.length && <AvatarIcon/>}
+          </View>
+          <View style={_styles.body}>
+            <Text style={_styles.name}>
               {chat.name}
-            </ChatName>
-            <ChatMessage>
-              You have a message...
-            </ChatMessage>
-          </ChatBody>
-          <ChatInformation>
-            <ChatMessageDate>
-              {moment().format('HH:mm')}
-            </ChatMessageDate>
-            <ChatNotReadenMessage>
-              <ChatNotReadenMessageText>
-                {chat.unreadCount}
-              </ChatNotReadenMessageText>
-            </ChatNotReadenMessage>
-          </ChatInformation>
-        </Chat>
+            </Text>
+            <Text style={_styles.limitText}>
+              {chat.unreadCount > 0 && chat.lastMessage.type === 'text' && <Text>{context.t('HaveMessage')}</Text>}
+              {chat.unreadCount > 0 && chat.lastMessage.type === 'audio' && <Text>{context.t('HaveVoiceMessage')}</Text>}
+              {chat.unreadCount > 0 && chat.lastMessage.type === 'video' && <Text>{context.t('HaveVideo')}</Text>}
+              {chat.unreadCount > 0 && chat.lastMessage.type === 'image' && <Text>{context.t('HaveImage')}</Text>}
+              {chat.unreadCount > 0 && chat.lastMessage.type === 'call' && <Text>{context.t('HaveCall')}</Text>}
+              {chat.unreadCount === 0 && <Text>{chat.lastMessage.text}</Text>}
+            </Text>
+          </View>
+          <View style={_styles.information}>
+            <Text style={_styles.text}>
+              {isToday && moment(chat.dateUpdate).format('HH:mm')}
+              {!isToday && moment(chat.dateUpdate).format('DD.MM.YY')}
+            </Text>
+            {chat.unreadCount > 0 &&
+              <View style={_styles.notReadenMessage}>
+                <Text style={_styles.notReadenMessageText}>
+                  {chat.unreadCount}
+                </Text>
+              </View>
+            }
+          </View>
+        </View>
       </TouchableOpacity>
     );
   }
