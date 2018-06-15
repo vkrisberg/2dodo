@@ -7,6 +7,7 @@ import Checkbox from '../checkbox-svg';
 import {AvatarIcon} from '../../icons';
 import styles, {ChatChosen} from './styles';
 import {themeEnum} from '../../../enums';
+import avatarBgIcon from './img/circle.png';
 
 export default class ChatItem extends Component {
 
@@ -53,13 +54,16 @@ export default class ChatItem extends Component {
     return (
       <TouchableOpacity onPress={onPress} onLongPress={this.onLongPress}>
         <View style={_styles.container}>
-          { this.state.chosen && <Checkbox
-            checked={checked}
-            style={ChatChosen}
-            onPress={onCheckboxPress}
-          />
+          { this.state.chosen && <View style={_styles.checkboxBlock}>
+            <Checkbox
+              checked={checked}
+              style={ChatChosen}
+              onPress={onCheckboxPress}
+            />
+          </View>
           }
           <View style={_styles.image}>
+            <Image source={avatarBgIcon} style={_styles.avatarBg}/>
             {chat.avatar.length > 0 && <Image source={{uri: chat.avatar}} style={_styles.avatar}/>}
             {!chat.avatar.length && chat.name && <Text style={_styles.avatarInitials}>{this.getInitials(chat.name)}</Text>}
             {!chat.name && !chat.avatar.length && <AvatarIcon/>}
@@ -68,7 +72,7 @@ export default class ChatItem extends Component {
             <Text style={_styles.name}>
               {chat.name}
             </Text>
-            <Text style={_styles.limitText} numberOfLines={1} ellipsizeMode="tail">
+            <Text style={_styles.limitText} numberOfLines={2} ellipsizeMode="tail">
               {chat.unreadCount > 0 && chat.lastMessage.type === 'text' && context.t('HaveMessage')}
               {chat.unreadCount > 0 && chat.lastMessage.type === 'audio' && context.t('HaveVoiceMessage')}
               {chat.unreadCount > 0 && chat.lastMessage.type === 'video' && context.t('HaveVideo')}

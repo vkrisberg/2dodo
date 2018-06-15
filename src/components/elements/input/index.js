@@ -37,9 +37,17 @@ export default class Input extends PureComponent {
     focused: false,
   };
 
-  handleFocus = () => this.setState({focused: true});
+  handleFocus = () => {
+    const {input} = this.props;
+    this.setState({focused: true});
+    input.onFocus && input.onFocus();
+  };
 
-  handleBlur = () => this.setState({focused: false});
+  handleBlur = () => {
+    const {input} = this.props;
+    this.setState({focused: false});
+    input.onBlur && input.onBlur();
+  };
 
   render() {
     let {
