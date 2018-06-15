@@ -14,7 +14,7 @@ const validate = (values) => {
   if (!values.login) {
     errors.login = 'Required'
   } else if (!/^\w+$/.test(values.login)) {
-    errors.username = 'Login error'
+    errors.login = 'LoginRegexpError'
   }
 
   return errors
@@ -58,8 +58,28 @@ class RegistrationLoginForm extends Component {
     }
   };
 
-  renderField = () => {
+  renderField = (props) => {
+    const {meta: {touched, error}} = props;
+    const {theme, context} = this.props;
+    const errors = [];
 
+    if (touched && error) {
+      errors.push({
+        path: props.input.name,
+        code: error,
+        message: context.t(error),
+      });
+    }
+    console.log('RENDER', errors);
+    return (
+      <View>
+        <Input
+          {...props}
+          theme={theme}
+          error={touched && error}/>,
+        <FieldError theme={theme} errors={errors} path={props.input.name}/>
+      </View>
+    );
   };
 
   render() {
@@ -82,7 +102,7 @@ class RegistrationLoginForm extends Component {
           <View style={_styles.inputContainer}>
             <Field
               name="login"
-              component={Input}
+              component={this.renderField}
               placeholder={context.t('CreateLogin')}
               autoCapitalize={'none'}
               autoCorrect={false}/>

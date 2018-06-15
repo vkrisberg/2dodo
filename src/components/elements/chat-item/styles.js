@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import {colors, fonts, weights} from "../../../styles";
 import {StyleSheet} from "react-native";
 
