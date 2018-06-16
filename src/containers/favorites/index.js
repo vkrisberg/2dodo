@@ -15,7 +15,7 @@ import {
   BoldText
 } from './styles';
 
-export default class Favorits extends Component {
+export default class Favorites extends Component {
   constructor(props) {
     super(props);
 

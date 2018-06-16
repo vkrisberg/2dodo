@@ -1,10 +1,11 @@
-import {createBottomTabNavigator} from 'react-navigation';
 import React from 'react';
+import {createBottomTabNavigator} from 'react-navigation';
+import {colors, weights, fonts} from './styles';
 
 import {
   Contacts,
   Groups,
-  Favorits,
+  Favorites,
   Settings,
   Messages
 } from './containers';
@@ -20,61 +21,61 @@ export default createBottomTabNavigator({
   Contacts: {
     screen: Contacts,
     navigationOptions: {
-      tabBarIcon: ({focused}) => <ContactsIcon active={focused}/>
+      tabBarIcon: ({focused}) => <ContactsIcon active={focused}/>,
+      tabBarLabel: 'Contacts',
     }
   },
-  Favorits: {
-    screen: Favorits,
+  Favorites: {
+    screen: Favorites,
     navigationOptions: {
-      tabBarIcon: ({focused}) => <FavoritsIcon active={focused}/>
+      tabBarIcon: ({focused}) => <FavoritsIcon active={focused}/>,
+      tabBarLabel: 'Favorites',
     }
   },
   Messages: {
     screen: Messages,
     navigationOptions: {
-      tabBarIcon: ({focused}) => <MessagesIcon active={focused}/>
+      tabBarIcon: ({focused}) => <MessagesIcon active={focused}/>,
+      tabBarLabel: 'Messages',
     }
   },
   Groups: {
     screen: Groups,
     navigationOptions: {
-      tabBarIcon: ({focused}) => <GroupsIcon active={focused}/>
+      tabBarIcon: ({focused}) => <GroupsIcon active={focused}/>,
+      tabBarLabel: 'Groups',
     }
   },
   Settings: {
     screen: Settings,
     navigationOptions: {
-      tabBarIcon: ({focused}) => <SettingsIcon active={focused}/>
+      tabBarIcon: ({focused}) => <SettingsIcon active={focused}/>,
+      tabBarLabel: 'Settings',
     }
   }
 }, {
   initialRouteName: 'Messages',
-  tabBarPosition: 'bottom',
   tabBarOptions: {
     showIcon: true,
-    activeTintColor: '#68a7ff',
-    inactiveTintColor: '#a4a7ae',
+    activeTintColor: colors.light.tabBarActiveTint,
+    activeBackgroundColor: colors.light.tabBarActiveBg,
+    inactiveTintColor: colors.light.tabBarInactiveTint,
+    inactiveBackgroundColor: colors.light.tabBarInactiveBg,
     upperCaseLabel: false,
     style: {
-      backgroundColor: '#ffffff',
       borderTopWidth: 1,
-      borderTopColor: '#f2f5fa',
-      height: 60
+      borderTopColor: colors.light.tabBarTopBorder,
+      height: 55,
     },
     labelStyle: {
-      fontSize: 11,
-      position: 'absolute',
-      width: 107,
-      bottom: 0
-    },
-    indicatorStyle: {
-      backgroundColor: 'white'
+      fontFamily: fonts.main,
+      fontSize: 12,
+      fontWeight: weights.medium,
+      marginBottom: 5,
     },
     tabStyle: {
-      flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
-      paddingBottom: 25
     },
     iconStyle: {
       height: 27

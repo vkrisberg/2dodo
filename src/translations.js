@@ -1,5 +1,11 @@
 const translations = {
   'ru': {
+    // Main menu
+    'Contacts': 'Контакты',
+    'Favorites': 'Избранное',
+    'Messages': 'Сообщения',
+    'Groups': 'Группы',
+    'Settings': 'Настройки',
     // Events
     'SkipAllFeatures': 'Skip all features',
     // Login
@@ -15,10 +21,10 @@ const translations = {
     'ForgotPassword': 'Восстановление пароля',
     'FirstTimeInApp': 'Первый раз в приложении?',
     'KeysImport': 'Импортировать ключи',
-    'EnterKey': 'Enter key',
-    'ReadQrCode': 'Read QR-code',
-    'RestoreFromBackup': 'Restore from backup',
-    'Cancel': 'Cancel',
+    'EnterKeyAction': 'Ввести ключ',
+    'ReadQrCode': 'Прочитать QR-код',
+    'RestoreFromBackup': 'Восстановить из резервной копии',
+    'Cancel': 'Отмена',
     // Registration
     'Registration': 'Регистрация',
     'RegistrationLoginDescription': 'Во время регистрации приложение создаст ключ безопасности для восстановления',
@@ -34,7 +40,6 @@ const translations = {
     'GoToApp': 'В приложение',
     'SkipThisStep': 'Пропустить этот шаг',
     // Settings
-    'Settings': 'Настройки',
     'SetYourPhoto': 'Выберите ваш аватар',
     'DayLight': 'Дневная',
     'DarkNight': 'Ночная',
@@ -61,8 +66,20 @@ const translations = {
     // Errors
     'Required': 'Required',
     'LoginRegexpError': 'Login must be minimum 2 characters long and only contain a-z, 0-9 and _',
+    'PasswordRegexpError': 'Password must be minimum 6 characters long',
+    'RepeatPasswordNotMatch': 'Passwords do not match',
+    'ServerRegexpError': 'Invalid server address',
+    'EmailRegexpError': 'Invalid email address',
+    'PhoneRegexpError': 'Invalid phone number',
+    'NameRegexpError': 'Only letters, numbers and dashes are allowed',
   },
   'en': {
+    // Main menu
+    'Contacts': 'Contacts',
+    'Favorites': 'Favorites',
+    'Messages': 'Messages',
+    'Groups': 'Groups',
+    'Settings': 'Settings',
     // Events
     'SkipAllFeatures': 'Skip all features',
     // Login
@@ -78,7 +95,7 @@ const translations = {
     'ForgotPassword': 'Forgot password',
     'FirstTimeInApp': 'First time in app?',
     'KeysImport': 'Keys import',
-    'EnterKey': 'Enter key',
+    'EnterKeyAction': 'Enter key',
     'ReadQrCode': 'Read QR-code',
     'RestoreFromBackup': 'Restore from backup',
     'Cancel': 'Cancel',
@@ -97,7 +114,6 @@ const translations = {
     'GoToApp': 'Go to app',
     'SkipThisStep': 'Skip this step',
     // Settings
-    'Settings': 'Settings',
     'SetYourPhoto': 'Set your photo',
     'DayLight': 'Day light',
     'DarkNight': 'Dark night',
@@ -124,6 +140,12 @@ const translations = {
     // Errors
     'Required': 'Required',
     'LoginRegexpError': 'Login must be minimum 2 characters long and only contain a-z, 0-9 and _',
+    'PasswordRegexpError': 'Password must be minimum 6 characters long',
+    'RepeatPasswordNotMatch': 'Passwords do not match',
+    'ServerRegexpError': 'Invalid server address',
+    'EmailRegexpError': 'Invalid email address',
+    'PhoneRegexpError': 'Invalid phone number',
+    'NameRegexpError': 'Only letters, numbers and dashes are allowed',
   },
 };
 

@@ -3,9 +3,10 @@ import {View, KeyboardAvoidingView} from 'react-native';
 import {Field, reduxForm} from 'redux-form';
 import PropTypes from 'prop-types';
 
-import {TextLabel, Input, Button, Checkbox, SkipButton} from '../../../elements';
-import {themeEnum} from '../../../../enums';
+import {TextLabel, Input, Button, Checkbox, SkipButton, FieldError} from '../../../elements';
+import {themeEnum, phonePrefixEnum} from '../../../../enums';
 import {colors, weights} from '../../../../styles';
+import validate from '../validate';
 import styles from './styles';
 
 class RegistrationEmailForm extends Component {
@@ -21,11 +22,35 @@ class RegistrationEmailForm extends Component {
     theme: themeEnum.light,
   };
 
+  renderField = (props) => {
+    const {meta: {touched, error}} = props;
+    const {theme, context} = this.props;
+    const errors = [];
+
+    if (touched && error) {
+      errors.push({
+        path: props.input.name,
+        code: error,
+        message: context.t(error),
+      });
+    }
+
+    return (
+      <View>
+        <Input
+          {...props}
+          theme={theme}
+          error={touched && error}/>,
+        <FieldError theme={theme} errors={errors} path={props.input.name}/>
+      </View>
+    );
+  };
+
   renderPhonePrefix = (theme, _styles) => {
     return (
       <View style={_styles.phonePrefixContainer}>
         <TextLabel theme={theme}
-                   color={colors[theme].blackText}>RUS   +7</TextLabel>
+                   color={colors[theme].blackText}>RUS   {phonePrefixEnum.rus}</TextLabel>
         <TextLabel theme={theme}
                    color={colors[theme].grayPlaceholder} style={_styles.phonePrefixPipe}>|</TextLabel>
       </View>
@@ -51,7 +76,7 @@ class RegistrationEmailForm extends Component {
           <View style={_styles.inputContainer}>
             <Field
               name="email"
-              component={Input}
+              component={this.renderField}
               placeholder={context.t('Email')}
               keyboardType={'email-address'}
               autoCapitalize={'none'}
@@ -60,7 +85,7 @@ class RegistrationEmailForm extends Component {
               {this.renderPhonePrefix(theme, _styles)}
               <Field
                 name="phone"
-                component={Input}
+                component={this.renderField}
                 placeholder={context.t('Phone')}
                 style={_styles.phoneInput}
                 keyboardType={'numeric'}
@@ -90,5 +115,6 @@ class RegistrationEmailForm extends Component {
 export default reduxForm({
   form: 'registration',
   destroyOnUnmount: false,
-  forceUnregisterOnUnmount: true
+  forceUnregisterOnUnmount: true,
+  validate,
 })(RegistrationEmailForm);

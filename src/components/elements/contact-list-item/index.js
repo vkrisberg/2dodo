@@ -14,7 +14,7 @@ import {
   ContactMessage
 } from './styles';
 
-class ContactItem extends Component {
+class ContactListItem extends Component {
 
   static propTypes = {
     contact: PropTypes.object.isRequired,
@@ -51,4 +51,4 @@ class ContactItem extends Component {
   }
 }
 
-export default connect()(ContactItem);
+export default connect()(ContactListItem);

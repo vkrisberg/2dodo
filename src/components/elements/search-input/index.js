@@ -41,7 +41,7 @@ export default class SearchInput extends Component {
     return (
       <SearchInputView>
         <IconContainer>
-          <SearchIcon />
+          <SearchIcon/>
         </IconContainer>
         {!isFocused && !value && <StyledText>{this.props.placeholder}</StyledText>}
         <InputView>

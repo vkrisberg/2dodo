@@ -1,118 +1,17 @@
-import React, {PureComponent} from 'react';
-import {ScrollView, Text, TouchableWithoutFeedback} from 'react-native';
+import React, {Component} from 'react';
+import {View, Text, TouchableWithoutFeedback} from 'react-native';
 import {connect} from 'react-redux';
-import {withNavigation} from 'react-navigation';
 import PropTypes from 'prop-types';
+import {isEmpty} from 'lodash';
 
+import {MainLayout, BackgroundLayout} from '../../../components/layouts';
+import {ChatList} from '../../../components/lists';
+import {SearchInput, Navbar, NavbarDots, AddButton, ChatListItem} from '../../../components/elements';
 import {chatActions, chatMessageActions, contactActions} from '../../../store/actions';
-import {Wrapper} from '../../../components/layouts';
 import {routeEnum} from '../../../enums';
-import {FavoritsDotsIcon, AddIcon} from '../../../components/icons';
-import {SearchInput, ChatsBody} from '../../../components/elements';
-import {
-  Header,
-  StyledTitle,
-  TitleContainer,
-  AddContact,
-  StyledIcon
-} from '../styles';
+import dummyList from './dummy';
 
-const list = [
-  {
-    id: '', // unique chat id (uuid4)
-    name: 'Gomer Simpson',
-    owner: '',
-    members: [],
-    shortName: '',
-    avatar: '',
-    lastMessage: {
-      id: 'id',
-      chatId: 'id2',
-      type: 'text', // [text, audio, video, image, call]
-      username: 'Kolya',
-      from: 'Gomer Simpson',
-      text: 'Hello!',
-      fileUrl: '',
-      user: {
-        name: 'User',
-        primaryKey: 'username',
-        properties: {
-          username: 'string', // login@hostname
-          nickname: 'string', // login
-          email: 'string',
-          phones: 'string?[]',
-          firstName: 'string?',
-          secondName: 'string?',
-          bio: 'string?',
-          avatar: 'https://st.kp.yandex.net/images/actor_iphone/iphone360_110.jpg',
-          theme: 'string',
-        },
-      },
-      quote: {},
-      status: 'sending', // [sending, send, received, read, error]
-      isOwn: false,
-      isFavorite: false,
-      salt: '',
-      dateSend: null,
-      dateCreate: null,
-      dateUpdate: null,},
-    unreadCount: 1,
-    sort: 0,
-    pin: 0,
-    isMuted: false,
-    isDeleted: false,
-    dateCreate: null,
-    dateUpdate: '2018-06-15 10:00',
-  },
-  {
-    id: '', // unique chat id (uuid4)
-    name: 'Lisa Simpson',
-    owner: '',
-    members: [],
-    shortName: '',
-    avatar: 'http://i.imgur.com/4LClmI1.png',
-    lastMessage: {
-      id: 'id',
-      chatId: 'id2',
-      type: 'text', // [text, audio, video, image, call]
-      username: 'Kolya',
-      from: 'Lisa Simpson',
-      text: 'Lisa how many times do you talk your music is dangerous to the ears!',
-      fileUrl: '',
-      user: {
-        name: 'User',
-        primaryKey: 'username',
-        properties: {
-          username: 'string', // login@hostname
-          nickname: 'string', // login
-          email: 'string',
-          phones: 'string?[]',
-          firstName: 'string?',
-          secondName: 'string?',
-          bio: 'string?',
-          avatar: 'https://st.kp.yandex.net/images/actor_iphone/iphone360_110.jpg',
-          theme: 'string',
-        },
-      },
-      quote: {},
-      status: 'sending', // [sending, send, received, read, error]
-      isOwn: false,
-      isFavorite: false,
-      salt: '',
-      dateSend: null,
-      dateCreate: null,
-      dateUpdate: null,},
-    unreadCount: 0,
-    sort: 0,
-    pin: 0,
-    isMuted: false,
-    isDeleted: false,
-    dateCreate: null,
-    dateUpdate: '2018-06-14 10:00',
-  },
-];
-
-class Messages extends PureComponent {
+class Messages extends Component {
 
   static propTypes = {
     account: PropTypes.object,
@@ -128,11 +27,15 @@ class Messages extends PureComponent {
   };
 
   state = {
-    page: 'chatList', // [chatList, createChat]
+    editMode: false,
+    selected: {},
   };
 
-  componentDidMount() {
+  constructor(props) {
+    super(props);
+  }
 
+  componentDidMount() {
     this.loadChatList();
     this.loadContactList();
     // TODO - remove after tests
@@ -208,32 +111,75 @@ class Messages extends PureComponent {
   };
 
   onChatPress = (chat) => {
+    if (this.state.editMode) {
+      this.onChatCheckboxPress(chat);
+      return;
+    }
+
     this.props.navigation.navigate(routeEnum.PrivateChat, {chat});
   };
 
-  render() {
-    const {chat} = this.props;
+  onChatLongPress = (chat) => {
+    if (!this.state.editMode) {
+      this.setState({
+        selected: {[chat.id]: chat},
+        editMode: true,
+      });
+    }
+  };
+
+  onChatCheckboxPress = (chat) => {
+    if (this.state.editMode) {
+      const selected = {...this.state.selected};
+
+      if (!selected[chat.id]) {
+        selected[chat.id] = chat;
+      } else {
+        delete selected[chat.id];
+      }
+
+      if (isEmpty(selected)) {
+        this.setState({
+          editMode: false,
+          selected: {},
+        });
+        return;
+      }
+
+      this.setState({selected});
+    }
+  };
+
+  renderChatItem = ({item}) => {
+    const {account} = this.props;
 
     return (
-      <Wrapper scrolled>
-        <Header>
-          <TitleContainer width={'60%'}>
-            <StyledIcon>
-              <FavoritsDotsIcon/>
-            </StyledIcon>
-            <StyledTitle marginLeft={30}>
-              Messages
-            </StyledTitle>
-          </TitleContainer>
-          <TouchableWithoutFeedback onPress={this.onCreate}>
-            <AddContact>
-              <AddIcon/>
-            </AddContact>
-          </TouchableWithoutFeedback>
-        </Header>
-        <SearchInput placeholder="Search in chats" onChange={this.searchChats}/>
-        <ChatsBody context={this.context} chatList={list} onChatPress={this.onChatPress}/>
-      </Wrapper>
+      <ChatListItem item={item}
+                    theme={account.user.theme}
+                    context={this.context}
+                    editMode={this.state.editMode}
+                    selectedItems={this.state.selected}
+                    onPress={this.onChatPress}
+                    onLongPress={this.onChatLongPress}
+                    onCheckboxPress={this.onChatCheckboxPress}/>
+    );
+  };
+
+  render() {
+    const {account, chat} = this.props;
+
+    return (
+      <MainLayout netOffline={!account.net.connected}>
+        <BackgroundLayout theme={account.user.theme} padding={10}>
+          <Navbar renderTitle={this.context.t('Messages')}
+                  renderLeft={<NavbarDots/>}
+                  renderRight={<AddButton onPress={this.onCreate}/>}/>
+          <SearchInput placeholder="Search in chats" onChange={this.searchChats}/>
+          <ChatList items={dummyList}
+                    selected={this.state.selected}
+                    renderItem={this.renderChatItem}/>
+        </BackgroundLayout>
+      </MainLayout>
     );
   }
 }
@@ -243,4 +189,4 @@ export default connect(state => ({
   chat: state.chat,
   chatMessage: state.chatMessage,
   contact: state.contact,
-}))(withNavigation(Messages));
+}))(Messages);

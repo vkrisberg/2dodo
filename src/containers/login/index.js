@@ -17,10 +17,9 @@ import {
   LoginStyles,
 } from './styles';
 import {colors, sizes} from '../../styles';
-import CONFIG from '../../config';
 import storageEnum from '../../enums/storage-enum';
-
-const loginRegexp = /^\w+(@[\w\.\-]+)?$/;
+import {validation} from '../../utils';
+import CONFIG from '../../config';
 
 class Login extends Component {
 
@@ -79,7 +78,7 @@ class Login extends Component {
       return false;
     }
 
-    if (!loginRegexp.test(login)) {
+    if (!validation.usernameRegex.test(login)) {
       this.setState({
         errors: {
           login: true,
@@ -129,7 +128,7 @@ class Login extends Component {
 
   keysImport = () => {
     const {t} = this.context;
-    const options = [t('EnterKey'), t('ReadQrCode'), t('RestoreFromBackup'), t('Cancel')];
+    const options = [t('EnterKeyAction'), t('ReadQrCode'), t('RestoreFromBackup'), t('Cancel')];
     const cancelButtonIndex = -1;
     const destructiveButtonIndex = 3;
 
@@ -150,7 +149,7 @@ class Login extends Component {
 
     return (
       <MainLayout netOffline={!account.net.connected}>
-        <BackgroundLayout background="login">
+        <BackgroundLayout background="login" barStyle="light-content">
           <DismissKeyboardLayout>
             <KeyboardAvoidingView style={LoginStyles.container} behavior="position" enabled>
               <Logo style={LoginStyles.logo}/>

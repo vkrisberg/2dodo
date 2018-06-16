@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 
 export const SearchInputView = styled.View`
-  width: 92%;
-  height: 35px;
+  width: 100%;
+  height: 30;
   background-color: #f2f3f5;
   padding: 0 4%;
-  margin-top: -20;
-  border-radius: 70px;
+  margin-top: 8;
+  border-radius: 30;
   align-items: center;
   justify-content: center;
 `;
@@ -23,10 +23,11 @@ export const InputView = styled.View`
 `;
 
 export const StyledInput = styled.TextInput`
-  height: 35;
+  height: 30;
   width: 100%;
 `;
 
 export const StyledText = styled.Text`
   position: absolute;
+  color: #898f9c;
 `;

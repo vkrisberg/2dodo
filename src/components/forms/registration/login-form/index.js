@@ -6,19 +6,8 @@ import PropTypes from 'prop-types';
 import {Button, Checkbox, Input, TextLabel, FieldError} from '../../../elements';
 import {themeEnum} from '../../../../enums';
 import {colors, weights} from '../../../../styles';
+import validate from '../validate';
 import styles from './styles';
-
-const validate = (values) => {
-  const errors = {}
-
-  if (!values.login) {
-    errors.login = 'Required'
-  } else if (!/^\w+$/.test(values.login)) {
-    errors.login = 'LoginRegexpError'
-  }
-
-  return errors
-};
 
 class RegistrationLoginForm extends Component {
 
@@ -40,21 +29,21 @@ class RegistrationLoginForm extends Component {
     checked: false,
   };
 
+  componentWillUnmount() {
+    this.props.reset();
+  }
+
   toggleServerInput = (checked) => {
     this.setState({checked});
+    if (!checked) {
+      this.props.change('server', '');
+    }
   };
 
-  renderServerInput = (_styles) => {
-    if (this.state.checked) {
-      return (
-        <Field
-          name="server"
-          component={Input}
-          placeholder={this.props.defaultServer}
-          style={_styles.serverInput}
-          autoCapitalize={'none'}
-          autoCorrect={false}/>
-      );
+  onSubmit = () => {
+    if (!this.props.handleSubmit()) {
+      this.props.change('page', 1);
+      this.props.untouch('email');
     }
   };
 
@@ -70,7 +59,7 @@ class RegistrationLoginForm extends Component {
         message: context.t(error),
       });
     }
-    console.log('RENDER', errors);
+
     return (
       <View>
         <Input
@@ -82,10 +71,23 @@ class RegistrationLoginForm extends Component {
     );
   };
 
+  renderServerInput = (_styles) => {
+    if (this.state.checked) {
+      return (
+        <Field
+          name="server"
+          component={this.renderField}
+          placeholder={this.props.defaultServer}
+          style={_styles.serverInput}
+          autoCapitalize={'none'}
+          autoCorrect={false}/>
+      );
+    }
+  };
+
   render() {
-    const {theme, context, errors} = this.props;
+    const {theme, context} = this.props;
     const _styles = styles(theme);
-    // const _errors = [{path: 'login', message: 'This name already used in app'}];
 
     return (
       <View style={_styles.container}>
@@ -106,23 +108,20 @@ class RegistrationLoginForm extends Component {
               placeholder={context.t('CreateLogin')}
               autoCapitalize={'none'}
               autoCorrect={false}/>
-            <FieldError theme={theme} errors={errors} path="login"/>
             <Field
               name="password"
-              component={Input}
+              component={this.renderField}
               placeholder={context.t('Password')}
               secureTextEntry={true}
               autoCapitalize={'none'}
               autoCorrect={false}/>
-            <FieldError theme={theme} errors={errors} path="password"/>
             <Field
               name="repeatPassword"
-              component={Input}
+              component={this.renderField}
               placeholder={context.t('RepeatPassword')}
               secureTextEntry={true}
               autoCapitalize={'none'}
               autoCorrect={false}/>
-            <FieldError theme={theme} errors={errors} path="repeatPassword"/>
           </View>
           <View style={_styles.checkboxContainer}>
             <TextLabel theme={theme} color={colors[theme].blackText}>{context.t('UseSpecialServerParams')}</TextLabel>
@@ -130,7 +129,7 @@ class RegistrationLoginForm extends Component {
           </View>
           {this.renderServerInput(_styles)}
           <View style={_styles.buttonContainer}>
-            <Button onPress={this.props.handleSubmit}>{context.t('Continue')}</Button>
+            <Button onPress={this.onSubmit}>{context.t('Continue')}</Button>
           </View>
         </KeyboardAvoidingView>
       </View>

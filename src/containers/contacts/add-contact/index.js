@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import Wrapper from '../../../components/layouts/wrapper';
 import {ArrowIcon} from '../../../components/icons';
 import {SearchInput, Button} from '../../../components/elements';
-import {AddContact as AddContactForm} from '../../../components/forms';
+import {AddContactForm} from '../../../components/forms';
 import {contactActions} from '../../../store/actions';
 import {Header, TitleContainer, StyledTitle} from '../styles';
 import {MessageStyles} from '../../messages/styles';

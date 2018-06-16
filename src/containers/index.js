@@ -3,7 +3,7 @@ export {default as Registration} from './registration';
 export {default as Login} from './login';
 export {default as Preload} from './preload';
 export {default as Events} from './events';
-export {default as Favorits} from './favorits';
+export {default as Favorites} from './favorites';
 export {default as ForgotPassword} from './forgot-password';
 export {default as Groups} from './groups';
 export {default as Main} from './main';

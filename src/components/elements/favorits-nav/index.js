@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-import {favoritsNavEnum} from '../../../enums';
+import {favoritesNavEnum} from '../../../enums';
 import {Tabs} from './styles';
 import {Tab} from '../index';
 
@@ -57,7 +57,7 @@ export default class FavoritsNav extends Component {
 
     return (
       <Tabs>
-        {favoritsNavEnum.map((child, tabIndex) => {
+        {favoritesNavEnum.map((child, tabIndex) => {
           return <Tab
             key={child.text}
             tabIndex={tabIndex}

@@ -10,7 +10,7 @@ export default {
   Messages: 'Messages',
   Groups: 'Groups',
   Settings: 'Settings',
-  Favorits: 'Favorits',
+  Favorites: 'Favorites',
   PasswordApprove: 'PasswordApprove',
   PrivateChat: 'PrivateChat',
   GroupChat: 'GroupChat',

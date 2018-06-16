@@ -54,12 +54,19 @@ const encrypt = (publicKey, data) => {
  * Decrypt
  * @param privateKey
  * @param data
- * @returns {*|PromiseLike<T>|Promise<T>}
+ * @param passphrase
+ * @returns {Promise<Promise<*>|Promise<Object>>}
  */
-const decrypt = (privateKey, data) => {
+const decrypt = async (privateKey, data, passphrase = '') => {
+  const _privateKey = openpgp.readArmoredKey(privateKey).keys[0];
+
+  if (passphrase) {
+    await _privateKey.decrypt(passphrase);
+  }
+
   const options = {
     message: openpgp.readMessage(data),
-    privateKey: openpgp.readArmoredKey(privateKey).keys[0],
+    privateKey: _privateKey,
   };
 
   return openpgp.decrypt(options).then((plaintext) => {

@@ -3,10 +3,25 @@ import {View, KeyboardAvoidingView, TouchableOpacity} from 'react-native';
 import {Field, reduxForm} from 'redux-form';
 import PropTypes from 'prop-types';
 
-import {Button, Input, TextLabel, Avatar, ThemeButton} from '../../../elements';
+import {Button, Input, TextLabel, Avatar, ThemeButton, FieldError} from '../../../elements';
 import {themeEnum} from '../../../../enums';
 import {colors, weights} from '../../../../styles';
+import {validation} from '../../../../utils';
 import styles from './styles';
+
+const validate = (values) => {
+  const errors = {};
+
+  if (values.firstName && !validation.nameRegex.test(values.firstName)) {
+    errors.firstName = 'NameRegexpError';
+  }
+
+  if (values.secondName && !validation.nameRegex.test(values.secondName)) {
+    errors.secondName = 'NameRegexpError';
+  }
+
+  return errors;
+};
 
 class RegistrationSettingsForm extends Component {
 
@@ -30,6 +45,30 @@ class RegistrationSettingsForm extends Component {
       this.props.onTheme && this.props.onTheme(theme);
     };
   }
+
+  renderField = (props) => {
+    const {meta: {touched, error}} = props;
+    const {theme, context} = this.props;
+    const errors = [];
+
+    if (touched && error) {
+      errors.push({
+        path: props.input.name,
+        code: error,
+        message: context.t(error),
+      });
+    }
+
+    return (
+      <View>
+        <Input
+          {...props}
+          theme={theme}
+          error={touched && error}/>,
+        <FieldError theme={theme} errors={errors} path={props.input.name}/>
+      </View>
+    );
+  };
 
   render() {
     const {theme, context, user} = this.props;
@@ -65,12 +104,12 @@ class RegistrationSettingsForm extends Component {
           <View style={_styles.inputContainer}>
             <Field
               name="firstName"
-              component={Input}
+              component={this.renderField}
               placeholder={context.t('Name')}
               autoCorrect={false}/>
             <Field
               name="secondName"
-              component={Input}
+              component={this.renderField}
               placeholder={context.t('SecondName')}
               autoCorrect={false}/>
           </View>
@@ -87,7 +126,8 @@ class RegistrationSettingsForm extends Component {
 }
 
 export default reduxForm({
-  form: 'registration',
+  form: 'settings',
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true,
+  validate,
 })(RegistrationSettingsForm);

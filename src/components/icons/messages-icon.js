@@ -3,16 +3,16 @@ import {Svg, G, Path} from 'react-native-svg';
 
 export default class MessagesIcon extends PureComponent {
   render() {
-    const { active } = this.props;
+    const {active} = this.props;
 
     return (
       <Svg width="36" height="35">
         <G>
           <Path
             strokeWidth="2"
-            stroke={ active ? "rgb(98, 163, 255)" : "rgb(164, 167, 174)"}
+            stroke={active ? 'rgb(98, 163, 255)' : 'rgb(164, 167, 174)'}
             fillOpacity={active ? 1 : 0}
-            fill={active ? "rgb(98, 163, 255)" : "white"}
+            fill={active ? 'rgb(98, 163, 255)' : 'white'}
             d="M18.000,29.517 C15.454,29.517 13.230,28.938 11.394,27.892 C5.836,30.998 4.793,29.201 7.569,24.135
             C6.466,22.273 5.856,19.994 5.856,17.379 C5.856,10.005 10.622,5.241 18.000,5.241 C25.378,5.241 30.144,10.005
             30.144,17.379 C30.144,24.753 25.378,29.517 18.000,29.517 Z"
@@ -20,7 +20,7 @@ export default class MessagesIcon extends PureComponent {
         </G>
         <G width="16" height="6" x="10" y="14">
           <Path
-            fill={active ? "white" : "rgb(169, 172, 178)"}
+            fill={active ? 'white' : 'rgb(169, 172, 178)'}
             d="M13.520,5.034 C12.605,5.034 11.864,4.293 11.864,3.379 C11.864,2.465 12.605,1.724 13.520,1.724
             C14.435,1.724 15.176,2.465 15.176,3.379 C15.176,4.293 14.435,5.034 13.520,5.034 ZM8.000,3.931
             C7.085,3.931 6.344,3.190 6.344,2.276 C6.344,1.362 7.085,0.621 8.000,0.621 C8.915,0.621
