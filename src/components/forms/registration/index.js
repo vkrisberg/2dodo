@@ -12,7 +12,6 @@ export default class RegistrationForm extends PureComponent {
   static propTypes = {
     context: PropTypes.object,
     account: PropTypes.object,
-    onLoginPass: PropTypes.func,
     onRegister: PropTypes.func,
     onSettings: PropTypes.func,
     onAvatar: PropTypes.func,
@@ -53,12 +52,6 @@ export default class RegistrationForm extends PureComponent {
     }
   };
 
-  onLoginPass = (data) => {
-    if (this.props.onLoginPass && this.props.onLoginPass(data)) {
-      this.nextPage();
-    }
-  };
-
   onRegister = (data) => {
     if (this.props.onRegister) {
       this.props.onRegister(data).then((result) => {
@@ -87,7 +80,7 @@ export default class RegistrationForm extends PureComponent {
           <RegistrationLoginForm theme={theme}
                                  context={context}
                                  defaultServer={server}
-                                 onSubmit={this.onLoginPass}/>
+                                 onSubmit={this.nextPage}/>
           <RegistrationEmailForm theme={theme}
                                  context={context}
                                  onSubmit={this.onRegister}/>

@@ -1,14 +1,16 @@
 import React, {Component} from 'react';
-import {Alert} from 'react-native';
+import {Alert, AsyncStorage} from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
-import {MainLayout, BackgroundLayout, DismissKeyboardLayout} from '../../components/layouts';
+import {MainLayout, BackgroundLayout} from '../../components/layouts';
 import {RegistrationForm} from '../../components/forms';
 import {accountActions} from '../../store/actions';
 import {routeEnum, dbEnum} from '../../enums';
 import {services} from '../../utils';
+import storageEnum from '../../enums/storage-enum';
+import CONFIG from '../../config';
 
 class Registration extends Component {
   static propTypes = {
@@ -67,22 +69,18 @@ class Registration extends Component {
     });
   };
 
-  loginPassword = (data) => {
-    if (!data.login) {
-      Alert.alert('Fill login field');
-      return false;
-    }
-
-    return true;
+  wsConnect = ({deviceId, hostname, user, keys, password}) => {
+    services.websocketConnect({
+      deviceId,
+      hostname,
+      username: user.username,
+      password,
+      hashKey: keys.hashKey,
+    });
   };
 
   registration = async (data) => {
     const {account, dispatch} = this.props;
-
-    if (data.email && this.checkEmail(data.email)) {
-      Alert.alert('Invalid email address');
-      return false;
-    }
 
     if (account.loading) {
       Alert.alert('Account is loading');
@@ -90,27 +88,29 @@ class Registration extends Component {
     }
 
     const sendData = {
-      name: (data.nickname || '').trim().toLowerCase(),
+      name: (data.login || '').trim().toLowerCase(),
+      password: data.password,
       email: (data.email || '').trim().toLowerCase(),
       device_id: account.deviceId,
       device_name: account.deviceName,
       platform: account.platform,
       settings: null,
-      firstName: (data.firstName || '').trim(),
-      secondName: (data.secondName || '').trim(),
+      server: data.server,
     };
 
     return await dispatch(accountActions.register(sendData))
-      .then(() => {
+      .then((data) => {
         Alert.alert('Registration success');
         console.log('registration success', this.props.account);
+        AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.username}`, data.username);
+        AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.password}`, data.password);
         this.saveToDatabase();
         return true;
         // this.props.navigation.navigate(routeEnum.Login);
       })
       .catch((error) => {
-        Alert.alert('Registration error');
-        console.log('registration error', error.response.data);
+        Alert.alert(error.response.data.message);
+        console.log('registration error', error.response.status, error.response.data);
         if (error.response.status === 400) {
           // this.props.navigation.navigate(routeEnum.Login);
         }
@@ -118,8 +118,17 @@ class Registration extends Component {
       });
   };
 
-  updateSettings = (data) => {
+  updateSettings = async (data) => {
+    const {account} = this.props;
+    const password = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
 
+    this.wsConnect({
+      deviceId: account.deviceId,
+      hostname: account.hostname,
+      user: account.user,
+      keys: account.keys,
+      password,
+    });
   };
 
   updateAvatar = () => {
@@ -139,10 +148,6 @@ class Registration extends Component {
     this.props.dispatch(accountActions.changeTheme(theme));
   };
 
-  checkEmail = (value) => {
-    return !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value);
-  };
-
   render() {
     const {account} = this.props;
 
@@ -151,7 +156,6 @@ class Registration extends Component {
         <BackgroundLayout background="registration">
           <RegistrationForm context={this.context}
                             account={account}
-                            onLoginPass={this.loginPassword}
                             onRegister={this.registration}
                             onSettings={this.updateSettings}
                             onAvatar={this.updateAvatar}

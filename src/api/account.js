@@ -6,9 +6,9 @@ export default {
     return http.get('/ping/');
   },
 
-  registration: ({name, email, open_key, hash_key, device_id, device_name, platform, settings}) => {
+  registration: ({name, password, email, open_key, hash_key, device_id, device_name, platform, settings}) => {
     const http = services.getHttp();
-    const data = {name, email, open_key, hash_key, device_id, device_name, platform, settings};
+    const data = {name, password, email, open_key, hash_key, device_id, device_name, platform, settings};
     return http.post('/registration/', data);
   },
 

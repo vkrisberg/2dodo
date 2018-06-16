@@ -7,11 +7,13 @@ const initState = {
   authorized: false,
 
   user: {
-    nickname: '', // login
     username: '', // login@hostname
+    nickname: '', // login
+    email: '',
+    phones: [],
     firstName: '',
     secondName: '',
-    email: '',
+    bio: '',
     avatar: '', // in base64
     theme: themeEnum.light, // [light, night]
   },
@@ -152,11 +154,10 @@ export default reducer(initState, {
     const account = {
       user: {
         ...state.user,
+        username: data.username,
         nickname: data.name,
-        username: `${data.name}@${state.hostname}`,
-        firstName: data.firstName,
-        secondName: data.secondName,
         email: data.email,
+        phones: data.phone ? [data.phone] : [],
       },
       keys: {
         publicKey: data.publicKey,

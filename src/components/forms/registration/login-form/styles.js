@@ -23,7 +23,7 @@ export default (theme) => {
 
     serverInput: {
       marginTop: 15,
-      marginBottom: 0,
+      // marginBottom: 0,
     },
 
     inputContainer: {

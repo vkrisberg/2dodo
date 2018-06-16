@@ -109,19 +109,26 @@ export default {
   },
 
   register: (data) => {
-    return async dispatch => {
+    return async (dispatch, getState) => {
       dispatch({type: types.REGISTER});
       try {
-        const {publicKey, privateKey} = await pgplib.generateKey({name: data.name, email: data.email});
+        const {account} = getState();
+        const {publicKey, privateKey} = await pgplib.generateKey({
+          name: data.name,
+          email: data.email,
+          passphrase: data.password,
+        });
         const hashKey = hashlib.hexSha256(privateKey);
         data.publicKey = publicKey;
         data.privateKey = privateKey;
         data.hashKey = hashKey;
         data.open_key = publicKey;
         data.hash_key = hashKey;
+        data.username = `${data.name}@${account.hostname}`;
+        // TODO - parse and apply data.server
         const res = await apiAccount.registration(data);
         dispatch({type: types.REGISTER_SUCCESS, payload: res.data, data});
-        return res.data;
+        return data;
       } catch (e) {
         if (e.response && e.response.status < 500) {
           dispatch({type: types.REGISTER_FAILURE, error: e.response.data, data});

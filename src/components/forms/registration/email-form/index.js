@@ -3,9 +3,10 @@ import {View, KeyboardAvoidingView} from 'react-native';
 import {Field, reduxForm} from 'redux-form';
 import PropTypes from 'prop-types';
 
-import {TextLabel, Input, Button, Checkbox, SkipButton} from '../../../elements';
+import {TextLabel, Input, Button, Checkbox, SkipButton, FieldError} from '../../../elements';
 import {themeEnum} from '../../../../enums';
 import {colors, weights} from '../../../../styles';
+import validate from '../validate';
 import styles from './styles';
 
 class RegistrationEmailForm extends Component {
@@ -19,6 +20,30 @@ class RegistrationEmailForm extends Component {
 
   static defaultProps = {
     theme: themeEnum.light,
+  };
+
+  renderField = (props) => {
+    const {meta: {touched, error}} = props;
+    const {theme, context} = this.props;
+    const errors = [];
+
+    if (touched && error) {
+      errors.push({
+        path: props.input.name,
+        code: error,
+        message: context.t(error),
+      });
+    }
+
+    return (
+      <View>
+        <Input
+          {...props}
+          theme={theme}
+          error={touched && error}/>,
+        <FieldError theme={theme} errors={errors} path={props.input.name}/>
+      </View>
+    );
   };
 
   renderPhonePrefix = (theme, _styles) => {
@@ -51,7 +76,7 @@ class RegistrationEmailForm extends Component {
           <View style={_styles.inputContainer}>
             <Field
               name="email"
-              component={Input}
+              component={this.renderField}
               placeholder={context.t('Email')}
               keyboardType={'email-address'}
               autoCapitalize={'none'}
@@ -60,7 +85,7 @@ class RegistrationEmailForm extends Component {
               {this.renderPhonePrefix(theme, _styles)}
               <Field
                 name="phone"
-                component={Input}
+                component={this.renderField}
                 placeholder={context.t('Phone')}
                 style={_styles.phoneInput}
                 keyboardType={'numeric'}
@@ -90,5 +115,6 @@ class RegistrationEmailForm extends Component {
 export default reduxForm({
   form: 'registration',
   destroyOnUnmount: false,
-  forceUnregisterOnUnmount: true
+  forceUnregisterOnUnmount: true,
+  validate,
 })(RegistrationEmailForm);
