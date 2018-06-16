@@ -3,10 +3,12 @@ import {Svg, Path} from 'react-native-svg';
 
 export default class AddIcon extends PureComponent {
   render() {
+    const {color} = this.props;
+
     return (
-      <Svg width="19" height="20">
+      <Svg width="20" height="20">
         <Path
-          fill="rgb(98, 163, 255)"
+          fill={color || '#62a3ff'}
           d="M17.817,10.966 L10.640,10.966 L10.640,18.137 C10.640,18.747 10.146,19.241 9.536,19.241
           C8.926,19.241 8.432,18.747 8.432,18.137 L8.432,10.966 L1.255,10.966 C0.646,10.966 0.152,10.471
           0.152,9.862 C0.152,9.253 0.646,8.759 1.255,8.759 L8.432,8.759 L8.432,1.587 C8.432,0.977 8.926,0.483

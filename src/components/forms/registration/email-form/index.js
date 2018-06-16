@@ -4,7 +4,7 @@ import {Field, reduxForm} from 'redux-form';
 import PropTypes from 'prop-types';
 
 import {TextLabel, Input, Button, Checkbox, SkipButton, FieldError} from '../../../elements';
-import {themeEnum} from '../../../../enums';
+import {themeEnum, phonePrefixEnum} from '../../../../enums';
 import {colors, weights} from '../../../../styles';
 import validate from '../validate';
 import styles from './styles';
@@ -50,7 +50,7 @@ class RegistrationEmailForm extends Component {
     return (
       <View style={_styles.phonePrefixContainer}>
         <TextLabel theme={theme}
-                   color={colors[theme].blackText}>RUS   +7</TextLabel>
+                   color={colors[theme].blackText}>RUS   {phonePrefixEnum.rus}</TextLabel>
         <TextLabel theme={theme}
                    color={colors[theme].grayPlaceholder} style={_styles.phonePrefixPipe}>|</TextLabel>
       </View>

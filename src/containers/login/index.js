@@ -149,7 +149,7 @@ class Login extends Component {
 
     return (
       <MainLayout netOffline={!account.net.connected}>
-        <BackgroundLayout background="login">
+        <BackgroundLayout background="login" barStyle="light-content">
           <DismissKeyboardLayout>
             <KeyboardAvoidingView style={LoginStyles.container} behavior="position" enabled>
               <Logo style={LoginStyles.logo}/>

@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import RegistrationLoginForm from './login-form';
 import RegistrationEmailForm from './email-form';
 import RegistrationSettingsForm from './settings-form';
+import {phonePrefixEnum} from '../../../enums';
 import {sizes} from '../../../styles';
 
 export default class RegistrationForm extends PureComponent {
@@ -80,9 +81,11 @@ export default class RegistrationForm extends PureComponent {
           <RegistrationLoginForm theme={theme}
                                  context={context}
                                  defaultServer={server}
+                                 initialValues={{page: 0}}
                                  onSubmit={this.nextPage}/>
           <RegistrationEmailForm theme={theme}
                                  context={context}
+                                 initialValues={{phonePrefix: phonePrefixEnum.rus}}
                                  onSubmit={this.onRegister}/>
           <RegistrationSettingsForm theme={theme}
                                     context={context}

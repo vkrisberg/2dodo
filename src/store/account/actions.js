@@ -47,6 +47,7 @@ export default {
         // await AsyncStorage.clear();
         // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
         // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
+        // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
         //---
         const realm = services.getRealm();
         const authorized = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);

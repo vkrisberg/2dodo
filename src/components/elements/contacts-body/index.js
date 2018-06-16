@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import {EmptyContactsView, BoldText} from './styles';
 import {ContactsEmptyIcon} from '../../icons';
-import {ContactItem} from '../index';
+import {ContactListItem} from '../index';
 
 export default class ContactsBody extends Component {
 
@@ -45,7 +45,7 @@ export default class ContactsBody extends Component {
 
     if (contacts.length) {
       return contacts.map((contact, index) => (
-        <ContactItem
+        <ContactListItem
           key={index}
           contact={contact}
           checked={this.isContactChosen(contact)}

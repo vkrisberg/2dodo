@@ -29,10 +29,21 @@ class RegistrationLoginForm extends Component {
     checked: false,
   };
 
+  componentWillUnmount() {
+    this.props.reset();
+  }
+
   toggleServerInput = (checked) => {
     this.setState({checked});
     if (!checked) {
       this.props.change('server', '');
+    }
+  };
+
+  onSubmit = () => {
+    if (!this.props.handleSubmit()) {
+      this.props.change('page', 1);
+      this.props.untouch('email');
     }
   };
 
@@ -118,7 +129,7 @@ class RegistrationLoginForm extends Component {
           </View>
           {this.renderServerInput(_styles)}
           <View style={_styles.buttonContainer}>
-            <Button onPress={this.props.handleSubmit}>{context.t('Continue')}</Button>
+            <Button onPress={this.onSubmit}>{context.t('Continue')}</Button>
           </View>
         </KeyboardAvoidingView>
       </View>

@@ -8,12 +8,11 @@ export const ChatChosen = {
 export default (theme) => {
   return StyleSheet.create({
     container: {
-      width: sizes.windowWidth,
-      paddingHorizontal: '7%',
-      height: 50,
-      marginVertical: 8,
-      marginHorizontal: 'auto',
       flexDirection: 'row',
+      height: 50,
+      width: sizes.windowWidth - 20,
+      marginVertical: 8,
+      paddingHorizontal: 10,
     },
 
     checkboxBlock: {

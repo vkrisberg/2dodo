@@ -16,7 +16,7 @@ export default class Events extends Component {
 
   render() {
     return (
-      <BackgroundLayout>
+      <BackgroundLayout background="preload" barStyle="light-content">
         <Carousel items={slideEnum} onSkip={this.onSkip}/>
       </BackgroundLayout>
     );

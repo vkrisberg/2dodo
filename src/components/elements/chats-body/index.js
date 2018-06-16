@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import {EmptyFavoritsView, BoldText} from './styles';
 import {EmptyMessagesIcon} from '../../../components/icons';
-import {ChatItem} from '../../../components/elements';
+import {ChatListItem} from '../../../components/elements';
 
 export default class ChatsBody extends Component {
 
@@ -46,7 +46,7 @@ export default class ChatsBody extends Component {
         <View style={{marginVertical: 8}}>
           {
             chatList.map((chat, index) => (
-              <ChatItem
+              <ChatListItem
                 key={index}
                 context={context}
                 chat={chat}

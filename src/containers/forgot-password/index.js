@@ -28,7 +28,7 @@ class ForgotPassword extends Component {
 
     return (
       <MainLayout netOffline={!account.net.connected}>
-        <BackgroundLayout background="registration">
+        <BackgroundLayout background="registration" barStyle="light-content">
           <DismissKeyboardLayout>
             <ForgotPasswordForm context={this.context} account={account}/>
             {/*<SuccessMessage*/}

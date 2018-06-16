@@ -27,11 +27,13 @@ export default (values) => {
     errors.server = 'ServerRegexpError';
   }
 
-  if (values.email && !validation.emailRegex.test(values.email)) {
+  if (values.page === 1 && !values.email) {
+    errors.email = 'Required';
+  } else if (values.page === 1 && !validation.emailRegex.test(values.email)) {
     errors.email = 'EmailRegexpError';
   }
 
-  if (values.phone && !validation.phoneRegex.test(values.phone)) {
+  if (values.page === 1 && values.phone && !validation.phoneRegex.test(values.phone)) {
     errors.phone = 'PhoneRegexpError';
   }
 

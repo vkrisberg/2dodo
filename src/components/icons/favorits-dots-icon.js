@@ -3,10 +3,12 @@ import {Svg, Path} from 'react-native-svg';
 
 export default class FavoritsDotsIcon extends PureComponent {
   render() {
+    const {color} = this.props;
+
     return (
       <Svg width="13" height="22">
         <Path
-          fill="rgb(106, 118, 134)"
+          fill={color || '#6a7686'}
           d="M10.568,13.069 C9.349,13.069 8.360,12.081 8.360,10.862 C8.360,9.643 9.349,8.655 10.568,8.655
           C11.787,8.655 12.776,9.643 12.776,10.862 C12.776,12.081 11.787,13.069 10.568,13.069 ZM10.568,4.793
           C9.349,4.793 8.360,3.805 8.360,2.586 C8.360,1.367 9.349,0.379 10.568,0.379 C11.787,0.379 12.776,1.367

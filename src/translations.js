@@ -1,5 +1,11 @@
 const translations = {
   'ru': {
+    // Main menu
+    'Contacts': 'Контакты',
+    'Favorites': 'Избранное',
+    'Messages': 'Сообщения',
+    'Groups': 'Группы',
+    'Settings': 'Настройки',
     // Events
     'SkipAllFeatures': 'Skip all features',
     // Login
@@ -34,7 +40,6 @@ const translations = {
     'GoToApp': 'В приложение',
     'SkipThisStep': 'Пропустить этот шаг',
     // Settings
-    'Settings': 'Настройки',
     'SetYourPhoto': 'Выберите ваш аватар',
     'DayLight': 'Дневная',
     'DarkNight': 'Ночная',
@@ -69,6 +74,12 @@ const translations = {
     'NameRegexpError': 'Only letters, numbers and dashes are allowed',
   },
   'en': {
+    // Main menu
+    'Contacts': 'Contacts',
+    'Favorites': 'Favorites',
+    'Messages': 'Messages',
+    'Groups': 'Groups',
+    'Settings': 'Settings',
     // Events
     'SkipAllFeatures': 'Skip all features',
     // Login
@@ -103,7 +114,6 @@ const translations = {
     'GoToApp': 'Go to app',
     'SkipThisStep': 'Skip this step',
     // Settings
-    'Settings': 'Settings',
     'SetYourPhoto': 'Set your photo',
     'DayLight': 'Day light',
     'DarkNight': 'Dark night',

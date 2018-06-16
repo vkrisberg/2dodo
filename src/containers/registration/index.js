@@ -91,6 +91,7 @@ class Registration extends Component {
       name: (data.login || '').trim().toLowerCase(),
       password: data.password,
       email: (data.email || '').trim().toLowerCase(),
+      phone: (data.phone || '').trim(),
       device_id: account.deviceId,
       device_name: account.deviceName,
       platform: account.platform,
@@ -129,6 +130,8 @@ class Registration extends Component {
       keys: account.keys,
       password,
     });
+
+    this.props.navigation.replace(routeEnum.Messages);
   };
 
   updateAvatar = () => {
@@ -153,7 +156,7 @@ class Registration extends Component {
 
     return (
       <MainLayout netOffline={!account.net.connected}>
-        <BackgroundLayout background="registration">
+        <BackgroundLayout background="registration" barStyle="light-content">
           <RegistrationForm context={this.context}
                             account={account}
                             onRegister={this.registration}
