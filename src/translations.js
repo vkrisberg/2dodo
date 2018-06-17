@@ -72,6 +72,8 @@ const translations = {
     'EmailRegexpError': 'Invalid email address',
     'PhoneRegexpError': 'Invalid phone number',
     'NameRegexpError': 'Only letters, numbers and dashes are allowed',
+    'AddContact': 'Добавить контакт',
+    'AddContactPlaceholder': 'Добавить контакт по @nickname',
   },
   'en': {
     // Main menu
@@ -146,6 +148,8 @@ const translations = {
     'EmailRegexpError': 'Invalid email address',
     'PhoneRegexpError': 'Invalid phone number',
     'NameRegexpError': 'Only letters, numbers and dashes are allowed',
+    'AddContact': 'Add contact',
+    'AddContactPlaceholder': 'Search contacts for @nickname',
   },
 };
 
