@@ -1,17 +1,22 @@
-import {colors, fonts, weights} from "../../../styles";
+import {colors, fonts, weights, sizes} from "../../../styles";
 import {StyleSheet} from "react-native";
 
 export default (theme) => {
   return StyleSheet.create({
     wrapper: {
+      width: '100%',
       marginTop: 14,
-      marginHorizontal: 10,
-      borderTopWidth: 2,
-      borderTopColor: colors[theme].grayLight,
+      paddingHorizontal: 10,
+    },
+
+    divider: {
+      width: '100%',
+      height: 2,
+      backgroundColor: colors[theme].grayLight,
     },
 
     emptyContactsView: {
-      width: '100%',
+      width: sizes.windowWidth,
       position: 'absolute',
       top: '45%',
       justifyContent: 'center',

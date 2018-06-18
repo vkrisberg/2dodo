@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
 import {contactActions} from '../../../store/actions';
-import {Navbar, SearchInput, NavbarDots, NavbarButton, AddButton} from '../../../components/elements';
-import {ContactsList} from '../../../components/lists';
+import {Navbar, SearchInput, NavbarDots, NavbarButton, AddButton, ContactListItem} from '../../../components/elements';
+import {ContactList} from '../../../components/lists';
 
 const list = [
   {
@@ -33,6 +33,8 @@ class Contacts extends Component {
   state = {
     editMode: false,
     selected: {},
+    chosenContacts: [],
+    chosenMessage: [],
   };
 
   componentDidMount() {
@@ -91,6 +93,35 @@ class Contacts extends Component {
     return <AddButton onPress={this.onCreate}/>;
   };
 
+  isContactChosen = (contact) => {
+    return this.state.chosenContacts.find(item => item === contact);
+  };
+
+  onContactPress = (contact) => {
+
+  };
+
+  onCheckboxPress = (contact) => {
+    const {chosenContacts} = this.state;
+
+    if (this.isChatChosen(message)) {
+      this.setState({chosenMessage: chosenContacts.filter(item => item !== contact)});
+    }
+
+    this.setState({chosenMessage: [...chosenContacts, contact]});
+  };
+
+  renderContactList = ({item}) => {
+    return (
+      <ContactListItem
+        contact={item}
+        checked={this.isContactChosen(item)}
+        onPress={this.onContactPress(item)}
+        onCheckboxPress={() => this.onCheckboxPress(item)}
+      />
+    );
+  };
+
   render() {
     const {context} = this;
     const {contact, account} = this.props;
@@ -102,7 +133,7 @@ class Contacts extends Component {
             renderLeft={<NavbarDots/>}
             renderRight={this.renderNavbarButton()}/>
           <SearchInput placeholder="Search contacts" onChange={this.onSearchChange}/>
-          <ContactsList contacts={list} context={context}/>
+          <ContactList context={context} items={list} renderItem={this.renderContactList}/>
         </BackgroundLayout>
       </MainLayout>
     );
