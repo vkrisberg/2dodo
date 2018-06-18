@@ -67,7 +67,9 @@ export default {
         // });
 
         console.log('chat list loaded', chatList.length);
-        const payload = [...chatList];
+        const payload = chatList.map((item) => {
+          return {...item};
+        });
         dispatch({type: types.LOAD_SUCCESS, payload});
         return payload;
       } catch (e) {
@@ -170,9 +172,7 @@ export default {
       try {
         const realm = services.getRealm();
         let chats = realm.objects(dbEnum.Chat);
-        chats = chats.filter((item) => {
-          return ids.indexOf(item.id) >= 0;
-        });
+        chats = chats.filter((item) => ids.indexOf(item.id) >= 0);
 
         if (!chats || !chats.length) {
           throw new Error('delete failed: chats are not found');
@@ -249,9 +249,8 @@ export default {
           throw new Error('data.payload is null');
         }
         // send delivery report
-        const encryptTime =  get(message, 'encrypt_time', null);
-        console.log('ENCRTIME', encryptTime);
-        await apiServer.deliveryReport(encryptTime);
+        const msgEncryptTime =  get(message, 'encrypt_time', null);
+        await apiServer.deliveryReport(msgEncryptTime);
 
         const realmChat = realm.objectForPrimaryKey(dbEnum.Chat, meta.id);
         if (realmChat) {

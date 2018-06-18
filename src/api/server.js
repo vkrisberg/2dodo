@@ -8,7 +8,7 @@ export default {
     }
 
     const websocket = services.getWebsocket();
-    const serverMessage = await wsMessage.getClientMessage({
+    const serverMessage = await wsMessage.getServerMessage({
       action: actionEnum.deliveryReport,
       data: {
         encrypt_time: encryptTime,
