@@ -5,7 +5,7 @@ import {isEmpty, map} from 'lodash';
 
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
 import {ChatList} from '../../../components/lists';
-import {SearchInput, Navbar, NavbarDots, AddButton, ChatListItem, NavbarButton} from '../../../components/elements';
+import {SearchInput, Navbar, NavbarDots, ButtonAdd, ChatListItem, ButtonNavbar} from '../../../components/elements';
 import {chatActions, chatMessageActions, contactActions} from '../../../store/actions';
 import {routeEnum} from '../../../enums';
 
@@ -109,7 +109,7 @@ class Messages extends Component {
   };
 
   onCreate = () => {
-    this.props.navigation.navigate('CreateChat');
+    this.props.navigation.navigate(routeEnum.ChatCreate);
   };
 
   onChatPress = (chat) => {
@@ -118,7 +118,7 @@ class Messages extends Component {
       return;
     }
 
-    this.props.navigation.navigate(routeEnum.PrivateChat, {chat});
+    this.props.navigation.navigate(routeEnum.ChatMessage, {chat});
   };
 
   onChatLongPress = (chat) => {
@@ -184,11 +184,11 @@ class Messages extends Component {
 
     if (editMode) {
       return (
-        <NavbarButton position="right" onPress={this.onChatsDelete}>{this.context.t('Delete')}</NavbarButton>
+        <ButtonNavbar position="right" onPress={this.onChatsDelete}>{this.context.t('Delete')}</ButtonNavbar>
       );
     }
 
-    return <AddButton onPress={this.onCreate}/>;
+    return <ButtonAdd onPress={this.onCreate}/>;
   };
 
   render() {

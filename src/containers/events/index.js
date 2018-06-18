@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {AsyncStorage} from 'react-native';
 
 import {BackgroundLayout} from '../../components/layouts';
-import Carousel from '../../components/elements/carousel';
+import {Carousel} from '../../components/elements';
 import slideEnum from './enums/slideEnum';
 import {storageEnum, routeEnum} from '../../enums';
 import CONFIG from '../../config';

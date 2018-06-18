@@ -4,7 +4,7 @@ import {TouchableOpacity, Text, View} from 'react-native';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
-import Checkbox from '../checkbox-svg';
+import {Checkbox} from '../index';
 import {AvatarIcon} from '../../icons';
 import {themeEnum} from '../../../enums';
 import styles from './styles';
@@ -44,7 +44,9 @@ class ContactListItem extends Component {
     return (
       <TouchableOpacity onPress={this.onPress} onLongPress={this.onLongPress} style={{width: '100%'}}>
         <View style={_styles.wrapper}>
-          {/*<Checkbox checked={checked} style={_styles.chosen} onPress={this.onCheckboxPress}/>*/}
+          {/*<Checkbox*/}
+            {/*style={_styles.chosen}*/}
+            {/*input={{value: checked, onChange: this.onCheckboxPress}}/>*/}
           <View style={_styles.image}>
             <AvatarIcon/>
           </View>

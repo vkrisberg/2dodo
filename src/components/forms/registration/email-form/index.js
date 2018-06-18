@@ -3,7 +3,7 @@ import {View, KeyboardAvoidingView} from 'react-native';
 import {Field, reduxForm} from 'redux-form';
 import PropTypes from 'prop-types';
 
-import {TextLabel, Input, Button, Checkbox, SkipButton, FieldError} from '../../../elements';
+import {TextLabel, Input, Button, Checkbox, ButtonSkip, FieldError} from '../../../elements';
 import {themeEnum, phonePrefixEnum} from '../../../../enums';
 import {colors, weights} from '../../../../styles';
 import validate from '../validate';
@@ -103,9 +103,9 @@ class RegistrationEmailForm extends Component {
           </View>
         </KeyboardAvoidingView>
         <View style={_styles.skipContainer}>
-          <SkipButton onSkip={this.props.handleSubmit} color={colors[theme].grayDarker} marginBottom={15}>
+          <ButtonSkip onSkip={this.props.handleSubmit} color={colors[theme].grayDarker} marginBottom={15}>
             {context.t('SkipThisStep')}
-          </SkipButton>
+          </ButtonSkip>
         </View>
       </View>
     );

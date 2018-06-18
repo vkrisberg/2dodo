@@ -1,3 +1,3 @@
 export {default as Messages} from './main';
-export {default as CreateChat} from './create-chat';
-export {default as PrivateChat} from './private-chat';
+export {default as ChatCreate} from './chat-create';
+export {default as ChatMessage} from './chat-message';

@@ -1,4 +1,5 @@
-export {default as AddContactForm} from './add-contact';
-export {default as ForgotPasswordForm} from './forgot-password';
 export {default as LoginForm} from './login';
 export {default as RegistrationForm} from './registration';
+export {default as ForgotPassEmailForm} from './forgot-password/email-form';
+export {default as ForgotPassEnterKeyForm} from './forgot-password/enter-key-form';
+export {default as SuccessMessage} from './forgot-password/success-message';
