@@ -16,6 +16,7 @@ export default (theme) => {
     },
 
     iconContainer: {
+      width: '100%',
       alignSelf: 'flex-start',
     },
 
@@ -40,6 +41,12 @@ export default (theme) => {
       padding: 0,
       fontSize: 13,
       color: colors[theme].grayBlue,
+    },
+
+    closeIcon: {
+      position: 'absolute',
+      right: 0,
+      zIndex: 2,
     },
   });
 };
