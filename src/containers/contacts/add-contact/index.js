@@ -1,22 +1,31 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, KeyboardAvoidingView} from 'react-native';
+import {TouchableWithoutFeedback, TouchableOpacity, KeyboardAvoidingView, Text, View, Image} from 'react-native';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
 import Wrapper from '../../../components/layouts/wrapper';
 import {ArrowIcon} from '../../../components/icons';
-import {SearchInput, Button} from '../../../components/elements';
-import {AddContactForm} from '../../../components/forms';
+import {SearchInput} from '../../../components/elements';
 import {contactActions} from '../../../store/actions';
-import {Header, TitleContainer, StyledTitle} from '../styles';
-import {MessageStyles} from '../../messages/styles';
+import styles from '../styles';
+import QrIcon from './img/qr.png';
 
 class AddContact extends Component {
+   static propTypes = {
+     account: PropTypes.object,
+   };
+
+   static contextTypes = {
+     t: PropTypes.func.isRequired,
+   };
 
   goBack = () => this.props.navigation.goBack();
 
+  goQrScanner = () => this.props.navigation.goBack();
+
   onSearchChange = (value) => {
     return this.setState({value});
-  }
+  };
 
   addContact = (data) => {
     const {account} = this.props;
@@ -35,20 +44,33 @@ class AddContact extends Component {
   };
 
   render() {
+    const {context} = this;
+    const {theme} = this.props.account.user;
+    const _styles = styles(theme);
+
     return (
       <Wrapper scrolled>
-        <Header>
-          <TitleContainer width="70%">
+        <View style={_styles.header}>
+          <View style={_styles.titleContainer}>
             <TouchableOpacity onPress={this.goBack}>
               <ArrowIcon />
             </TouchableOpacity>
-            <StyledTitle marginLeft={20}>
-              Add contact
-            </StyledTitle>
-          </TitleContainer>
-        </Header>
-        <SearchInput placeholder="Search contacts for @nickname" onChange={this.onSearchChange}/>
-        <AddContactForm onSubmit={this.addContact}/>
+            <Text style={_styles.styledTitle}>
+              {context.t('AddContact')}
+            </Text>
+          </View>
+        </View>
+        <View style={_styles.body}>
+          <SearchInput placeholder={context.t('AddContactPlaceholder')} onChange={this.onSearchChange}/>
+          <View style={_styles.content}>
+            <TouchableWithoutFeedback onPress={this.goQrScanner}>
+              <View style={_styles.infoBlock}>
+                <Image source={QrIcon}/>
+                <Text style={_styles.infoText}>{context.t('AddContactQrCode')}</Text>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </View>
       </Wrapper>
     );
   }
