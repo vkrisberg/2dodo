@@ -9,7 +9,6 @@ import {ChatList} from '../../../components/lists';
 import {SearchInput, Navbar, NavbarDots, AddButton, ChatListItem, NavbarButton} from '../../../components/elements';
 import {chatActions, chatMessageActions, contactActions} from '../../../store/actions';
 import {routeEnum} from '../../../enums';
-import dummyList from './dummy';
 
 class Messages extends Component {
 
@@ -156,12 +155,14 @@ class Messages extends Component {
 
   onChatsDelete = () => {
     const chatIds = map(this.state.selected, (item, key) => key);
-    this.deleteChats(chatIds).then(() => {
-      this.setState({
-        editMode: false,
-        selected: {},
+    if (chatIds.length) {
+      this.deleteChats(chatIds).then(() => {
+        this.setState({
+          editMode: false,
+          selected: {},
+        });
       });
-    });
+    }
   };
 
   renderChatItem = ({item}) => {
@@ -189,7 +190,7 @@ class Messages extends Component {
     }
 
     return <AddButton onPress={this.onCreate}/>;
-  }
+  };
 
   render() {
     const {account, chat} = this.props;

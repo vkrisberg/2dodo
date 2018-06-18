@@ -113,7 +113,7 @@ class PrivateChat extends PureComponent {
         </Header>
         <SearchInput placeholder="Search in messages" onChange={this.onSearchChange}/>
         <KeyboardAvoidingView style={MessageStyles.container} behavior="padding" enabled>
-          <MessageList data={chatMessage.list} verticalOffset={116} renderItem={this.renderMessage}/>
+          <MessageList items={chatMessage.list} verticalOffset={116} renderItem={this.renderMessage}/>
           <MessageInput onSubmitText={this.onSubmitText}/>
         </KeyboardAvoidingView>
       </Wrapper>

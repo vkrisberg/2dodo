@@ -47,7 +47,9 @@ export default {
           contacts = contacts.filtered(filter);
         }
         console.log('contacts loaded', contacts.length);
-        const payload = [...contacts];
+        const payload = contacts.map((item) => {
+          return {...item};
+        });
         dispatch({type: types.LOAD_SUCCESS, payload});
         return payload;
       } catch (e) {
