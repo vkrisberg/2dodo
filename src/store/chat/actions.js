@@ -1,6 +1,6 @@
 import {get, map, filter} from 'lodash';
 
-import apiChat from '../../api/chat';
+import {apiChat, apiServer} from '../../api';
 import {services, wsMessage} from '../../utils';
 import {dbEnum} from '../../enums';
 import CONFIG from '../../config';
@@ -248,6 +248,10 @@ export default {
         if (!dataPayload) {
           throw new Error('data.payload is null');
         }
+        // send delivery report
+        const encryptTime =  get(message, 'encrypt_time', null);
+        console.log('ENCRTIME', encryptTime);
+        await apiServer.deliveryReport(encryptTime);
 
         const realmChat = realm.objectForPrimaryKey(dbEnum.Chat, meta.id);
         if (realmChat) {

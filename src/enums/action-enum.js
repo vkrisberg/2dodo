@@ -7,4 +7,5 @@ export default {
   chatMessageTyping: 'chat_message_typing',
   // server actions
   getOpenKey: 'get_open_key',
+  deliveryReport: 'delivery_report',
 };
