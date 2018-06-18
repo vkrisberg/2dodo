@@ -20,7 +20,8 @@ export default class BackgroundLayout extends PureComponent {
     background: PropTypes.string,
     barHidden: PropTypes.bool,
     barStyle: PropTypes.string,
-    padding: PropTypes.number,
+    paddingHorizontal: PropTypes.number,
+    paddingVertical: PropTypes.number,
     style: PropTypes.any,
   };
 
@@ -29,7 +30,8 @@ export default class BackgroundLayout extends PureComponent {
     background: 'none', // [none, preload, login, registration]
     barHidden: false,
     barStyle: 'dark-content',
-    padding: 0,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
   };
 
   getBackground = () => {
@@ -61,8 +63,8 @@ export default class BackgroundLayout extends PureComponent {
   };
 
   render() {
-    const {theme, style, barHidden, barStyle, padding} = this.props;
-    const _styles = styles({theme, padding});
+    const {theme, style, barHidden, barStyle, paddingHorizontal, paddingVertical} = this.props;
+    const _styles = styles({theme, paddingHorizontal, paddingVertical});
 
     return (
       <View style={[_styles.container, style]}>

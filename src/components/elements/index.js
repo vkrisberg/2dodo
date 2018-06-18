@@ -4,6 +4,7 @@ export {default as SkipButton} from './skip-button';
 export {default as ThemeButton} from './theme-button';
 export {default as BackButton} from './back-button';
 export {default as AddButton} from './add-button';
+export {default as NavbarButton} from './navbar-button';
 export {default as Avatar} from './avatar';
 export {default as TextLabel} from './text-label';
 export {default as Carousel} from './carousel';

@@ -244,6 +244,12 @@ export default {
         if (error) {
           throw new Error({type: 'server', error});
         }
+
+        const realmChatMessage = realm.objectForPrimaryKey(dbEnum.ChatMessage, meta.id);
+        if (realmChatMessage) {
+          throw new Error('chat message has already received');
+        }
+
         let encryptTime = get(message, 'encrypt_time', null);
         encryptTime = wsMessage.dateSendToRealm(encryptTime);
         let hashKeys = realm.objects(dbEnum.HashKey)
