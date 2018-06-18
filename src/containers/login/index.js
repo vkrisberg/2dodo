@@ -107,7 +107,7 @@ class Login extends Component {
     }
 
     const {deviceId, hostname, user, keys} = realmAccount;
-    dispatch(accountActions.login({deviceId, hostname, user, keys}))
+    dispatch(accountActions.login({deviceId, hostname, user, keys, password}))
       .then(() => {
         AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.username}`, username);
         AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.password}`, password);

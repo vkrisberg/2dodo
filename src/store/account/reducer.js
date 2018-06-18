@@ -24,6 +24,8 @@ const initState = {
     hashKey: null,
   },
 
+  password: '',
+
   deviceId: '',
   deviceName: '',
   platform: '',
@@ -117,6 +119,7 @@ export default reducer(initState, {
     return {
       ...state,
       deviceId: action.payload.deviceId,
+      password: action.payload.password,
       user: {
         ...action.payload.user,
       },
@@ -152,6 +155,7 @@ export default reducer(initState, {
   [types.REGISTER_SUCCESS]: (state, action) => {
     const {data} = action;
     const account = {
+      password: data.password,
       user: {
         ...state.user,
         username: data.username,

@@ -36,7 +36,7 @@ class Preload extends Component {
         .then((data) => {
           const {deviceId, hostname, user, keys} = this.props.account;
           const password = data.password;
-          dispatch(accountActions.login({deviceId, hostname, user, keys}))
+          dispatch(accountActions.login({deviceId, hostname, user, keys, password}))
             .then(() => {
               this.wsConnect({deviceId, hostname, user, keys, password});
             })

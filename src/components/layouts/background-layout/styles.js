@@ -1,14 +1,15 @@
 import {StyleSheet} from 'react-native';
 import {colors, sizes} from '../../../styles';
 
-export default ({theme, padding}) => {
+export default ({theme, paddingHorizontal, paddingVertical}) => {
   return StyleSheet.create({
     container: {
       flex: 1,
       alignItems: 'center',
       justifyContent: 'flex-start',
       backgroundColor: colors[theme].bgMain,
-      paddingHorizontal: padding,
+      paddingHorizontal: paddingHorizontal,
+      paddingVertical: paddingVertical,
     },
 
     image: {

@@ -154,10 +154,11 @@ const decryptChatMessage = async ({data, hashKey}) => {
  * Decrypt client message
  * @param data
  * @param privateKey
+ * @param password
  * @returns {Promise<any>}
  */
-const decryptClientMessage = async ({data, privateKey}) => {
-  const message = await pgplib.decrypt(privateKey, data);
+const decryptClientMessage = async ({data, privateKey, password}) => {
+  const message = await pgplib.decrypt(privateKey, data, password);
 
   return JSON.parse(message);
 };

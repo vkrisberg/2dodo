@@ -2,11 +2,11 @@ import React, {Component} from 'react';
 import {View, Text, TouchableWithoutFeedback} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {isEmpty} from 'lodash';
+import {isEmpty, map} from 'lodash';
 
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
 import {ChatList} from '../../../components/lists';
-import {SearchInput, Navbar, NavbarDots, AddButton, ChatListItem} from '../../../components/elements';
+import {SearchInput, Navbar, NavbarDots, AddButton, ChatListItem, NavbarButton} from '../../../components/elements';
 import {chatActions, chatMessageActions, contactActions} from '../../../store/actions';
 import {routeEnum} from '../../../enums';
 import dummyList from './dummy';
@@ -46,7 +46,7 @@ class Messages extends Component {
     //   this.createChat(contacts).then((chat) => {
     //     // chat.name = 'New Chat';
     //     // this.updateChat(chat);
-    //     // this.deleteChat(chat.id);
+    //     // this.deleteChatById(chat.id);
     //     const messageData = {
     //       username: account.user.username,
     //       text: 'Hello World!',
@@ -77,8 +77,12 @@ class Messages extends Component {
     return this.props.dispatch(chatActions.update(data));
   };
 
-  deleteChat = async (id) => {
-    return this.props.dispatch(chatActions.delete(id));
+  deleteChatById = async (id) => {
+    return this.props.dispatch(chatActions.deleteById(id));
+  };
+
+  deleteChats = async (ids) => {
+    return this.props.dispatch(chatActions.delete(ids));
   };
 
   loadChatMessages = () => {
@@ -150,6 +154,16 @@ class Messages extends Component {
     }
   };
 
+  onChatsDelete = () => {
+    const chatIds = map(this.state.selected, (item, key) => key);
+    this.deleteChats(chatIds).then(() => {
+      this.setState({
+        editMode: false,
+        selected: {},
+      });
+    });
+  };
+
   renderChatItem = ({item}) => {
     const {account} = this.props;
 
@@ -165,17 +179,29 @@ class Messages extends Component {
     );
   };
 
+  renderNavbarButton = () => {
+    const {editMode} = this.state;
+
+    if (editMode) {
+      return (
+        <NavbarButton position="right" onPress={this.onChatsDelete}>{this.context.t('Delete')}</NavbarButton>
+      );
+    }
+
+    return <AddButton onPress={this.onCreate}/>;
+  }
+
   render() {
     const {account, chat} = this.props;
 
     return (
       <MainLayout netOffline={!account.net.connected}>
-        <BackgroundLayout theme={account.user.theme} padding={10}>
+        <BackgroundLayout theme={account.user.theme} paddingHorizontal={10}>
           <Navbar renderTitle={this.context.t('Messages')}
                   renderLeft={<NavbarDots/>}
-                  renderRight={<AddButton onPress={this.onCreate}/>}/>
+                  renderRight={this.renderNavbarButton()}/>
           <SearchInput placeholder="Search in chats" onChange={this.searchChats}/>
-          <ChatList items={dummyList}
+          <ChatList items={chat.list}
                     selected={this.state.selected}
                     renderItem={this.renderChatItem}/>
         </BackgroundLayout>

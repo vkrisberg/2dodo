@@ -76,6 +76,7 @@ export default {
         }
 
         const payload = {...account};
+        payload.password = password;
         dispatch({type: types.REMIND_SUCCESS, payload});
         return {...payload, password};
       } catch (e) {
@@ -85,10 +86,10 @@ export default {
     };
   },
 
-  login: ({deviceId, hostname, user, keys}) => {
+  login: ({deviceId, hostname, user, keys, password}) => {
     return async dispatch => {
       try {
-        dispatch({type: types.LOGIN, payload: {deviceId, hostname, user, keys}});
+        dispatch({type: types.LOGIN, payload: {deviceId, hostname, user, keys, password}});
         // dispatch({type: types.LOGIN_SUCCESS});
       } catch (e) {
         dispatch({type: types.LOGIN_FAILURE, error: e});
@@ -126,6 +127,7 @@ export default {
         data.open_key = publicKey;
         data.hash_key = hashKey;
         data.username = `${data.name}@${account.hostname}`;
+        data.device_id = 'uniqDeviceId0';
         // TODO - parse and apply data.server
         const res = await apiAccount.registration(data);
         dispatch({type: types.REGISTER_SUCCESS, payload: res.data, data});
@@ -146,6 +148,7 @@ export default {
   },
 
   changeTheme: (theme) => {
+    // TODO - save to database
     return {type: types.THEME_CHANGE, payload: theme};
   },
 
