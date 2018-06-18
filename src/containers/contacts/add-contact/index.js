@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, KeyboardAvoidingView, Text, View} from 'react-native';
+import {TouchableOpacity, KeyboardAvoidingView, Text, View, Image} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import Wrapper from '../../../components/layouts/wrapper';
 import {ArrowIcon} from '../../../components/icons';
-import {SearchInput, Button} from '../../../components/elements';
-import {AddContactForm} from '../../../components/forms';
+import {SearchInput} from '../../../components/elements';
 import {contactActions} from '../../../store/actions';
 import styles from '../styles';
+import QrIcon from './img/qr.png';
 
 class AddContact extends Component {
    static propTypes = {
@@ -60,8 +60,10 @@ class AddContact extends Component {
         </View>
         <View style={_styles.body}>
           <SearchInput placeholder={context.t('AddContactPlaceholder')} onChange={this.onSearchChange}/>
+          <View style={_styles.content}>
+            <Image source={QrIcon}/>
+          </View>
         </View>
-        <AddContactForm onSubmit={this.addContact}/>
       </Wrapper>
     );
   }

@@ -68,6 +68,14 @@ export default (theme) => {
       width: sizes.windowWidth,
       paddingRight: 10,
       paddingLeft: 10,
+      flexDirection: 'column',
+      flex: 1
+    },
+
+    content: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
   });
 };
