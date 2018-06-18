@@ -1,18 +1,13 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity, Text, View} from 'react-native';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 
 import Checkbox from '../checkbox-svg';
 import {AvatarIcon} from '../../icons';
-import {
-  Contact,
-  ContactChosen,
-  ContactImage,
-  ContactBody,
-  ContactName,
-  ContactMessage
-} from './styles';
+import {themeEnum} from '../../../enums';
+import styles from './styles';
 
 class ContactListItem extends Component {
 
@@ -22,30 +17,33 @@ class ContactListItem extends Component {
     onCheckboxPress: PropTypes.func,
     onPress: PropTypes.func,
     onLongPress: PropTypes.func,
+    theme: PropTypes.string,
+  };
+
+  static defaultProps = {
+    theme: themeEnum.light,
   };
 
   render() {
-    const {contact, checked, onCheckboxPress, onPress, onLongPress} = this.props;
-    const name = contact.firstName || contact.secondName
-      ? `${contact.firstName} ${contact.secondName}`
-      : contact.username;
+    const {contact, checked, onCheckboxPress, onPress, onLongPress, theme} = this.props;
+    const _styles = styles(theme);
 
     return (
-      <TouchableOpacity onPress={onPress} onLongPress={onLongPress}>
-        <Contact>
+      <TouchableOpacity onPress={onPress} onLongPress={onLongPress} style={{width: '100%'}}>
+        <View style={_styles.wrapper}>
           {/* <Checkbox checked={checked} style={ChatChosen} onPress={onCheckboxPress} /> */}
-          <ContactImage>
+          <View style={_styles.image}>
             <AvatarIcon/>
-          </ContactImage>
-          <ContactBody>
-            <ContactName>
-              {name}
-            </ContactName>
-            <ContactMessage>
+          </View>
+          <View style={_styles.body}>
+            <Text style={_styles.name}>
               {contact.username}
-            </ContactMessage>
-          </ContactBody>
-        </Contact>
+            </Text>
+            <Text>
+              {moment(contact.dateUpdate).format('DD.MM.YY')}
+            </Text>
+          </View>
+        </View>
       </TouchableOpacity>
     );
   }
