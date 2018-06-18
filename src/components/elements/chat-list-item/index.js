@@ -50,6 +50,29 @@ export default class ChatListItem extends Component {
     this.props.onCheckboxPress && this.props.onCheckboxPress(this.props.item);
   };
 
+  renderLastMessage = (_styles) => {
+    const {item, context} = this.props;
+
+    if (item.lastMessage) {
+      return (
+        <Text style={_styles.limitText} numberOfLines={2} ellipsizeMode="tail">
+          {item.unreadCount > 0 && item.lastMessage.type === 'text' && context.t('HaveMessage')}
+          {item.unreadCount > 0 && item.lastMessage.type === 'audio' && context.t('HaveVoiceMessage')}
+          {item.unreadCount > 0 && item.lastMessage.type === 'video' && context.t('HaveVideo')}
+          {item.unreadCount > 0 && item.lastMessage.type === 'image' && context.t('HaveImage')}
+          {item.unreadCount > 0 && item.lastMessage.type === 'call' && context.t('HaveCall')}
+          {item.unreadCount === 0 && item.lastMessage.text}
+        </Text>
+      );
+    }
+
+    return (
+      <Text style={_styles.limitText} numberOfLines={2} ellipsizeMode="tail">
+        {context.t('NoMessages')}
+      </Text>
+    );
+  };
+
   render() {
     const {item, theme, context, editMode, selectedItems} = this.props;
     const _styles = styles(theme);
@@ -67,23 +90,16 @@ export default class ChatListItem extends Component {
           }
           <View style={_styles.image}>
             <Image source={avatarBgIcon} style={_styles.avatarBg}/>
-            {item.avatar.length > 0 && <Image source={{uri: item.avatar}} style={_styles.avatar}/>}
-            {!item.avatar.length && item.name &&
+            {item.avatar && <Image source={{uri: item.avatar}} style={_styles.avatar}/>}
+            {!item.avatar && item.name &&
             <Text style={_styles.avatarInitials}>{this.getInitials(item.name)}</Text>}
-            {!item.name && !item.avatar.length && <AvatarIcon/>}
+            {!item.name && !item.avatar && <AvatarIcon/>}
           </View>
           <View style={_styles.body}>
             <Text style={_styles.name}>
               {item.name}
             </Text>
-            <Text style={_styles.limitText} numberOfLines={2} ellipsizeMode="tail">
-              {item.unreadCount > 0 && item.lastMessage.type === 'text' && context.t('HaveMessage')}
-              {item.unreadCount > 0 && item.lastMessage.type === 'audio' && context.t('HaveVoiceMessage')}
-              {item.unreadCount > 0 && item.lastMessage.type === 'video' && context.t('HaveVideo')}
-              {item.unreadCount > 0 && item.lastMessage.type === 'image' && context.t('HaveImage')}
-              {item.unreadCount > 0 && item.lastMessage.type === 'call' && context.t('HaveCall')}
-              {item.unreadCount === 0 && item.lastMessage.text}
-            </Text>
+            {this.renderLastMessage(_styles)}
           </View>
           <View style={_styles.information}>
             <Text style={_styles.text}>

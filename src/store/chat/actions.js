@@ -164,18 +164,65 @@ export default {
     };
   },
 
-  delete: (id) => {
+  delete: (ids) => {
+    return async dispatch => {
+      dispatch({type: types.DELETE});
+      try {
+        const realm = services.getRealm();
+        let chats = realm.objects(dbEnum.Chat);
+        chats = chats.filter((item) => {
+          return ids.indexOf(item.id) >= 0;
+        });
+
+        if (!chats || !chats.length) {
+          throw new Error('delete failed: chats are not found');
+        }
+
+        await realm.write(() => {
+          realm.delete(chats);
+        });
+
+        for (let i = 0; i < ids.length; i++) {
+          const chatId = ids[i];
+          const messages = realm.objects(dbEnum.ChatMessage).filtered(`chatId = '${chatId}'`);
+          const hashKeys = realm.objects(dbEnum.HashKey).filtered(`chatId = '${chatId}'`);
+          await realm.write(() => {
+            realm.delete(messages);
+            realm.delete(hashKeys);
+          });
+        }
+
+        // console.log('chat deleted', id);
+        dispatch({type: types.DELETE_SUCCESS, payload: ids});
+        return true;
+      } catch (e) {
+        dispatch({type: types.DELETE_FAILURE, error: e});
+        throw e;
+      }
+    };
+  },
+
+  deleteById: (id) => {
     return async dispatch => {
       dispatch({type: types.DELETE});
       try {
         const realm = services.getRealm();
         // const chat = realm.objects(dbEnum.Chat); // remove all chats for testing
         const chat = realm.objectForPrimaryKey(dbEnum.Chat, id);
+
         if (!chat) {
           throw new Error('delete failed: chat is not found');
         }
+
         await realm.write(() => {
           realm.delete(chat);
+        });
+
+        const messages = realm.objects(dbEnum.ChatMessage).filtered(`chatId = '${id}'`);
+        const hashKeys = realm.objects(dbEnum.HashKey).filtered(`chatId = '${id}'`);
+        await realm.write(() => {
+          realm.delete(messages);
+          realm.delete(hashKeys);
         });
         // console.log('chat deleted', id);
         dispatch({type: types.DELETE_SUCCESS, payload: id});
@@ -193,13 +240,24 @@ export default {
         const realm = services.getRealm();
         const {account} = getState();
         const dateNow = new Date();
-        const dataPayload = get(message, 'data.payload', {});
+        const meta = get(message, 'data.meta', null);
+        if (!meta) {
+          throw new Error('data.meta is null');
+        }
+        const dataPayload = get(message, 'data.payload', null);
         if (!dataPayload) {
           throw new Error('data.payload is null');
         }
+
+        const realmChat = realm.objectForPrimaryKey(dbEnum.Chat, meta.id);
+        if (realmChat) {
+          throw new Error('chat has already created');
+        }
+
         const decryptedData = await wsMessage.decryptClientMessage({
           data: dataPayload,
-          privateKey: account.keys.privateKey
+          privateKey: account.keys.privateKey,
+          password: account.password,
         });
         const members = filter(decryptedData.members, (username) => username !== account.user.username);
         const contacts = map(members, (username) => {

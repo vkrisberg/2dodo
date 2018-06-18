@@ -123,6 +123,8 @@ class Registration extends Component {
     const {account} = this.props;
     const password = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
 
+    // TODO - save firstName, secondName to database
+
     this.wsConnect({
       deviceId: account.deviceId,
       hostname: account.hostname,

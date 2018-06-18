@@ -59,10 +59,13 @@ const translations = {
     'FullscreenPhoto': 'Fullscreen photo',
     'DeletePhoto': 'Delete photo',
     'HaveMessage': 'У вас новое сообщение...',
+    'NoMessages': 'У вас пока нет сообщений...',
     'HaveVoiceMessage': 'Отправил(а) вам аудиосообщение',
     'HaveVideo': 'Отправил(а) вам видео...',
     'HaveImage': 'Отправил(а) вам изображение...',
     'HaveCall': 'Пропущенный звонок',
+    // Buttons
+    'Delete': 'Удалить',
     // Errors
     'Required': 'Required',
     'LoginRegexpError': 'Login must be minimum 2 characters long and only contain a-z, 0-9 and _',
@@ -135,10 +138,13 @@ const translations = {
     'FullscreenPhoto': 'Fullscreen photo',
     'DeletePhoto': 'Delete photo',
     'HaveMessage': 'You have a new message...',
+    'NoMessages': 'You have no messages yet...',
     'HaveVoiceMessage': 'Send your a voice message',
     'HaveVideo': 'Send your a video...',
     'HaveImage': 'Send your an image...',
     'HaveCall': 'Missed call',
+    // Buttons
+    'Delete': 'Delete',
     // Errors
     'Required': 'Required',
     'LoginRegexpError': 'Login must be minimum 2 characters long and only contain a-z, 0-9 and _',

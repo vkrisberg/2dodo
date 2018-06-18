@@ -31,17 +31,9 @@ export default class ChatList extends PureComponent {
     };
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate() {
     if (this.state.items.length !== this.props.items.length) {
       this.setState({items: this.props.items});
-    }
-
-    if (prevState.items.length !== this.state.items.length) {
-      this.flatList.scrollToEnd();
-    }
-
-    if (prevState.contentSize !== this.state.contentSize) {
-      this.flatList.scrollToEnd();
     }
   }
 
