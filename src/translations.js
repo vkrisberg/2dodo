@@ -77,6 +77,7 @@ const translations = {
     'NameRegexpError': 'Only letters, numbers and dashes are allowed',
     'AddContact': 'Добавить контакт',
     'AddContactPlaceholder': 'Добавить контакт по @nickname',
+    'AddContactQrCode': 'Нажмите здесь, чтобы использовать сканер QR-кода для добавления контакта друга',
   },
   'en': {
     // Main menu
@@ -156,6 +157,7 @@ const translations = {
     'NameRegexpError': 'Only letters, numbers and dashes are allowed',
     'AddContact': 'Add contact',
     'AddContactPlaceholder': 'Search contacts for @nickname',
+    'AddContactQrCode': 'Tap here to use QR-code scanner to add friend contact',
   },
 };
 

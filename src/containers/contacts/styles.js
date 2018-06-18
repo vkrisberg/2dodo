@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {colors, sizes, weights} from "../../styles";
+import {colors, fonts, sizes, weights} from "../../styles";
 import {StyleSheet} from "react-native";
 
 export const StyledTitle = styled.Text`
@@ -76,6 +76,21 @@ export default (theme) => {
       flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
+    },
+
+    infoBlock: {
+      flexDirection: 'column',
+      alignItems: 'center',
+      width: 220,
+    },
+
+    infoText: {
+      marginTop: 20,
+      textAlign: 'center',
+      color: colors[theme].grayDarker,
+      fontSize: 15,
+      fontWeight: weights.medium,
+      fontFamily: fonts.main,
     },
   });
 };

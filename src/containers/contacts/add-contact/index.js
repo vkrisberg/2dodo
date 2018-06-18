@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, KeyboardAvoidingView, Text, View, Image} from 'react-native';
+import {TouchableWithoutFeedback, TouchableOpacity, KeyboardAvoidingView, Text, View, Image} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -20,6 +20,8 @@ class AddContact extends Component {
    };
 
   goBack = () => this.props.navigation.goBack();
+
+  goQrScanner = () => this.props.navigation.goBack();
 
   onSearchChange = (value) => {
     return this.setState({value});
@@ -61,7 +63,12 @@ class AddContact extends Component {
         <View style={_styles.body}>
           <SearchInput placeholder={context.t('AddContactPlaceholder')} onChange={this.onSearchChange}/>
           <View style={_styles.content}>
-            <Image source={QrIcon}/>
+            <TouchableWithoutFeedback onPress={this.goQrScanner}>
+              <View style={_styles.infoBlock}>
+                <Image source={QrIcon}/>
+                <Text style={_styles.infoText}>{context.t('AddContactQrCode')}</Text>
+              </View>
+            </TouchableWithoutFeedback>
           </View>
         </View>
       </Wrapper>
