@@ -42,7 +42,8 @@ export default (theme) => {
     infoBlock: {
       flexDirection: 'column',
       alignItems: 'center',
-      width: 220,
+      width: 240,
+      padding: 10,
     },
 
     infoText: {
