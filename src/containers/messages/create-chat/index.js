@@ -1,15 +1,24 @@
 import React, {Component} from 'react';
-import {TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
-import Wrapper from '../../../components/layouts/wrapper';
-import {ArrowIcon} from '../../../components/icons';
-import {SearchInput, ContactsBody} from '../../../components/elements';
+import {MainLayout, BackgroundLayout} from '../../../components/layouts';
+import {ContactList} from '../../../components/lists';
+import {SearchInput, Navbar, ContactListItem, BackButton} from '../../../components/elements';
 import {chatActions, contactActions} from '../../../store/actions';
-import {Header, TitleContainer, StyledTitle} from '../styles';
-import {routeEnum} from '../../../enums';
 
 class CreateChat extends Component {
+
+  static propTypes = {
+    account: PropTypes.object,
+    contact: PropTypes.object,
+    dispatch: PropTypes.func.isRequired,
+    navigation: PropTypes.shape({navigate: PropTypes.func}),
+  };
+
+  static contextTypes = {
+    t: PropTypes.func.isRequired,
+  };
 
   componentDidMount() {
     this.loadContactList();
@@ -45,28 +54,34 @@ class CreateChat extends Component {
     });
   };
 
+  renderContactItem = ({item}) => {
+    return (
+      <ContactListItem
+        item={item}
+        onPress={this.onCreateChat}
+      />
+    );
+  };
+
   render() {
-    const {contact} = this.props;
+    const {account, contact} = this.props;
 
     return (
-      <Wrapper scrolled>
-        <Header>
-          <TitleContainer width="100%">
-            <TouchableOpacity onPress={this.goBack}>
-              <ArrowIcon />
-            </TouchableOpacity>
-            <StyledTitle marginLeft={20}>
-              Create chat with
-            </StyledTitle>
-          </TitleContainer>
-        </Header>
-        <SearchInput placeholder="Search in contacts" onChange={this.onSearchChange}/>
-        <ContactsBody contacts={contact.list} onContactPress={this.onCreateChat}/>
-      </Wrapper>
+      <MainLayout netOffline={!account.net.connected}>
+        <BackgroundLayout theme={account.user.theme} paddingHorizontal={10}>
+          <Navbar renderTitle={this.context.t('CreateChat')}
+                  renderLeft={<BackButton/>}/>
+          <SearchInput placeholder="Search in chats" onChange={this.searchChats}/>
+          <ContactList context={this.context}
+                       items={contact.list}
+                       renderItem={this.renderContactItem}/>
+        </BackgroundLayout>
+      </MainLayout>
     );
   }
 }
 
 export default connect(state => ({
+  account: state.account,
   contact: state.contact,
 }))(CreateChat);

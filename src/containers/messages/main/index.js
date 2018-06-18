@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {View, Text, TouchableWithoutFeedback} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {isEmpty, map} from 'lodash';
@@ -194,16 +193,18 @@ class Messages extends Component {
 
   render() {
     const {account, chat} = this.props;
+    const {theme} = account.user;
 
     return (
       <MainLayout netOffline={!account.net.connected}>
-        <BackgroundLayout theme={account.user.theme} paddingHorizontal={10}>
+        <BackgroundLayout theme={theme} paddingHorizontal={10}>
           <Navbar renderTitle={this.context.t('Messages')}
                   renderLeft={<NavbarDots/>}
                   renderRight={this.renderNavbarButton()}/>
           <SearchInput placeholder="Search in chats" onChange={this.searchChats}/>
-          <ChatList items={chat.list}
-                    selected={this.state.selected}
+          <ChatList theme={theme}
+                    context={this.context}
+                    items={chat.list}
                     renderItem={this.renderChatItem}/>
         </BackgroundLayout>
       </MainLayout>

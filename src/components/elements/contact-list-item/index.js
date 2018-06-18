@@ -12,35 +12,48 @@ import styles from './styles';
 class ContactListItem extends Component {
 
   static propTypes = {
-    contact: PropTypes.object.isRequired,
+    item: PropTypes.object.isRequired,
     checked: PropTypes.bool,
-    onCheckboxPress: PropTypes.func,
     onPress: PropTypes.func,
     onLongPress: PropTypes.func,
+    onCheckboxPress: PropTypes.func,
     theme: PropTypes.string,
   };
 
   static defaultProps = {
+    checked: false,
     theme: themeEnum.light,
   };
 
+  onPress = () => {
+    this.props.onPress && this.props.onPress(this.props.item);
+  };
+
+  onLongPress = () => {
+    this.props.onLongPress && this.props.onLongPress(this.props.item);
+  };
+
+  onCheckboxPress = () => {
+    this.props.onCheckboxPress && this.props.onCheckboxPress(this.props.item);
+  };
+
   render() {
-    const {contact, checked, onCheckboxPress, onPress, onLongPress, theme} = this.props;
+    const {item, checked, theme} = this.props;
     const _styles = styles(theme);
 
     return (
-      <TouchableOpacity onPress={onPress} onLongPress={onLongPress} style={{width: '100%'}}>
+      <TouchableOpacity onPress={this.onPress} onLongPress={this.onLongPress} style={{width: '100%'}}>
         <View style={_styles.wrapper}>
-          {/* <Checkbox checked={checked} style={ChatChosen} onPress={onCheckboxPress} /> */}
+          {/*<Checkbox checked={checked} style={_styles.chosen} onPress={this.onCheckboxPress}/>*/}
           <View style={_styles.image}>
             <AvatarIcon/>
           </View>
           <View style={_styles.body}>
             <Text style={_styles.name}>
-              {contact.username}
+              {item.username}
             </Text>
             <Text>
-              {moment(contact.dateUpdate).format('DD.MM.YY')}
+              {moment(item.dateUpdate).format('DD.MM.YY')}
             </Text>
           </View>
         </View>

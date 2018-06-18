@@ -97,7 +97,7 @@ class PrivateChat extends PureComponent {
   };
 
   render() {
-    const {chat, chatMessage} = this.props;
+    const {account, chat, chatMessage} = this.props;
 
     return (
       <Wrapper scrolled={false}>
@@ -113,7 +113,12 @@ class PrivateChat extends PureComponent {
         </Header>
         <SearchInput placeholder="Search in messages" onChange={this.onSearchChange}/>
         <KeyboardAvoidingView style={MessageStyles.container} behavior="padding" enabled>
-          <MessageList items={chatMessage.list} verticalOffset={116} renderItem={this.renderMessage}/>
+          <MessageList
+            items={chatMessage.list}
+            verticalOffset={116}
+            renderItem={this.renderMessage}
+            theme={account.user.theme}
+            context={this.context}/>
           <MessageInput onSubmitText={this.onSubmitText}/>
         </KeyboardAvoidingView>
       </Wrapper>

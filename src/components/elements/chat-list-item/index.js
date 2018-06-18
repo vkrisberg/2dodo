@@ -6,7 +6,7 @@ import moment from 'moment';
 import {Checkbox} from '../index';
 import {AvatarIcon} from '../../icons';
 import {themeEnum} from '../../../enums';
-import styles, {ChatChosen} from './styles';
+import styles from './styles';
 
 import avatarBgIcon from './img/circle.png';
 
@@ -68,13 +68,13 @@ export default class ChatListItem extends Component {
 
     return (
       <Text style={_styles.limitText} numberOfLines={2} ellipsizeMode="tail">
-        {context.t('NoMessages')}
+        {context.t('NoMessagesYet')}
       </Text>
     );
   };
 
   render() {
-    const {item, theme, context, editMode, selectedItems} = this.props;
+    const {item, theme, editMode, selectedItems} = this.props;
     const _styles = styles(theme);
     const isToday = moment(item.dateUpdate).format('DD.MM.YY') === moment().format('DD.MM.YY');
     const chosen = selectedItems[item.id];
@@ -84,7 +84,7 @@ export default class ChatListItem extends Component {
         <View style={_styles.container}>
           {editMode && <View style={_styles.checkboxBlock}>
             <Checkbox
-              style={ChatChosen}
+              style={_styles.chosen}
               input={{value: !!chosen, onChange: this.onCheckboxPress}}/>
           </View>
           }

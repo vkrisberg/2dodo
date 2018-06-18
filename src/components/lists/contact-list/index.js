@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {View, Text, FlatList} from 'react-native';
 
@@ -6,12 +6,11 @@ import {ContactsEmptyIcon} from '../../icons/index';
 import {themeEnum} from '../../../enums';
 import styles from './styles';
 
-export default class ContactList extends Component {
+export default class ContactList extends PureComponent {
 
   static propTypes = {
     items: PropTypes.array,
     renderItem: PropTypes.func,
-    onContactPress: PropTypes.func,
     theme: PropTypes.string,
     context: PropTypes.object,
   };
@@ -24,13 +23,14 @@ export default class ContactList extends Component {
 
   constructor(props) {
     super(props);
+
+    this.flatList = null;
+
     this.state = {
       items: props.items,
+      contentSize: 0,
+      layoutHeight: 0,
     };
-  }
-
-  componentDidMount() {
-    return null;
   }
 
   componentDidUpdate() {
@@ -39,21 +39,32 @@ export default class ContactList extends Component {
     }
   }
 
-  _keyExtractor = (item, index) => index;
+  updateLayoutHeight(e) {
+    this.setState({layoutHeight: e.nativeEvent.layout.height});
+  }
+
+  updateContentSize(w, h) {
+    this.setState({contentSize: h});
+  }
+
+  _keyExtractor = (item) => item.username;
 
   render() {
-    const {theme, context, renderItem} = this.props;
     const {items} = this.state;
+    const {theme, context, renderItem} = this.props;
     const _styles = styles(theme);
 
     if (items.length) {
       return (
-        <View style={_styles.wrapper}>
+        <View style={_styles.container}>
           <View style={_styles.divider}/>
           <Text style={_styles.caption}>{`${context.t('SearchResults')} (${items.length})`}</Text>
           <FlatList
+            ref={ref => this.flatList = ref}
             data={items}
             renderItem={renderItem}
+            onLayout={e => this.updateLayoutHeight(e)}
+            onContentSizeChange={(w, h) => this.updateContentSize(w, h)}
             keyExtractor={this._keyExtractor}
           />
         </View>
