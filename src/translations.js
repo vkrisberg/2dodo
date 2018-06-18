@@ -78,6 +78,8 @@ const translations = {
     'AddContact': 'Добавить контакт',
     'AddContactPlaceholder': 'Добавить контакт по @nickname',
     'AddContactQrCode': 'Нажмите здесь, чтобы использовать сканер QR-кода для добавления контакта друга',
+    'NoContacts': 'У Вас еще нет контактов',
+    'SearchResults': 'Результаты поиска',
   },
   'en': {
     // Main menu
@@ -158,6 +160,8 @@ const translations = {
     'AddContact': 'Add contact',
     'AddContactPlaceholder': 'Search contacts for @nickname',
     'AddContactQrCode': 'Tap here to use QR-code scanner to add friend contact',
+    'NoContacts': 'Your have not contacts yet',
+    'SearchResults': 'Search results',
   },
 };
 

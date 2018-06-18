@@ -1,18 +1,38 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, Text} from 'react-native';
+import {TouchableOpacity, Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
+import {MainLayout, BackgroundLayout} from '../../../components/layouts';
 import {contactActions} from '../../../store/actions';
-import {AddIcon, FavoritsDotsIcon} from '../../../components/icons/';
-import {SearchInput, ContactsBody} from '../../../components/elements';
-import {Wrapper} from '../../../components/layouts';
-import {Header, StyledTitle, TitleContainer, StyledIcon, AddButton} from '../styles';
+import {Navbar, SearchInput, NavbarDots, NavbarButton, AddButton} from '../../../components/elements';
+import {ContactsList} from '../../../components/lists';
+
+const list = [
+  {
+    username: 'Lisa Simpson',
+    dateCreate: '2018-06-14 10:00'
+  },
+  {
+    username: 'Margharet Simpson',
+    dateCreate: '2018-06-13 15:00'
+  },
+];
 
 class Contacts extends Component {
 
   static propTypes = {
     contact: PropTypes.object,
+    account: PropTypes.object,
+  };
+
+  static contextTypes = {
+    t: PropTypes.func.isRequired,
+  };
+
+  state = {
+    editMode: false,
+    selected: {},
   };
 
   componentDidMount() {
@@ -59,33 +79,37 @@ class Contacts extends Component {
     // this.deleteContact(username);
   };
 
+  renderNavbarButton = () => {
+    const {editMode} = this.state;
+
+    if (editMode) {
+      return (
+        <NavbarButton position="right" onPress={this.onDelete}>{this.context.t('Delete')}</NavbarButton>
+      );
+    }
+
+    return <AddButton onPress={this.onCreate}/>;
+  };
+
   render() {
-    const {contact} = this.props;
+    const {context} = this;
+    const {contact, account} = this.props;
 
     return (
-      <Wrapper scrolled>
-        <Header>
-          <TitleContainer width={'60%'}>
-            <StyledIcon>
-              <FavoritsDotsIcon/>
-            </StyledIcon>
-            <StyledTitle marginLeft={30}>
-              Contacts
-            </StyledTitle>
-          </TitleContainer>
-          <AddButton>
-            <TouchableOpacity onPress={this.onCreate}>
-              <AddIcon/>
-            </TouchableOpacity>
-          </AddButton>
-        </Header>
-        <SearchInput placeholder="Search in contacts" onChange={this.onSearchChange}/>
-        <ContactsBody contacts={contact.list}/>
-      </Wrapper>
+      <MainLayout netOffline={!account.net.connected}>
+        <BackgroundLayout theme={account.user.theme} paddingHorizontal={10}>
+          <Navbar renderTitle={context.t('Contacts')}
+            renderLeft={<NavbarDots/>}
+            renderRight={this.renderNavbarButton()}/>
+          <SearchInput placeholder="Search contacts" onChange={this.onSearchChange}/>
+          <ContactsList contacts={list} context={context}/>
+        </BackgroundLayout>
+      </MainLayout>
     );
   }
 }
 
 export default connect(state => ({
   contact: state.contact,
+  account: state.account,
 }))(Contacts);
