@@ -19,6 +19,7 @@ export default class Input extends PureComponent {
     placeholderColor: PropTypes.string,
     errorColor: PropTypes.string,
     style: PropTypes.any,
+    onSubmit: PropTypes.func,
     inputProps: PropTypes.object,
   };
 
@@ -61,6 +62,7 @@ export default class Input extends PureComponent {
       placeholderColor,
       errorColor,
       style,
+      onSubmit,
       ...inputProps,
     } = this.props;
     const borderWidth = this.state.focused || error ? 2 : 1;
@@ -81,6 +83,7 @@ export default class Input extends PureComponent {
         selectionColor={focusedColor}
         style={[_styles.input, style]}
         onChangeText={input.onChange}
+        onSubmitEditing={onSubmit}
         onBlur={this.handleBlur}
         onFocus={this.handleFocus}
         {...inputProps}

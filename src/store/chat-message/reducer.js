@@ -207,6 +207,7 @@ export default reducer(initState, {
     return {
       ...state,
       chat: action.payload,
+      list: [],
     };
   },
 });

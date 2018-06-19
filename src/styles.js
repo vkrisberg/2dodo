@@ -71,10 +71,15 @@ const colors = {
     navbarDescription: '#9399a5',
     backButton: '#6a7686',
     addButton: '#62a3ff',
-    messageDate: '#9399a5',
+    // Chat message
+    messageTextMain: '#1f2225',
+    messageTextSecond: '#9399a5',
     messageRightBg: '#5a9cf8',
     messageLeftBg: '#ffffff',
-    messageLeftBorder: '#dbdbdb',
+    messageBorder: '#dbdbdb',
+    messageInputBg: '#f7f7f7',
+    messageAudioBtnBg: '#eaeaea',
+    messageTextBtnBg: '#62a3ff',
   },
   night: {
     white: '#ffffff',
@@ -111,10 +116,15 @@ const colors = {
     navbarDescription: '#9399a5',
     backButton: '#6a7686',
     addButton: '#62a3ff',
-    messageDate: '#9399a5',
+    // Chat message
+    messageTextMain: '#1f2225',
+    messageTextSecond: '#9399a5',
     messageRightBg: '#5a9cf8',
     messageLeftBg: '#ffffff',
-    messageLeftBorder: '#dbdbdb',
+    messageBorder: '#dbdbdb',
+    messageInputBg: '#f7f7f7',
+    messageAudioBtnBg: '#eaeaea',
+    messageTextBtnBg: '#62a3ff',
   },
 };
 
