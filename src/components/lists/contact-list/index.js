@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {View, Text, FlatList} from 'react-native';
 
@@ -6,7 +6,7 @@ import {ContactsEmptyIcon} from '../../icons/index';
 import {themeEnum} from '../../../enums';
 import styles from './styles';
 
-export default class ContactList extends PureComponent {
+export default class ContactList extends Component {
 
   static propTypes = {
     items: PropTypes.array,

@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, {Component} from 'react';
 import {View, FlatList, Image, Keyboard} from 'react-native';
 import PropTypes from 'prop-types';
 
@@ -9,7 +9,7 @@ import styles from './styles';
 
 import IMG_MESSAGES_EMPTY from './img/messages_empty.png';
 
-export default class MessagesList extends PureComponent {
+export default class MessagesList extends Component {
 
   static propTypes = {
     items: PropTypes.array,

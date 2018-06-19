@@ -78,7 +78,7 @@ export default class ChatListItem extends Component {
     const _styles = styles(theme);
     const isToday = moment(item.dateUpdate).format('DD.MM.YY') === moment().format('DD.MM.YY');
     const chosen = selectedItems[item.id];
-
+    // console.log('chosen', editMode, chosen)
     return (
       <TouchableOpacity onPress={this.onPress} onLongPress={this.onLongPress}>
         <View style={_styles.container}>
