@@ -106,7 +106,11 @@ class ChatMessage extends PureComponent {
               renderItem={this.renderMessage}
               theme={account.user.theme}
               context={this.context}/>
-            <MessageInput onSubmitText={this.onSubmitText}/>
+            <MessageInput
+              theme={theme}
+              context={this.context}
+              disabled={!account.net.connected}
+              onSubmit={this.onSubmitText}/>
           </KeyboardAvoidingView>
         </BackgroundLayout>
       </MainLayout>
