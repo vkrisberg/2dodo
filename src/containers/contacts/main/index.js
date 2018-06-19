@@ -11,12 +11,31 @@ import {routeEnum} from '../../../enums';
 
 const list = [
   {
-    username: 'Lisa Simpson',
-    dateCreate: '2018-06-14 10:00'
+    title: 'Me',
+    data: [
+      {
+        username: 'Bart Simpson',
+      }
+    ],
   },
   {
-    username: 'Margharet Simpson',
-    dateCreate: '2018-06-13 15:00'
+    title: 'A',
+    data: [
+      {
+        username: 'Anna'
+      },
+      {
+        username: 'Alla'
+      },
+    ],
+  },
+  {
+    title: 'B',
+    data: [
+      {
+        username: 'Bady'
+      }
+    ],
   },
 ];
 
@@ -134,7 +153,7 @@ class Contacts extends Component {
             renderLeft={<NavbarDots/>}
             renderRight={this.renderNavbarButton()}/>
           <SearchInput placeholder="Search contacts" onChange={this.onSearchChange}/>
-          <ContactList context={context} items={contact.list} renderItem={this.renderContactList}/>
+          <ContactList context={context} items={list} renderItem={this.renderContactList} sections/>
         </BackgroundLayout>
       </MainLayout>
     );
