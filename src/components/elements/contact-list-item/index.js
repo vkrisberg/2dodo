@@ -18,11 +18,13 @@ class ContactListItem extends Component {
     onLongPress: PropTypes.func,
     onCheckboxPress: PropTypes.func,
     theme: PropTypes.string,
+    checkboxVisibility: PropTypes.bool,
   };
 
   static defaultProps = {
     checked: false,
     theme: themeEnum.light,
+    checkboxVisibility: false,
   };
 
   onPress = () => {
@@ -38,15 +40,15 @@ class ContactListItem extends Component {
   };
 
   render() {
-    const {item, checked, theme} = this.props;
+    const {item, checked, theme, checkboxVisibility} = this.props;
     const _styles = styles(theme);
 
     return (
       <TouchableOpacity onPress={this.onPress} onLongPress={this.onLongPress} style={{width: '100%'}}>
         <View style={_styles.wrapper}>
-          {/*<Checkbox*/}
-            {/*style={_styles.chosen}*/}
-            {/*input={{value: checked, onChange: this.onCheckboxPress}}/>*/}
+          {checkboxVisibility && <Checkbox
+            style={_styles.chosen}
+            input={{value: checked, onChange: this.onCheckboxPress}}/>}
           <View style={_styles.image}>
             <AvatarIcon/>
           </View>

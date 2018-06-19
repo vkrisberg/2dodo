@@ -1,7 +1,9 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import {View, Text, FlatList} from 'react-native';
+import RNLanguages from 'react-native-languages';
+import {View, Text, FlatList, SectionList} from 'react-native';
 
+import {generateAlphabet} from '../../../utils';
 import {ContactsEmptyIcon} from '../../icons/index';
 import {themeEnum} from '../../../enums';
 import styles from './styles';
@@ -13,12 +15,14 @@ export default class ContactList extends PureComponent {
     renderItem: PropTypes.func,
     theme: PropTypes.string,
     context: PropTypes.object,
+    sections: PropTypes.bool,
   };
 
   static defaultProps = {
     items: [],
     renderItem: () => {},
     theme: themeEnum.light,
+    sections: false,
   };
 
   constructor(props) {
@@ -51,10 +55,47 @@ export default class ContactList extends PureComponent {
 
   render() {
     const {items} = this.state;
-    const {theme, context, renderItem} = this.props;
+    const {theme, context, renderItem, sections} = this.props;
+    const lng = RNLanguages.language.substr(0, 2);
     const _styles = styles(theme);
+    let alphabet = null;
+
+    if (lng === 'ru') {
+      alphabet = generateAlphabet('а', 'я');
+    } else {
+      alphabet = generateAlphabet('a', 'z');
+    }
 
     if (items.length) {
+      if (sections) {
+        return (
+          <View style={_styles.sectionWrapper}>
+            <SectionList
+              style={_styles.section}
+              ref={ref => this.flatList = ref}
+              sections={items}
+              renderItem={renderItem}
+              onLayout={e => this.updateLayoutHeight(e)}
+              onContentSizeChange={(w, h) => this.updateContentSize(w, h)}
+              keyExtractor={this._keyExtractor}
+              renderSectionHeader={({section: {title}}) => (
+                <View style={_styles.sectionHeader}>
+                  <Text style={_styles.sectionLeft}>{title}</Text>
+                  {!(title === 'Me' || title === 'Я') && <View style={[_styles.divider]}/>}
+                </View>
+              )}
+            />
+            <View style={_styles.alphabet}>
+              {
+                alphabet.map( (letter, index) =>
+                  <Text key={index} style={_styles.alphabetLetter}>{letter}</Text>
+                )
+              }
+            </View>
+          </View>
+        );
+      }
+
       return (
         <View style={_styles.container}>
           <View style={_styles.divider}/>
