@@ -9,6 +9,7 @@ export default function ({event, store, navigation}) {
     console.log('websocket closed clear');
     AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
     AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
+    AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
     store.dispatch({type: types.LOGOUT_SUCCESS});
     navigation.replace(routeEnum.Login);
   } else {

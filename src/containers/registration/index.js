@@ -1,21 +1,21 @@
 import React, {Component} from 'react';
-import {Alert, KeyboardAvoidingView} from 'react-native';
+import {Alert, AsyncStorage} from 'react-native';
+import ImagePicker from 'react-native-image-picker';
 import {connect} from 'react-redux';
-import {withNavigation} from 'react-navigation';
 import PropTypes from 'prop-types';
 
-import {BackgroundLayout, DismissKeyboardLayout} from '../../components/layouts';
-import MainForm from '../../components/forms/registration/main-form';
-import EmailPhoneForm from '../../components/forms/registration/email-phone-form';
+import {MainLayout, BackgroundLayout} from '../../components/layouts';
+import {RegistrationForm} from '../../components/forms';
 import {accountActions} from '../../store/actions';
+import {routeEnum, dbEnum} from '../../enums';
 import {services} from '../../utils';
-import routeEnum from '../../enums/route-enum';
-import {dbEnum} from '../../enums';
+import storageEnum from '../../enums/storage-enum';
+import CONFIG from '../../config';
 
 class Registration extends Component {
   static propTypes = {
     account: PropTypes.object,
-    dispatch: PropTypes.func.isRequired,
+    dispatch: PropTypes.func,
     navigation: PropTypes.shape({navigate: PropTypes.func})
   };
 
@@ -23,24 +23,22 @@ class Registration extends Component {
     t: PropTypes.func.isRequired,
   };
 
-  state = {
-    page: 1,
-  };
-
   constructor(props) {
     super(props);
     this.realm = services.getRealm();
   }
 
-  nextPage = (data) => {
-    return data.nickname
-      ? this.setState({page: this.state.page + 1})
-      : Alert.alert('Fill nickname field');
-  };
-
-  previousPage = () => {
-    return this.setState({page: this.state.page - 1});
-  };
+  componentDidMount() {
+    this.imagePickerOptions = {
+      title: this.context.t('ChooseYourPhoto'),
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+      noData: false,
+      allowsEditing: true,
+    };
+  }
 
   saveToDatabase = () => {
     const {account} = this.props;
@@ -71,68 +69,108 @@ class Registration extends Component {
     });
   };
 
+  wsConnect = ({deviceId, hostname, user, keys, password}) => {
+    services.websocketConnect({
+      deviceId,
+      hostname,
+      username: user.username,
+      password,
+      hashKey: keys.hashKey,
+    });
+  };
+
   registration = async (data) => {
     const {account, dispatch} = this.props;
 
-    if (data.email && this.checkEmail(data.email)) {
-      Alert.alert('Invalid email address');
-
-      return null;
-    }
-
     if (account.loading) {
       Alert.alert('Account is loading');
-
-      return null;
+      return false;
     }
 
     const sendData = {
-      name: (data.nickname || '').trim().toLowerCase(),
+      name: (data.login || '').trim().toLowerCase(),
+      password: data.password,
       email: (data.email || '').trim().toLowerCase(),
+      phone: (data.phone || '').trim(),
       device_id: account.deviceId,
       device_name: account.deviceName,
       platform: account.platform,
       settings: null,
-      firstName: (data.firstName || '').trim(),
-      secondName: (data.secondName || '').trim(),
+      server: data.server,
     };
 
-    dispatch(accountActions.register(sendData))
-      .then(() => {
+    return await dispatch(accountActions.register(sendData))
+      .then((data) => {
         Alert.alert('Registration success');
         console.log('registration success', this.props.account);
+        AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.username}`, data.username);
+        AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.password}`, data.password);
         this.saveToDatabase();
-        this.props.navigation.navigate(routeEnum.Login);
+        return true;
+        // this.props.navigation.navigate(routeEnum.Login);
       })
       .catch((error) => {
-        Alert.alert('Registration error');
-        console.log('registration error', error.response.data);
+        Alert.alert(error.response.data.message);
+        console.log('registration error', error.response.status, error.response.data);
         if (error.response.status === 400) {
-          this.props.navigation.navigate(routeEnum.Login);
+          // this.props.navigation.navigate(routeEnum.Login);
         }
+        return false;
       });
   };
 
-  checkEmail = (value) => {
-    return !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value);
-  }
+  updateSettings = async (data) => {
+    const {account} = this.props;
+    const password = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
+
+    // TODO - save firstName, secondName to database
+
+    this.wsConnect({
+      deviceId: account.deviceId,
+      hostname: account.hostname,
+      user: account.user,
+      keys: account.keys,
+      password,
+    });
+
+    this.props.navigation.replace(routeEnum.Messages);
+  };
+
+  updateAvatar = () => {
+    ImagePicker.showImagePicker(this.imagePickerOptions, (response) => {
+      if (response.didCancel) {
+      }
+      else if (response.error) {
+        Alert.alert('Error', response.error);
+      }
+      else {
+        this.props.dispatch(accountActions.updateAvatar(response.data));
+      }
+    });
+  };
+
+  changeTheme = (theme) => {
+    this.props.dispatch(accountActions.changeTheme(theme));
+  };
 
   render() {
-    const {page} = this.state;
-    const {hostname, isSecure} = this.props.account;
-    const server = `http${isSecure ? 's' : ''}://${hostname}`;
+    const {account} = this.props;
 
     return (
-      <BackgroundLayout background="registration">
-        <DismissKeyboardLayout>
-        {page === 1 && <MainForm defaultServer={server} onSubmit={this.nextPage}/>}
-        {page === 2 && <EmailPhoneForm previousPage={this.previousPage} onSubmit={this.registration}/>}
-        </DismissKeyboardLayout>
-      </BackgroundLayout>
+      <MainLayout netOffline={!account.net.connected}>
+        <BackgroundLayout background="registration" barStyle="light-content">
+          <RegistrationForm context={this.context}
+                            account={account}
+                            onRegister={this.registration}
+                            onSettings={this.updateSettings}
+                            onAvatar={this.updateAvatar}
+                            onTheme={this.changeTheme}/>
+        </BackgroundLayout>
+      </MainLayout>
     );
   }
 }
 
 export default connect(state => ({
   account: state.account,
-}))(withNavigation(Registration));
+}))(Registration);

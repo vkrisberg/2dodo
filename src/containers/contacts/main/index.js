@@ -1,18 +1,41 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, Text} from 'react-native';
+import {TouchableOpacity, Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
+import {MainLayout, BackgroundLayout} from '../../../components/layouts';
+import {ContactList} from '../../../components/lists';
+import {Navbar, SearchInput, NavbarDots, ButtonNavbar, ButtonAdd, ContactListItem} from '../../../components/elements';
 import {contactActions} from '../../../store/actions';
-import {AddIcon, FavoritsDotsIcon} from '../../../components/icons/';
-import {SearchInput, ContactsBody} from '../../../components/elements';
-import {Wrapper} from '../../../components/layouts';
-import {Header, StyledTitle, TitleContainer, StyledIcon, AddButton} from '../styles';
+import {routeEnum} from '../../../enums';
+
+const list = [
+  {
+    username: 'Lisa Simpson',
+    dateCreate: '2018-06-14 10:00'
+  },
+  {
+    username: 'Margharet Simpson',
+    dateCreate: '2018-06-13 15:00'
+  },
+];
 
 class Contacts extends Component {
 
   static propTypes = {
     contact: PropTypes.object,
+    account: PropTypes.object,
+  };
+
+  static contextTypes = {
+    t: PropTypes.func.isRequired,
+  };
+
+  state = {
+    editMode: false,
+    selected: {},
+    chosenContacts: [],
+    chosenMessage: [],
   };
 
   componentDidMount() {
@@ -44,8 +67,8 @@ class Contacts extends Component {
     this.searchContacts(text);
   };
 
-  onCreate = (data) => {
-    this.props.navigation.navigate('AddContact');
+  onCreate = () => {
+    this.props.navigation.navigate(routeEnum.ContactAdd);
   };
 
   onUpdate = (username) => {
@@ -59,33 +82,66 @@ class Contacts extends Component {
     // this.deleteContact(username);
   };
 
+  renderNavbarButton = () => {
+    const {editMode} = this.state;
+
+    if (editMode) {
+      return (
+        <ButtonNavbar position="right" onPress={this.onDelete}>{this.context.t('Delete')}</ButtonNavbar>
+      );
+    }
+
+    return <ButtonAdd onPress={this.onCreate}/>;
+  };
+
+  isContactChosen = (contact) => {
+    return this.state.chosenContacts.find(item => item === contact);
+  };
+
+  onContactPress = (contact) => {
+
+  };
+
+  onCheckboxPress = (contact) => {
+    const {chosenContacts} = this.state;
+
+    if (this.isChatChosen(message)) {
+      this.setState({chosenMessage: chosenContacts.filter(item => item !== contact)});
+    }
+
+    this.setState({chosenMessage: [...chosenContacts, contact]});
+  };
+
+  renderContactList = ({item}) => {
+    return (
+      <ContactListItem
+        item={item}
+        checked={this.isContactChosen(item)}
+        onPress={this.onContactPress(item)}
+        onCheckboxPress={() => this.onCheckboxPress(item)}
+      />
+    );
+  };
+
   render() {
-    const {contact} = this.props;
+    const {context} = this;
+    const {contact, account} = this.props;
 
     return (
-      <Wrapper scrolled>
-        <Header>
-          <TitleContainer width={'60%'}>
-            <StyledIcon>
-              <FavoritsDotsIcon/>
-            </StyledIcon>
-            <StyledTitle marginLeft={30}>
-              Contacts
-            </StyledTitle>
-          </TitleContainer>
-          <AddButton>
-            <TouchableOpacity onPress={this.onCreate}>
-              <AddIcon/>
-            </TouchableOpacity>
-          </AddButton>
-        </Header>
-        <SearchInput placeholder="Search in contacts" onChange={this.onSearchChange}/>
-        <ContactsBody contacts={contact.list}/>
-      </Wrapper>
+      <MainLayout netOffline={!account.net.connected}>
+        <BackgroundLayout theme={account.user.theme} paddingHorizontal={10}>
+          <Navbar renderTitle={context.t('Contacts')}
+            renderLeft={<NavbarDots/>}
+            renderRight={this.renderNavbarButton()}/>
+          <SearchInput placeholder="Search contacts" onChange={this.onSearchChange}/>
+          <ContactList context={context} items={contact.list} renderItem={this.renderContactList}/>
+        </BackgroundLayout>
+      </MainLayout>
     );
   }
 }
 
 export default connect(state => ({
   contact: state.contact,
+  account: state.account,
 }))(Contacts);

@@ -1,26 +1,24 @@
-import styled from 'styled-components';
+import {StyleSheet} from 'react-native';
+import {colors, fonts, weights} from '../../../styles';
 
-const getColor = ({ color }) => color || 'white';
+export default ({theme, color, bgColor}) => {
+  return StyleSheet.create({
+    container: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: bgColor || 'transparent',
+      borderColor: color || colors[theme].black,
+      borderWidth: 3,
+      width: 200,
+      height: 40,
+      borderRadius: 20,
+    },
 
-export const Container = styled.View`
-  align-items: center;
-  ${props => props.style && props.style}
-`;
-
-export const StyledButton = styled.TouchableOpacity`
-  align-items: center;
-  justify-content: center;
-  border-color: ${props => getColor(props)};
-  border-width: 2;
-  background-color: transparent;
-  width: 205;
-  height: 50;
-  padding: 10px;
-  border-radius: 70;
-  ${props => props.wrapperStyle && props.wrapperStyle}
-`;
-
-export const ButtonText = styled.Text`
-  color: ${props => getColor(props)};
-  ${props => props.textStyle && props.textStyle}
-`;
+    text: {
+      color: color || colors[theme].black,
+      fontFamily: fonts.main,
+      fontSize: 16,
+      fontWeight: weights.medium,
+    },
+  });
+}

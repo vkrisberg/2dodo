@@ -1,9 +1,29 @@
 import {StyleSheet} from 'react-native';
-import styled from 'styled-components';
+import {sizes} from '../../../styles';
 
-export const Wrapper = styled.View`
-  flex: 1;
-  flexDirection: column;
-  padding: 15px;
-  height: ${props => props.height};
-`;
+export default ({theme, verticalOffset}) => {
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      // height: sizes.windowHeight - sizes.navbarHeight - verticalOffset,
+      width: '100%',
+    },
+
+    emptyContainer: {
+      flex: 1,
+      width: '100%',
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingBottom: 50,
+    },
+
+    emptyWrapper: {
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+
+    text: {
+      marginTop: 15,
+    },
+  });
+}

@@ -1,17 +1,21 @@
 import {StyleSheet} from 'react-native';
-import {color} from '../../../styles';
+import {colors, sizes} from '../../../styles';
 
-export default StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    backgroundColor: color.white,
-  },
+export default ({theme, paddingHorizontal, paddingVertical}) => {
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'flex-start',
+      backgroundColor: colors[theme].bgMain,
+      paddingHorizontal: paddingHorizontal,
+      paddingVertical: paddingVertical,
+    },
 
-  image: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-  },
-});
+    image: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+    },
+  });
+}

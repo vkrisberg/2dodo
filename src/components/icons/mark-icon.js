@@ -1,5 +1,6 @@
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
+  Svg,
   G,
   Line
 } from 'react-native-svg';
@@ -9,26 +10,28 @@ export default class MarkIcon extends PureComponent {
     const {color} = this.props;
 
     return (
-      <G>
-        <Line
-          strokeLinecap="round"
-          x1="11"
-          y1="11"
-          x2="15"
-          y2="15"
-          stroke={color || 'white'}
-          strokeWidth="2"
-        />
-        <Line
-          strokeLinecap="round"
-          x1="15"
-          y1="15"
-          x2="21"
-          y2="8"
-          stroke={color || 'white'}
-          strokeWidth="2"
-        />
-      </G>
+      <Svg width="14" height="10">
+        <G>
+          <Line
+            strokeLinecap="round"
+            x1="2"
+            y1="5"
+            x2="6"
+            y2="9"
+            stroke={color || 'white'}
+            strokeWidth="2"
+          />
+          <Line
+            strokeLinecap="round"
+            x1="6"
+            y1="9"
+            x2="12"
+            y2="2"
+            stroke={color || 'white'}
+            strokeWidth="2"
+          />
+        </G>
+      </Svg>
     );
   }
 }

@@ -1,17 +1,21 @@
 import reducer from '../../utils/reducer';
 import {types} from './actions';
+import {themeEnum} from '../../enums'
 import CONFIG from '../../config';
 
 const initState = {
   authorized: false,
 
   user: {
-    nickname: '', // login
     username: '', // login@hostname
+    nickname: '', // login
+    email: '',
+    phones: [],
     firstName: '',
     secondName: '',
-    email: '',
-    avatar: '',
+    bio: '',
+    avatar: '', // in base64
+    theme: themeEnum.light, // [light, night]
   },
 
   keys: {
@@ -20,13 +24,21 @@ const initState = {
     hashKey: null,
   },
 
+  password: '',
+
   deviceId: '',
   deviceName: '',
   platform: '',
   hostname: CONFIG.hostname,
   isSecure: CONFIG.isSecure,
 
+  net: {
+    info: {type: '', effectiveType: ''},
+    connected: true,
+  },
+
   loading: false,
+  updating: false,
   error: null,
 };
 
@@ -107,6 +119,7 @@ export default reducer(initState, {
     return {
       ...state,
       deviceId: action.payload.deviceId,
+      password: action.payload.password,
       user: {
         ...action.payload.user,
       },
@@ -142,13 +155,13 @@ export default reducer(initState, {
   [types.REGISTER_SUCCESS]: (state, action) => {
     const {data} = action;
     const account = {
+      password: data.password,
       user: {
         ...state.user,
+        username: data.username,
         nickname: data.name,
-        username: `${data.name}@${state.hostname}`,
-        firstName: data.firstName,
-        secondName: data.secondName,
         email: data.email,
+        phones: data.phone ? [data.phone] : [],
       },
       keys: {
         publicKey: data.publicKey,
@@ -193,6 +206,53 @@ export default reducer(initState, {
     return {
       ..._state,
       loading: false,
+      error: action.error,
+    };
+  },
+
+  [types.NET_UPDATE]: (state, action) => {
+    return {
+      ...state,
+      net: {
+        info: action.payload,
+        connected: action.payload.type === 'wifi' || action.payload.type === 'cellular',
+      },
+    };
+  },
+
+  [types.THEME_CHANGE]: (state, action) => {
+    return {
+      ...state,
+      user: {
+        ...state.user,
+        theme: action.payload,
+      },
+    };
+  },
+
+  [types.AVATAR_UPDATE]: (state, action) => {
+    return {
+      ...state,
+      updating: true,
+      error: null
+    };
+  },
+
+  [types.AVATAR_UPDATE_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      user: {
+        ...state.user,
+        avatar: action.payload,
+      },
+      updating: false,
+    };
+  },
+
+  [types.AVATAR_UPDATE_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      updating: false,
       error: action.error,
     };
   },

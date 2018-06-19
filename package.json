@@ -24,7 +24,7 @@
     "react-native-check-box": "^2.1.0",
     "react-native-crypto": "^2.1.2",
     "react-native-device-info": "^0.21.5",
-    "react-native-image-picker": "^0.26.7",
+    "react-native-image-picker": "^0.26.10",
     "react-native-languages": "^1.0.7",
     "react-native-openpgp": "^1.0.4",
     "react-native-randombytes": "^3.1.0",

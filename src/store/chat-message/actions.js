@@ -1,6 +1,6 @@
 import {get, map, filter, uniqBy} from 'lodash';
 
-import apiChat from '../../api/chat';
+import {apiChat, apiServer} from '../../api';
 import {services, wsMessage} from '../../utils';
 import {dbEnum, messageEnum} from '../../enums';
 import CONFIG from '../../config';
@@ -74,7 +74,9 @@ export default {
           messages = messages.filtered(filter);
         }
         console.log('chat messages loaded', messages.length);
-        const payload = [...messages];
+        const payload = messages.map((item) => {
+          return {...item};
+        });
         dispatch({type: types.LOAD_SUCCESS, payload});
         return payload;
       } catch (e) {
@@ -244,6 +246,15 @@ export default {
         if (error) {
           throw new Error({type: 'server', error});
         }
+        // send delivery report
+        const msgEncryptTime =  get(message, 'encrypt_time', null);
+        await apiServer.deliveryReport(msgEncryptTime);
+
+        const realmChatMessage = realm.objectForPrimaryKey(dbEnum.ChatMessage, meta.id);
+        if (realmChatMessage) {
+          throw new Error('chat message has already received');
+        }
+
         let encryptTime = get(message, 'encrypt_time', null);
         encryptTime = wsMessage.dateSendToRealm(encryptTime);
         let hashKeys = realm.objects(dbEnum.HashKey)

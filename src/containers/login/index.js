@@ -1,31 +1,25 @@
 import React, {Component} from 'react';
-import {KeyboardAvoidingView} from 'react-native';
+import {KeyboardAvoidingView, View, Alert, ActionSheetIOS, AsyncStorage} from 'react-native';
 import {withNavigation} from 'react-navigation';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {
-  View,
-  Alert,
-} from 'react-native';
 
-import {BackgroundLayout, DismissKeyboardLayout} from '../../components/layouts';
-import Link from '../../components/elements/link';
-import LoginForm from '../../components/forms/login';
+import {MainLayout, BackgroundLayout, DismissKeyboardLayout} from '../../components/layouts';
+import {LoginForm} from '../../components/forms';
+import {Logo, Button, Link} from '../../components/elements';
 import {routeEnum, dbEnum} from '../../enums';
-import Logo from '../../components/elements/logo';
 import {services} from '../../utils';
 import {accountActions} from '../../store/actions';
 import {
   StyledText,
-  StyledLink,
   StyledRegistration,
-  RegistrationLabel
+  RegistrationLabel,
+  LoginStyles,
 } from './styles';
-import {LoginStyles} from './styles';
+import {colors, sizes} from '../../styles';
+import storageEnum from '../../enums/storage-enum';
+import {validation} from '../../utils';
 import CONFIG from '../../config';
-
-const logoStyle = {marginTop: 58};
-const linkStyle = {fontWeight: 'bold'};
 
 class Login extends Component {
 
@@ -39,66 +33,148 @@ class Login extends Component {
     t: PropTypes.func.isRequired,
   };
 
+  state = {
+    errors: {
+      login: false,
+      password: false,
+    },
+  };
+
   constructor(props) {
     super(props);
     this.realm = services.getRealm();
   }
 
-  wsConnect = ({deviceId, user, keys}) => {
+  componentDidUpdate() {
+    if (this.state.errors.login || this.state.errors.password) {
+      setTimeout(() => this.setState({errors: {}}), 2000);
+    }
+  }
+
+  wsConnect = ({deviceId, hostname, user, keys, password}) => {
     services.websocketConnect({
       deviceId,
+      hostname,
       username: user.username,
-      password: keys.hashKey,
+      password,
+      hashKey: keys.hashKey,
     });
   };
 
   login = async (data) => {
-    const {dispatch} = this.props;
-    const {username} = data;
+    const {dispatch, account} = this.props;
+    const login = (data.login || '').trim().toLowerCase();
+    const password = (data.password || '').trim();
+    // const createNewKey = data.createNewKey || false;
 
-    if (!username) {
-      Alert.alert('Fill username field');
-      return null;
+    this.setState({
+      errors: {
+        login: !login,
+        password: !password,
+      },
+    });
+
+    if (!login || !password) {
+      return false;
     }
 
-    const _username = `${username.trim().toLowerCase()}@${CONFIG.hostname}`;
-    const account = this.realm.objectForPrimaryKey(dbEnum.Account, _username);
-
-    if (!account) {
-      Alert.alert('Wrong username');
-      return null;
+    if (!validation.usernameRegex.test(login)) {
+      this.setState({
+        errors: {
+          login: true,
+          password: false,
+        },
+      });
+      return false;
     }
 
-    const {deviceId, user, keys} = account;
-    dispatch(accountActions.login({deviceId, user, keys}))
+    let username = login;
+
+    if (login.indexOf('@') === -1) {
+      username = `${login}@${account.hostname}`;
+    }
+
+    const realmAccount = this.realm.objectForPrimaryKey(dbEnum.Account, username);
+
+    if (!realmAccount) {
+      this.setState({
+        errors: {
+          login: true,
+          password: true,
+        },
+      });
+      return false;
+    }
+
+    const {deviceId, hostname, user, keys} = realmAccount;
+    dispatch(accountActions.login({deviceId, hostname, user, keys, password}))
       .then(() => {
-        this.wsConnect({deviceId, user, keys});
+        AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.username}`, username);
+        AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.password}`, password);
+        this.wsConnect({deviceId, hostname, user, keys, password});
         this.props.navigation.replace(routeEnum.Messages);
       })
       .catch((error) => {
         console.error('login error', error);
-        Alert.alert('Login error');
+        Alert.alert(this.context.t('LoginAuthError'));
+        this.setState({
+          errors: {
+            login: true,
+            password: true,
+          },
+        });
+      });
+  };
+
+  keysImport = () => {
+    const {t} = this.context;
+    const options = [t('EnterKeyAction'), t('ReadQrCode'), t('RestoreFromBackup'), t('Cancel')];
+    const cancelButtonIndex = -1;
+    const destructiveButtonIndex = 3;
+
+    ActionSheetIOS.showActionSheetWithOptions({
+        options,
+        cancelButtonIndex,
+        destructiveButtonIndex,
+      },
+      (buttonIndex) => {
+        console.log('ActionSheetIOS', buttonIndex);
       });
   };
 
   render() {
+    const {account} = this.props;
     const {t} = this.context;
+    const forgotLinkColor = sizes.isIphone5 ? colors.light.blueDarker : colors.light.white;
 
     return (
-      <BackgroundLayout background="login">
-        <DismissKeyboardLayout>
-          <KeyboardAvoidingView style={LoginStyles.container} behavior="position" enabled>
-            <Logo style={logoStyle} flex={false}/>
-            <StyledText>{t('Welcome')}</StyledText>
-            <LoginForm placeholder={t('LoginPlaceholder')} onSubmit={this.login}/>
-            {/*<StyledLink to={routeEnum.ForgotPassword}>{t('ForgetPassword')}</StyledLink>*/}
+      <MainLayout netOffline={!account.net.connected}>
+        <BackgroundLayout background="login" barStyle="light-content">
+          <DismissKeyboardLayout>
+            <KeyboardAvoidingView style={LoginStyles.container} behavior="position" enabled>
+              <Logo style={LoginStyles.logo}/>
+              <StyledText>{t('LoginWelcome')}</StyledText>
+              <LoginForm context={this.context} errors={this.state.errors} onSubmit={this.login}/>
+            </KeyboardAvoidingView>
+            <Link style={LoginStyles.forgot}
+                  to={routeEnum.ForgotPassword}
+                  color={forgotLinkColor}>{t('ForgotPassword')}</Link>
             <StyledRegistration>
               <RegistrationLabel>{t('FirstTimeInApp')}</RegistrationLabel>
-              <Link style={linkStyle} color="white" to={routeEnum.Registration}>{t('Registration')}</Link>
+              <Link to={routeEnum.Registration}
+                    color={colors.light.blueDarker}>{t('Registration')}</Link>
             </StyledRegistration>
-          </KeyboardAvoidingView>
-        </DismissKeyboardLayout>
-      </BackgroundLayout>
+            <View style={LoginStyles.keysImportContainer}>
+              <Button style={LoginStyles.keysImportButton}
+                      color={colors.light.grayDarker}
+                      bgColor={colors.light.whiteSmoke}
+                      onPress={this.keysImport}>
+                {t('KeysImport')}
+              </Button>
+            </View>
+          </DismissKeyboardLayout>
+        </BackgroundLayout>
+      </MainLayout>
     );
   }
 }

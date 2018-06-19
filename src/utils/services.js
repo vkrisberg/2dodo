@@ -17,12 +17,17 @@ class Services {
     ws.init({store, navigation});
   }
 
-  websocketConnect({deviceId, username, password, url}) {
+  websocketConnect({deviceId, hostname, username, password, hashKey, url}) {
+    let _url = url || defaultUrl;
+    if (hostname) {
+      _url = `ws${CONFIG.isSecure ? 's' : ''}://${hostname}/ws/`;
+    }
     this.wsConfig = {
       deviceId,
       username,
       password,
-      url: url || defaultUrl
+      hashKey,
+      url: _url,
     };
     this.ws = ws.connect(this.wsConfig);
     return this.ws;

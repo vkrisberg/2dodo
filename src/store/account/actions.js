@@ -1,7 +1,7 @@
 import {AsyncStorage} from 'react-native';
 
 import apiAccount from '../../api/account';
-import {services} from '../../utils';
+import {services, wsMessage} from '../../utils';
 import {pgplib, hashlib} from '../../utils/encrypt';
 import {storageEnum, dbEnum} from '../../enums';
 import CONFIG from '../../config';
@@ -24,6 +24,13 @@ export const types = {
   REGISTER: Symbol('REGISTER'),
   REGISTER_SUCCESS: Symbol('REGISTER_SUCCESS'),
   REGISTER_FAILURE: Symbol('REGISTER_FAILURE'),
+
+  AVATAR_UPDATE: Symbol('AVATAR_UPDATE'),
+  AVATAR_UPDATE_SUCCESS: Symbol('AVATAR_UPDATE_SUCCESS'),
+  AVATAR_UPDATE_FAILURE: Symbol('AVATAR_UPDATE_FAILURE'),
+
+  NET_UPDATE: Symbol('NET_UPDATE'),
+  THEME_CHANGE: Symbol('THEME_CHANGE'),
 };
 
 export default {
@@ -40,16 +47,19 @@ export default {
         // await AsyncStorage.clear();
         // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
         // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
+        // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
         //---
         const realm = services.getRealm();
         const authorized = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
         const username = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
-        if (!authorized || !username) {
+        const password = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
+
+        if (!authorized || !username || !password) {
           throw new Error('remind failed: user is not authorized');
         }
 
         const account = realm.objectForPrimaryKey(dbEnum.Account, username);
-        // console.log('account', account);
+        // console.log('account', account.keys);
 
         // TODO - remove after test
         // const pubKey = '';
@@ -66,8 +76,9 @@ export default {
         }
 
         const payload = {...account};
+        payload.password = password;
         dispatch({type: types.REMIND_SUCCESS, payload});
-        return payload;
+        return {...payload, password};
       } catch (e) {
         dispatch({type: types.REMIND_FAILURE, error: e});
         throw e;
@@ -75,10 +86,10 @@ export default {
     };
   },
 
-  login: ({deviceId, user, keys}) => {
+  login: ({deviceId, hostname, user, keys, password}) => {
     return async dispatch => {
       try {
-        dispatch({type: types.LOGIN, payload: {user, keys}});
+        dispatch({type: types.LOGIN, payload: {deviceId, hostname, user, keys, password}});
         // dispatch({type: types.LOGIN_SUCCESS});
       } catch (e) {
         dispatch({type: types.LOGIN_FAILURE, error: e});
@@ -100,19 +111,26 @@ export default {
   },
 
   register: (data) => {
-    return async dispatch => {
+    return async (dispatch, getState) => {
       dispatch({type: types.REGISTER});
       try {
-        const {publicKey, privateKey} = await pgplib.generateKey({name: data.name, email: data.email});
+        const {account} = getState();
+        const {publicKey, privateKey} = await pgplib.generateKey({
+          name: data.name,
+          email: data.email,
+          passphrase: data.password,
+        });
         const hashKey = hashlib.hexSha256(privateKey);
         data.publicKey = publicKey;
         data.privateKey = privateKey;
         data.hashKey = hashKey;
         data.open_key = publicKey;
         data.hash_key = hashKey;
+        data.username = `${data.name}@${account.hostname}`;
+        // TODO - parse and apply data.server
         const res = await apiAccount.registration(data);
         dispatch({type: types.REGISTER_SUCCESS, payload: res.data, data});
-        return res.data;
+        return data;
       } catch (e) {
         if (e.response && e.response.status < 500) {
           dispatch({type: types.REGISTER_FAILURE, error: e.response.data, data});
@@ -122,5 +140,39 @@ export default {
         throw e;
       }
     };
-  }
+  },
+
+  netUpdate: (connectionInfo) => {
+    return {type: types.NET_UPDATE, payload: connectionInfo};
+  },
+
+  changeTheme: (theme) => {
+    // TODO - save to database
+    return {type: types.THEME_CHANGE, payload: theme};
+  },
+
+  updateAvatar: (avatarBase64) => {
+    return async (dispatch, getState) => {
+      dispatch({type: types.AVATAR_UPDATE});
+      try {
+        const realm = services.getRealm();
+        const {account} = getState();
+        const dateNow = new Date();
+        const realmAccount = realm.objectForPrimaryKey(dbEnum.Account, account.user.username);
+        if (realmAccount) {
+          await realm.write(() => {
+            realmAccount.user.avatar = avatarBase64;
+            realmAccount.dateUpdate = dateNow;
+          });
+          // console.log('avatar updated', realmAccount);
+          // TODO - send avatar to server
+        }
+        dispatch({type: types.AVATAR_UPDATE_SUCCESS, payload: avatarBase64});
+        return realmAccount;
+      } catch (e) {
+        dispatch({type: types.AVATAR_UPDATE_FAILURE, error: e});
+        throw e;
+      }
+    };
+  },
 };

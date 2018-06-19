@@ -2,6 +2,7 @@ import React, {PureComponent} from 'react';
 import {StatusBar, View, ScrollView, Image, Dimensions} from 'react-native';
 import PropTypes from 'prop-types';
 
+import {themeEnum} from '../../../enums';
 import styles from './styles';
 
 import BG_LOGIN from './img/bg_login.png';
@@ -15,16 +16,22 @@ const registrationRatio = 0.341333333333333;
 export default class BackgroundLayout extends PureComponent {
 
   static propTypes = {
+    theme: PropTypes.string,
     background: PropTypes.string,
     barHidden: PropTypes.bool,
     barStyle: PropTypes.string,
+    paddingHorizontal: PropTypes.number,
+    paddingVertical: PropTypes.number,
     style: PropTypes.any,
   };
 
   static defaultProps = {
-    background: 'preload', // [preload, login, registration]
+    theme: themeEnum.light,
+    background: 'none', // [none, preload, login, registration]
     barHidden: false,
-    barStyle: 'light-content'
+    barStyle: 'dark-content',
+    paddingHorizontal: 0,
+    paddingVertical: 0,
   };
 
   getBackground = () => {
@@ -44,19 +51,30 @@ export default class BackgroundLayout extends PureComponent {
       : deviceHeight;
   };
 
+  renderImage = (_styles) => {
+    if (this.props.background !== 'none') {
+      return (
+        <Image style={_styles.image}
+               source={this.getBackground()}
+               width={deviceWidth}
+               height={this.getImageHeight()}/>
+      );
+    }
+  };
+
   render() {
+    const {theme, style, barHidden, barStyle, paddingHorizontal, paddingVertical} = this.props;
+    const _styles = styles({theme, paddingHorizontal, paddingVertical});
+
     return (
-      <View style={[styles.container, this.props.style]}>
+      <View style={[_styles.container, style]}>
         <StatusBar
           animated={true}
           translucent={true}
           backgroundColor="rgba(0, 0, 0, 0)"
-          hidden={this.props.barHidden}
-          barStyle={this.props.barStyle}/>
-        <Image style={styles.image}
-               source={this.getBackground()}
-               width={deviceWidth}
-               height={this.getImageHeight()}/>
+          hidden={barHidden}
+          barStyle={barStyle}/>
+        {this.renderImage(_styles)}
         {this.props.children}
       </View>
     );

@@ -1,23 +1,15 @@
-import React, {PureComponent} from 'react';
-import {ScrollView, Text, TouchableWithoutFeedback} from 'react-native';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {withNavigation} from 'react-navigation';
 import PropTypes from 'prop-types';
+import {isEmpty, map} from 'lodash';
 
+import {MainLayout, BackgroundLayout} from '../../../components/layouts';
+import {ChatList} from '../../../components/lists';
+import {SearchInput, Navbar, NavbarDots, ButtonAdd, ChatListItem, ButtonNavbar} from '../../../components/elements';
 import {chatActions, chatMessageActions, contactActions} from '../../../store/actions';
-import {Wrapper} from '../../../components/layouts';
 import {routeEnum} from '../../../enums';
-import {FavoritsDotsIcon, AddIcon} from '../../../components/icons';
-import {SearchInput, ChatsBody} from '../../../components/elements';
-import {
-  Header,
-  StyledTitle,
-  TitleContainer,
-  AddContact,
-  StyledIcon
-} from '../styles';
 
-class Messages extends PureComponent {
+class Messages extends Component {
 
   static propTypes = {
     account: PropTypes.object,
@@ -33,11 +25,15 @@ class Messages extends PureComponent {
   };
 
   state = {
-    page: 'chatList', // [chatList, createChat]
+    editMode: false,
+    selected: {},
   };
 
-  componentDidMount() {
+  constructor(props) {
+    super(props);
+  }
 
+  componentDidMount() {
     this.loadChatList();
     this.loadContactList();
     // TODO - remove after tests
@@ -48,7 +44,7 @@ class Messages extends PureComponent {
     //   this.createChat(contacts).then((chat) => {
     //     // chat.name = 'New Chat';
     //     // this.updateChat(chat);
-    //     // this.deleteChat(chat.id);
+    //     // this.deleteChatById(chat.id);
     //     const messageData = {
     //       username: account.user.username,
     //       text: 'Hello World!',
@@ -79,8 +75,12 @@ class Messages extends PureComponent {
     return this.props.dispatch(chatActions.update(data));
   };
 
-  deleteChat = async (id) => {
-    return this.props.dispatch(chatActions.delete(id));
+  deleteChatById = async (id) => {
+    return this.props.dispatch(chatActions.deleteById(id));
+  };
+
+  deleteChats = async (ids) => {
+    return this.props.dispatch(chatActions.delete(ids));
   };
 
   loadChatMessages = () => {
@@ -109,36 +109,105 @@ class Messages extends PureComponent {
   };
 
   onCreate = () => {
-    this.props.navigation.navigate('CreateChat');
+    this.props.navigation.navigate(routeEnum.ChatCreate);
   };
 
   onChatPress = (chat) => {
-    this.props.navigation.navigate(routeEnum.PrivateChat, {chat});
+    if (this.state.editMode) {
+      this.onChatCheckboxPress(chat);
+      return;
+    }
+
+    this.props.navigation.navigate(routeEnum.ChatMessage, {chat});
+  };
+
+  onChatLongPress = (chat) => {
+    if (!this.state.editMode) {
+      this.setState({
+        selected: {[chat.id]: chat},
+        editMode: true,
+      });
+    }
+  };
+
+  onChatCheckboxPress = (chat) => {
+    if (this.state.editMode) {
+      const selected = {...this.state.selected};
+
+      if (!selected[chat.id]) {
+        selected[chat.id] = chat;
+      } else {
+        delete selected[chat.id];
+      }
+
+      if (isEmpty(selected)) {
+        this.setState({
+          editMode: false,
+          selected: {},
+        });
+        return;
+      }
+
+      this.setState({selected});
+    }
+  };
+
+  onChatsDelete = () => {
+    const chatIds = map(this.state.selected, (item, key) => key);
+    if (chatIds.length) {
+      this.deleteChats(chatIds).then(() => {
+        this.setState({
+          editMode: false,
+          selected: {},
+        });
+      });
+    }
+  };
+
+  renderChatItem = ({item}) => {
+    const {account} = this.props;
+
+    return (
+      <ChatListItem item={item}
+                    theme={account.user.theme}
+                    context={this.context}
+                    editMode={this.state.editMode}
+                    selectedItems={this.state.selected}
+                    onPress={this.onChatPress}
+                    onLongPress={this.onChatLongPress}
+                    onCheckboxPress={this.onChatCheckboxPress}/>
+    );
+  };
+
+  renderNavbarButton = () => {
+    const {editMode} = this.state;
+
+    if (editMode) {
+      return (
+        <ButtonNavbar position="right" onPress={this.onChatsDelete}>{this.context.t('Delete')}</ButtonNavbar>
+      );
+    }
+
+    return <ButtonAdd onPress={this.onCreate}/>;
   };
 
   render() {
-    const {chat} = this.props;
+    const {account, chat} = this.props;
+    const {theme} = account.user;
 
     return (
-      <Wrapper scrolled>
-        <Header>
-          <TitleContainer width={'60%'}>
-            <StyledIcon>
-              <FavoritsDotsIcon/>
-            </StyledIcon>
-            <StyledTitle marginLeft={30}>
-              Messages
-            </StyledTitle>
-          </TitleContainer>
-          <TouchableWithoutFeedback onPress={this.onCreate}>
-            <AddContact>
-              <AddIcon/>
-            </AddContact>
-          </TouchableWithoutFeedback>
-        </Header>
-        <SearchInput placeholder="Search in chats" onChange={this.searchChats}/>
-        <ChatsBody chatList={chat.list} onChatPress={this.onChatPress}/>
-      </Wrapper>
+      <MainLayout netOffline={!account.net.connected}>
+        <BackgroundLayout theme={theme} paddingHorizontal={10}>
+          <Navbar renderTitle={this.context.t('Messages')}
+                  renderLeft={<NavbarDots/>}
+                  renderRight={this.renderNavbarButton()}/>
+          <SearchInput placeholder="Search in chats" onChange={this.searchChats}/>
+          <ChatList theme={theme}
+                    context={this.context}
+                    items={chat.list}
+                    renderItem={this.renderChatItem}/>
+        </BackgroundLayout>
+      </MainLayout>
     );
   }
 }
@@ -148,4 +217,4 @@ export default connect(state => ({
   chat: state.chat,
   chatMessage: state.chatMessage,
   contact: state.contact,
-}))(withNavigation(Messages));
+}))(Messages);
