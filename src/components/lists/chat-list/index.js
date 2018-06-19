@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, {Component} from 'react';
 import {View, FlatList, Image} from 'react-native';
 import PropTypes from 'prop-types';
 
@@ -9,7 +9,7 @@ import styles from './styles';
 
 import IMG_CHATS_EMPTY from './img/chat_empty.png';
 
-export default class ChatList extends PureComponent {
+export default class ChatList extends Component {
 
   static propTypes = {
     items: PropTypes.array,
