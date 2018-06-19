@@ -84,6 +84,7 @@ const translations = {
     'NoChats': 'У Вас еще нет чатов',
     'NoMessages': 'Нет сообщений',
     'CreateChat': 'Создать чат',
+    'Message': 'Сообщение',
   },
   'en': {
     // Main menu
@@ -170,6 +171,7 @@ const translations = {
     'NoChats': 'Your have not chats yet',
     'NoMessages': 'No messages',
     'CreateChat': 'Create chat',
+    'Message': 'Message',
   },
 };
 

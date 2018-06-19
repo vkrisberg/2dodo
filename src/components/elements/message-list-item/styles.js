@@ -16,7 +16,7 @@ export default ({theme}) => {
 
     containerLeft: {
       backgroundColor: colors[theme].messageLeftBg,
-      borderColor: colors[theme].messageLeftBorder,
+      borderColor: colors[theme].messageBorder,
       borderWidth: 0.5,
       borderRadius: 10,
       marginVertical: 5,
