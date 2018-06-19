@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import RNLanguages from 'react-native-languages';
 import {View, Text, FlatList, SectionList} from 'react-native';
 
+import {alphabetEnum} from '../../../enums';
 import {generateAlphabet} from '../../../utils';
 import {ContactsEmptyIcon} from '../../icons/index';
 import {themeEnum} from '../../../enums';
@@ -58,13 +59,7 @@ export default class ContactList extends Component {
     const {theme, context, renderItem, sections} = this.props;
     const lng = RNLanguages.language.substr(0, 2);
     const _styles = styles(theme);
-    let alphabet = null;
-
-    if (lng === 'ru') {
-      alphabet = generateAlphabet('а', 'я');
-    } else {
-      alphabet = generateAlphabet('a', 'z');
-    }
+    let alphabet = generateAlphabet(alphabetEnum[lng].start, alphabetEnum[lng].end);
 
     if (items.length) {
       if (sections) {
