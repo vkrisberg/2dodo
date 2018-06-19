@@ -59,7 +59,7 @@ export default {
         }
 
         const account = realm.objectForPrimaryKey(dbEnum.Account, username);
-        // console.log('account', account);
+        // console.log('account', account.keys);
 
         // TODO - remove after test
         // const pubKey = '';
@@ -127,7 +127,6 @@ export default {
         data.open_key = publicKey;
         data.hash_key = hashKey;
         data.username = `${data.name}@${account.hostname}`;
-        data.device_id = 'uniqDeviceId0';
         // TODO - parse and apply data.server
         const res = await apiAccount.registration(data);
         dispatch({type: types.REGISTER_SUCCESS, payload: res.data, data});
