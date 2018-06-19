@@ -1,12 +1,27 @@
 import {StyleSheet} from 'react-native';
-import {sizes} from '../../../styles';
 
-export default (verticalOffset) => {
+export default ({theme}) => {
   return StyleSheet.create({
     container: {
       flex: 1,
-      // height: sizes.windowHeight - sizes.navbarHeight - verticalOffset,
-      // width: sizes.windowWidth,
+      width: '100%',
+    },
+
+    emptyContainer: {
+      flex: 1,
+      width: '100%',
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingBottom: 50,
+    },
+
+    emptyWrapper: {
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+
+    text: {
+      marginTop: 15,
     },
   });
 }

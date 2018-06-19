@@ -34,5 +34,9 @@ export default (theme) => {
       fontSize: 16,
       color: colors[theme].grayBlue,
     },
+
+    chosen: {
+      marginBottom: -6,
+    },
   });
 };

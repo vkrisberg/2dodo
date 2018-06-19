@@ -4,9 +4,10 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
-import {contactActions} from '../../../store/actions';
-import {Navbar, SearchInput, NavbarDots, NavbarButton, AddButton, ContactListItem} from '../../../components/elements';
 import {ContactList} from '../../../components/lists';
+import {Navbar, SearchInput, NavbarDots, ButtonNavbar, ButtonAdd, ContactListItem} from '../../../components/elements';
+import {contactActions} from '../../../store/actions';
+import {routeEnum} from '../../../enums';
 
 const list = [
   {
@@ -66,8 +67,8 @@ class Contacts extends Component {
     this.searchContacts(text);
   };
 
-  onCreate = (data) => {
-    this.props.navigation.navigate('AddContact');
+  onCreate = () => {
+    this.props.navigation.navigate(routeEnum.ContactAdd);
   };
 
   onUpdate = (username) => {
@@ -86,11 +87,11 @@ class Contacts extends Component {
 
     if (editMode) {
       return (
-        <NavbarButton position="right" onPress={this.onDelete}>{this.context.t('Delete')}</NavbarButton>
+        <ButtonNavbar position="right" onPress={this.onDelete}>{this.context.t('Delete')}</ButtonNavbar>
       );
     }
 
-    return <AddButton onPress={this.onCreate}/>;
+    return <ButtonAdd onPress={this.onCreate}/>;
   };
 
   isContactChosen = (contact) => {
@@ -114,7 +115,7 @@ class Contacts extends Component {
   renderContactList = ({item}) => {
     return (
       <ContactListItem
-        contact={item}
+        item={item}
         checked={this.isContactChosen(item)}
         onPress={this.onContactPress(item)}
         onCheckboxPress={() => this.onCheckboxPress(item)}
@@ -133,7 +134,7 @@ class Contacts extends Component {
             renderLeft={<NavbarDots/>}
             renderRight={this.renderNavbarButton()}/>
           <SearchInput placeholder="Search contacts" onChange={this.onSearchChange}/>
-          <ContactList context={context} items={list} renderItem={this.renderContactList}/>
+          <ContactList context={context} items={contact.list} renderItem={this.renderContactList}/>
         </BackgroundLayout>
       </MainLayout>
     );

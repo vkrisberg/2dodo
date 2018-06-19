@@ -1,22 +1,28 @@
 import React, {PureComponent} from 'react';
-import {View, FlatList} from 'react-native';
+import {View, FlatList, Image} from 'react-native';
 import PropTypes from 'prop-types';
 
+import {TextLabel} from '../../elements';
+import {themeEnum} from '../../../enums';
+import {colors} from '../../../styles';
 import styles from './styles';
+
+import IMG_CHATS_EMPTY from './img/chat_empty.png';
 
 export default class ChatList extends PureComponent {
 
   static propTypes = {
     items: PropTypes.array,
     renderItem: PropTypes.func,
-    verticalOffset: PropTypes.number,
+    theme: PropTypes.string,
+    context: PropTypes.object,
     style: PropTypes.any,
   };
 
   static defaultProps = {
     items: [],
     renderItem: () => null,
-    verticalOffset: 0,
+    theme: themeEnum.light,
   };
 
   constructor(props) {
@@ -49,8 +55,19 @@ export default class ChatList extends PureComponent {
 
   render() {
     const {items} = this.state;
-    const {renderItem, verticalOffset, style} = this.props;
-    const _styles = styles(verticalOffset);
+    const {renderItem, theme, context, style} = this.props;
+    const _styles = styles({theme});
+
+    if (!items.length) {
+      return (
+        <View style={_styles.emptyContainer}>
+          <View style={_styles.emptyWrapper}>
+            <Image source={IMG_CHATS_EMPTY}/>
+            <TextLabel style={_styles.text} color={colors[theme].blackText}>{context.t('NoChats')}</TextLabel>
+          </View>
+        </View>
+      );
+    }
 
     return (
       <View style={[_styles.container, style]}>

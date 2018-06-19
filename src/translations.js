@@ -59,7 +59,7 @@ const translations = {
     'FullscreenPhoto': 'Fullscreen photo',
     'DeletePhoto': 'Delete photo',
     'HaveMessage': 'У вас новое сообщение...',
-    'NoMessages': 'У вас пока нет сообщений...',
+    'NoMessagesYet': 'У вас пока нет сообщений...',
     'HaveVoiceMessage': 'Отправил(а) вам аудиосообщение',
     'HaveVideo': 'Отправил(а) вам видео...',
     'HaveImage': 'Отправил(а) вам изображение...',
@@ -80,6 +80,10 @@ const translations = {
     'AddContactQrCode': 'Нажмите здесь, чтобы использовать сканер QR-кода для добавления контакта друга',
     'NoContacts': 'У Вас еще нет контактов',
     'SearchResults': 'Результаты поиска',
+    // Chat
+    'NoChats': 'У Вас еще нет чатов',
+    'NoMessages': 'Нет сообщений',
+    'CreateChat': 'Создать чат',
   },
   'en': {
     // Main menu
@@ -141,7 +145,7 @@ const translations = {
     'FullscreenPhoto': 'Fullscreen photo',
     'DeletePhoto': 'Delete photo',
     'HaveMessage': 'You have a new message...',
-    'NoMessages': 'You have no messages yet...',
+    'NoMessagesYet': 'You have no messages yet...',
     'HaveVoiceMessage': 'Send your a voice message',
     'HaveVideo': 'Send your a video...',
     'HaveImage': 'Send your an image...',
@@ -162,6 +166,10 @@ const translations = {
     'AddContactQrCode': 'Tap here to use QR-code scanner to add friend contact',
     'NoContacts': 'Your have not contacts yet',
     'SearchResults': 'Search results',
+    // Chat
+    'NoChats': 'Your have not chats yet',
+    'NoMessages': 'No messages',
+    'CreateChat': 'Create chat',
   },
 };
 

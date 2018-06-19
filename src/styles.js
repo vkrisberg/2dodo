@@ -68,8 +68,13 @@ const colors = {
     tabBarInactiveBg: '#ffffff',
     bgMain: '#ffffff',
     navbarTitle: '#26292d',
+    navbarDescription: '#9399a5',
     backButton: '#6a7686',
     addButton: '#62a3ff',
+    messageDate: '#9399a5',
+    messageRightBg: '#5a9cf8',
+    messageLeftBg: '#ffffff',
+    messageLeftBorder: '#dbdbdb',
   },
   night: {
     white: '#ffffff',
@@ -103,8 +108,13 @@ const colors = {
     tabBarInactiveBg: '#ffffff',
     bgMain: '#242424',
     navbarTitle: '#26292d',
+    navbarDescription: '#9399a5',
     backButton: '#6a7686',
     addButton: '#62a3ff',
+    messageDate: '#9399a5',
+    messageRightBg: '#5a9cf8',
+    messageLeftBg: '#ffffff',
+    messageLeftBorder: '#dbdbdb',
   },
 };
 

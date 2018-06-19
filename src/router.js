@@ -5,50 +5,42 @@ import PropTypes from 'prop-types';
 
 import Tabs from './tab-navigator';
 import {
-  Main,
   Login,
   Registration,
   ForgotPassword,
   Preload,
   Events,
-  PasswordApprove
 } from './containers';
-import {AddContact} from './containers/contacts';
-import {CreateChat, PrivateChat} from './containers/messages';
+import {ContactAdd} from './containers/contacts';
+import {ChatCreate, ChatMessage} from './containers/messages';
 
 export const MainStack = createStackNavigator({
-  Main: {
-    screen: Main,
-  },
   Login: {
     screen: Login,
   },
   Registration: {
-    screen: Registration
+    screen: Registration,
   },
   ForgotPassword: {
-    screen: ForgotPassword
+    screen: ForgotPassword,
   },
   Messages: {
-    screen: Tabs
+    screen: Tabs,
   },
   Events: {
-    screen: Events
+    screen: Events,
   },
   Preload: {
-    screen: Preload
+    screen: Preload,
   },
-  PasswordApprove: {
-    screen: PasswordApprove
+  ContactAdd: {
+    screen: ContactAdd,
   },
-  AddContact: {
-    screen: AddContact
+  ChatCreate: {
+    screen: ChatCreate,
   },
-  CreateChat: {
-    screen: CreateChat
-  },
-  PrivateChat: {
-    screen: PrivateChat
+  ChatMessage: {
+    screen: ChatMessage,
   },
 }, {
   headerMode: 'none',

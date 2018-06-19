@@ -1,10 +1,6 @@
 import {StyleSheet} from "react-native";
 import {colors, fonts, weights, sizes} from "../../../styles";
 
-export const ChatChosen = {
-  marginBottom: -6
-};
-
 export default (theme) => {
   return StyleSheet.create({
     container: {
@@ -102,6 +98,10 @@ export default (theme) => {
       fontWeight: weights.medium,
       height: 30,
       overflow: 'hidden',
+    },
+
+    chosen: {
+      marginBottom: -6,
     },
   });
 };

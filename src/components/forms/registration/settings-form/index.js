@@ -3,7 +3,7 @@ import {View, KeyboardAvoidingView, TouchableOpacity} from 'react-native';
 import {Field, reduxForm} from 'redux-form';
 import PropTypes from 'prop-types';
 
-import {Button, Input, TextLabel, Avatar, ThemeButton, FieldError} from '../../../elements';
+import {Button, Input, TextLabel, Avatar, ButtonTheme, FieldError} from '../../../elements';
 import {themeEnum} from '../../../../enums';
 import {colors, weights} from '../../../../styles';
 import {validation} from '../../../../utils';
@@ -92,11 +92,11 @@ class RegistrationSettingsForm extends Component {
                        color={colors[theme].blueDarker}>{context.t('SetYourPhoto')}</TextLabel>
           </View>
           <View style={_styles.themeContainer}>
-            <ThemeButton context={context}
+            <ButtonTheme context={context}
                          theme={theme}
                          type={themeEnum.light}
                          onPress={this.onThemeChange(themeEnum.light)}/>
-            <ThemeButton context={context}
+            <ButtonTheme context={context}
                          theme={theme}
                          type={themeEnum.night}
                          onPress={this.onThemeChange(themeEnum.night)}/>

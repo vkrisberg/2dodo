@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
-import {View, Text, TouchableWithoutFeedback} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {isEmpty, map} from 'lodash';
 
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
 import {ChatList} from '../../../components/lists';
-import {SearchInput, Navbar, NavbarDots, AddButton, ChatListItem, NavbarButton} from '../../../components/elements';
+import {SearchInput, Navbar, NavbarDots, ButtonAdd, ChatListItem, ButtonNavbar} from '../../../components/elements';
 import {chatActions, chatMessageActions, contactActions} from '../../../store/actions';
 import {routeEnum} from '../../../enums';
 
@@ -110,7 +109,7 @@ class Messages extends Component {
   };
 
   onCreate = () => {
-    this.props.navigation.navigate('CreateChat');
+    this.props.navigation.navigate(routeEnum.ChatCreate);
   };
 
   onChatPress = (chat) => {
@@ -119,7 +118,7 @@ class Messages extends Component {
       return;
     }
 
-    this.props.navigation.navigate(routeEnum.PrivateChat, {chat});
+    this.props.navigation.navigate(routeEnum.ChatMessage, {chat});
   };
 
   onChatLongPress = (chat) => {
@@ -185,25 +184,27 @@ class Messages extends Component {
 
     if (editMode) {
       return (
-        <NavbarButton position="right" onPress={this.onChatsDelete}>{this.context.t('Delete')}</NavbarButton>
+        <ButtonNavbar position="right" onPress={this.onChatsDelete}>{this.context.t('Delete')}</ButtonNavbar>
       );
     }
 
-    return <AddButton onPress={this.onCreate}/>;
+    return <ButtonAdd onPress={this.onCreate}/>;
   };
 
   render() {
     const {account, chat} = this.props;
+    const {theme} = account.user;
 
     return (
       <MainLayout netOffline={!account.net.connected}>
-        <BackgroundLayout theme={account.user.theme} paddingHorizontal={10}>
+        <BackgroundLayout theme={theme} paddingHorizontal={10}>
           <Navbar renderTitle={this.context.t('Messages')}
                   renderLeft={<NavbarDots/>}
                   renderRight={this.renderNavbarButton()}/>
           <SearchInput placeholder="Search in chats" onChange={this.searchChats}/>
-          <ChatList items={chat.list}
-                    selected={this.state.selected}
+          <ChatList theme={theme}
+                    context={this.context}
+                    items={chat.list}
                     renderItem={this.renderChatItem}/>
         </BackgroundLayout>
       </MainLayout>

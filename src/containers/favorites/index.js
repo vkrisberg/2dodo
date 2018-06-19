@@ -3,7 +3,7 @@ import {TouchableWithoutFeedback} from 'react-native';
 
 import {Wrapper} from '../../components/layouts';
 import {FavoritsDotsIcon, EmptyFavoritsIcon} from '../../components/icons';
-import {FavoritsNav} from '../../components/elements';
+import {NavbarFavorites} from '../../components/elements';
 import {
   Header,
   StyledTitle,
@@ -62,7 +62,7 @@ export default class Favorites extends Component {
             </TouchableWithoutFeedback>
           </AddContact>
         </Header>
-        <FavoritsNav />
+        <NavbarFavorites />
         {this.getFavorits()}
       </Wrapper>
     );
