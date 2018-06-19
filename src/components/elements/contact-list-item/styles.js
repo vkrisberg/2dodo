@@ -37,6 +37,7 @@ export default (theme) => {
 
     chosen: {
       marginBottom: -6,
+      marginRight: 13,
     },
   });
 };

@@ -7,6 +7,28 @@ import {ContactList} from '../../../components/lists';
 import {SearchInput, Navbar, ContactListItem, ButtonBack} from '../../../components/elements';
 import {chatActions, contactActions} from '../../../store/actions';
 
+const list = [
+  {
+    title: 'A',
+    data: [
+      {
+        username: 'Anna'
+      },
+      {
+        username: 'Alla'
+      },
+    ],
+  },
+  {
+    title: 'B',
+    data: [
+      {
+        username: 'Bady'
+      }
+    ],
+  },
+];
+
 class ChatCreate extends Component {
 
   static propTypes = {
@@ -58,6 +80,7 @@ class ChatCreate extends Component {
     return (
       <ContactListItem
         item={item}
+        checkboxVisibility
         onPress={this.onCreateChat}
       />
     );
@@ -73,7 +96,8 @@ class ChatCreate extends Component {
                   renderLeft={<ButtonBack/>}/>
           <SearchInput placeholder="Search in chats" onChange={this.searchChats}/>
           <ContactList context={this.context}
-                       items={contact.list}
+                       items={list}
+                       sections
                        renderItem={this.renderContactItem}/>
         </BackgroundLayout>
       </MainLayout>
