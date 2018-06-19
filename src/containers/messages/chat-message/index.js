@@ -3,17 +3,11 @@ import {View, ScrollView, Text, TouchableOpacity, KeyboardAvoidingView} from 're
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
+import {MainLayout, BackgroundLayout} from '../../../components/layouts';
+import {NavbarChat, SearchInput, MessageListItem, MessageInput} from '../../../components/elements';
 import {chatActions, chatMessageActions, contactActions} from '../../../store/actions';
-import Wrapper from '../../../components/layouts/wrapper';
-import {ArrowIcon} from '../../../components/icons';
-import {Input, Button, SearchInput, MessageListItem, MessageInput} from '../../../components/elements';
 import {MessageList} from '../../../components/lists';
-import {
-  Header,
-  StyledTitle,
-  TitleContainer,
-  MessageStyles,
-} from '../styles';
+import styles from './styles';
 
 class ChatMessage extends PureComponent {
 
@@ -98,30 +92,24 @@ class ChatMessage extends PureComponent {
 
   render() {
     const {account, chat, chatMessage} = this.props;
+    const {theme} = account.user;
 
     return (
-      <Wrapper scrolled={false}>
-        <Header>
-          <TitleContainer width="100%">
-            <TouchableOpacity onPress={this.goBack}>
-              <ArrowIcon/>
-            </TouchableOpacity>
-            <StyledTitle marginLeft={20}>
-              {chat.current.name}
-            </StyledTitle>
-          </TitleContainer>
-        </Header>
-        <SearchInput placeholder="Search in messages" onChange={this.onSearchChange}/>
-        <KeyboardAvoidingView style={MessageStyles.container} behavior="padding" enabled>
-          <MessageList
-            items={chatMessage.list}
-            verticalOffset={116}
-            renderItem={this.renderMessage}
-            theme={account.user.theme}
-            context={this.context}/>
-          <MessageInput onSubmitText={this.onSubmitText}/>
-        </KeyboardAvoidingView>
-      </Wrapper>
+      <MainLayout netOffline={!account.net.connected}>
+        <BackgroundLayout theme={theme} paddingHorizontal={10}>
+          <NavbarChat title={chat.current.name} description={'online'}/>
+          <SearchInput placeholder="Search in messages" onChange={this.onSearchChange}/>
+          <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+            <MessageList
+              items={chatMessage.list}
+              verticalOffset={116}
+              renderItem={this.renderMessage}
+              theme={account.user.theme}
+              context={this.context}/>
+            <MessageInput onSubmitText={this.onSubmitText}/>
+          </KeyboardAvoidingView>
+        </BackgroundLayout>
+      </MainLayout>
     );
   }
 }

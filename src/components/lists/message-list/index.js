@@ -53,11 +53,11 @@ export default class MessagesList extends PureComponent {
     }
 
     if (prevState.items.length !== this.state.items.length) {
-      this.flatList.scrollToEnd();
+      this.flatList && this.flatList.scrollToEnd();
     }
 
     if (prevState.contentSize !== this.state.contentSize) {
-      this.flatList.scrollToEnd();
+      this.flatList && this.flatList.scrollToEnd();
     }
   }
 
@@ -73,7 +73,7 @@ export default class MessagesList extends PureComponent {
 
   keyboardDidShow = () => {
     this.setState({isKeyboardActive: true});
-    this.flatList.scrollToEnd();
+    this.flatList && this.flatList.scrollToEnd();
   };
 
   keyboardWillHide = (e) => {
@@ -81,7 +81,7 @@ export default class MessagesList extends PureComponent {
 
   keyboardDidHide = () => {
     this.setState({isKeyboardActive: false});
-    this.flatList.scrollToEnd();
+    this.flatList && this.flatList.scrollToEnd();
   };
 
   updateLayoutHeight(e) {
@@ -102,8 +102,10 @@ export default class MessagesList extends PureComponent {
     if (!items.length) {
       return (
         <View style={_styles.emptyContainer}>
-          <Image source={IMG_MESSAGES_EMPTY}/>
-          <TextLabel style={_styles.text} color={colors[theme].blackText}>{context.t('NoMessages')}</TextLabel>
+          <View style={_styles.emptyWrapper}>
+            <Image source={IMG_MESSAGES_EMPTY}/>
+            <TextLabel style={_styles.text} color={colors[theme].blackText}>{context.t('NoMessages')}</TextLabel>
+          </View>
         </View>
       );
     }

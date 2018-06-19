@@ -15,6 +15,11 @@ export default ({theme}) => {
       paddingBottom: 50,
     },
 
+    emptyWrapper: {
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+
     text: {
       marginTop: 15,
     },

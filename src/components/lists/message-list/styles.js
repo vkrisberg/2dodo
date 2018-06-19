@@ -4,8 +4,9 @@ import {sizes} from '../../../styles';
 export default ({theme, verticalOffset}) => {
   return StyleSheet.create({
     container: {
-      height: sizes.windowHeight - sizes.navbarHeight - verticalOffset,
-      width: sizes.windowWidth,
+      flex: 1,
+      // height: sizes.windowHeight - sizes.navbarHeight - verticalOffset,
+      width: '100%',
     },
 
     emptyContainer: {
@@ -14,6 +15,11 @@ export default ({theme, verticalOffset}) => {
       alignItems: 'center',
       justifyContent: 'center',
       paddingBottom: 50,
+    },
+
+    emptyWrapper: {
+      alignItems: 'center',
+      justifyContent: 'center',
     },
 
     text: {

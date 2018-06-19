@@ -1,50 +1,82 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, Text} from 'react-native';
+import {View, TouchableOpacity, Text, Image} from 'react-native';
 import PropTypes from 'prop-types';
 
+import {Navbar, ButtonBack, ButtonNavbar, TextLabel} from '../index'
+import {AvatarIcon} from '../../icons'
 import {themeEnum} from '../../../enums';
+import {colors, weights} from '../../../styles';
 import styles from './styles';
+
+import IMG_MENU_DOTS from './img/menu_dots.png';
 
 export default class NavbarChat extends Component {
 
   static propTypes = {
-    contacts: PropTypes.array.isRequired,
+    title: PropTypes.string,
+    description: PropTypes.string,
+    avatar: PropTypes.string,
     theme: PropTypes.string,
-    style: PropTypes.any,
-    onPress: PropTypes.func,
+    onAvatarPress: PropTypes.func,
+    onMenuPress: PropTypes.func,
   };
 
   static defaultProps = {
-    contacts: [],
+    title: '',
+    description: '',
+    avatar: null,
     theme: themeEnum.light,
   };
 
-  onPress = () => {
-    this.props.onPress && this.props.onPress();
+  onAvatarPress = () => {
+    this.props.onAvatarPress && this.props.onAvatarPress();
   };
 
-  renderText(_styles) {
-    const {textStyle} = this.props;
+  onMenuPress = () => {
+    this.props.onMenuPress && this.props.onMenuPress();
+  };
 
-    if (typeof this.props.children === 'string') {
-      return (
-        <Text style={[_styles.text, textStyle]}>{this.props.children}</Text>
-      );
-    }
+  renderTitle = (_styles) => {
+    const {theme, title, description} = this.props;
+    return (
+      <View style={_styles.container}>
+        <View style={_styles.titleContainer}>
+          <TextLabel theme={theme}
+                     color={colors[theme].navbarTitle}
+                     weight={weights.bold}
+                     size={18}>{title}</TextLabel>
+          <TextLabel theme={theme}
+                     color={colors[theme].navbarDescription}
+                     weight={weights.medium}
+                     size={13}>{description}</TextLabel>
+        </View>
+        <TouchableOpacity style={_styles.menuContainer} onPress={this.onMenuPress}>
+          <Image style={_styles.menuDots} source={IMG_MENU_DOTS}/>
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
-    return this.props.children;
-  }
-
-  render() {
-    let {position, theme, color, bgColor, disabled, style} = this.props;
-    const _styles = styles({theme, color, bgColor, position});
+  renderAvatar = (_styles) => {
+    const {theme, avatar} = this.props;
 
     return (
-      <TouchableOpacity style={[_styles.container, style]}
-                        disabled={disabled}
-                        onPress={this.onPress}>
-        {this.renderText(_styles)}
-      </TouchableOpacity>
+      <ButtonNavbar theme={theme} position="right" onPress={this.onAvatarPress}>
+        {avatar && <Image style={_styles.avatar} source={{uri: `data:image/jpeg;base64,${avatar}`}}/>}
+        {!avatar && <AvatarIcon/>}
+      </ButtonNavbar>
+    );
+  };
+
+  render() {
+    let {theme} = this.props;
+    const _styles = styles({theme});
+
+    return (
+      <Navbar theme={theme}
+              renderTitle={this.renderTitle(_styles)}
+              renderLeft={<ButtonBack/>}
+              renderRight={this.renderAvatar(_styles)}/>
     );
   }
 }

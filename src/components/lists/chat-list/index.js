@@ -61,8 +61,10 @@ export default class ChatList extends PureComponent {
     if (!items.length) {
       return (
         <View style={_styles.emptyContainer}>
-          <Image source={IMG_CHATS_EMPTY}/>
-          <TextLabel style={_styles.text} color={colors[theme].blackText}>{context.t('NoChats')}</TextLabel>
+          <View style={_styles.emptyWrapper}>
+            <Image source={IMG_CHATS_EMPTY}/>
+            <TextLabel style={_styles.text} color={colors[theme].blackText}>{context.t('NoChats')}</TextLabel>
+          </View>
         </View>
       );
     }
