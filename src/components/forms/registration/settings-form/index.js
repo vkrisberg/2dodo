@@ -64,7 +64,7 @@ class RegistrationSettingsForm extends Component {
         <Input
           {...props}
           theme={theme}
-          error={touched && error}/>,
+          error={touched && error}/>
         <FieldError theme={theme} errors={errors} path={props.input.name}/>
       </View>
     );

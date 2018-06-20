@@ -1,4 +1,4 @@
-import {colors, fonts, sizes, weights} from '../../styles';
+import {colors, sizes, weights} from '../../../styles';
 import {StyleSheet} from 'react-native';
 
 export default (theme) => {
@@ -36,28 +36,6 @@ export default (theme) => {
     bodyProfile: {
       paddingLeft: 0,
       paddingRight: 0,
-    },
-
-    content: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-
-    infoBlock: {
-      flexDirection: 'column',
-      alignItems: 'center',
-      width: 240,
-      padding: 10,
-    },
-
-    infoText: {
-      marginTop: 20,
-      textAlign: 'center',
-      color: colors[theme].grayDarker,
-      fontSize: 15,
-      fontWeight: weights.medium,
-      fontFamily: fonts.main,
     },
 
     editBtn: {
