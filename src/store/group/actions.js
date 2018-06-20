@@ -92,7 +92,7 @@ export default {
           group_type: data.type,
           name: data.name,
           description: data.description || '',
-          avatar: data.avatar || null,
+          avatar: data.avatar || '',
           members: data.members || [],
         };
         const groupData = {
@@ -130,7 +130,7 @@ export default {
           link: data.link,
           name: data.name,
           description: data.description || '',
-          avatar: data.avatar || null,
+          avatar: data.avatar || '',
         };
         data.dateUpdate = new Date();
         let group = {};
