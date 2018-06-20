@@ -96,7 +96,7 @@ class ChatCreate extends Component {
                   renderLeft={<ButtonBack/>}/>
           <SearchInput placeholder="Search in chats" onChange={this.searchChats}/>
           <ContactList context={this.context}
-                       items={list}
+                       items={contact.sectionList}
                        sections
                        renderItem={this.renderContactItem}/>
         </BackgroundLayout>
