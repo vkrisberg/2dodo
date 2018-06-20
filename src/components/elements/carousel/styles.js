@@ -1,36 +1,34 @@
+import {Animated, StyleSheet} from 'react-native';
 import styled from 'styled-components';
-import {Animated} from 'react-native';
+import {fonts, weights} from '../../../styles';
 
-export const TowersImage = styled.Image`
-  position: absolute;
-  width: 202;
-  height: 134;
-  margin-top: 150;
-  left: 20%;
-`;
-
-export const BarContainer = styled.View`
-  position: absolute;
-  zIndex: 2;
-  bottom: 140;
-  flex-direction: row;
+export const Container = styled.View`
+  flex: 1;
+  align-items: center;
 `;
 
 export const ItemImage = styled.Image`
-  width: 130;
-  height: 206;
-  margin-bottom: 40;
-  margin-top: 80;
+  margin-top: ${props => props.isSmall ? '100' : '160'};
 `;
 
-export const ItemTitle = {
-  color: 'white'
-};
-
-export const ItemText = styled.Text`
-  width: 236;
+export const TitleText = styled.Text`
+  font-family: '${fonts.main}';
+  font-size: 18;
+  font-weight: ${weights.bold};
+  margin-top: 30;
   text-align: center;
   color: white;
+`;
+
+export const ItemText = styled.Text`
+  font-family: '${fonts.main}';
+  font-size: 15;
+  font-weight: ${weights.medium};
+  margin-top: 12;
+  text-align: center;
+  color: white;
+  padding-horizontal: 50;
+  line-height: 18;
 `;
 
 export const ItemWrap = styled.View`
@@ -38,20 +36,28 @@ export const ItemWrap = styled.View`
   width: ${props => props.width};
 `;
 
-export const Bar = Animated.createAnimatedComponent(styled.View`
-  background-color: white;
-  width: 9;
-  height: 9;
+export const BarContainer = styled.View`
   position: absolute;
-  left: 0;
-  top: 0;
-`);
+  zIndex: 2;
+  bottom: ${props => props.isSmall ? '110' : '140'};
+  flex-direction: row;
+`;
 
 export const Track = styled.View`
   background-color: rgba(255, 255, 255, 0.3);
   overflow: hidden;
-  width: 9;
-  height: 9;
-  border-radius: 70;
+  width: 7;
+  height: 7;
+  border-radius: 14;
   margin-left: ${props => props.marginLeft}
 `;
+
+export const Bar = Animated.createAnimatedComponent(styled.View`
+  background-color: white;
+  opacity: ${props => props.isActive ? '1' : '0.3'};
+  width: 7;
+  height: 7;
+  position: absolute;
+  left: 0;
+  top: 0;
+`);

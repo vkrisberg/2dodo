@@ -1,6 +1,6 @@
-import castleBlue from '../img/castle-blue.png';
-import castleGreen from '../img/castle-green.png';
-import castleOrange from '../img/castle-orange.png';
+import castleBlue from '../img/castle_blue.png';
+import castleGreen from '../img/castle_green.png';
+import castleOrange from '../img/castle_orange.png';
 
 export default [
   {

@@ -1,113 +1,97 @@
-import React, {PureComponent} from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {
+  View,
   Animated,
   Dimensions,
   ScrollView
 } from 'react-native';
-import {withNavigation} from 'react-navigation';
 
-
-import Title from '../title';
-import routeEnum from '../../../enums/route-enum';
-import castleTowers from './img/castle-towers.png';
-import BackgroundContainer from '../../../containers/background-container';
-import Skip from '../skip';
+import {ButtonSkip} from '../index';
 import {
-  TowersImage,
+  TitleText,
   Track,
   BarContainer,
   ItemImage,
   ItemText,
   ItemTitle,
   ItemWrap,
-  Bar
+  Bar,
+  Container,
 } from './styles';
 
 const deviceWidth = Dimensions.get('window').width;
-const barWidth = 110;
-const barSpace = 11;
+const deviceHeight = Dimensions.get('window').height;
+const isSmallScreen = deviceHeight < 667;
+const barSpace = 7;
 
-class Carousel extends PureComponent {
-  constructor(props) {
-    super(props);
-
-    this.numItems = props.data.length;
-    this.itemWidth = (barWidth / this.numItems) - ((this.numItems - 1) * barSpace);
-    this.animVal = new Animated.Value(0);
-  }
-
+export default class Carousel extends Component {
   static propTypes = {
-    data: PropTypes.array,
+    items: PropTypes.array,
     onSkip: PropTypes.func,
     navigation: PropTypes.shape({
       navigate: PropTypes.func
     })
-  }
+  };
 
-  toLogin = () => this.props.navigation.navigate(routeEnum.Login)
+  state = {
+    page: 0,
+  };
 
-  render() {
-    const { data } = this.props;
-    let imageArray = [];
-    let barArray = [];
+  onScrollEnd = (event) => {
+    const xOffset = event.nativeEvent.contentOffset.x;
 
-    data.forEach((item, i) => {
-      const thisItem = (
-        <ItemWrap key={`item${i}`} width={deviceWidth}>
-          <TowersImage source={castleTowers} />
-          <ItemImage source={item.image} />
-          <Title textStyle={ItemTitle}>{item.title}</Title>
-          <ItemText>
-            {item.text}
-          </ItemText>
+    this.setState({
+      page: Math.floor(xOffset / deviceWidth),
+    });
+  };
+
+  isActive = (index) => {
+    return this.state.page === index;
+  };
+
+  renderImages = () => {
+    return this.props.items.map((item, i) => {
+      return (
+        <ItemWrap key={i} width={deviceWidth}>
+          <ItemImage source={item.image} isSmall={isSmallScreen}/>
+          <TitleText>{item.title}</TitleText>
+          <ItemText>{item.text}</ItemText>
         </ItemWrap>
       );
+    });
+  };
 
-      imageArray.push(thisItem);
-
-      const scrollBarVal = this.animVal.interpolate({
-        inputRange: [deviceWidth * (i - 1), deviceWidth * (i + 1)],
-        outputRange: [-this.itemWidth, this.itemWidth],
-        extrapolate: 'clamp',
-      });
-
-      const thisBar = (
+  renderDots = () => {
+    return this.props.items.map((item, i) => {
+      return (
         <Track
-          key={`bar${i}`}
-          marginLeft={i === 0 ? 0 : barSpace}
-        >
-          <Bar translateX={scrollBarVal} />
+          key={i}
+          marginLeft={i === 0 ? 0 : barSpace}>
+          <Bar isActive={this.isActive(i)}/>
         </Track>
       );
-
-      barArray.push(thisBar);
     });
+  };
 
-    return(
-      <BackgroundContainer>
+  render() {
+    return (
+      <Container>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           scrollEventThrottle={1}
           pagingEnabled
-          onScroll={
-            Animated.event(
-              [{ nativeEvent: { contentOffset: { x: this.animVal } } }]
-            )
-          }
-        >
-          { imageArray }
+          onMomentumScrollEnd={this.onScrollEnd}>
+          {this.renderImages()}
         </ScrollView>
-        <BarContainer>
-          { barArray }
+        <BarContainer isSmall={isSmallScreen}>
+          {this.renderDots()}
         </BarContainer>
-        <Skip onSkip={this.props.onSkip}>
-          Skip this feature
-        </Skip>
-      </BackgroundContainer>
+        <ButtonSkip onSkip={this.props.onSkip} marginBottom={50}>
+          Skip all features
+        </ButtonSkip>
+      </Container>
     );
   }
 }
-
-export default withNavigation(Carousel);

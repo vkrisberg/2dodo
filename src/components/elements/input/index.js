@@ -1,52 +1,89 @@
-import React, { Component } from 'react';
-import { TextInput, ViewPropTypes } from 'react-native';
+import React, {PureComponent} from 'react';
+import {TextInput} from 'react-native';
 import PropTypes from 'prop-types';
 
-import {StyledInput} from './styles';
+import {colors} from '../../../styles';
+import {themeEnum} from '../../../enums';
+import styles from './styles';
 
-export default class Input extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      focused: false
-    };
-  }
+export default class Input extends PureComponent {
 
   static propTypes = {
-    placeholder: PropTypes.string,
+    theme: PropTypes.string,
     input: PropTypes.shape({}),
-    style: PropTypes.any,
+    error: PropTypes.any,
+    placeholder: PropTypes.string,
+    color: PropTypes.string,
     focusedColor: PropTypes.string,
-    textColor: PropTypes.string
+    borderColor: PropTypes.string,
+    placeholderColor: PropTypes.string,
+    errorColor: PropTypes.string,
+    style: PropTypes.any,
+    onSubmit: PropTypes.func,
+    inputProps: PropTypes.object,
   };
 
-  handleFocus = () => this.setState({ focused: true });
+  static defaultProps = {
+    theme: themeEnum.light,
+    error: false,
+    placeholder: '',
+    color: colors.light.black,
+    focusedColor: colors.light.blue,
+    borderColor: colors.light.gray,
+    placeholderColor: colors.light.grayPlaceholder,
+    errorColor: colors.light.red,
+  };
 
-  handleBlur = () => this.setState({ focused: false });
+  state = {
+    focused: false,
+  };
+
+  handleFocus = () => {
+    const {input} = this.props;
+    this.setState({focused: true});
+    input.onFocus && input.onFocus();
+  };
+
+  handleBlur = () => {
+    const {input} = this.props;
+    this.setState({focused: false});
+    input.onBlur && input.onBlur();
+  };
 
   render() {
-    const {
+    let {
+      theme,
       input,
+      error,
       placeholder,
-      style,
+      color,
+      borderColor,
       focusedColor,
-      textColor,
-      ...inputProps
+      placeholderColor,
+      errorColor,
+      style,
+      onSubmit,
+      ...inputProps,
     } = this.props;
+    const borderWidth = this.state.focused || error ? 2 : 1;
+    if (this.state.focused) {
+      borderColor = focusedColor;
+    }
+    if (error) {
+      borderColor = errorColor;
+    }
+    const _styles = styles({theme, color, borderColor, borderWidth});
 
     return (
-      <StyledInput
+      <TextInput
         underlineColorAndroid="transparent"
-        placeholderTextColor="#ced9e8"
-        onChangeText={input.onChange}
-        focused={this.state.focused}
-        focusedColor={focusedColor}
-        textColor={textColor}
-        selectionColor={focusedColor ? focusedColor : 'white'}
-        style={style}
-        placeholder={placeholder}
         value={input.value}
+        placeholder={placeholder}
+        placeholderTextColor={placeholderColor}
+        selectionColor={focusedColor}
+        style={[_styles.input, style]}
+        onChangeText={input.onChange}
+        onSubmitEditing={onSubmit}
         onBlur={this.handleBlur}
         onFocus={this.handleFocus}
         {...inputProps}

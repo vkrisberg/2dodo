@@ -1,44 +1,59 @@
 import {StyleSheet} from 'react-native';
 import styled from 'styled-components';
 
-import {Link} from '../../components/elements';
+import {colors, fonts, sizes, weights} from '../../styles';
 
 export const StyledText = styled.Text`
+  color: ${colors.light.white};
+  font-family: '${fonts.main}';
+  font-size: 15;
+  font-weight: ${weights.medium};
   text-align: center;
-  color: white;
-  margin-bottom: 20;
-  margin-top: 80;
-  font-size: 18;
-`;
-
-export const StyledLink = styled(Link)`
-  margin-top: 20;
-  margin-bottom: 10;
-  align-self: center;
+  margin-top: 18;
+  margin-bottom: 30;
 `;
 
 export const StyledRegistration = styled.View`
   flex-direction: row;
-  align-self: center;
-  margin-top: 25px;
-`;
-
-export const StyledKeysImport = styled.Text`
-  color: #808694;
-  font-weight: bold;
-  margin-top: 45px;
-  text-align: center;
+  align-items: center;
+  justify-content: center;
+  margin-top: ${sizes.isIphone5 ? '0' : '65'};
 `;
 
 export const RegistrationLabel = styled.Text`
-  margin-right: 10;
-  color: #ced9e8;
+  color: ${colors.light.grayDarker};
+  font-family: '${fonts.main}';
+  font-size: 15;
+  font-weight: ${weights.medium};
 `;
 
 export const LoginStyles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
+  },
 
+  logo: {
+    marginTop: 60,
+  },
+
+  forgot: {
+    marginTop: 15,
+  },
+
+  keysImportContainer: {
+    width: 315,
+    borderTopWidth: 1,
+    borderColor: colors.light.loginBorder,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 15,
+  },
+
+  keysImportButton: {
+    borderWidth: 0,
+    height: 'auto',
+    padding: 10,
+    marginTop: sizes.isIphone5 ? 0 : 5,
   },
 });

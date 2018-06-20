@@ -1,44 +1,80 @@
 import {StyleSheet} from 'react-native';
-import styled from 'styled-components';
+import {colors, fonts, sizes, weights} from '../../../styles';
 
-export const Wrapper = styled.View`
-  flexDirection: row;
-  width: 100%;
-`;
+const HEIGHT = 44;
 
-export const StyledInput = styled.TextInput`
-  flex: 2;
-  height: 64;
-  border-color: #000000;
-  border-radius: 32;
-  border-width: 1;
-  color: #000000;
-  padding: 0 15px;
-`;
+export default ({theme}) => {
+  return StyleSheet.create({
+    container: {
+      backgroundColor: colors[theme].messageInputBg,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'flex-start',
+      height: HEIGHT,
+      width: sizes.windowWidth,
+      marginLeft: -10,
+    },
 
-export const ButtonStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
-    height: 64,
-    width: 64,
-  },
+    leftButton: {
+      borderWidth: 0,
+      height: HEIGHT,
+      width: HEIGHT,
+    },
 
-  wrapper: {
-    borderColor: '#000000',
-    borderWidth: 2,
-    borderRadius: 32,
-    backgroundColor: '#000000',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 64,
-    width: 64,
-  },
+    rightButton: {
+      borderWidth: 0,
+      height: HEIGHT,
+      width: HEIGHT,
+    },
 
-  text: {
-    fontSize: 18,
-    color: '#000000'
-  },
-});
+    input: {
+      flex: 1,
+      color: colors[theme].messageTextMain,
+      backgroundColor: colors[theme].white,
+      fontFamily: fonts.main,
+      fontSize: 15,
+      fontWeight: weights.medium,
+      borderWidth: 0.5,
+      borderRadius: 20,
+      borderColor: colors[theme].messageBorder,
+      marginHorizontal: 5,
+      paddingHorizontal: 20,
+      height: 32,
+      width: '100%',
+    },
+
+    clipButton: {
+      height: 32,
+      width: 32,
+      borderRadius: 0,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+
+    microphoneButton: {
+      height: 32,
+      width: 32,
+      borderRadius: 0,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+
+    textButton: {
+      backgroundColor: colors[theme].messageTextBtnBg,
+      height: 32,
+      width: 32,
+      borderRadius: 16,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+
+    recordingButton: {
+      backgroundColor: colors[theme].messageAudioBtnBg,
+      height: 32,
+      width: 32,
+      borderRadius: 16,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+  });
+}

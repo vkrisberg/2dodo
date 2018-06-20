@@ -1,5 +1,3 @@
-import CONFIG from './config';
-
 /**
  * User schema
  */
@@ -20,7 +18,8 @@ User.schema = {
     firstName: 'string?',
     secondName: 'string?',
     bio: 'string?',
-    avatar: 'data?',
+    avatar: 'string?',
+    theme: 'string',
   },
 };
 
@@ -85,7 +84,7 @@ Contact.schema = {
     firstName: {type: 'string', optional: true, indexed: true},
     secondName: {type: 'string', optional: true, indexed: true},
     bio: 'string?',
-    avatar: 'data?',
+    avatar: 'string?',
     sound: 'string?',
     notification: {type: 'bool', default: true},
     isBlocked: {type: 'bool', default: false},
@@ -124,10 +123,10 @@ Chat.schema = {
   properties: {
     id: 'string', // unique chat id (uuid4)
     name: 'string',
-    owner: 'string',
-    members: 'string[]',
+    owner: 'string', // login@hostname
+    members: 'string[]', // [login@hostname, ...]
     shortName: 'string?',
-    avatar: 'data?',
+    avatar: 'string?',
     lastMessage: 'ChatMessage?',
     unreadCount: {type: 'int', default: 0},
     sort: {type: 'int', default: 0},
@@ -188,7 +187,7 @@ Group.schema = {
     owner: 'string',
     members: 'string?[]',
     shortName: 'string?',
-    avatar: 'data?',
+    avatar: 'string?',
     lastMessage: 'GroupMessage?',
     unreadCount: {type: 'int', default: 0},
     sort: {type: 'int', default: 0},

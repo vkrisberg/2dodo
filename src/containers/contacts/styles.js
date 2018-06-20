@@ -1,39 +1,58 @@
-import styled from 'styled-components';
+import {colors, fonts, sizes, weights} from "../../styles";
+import {StyleSheet} from "react-native";
 
-export const StyledTitle = styled.Text`
-  font-weight: bold;
-  font-size: 26;
-  color: #333;
-  margin-left: ${props => props.marginLeft || 0};
-`;
+export default (theme) => {
+  return StyleSheet.create({
+    header: {
+      width: sizes.windowWidth,
+      flexDirection: 'row',
+    },
 
-export const Header = styled.View`
-  width: 100%;
-  flex-direction: row;
-`;
+    styledTitle: {
+      fontWeight: weights.bold,
+      fontSize: 28,
+      marginLeft: 20,
+      color: colors[theme].navbarTitle,
+    },
 
-export const TitleContainer = styled.View`
-  width: ${props => props.width || '50%'};
-  padding: 30px 20px;
-  flex-direction: row;
-  align-items: center;
-`;
+    titleContainer: {
+      width: '100%',
+      paddingLeft: 20,
+      paddingRight: 10,
+      marginTop: 35,
+      marginBottom: 10,
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
 
-export const AddButton = styled.View`
-  width: 40%;
-  justify-content: center;
-  align-items: flex-end;
-  padding-right: 20;
-`;
+    body: {
+      width: sizes.windowWidth,
+      paddingRight: 10,
+      paddingLeft: 10,
+      flexDirection: 'column',
+      flex: 1
+    },
 
-export const SearchText = styled.Text`
-  color: #62a3ff;
-  font-size: 18px;
-  margin-top: 7px;
-`;
+    content: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
 
-export const StyledIcon = styled.View`
-  position: absolute;
-  top: 36px;
-  left: 20px;
-`;
+    infoBlock: {
+      flexDirection: 'column',
+      alignItems: 'center',
+      width: 240,
+      padding: 10,
+    },
+
+    infoText: {
+      marginTop: 20,
+      textAlign: 'center',
+      color: colors[theme].grayDarker,
+      fontSize: 15,
+      fontWeight: weights.medium,
+      fontFamily: fonts.main,
+    },
+  });
+};

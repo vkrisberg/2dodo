@@ -1,21 +1,20 @@
-import styled from 'styled-components';
+import {StyleSheet} from 'react-native';
+import {fonts, weights} from '../../../styles';
 
-const getColor = ({focusedColor}) => focusedColor ? focusedColor : 'white';
-
-const inputFocused = (props) => ({
-  'border-width': 2,
-  'border-color': `${getColor(props)}`
-});
-
-export const StyledInput = styled.TextInput`
-  width: 300;
-  height: 50;
-  border-color: #ced9e8;
-  border-width: 1;
-  margin-bottom: 20;
-  color: ${props => props.textColor || 'black'};
-  padding: 15px;
-  border-radius: 40;
-  ${props => props.focused && inputFocused(props)}
-  ${props => props.style && props.style}
-`;
+export default ({theme, color, borderColor, borderWidth}) => {
+  return StyleSheet.create({
+    input: {
+      color: color,
+      fontFamily: fonts.main,
+      fontSize: 15,
+      fontWeight: weights.medium,
+      borderWidth: borderWidth,
+      borderRadius: 20,
+      borderColor: borderColor,
+      marginBottom: 15,
+      paddingHorizontal: 20,
+      height: 40,
+      width: '100%',
+    },
+  });
+}

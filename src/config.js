@@ -1,6 +1,7 @@
 import Schema from './schema';
 
 export default {
+  hostname: 'api.2do.do',
   httpHost: 'api.2do.do',
   wsHost: 'api.2do.do/ws/',
   baseUrl: '/api',

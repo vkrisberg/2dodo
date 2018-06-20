@@ -1,15 +1,15 @@
 import React, {Component} from 'react';
-import {AsyncStorage} from 'react-native';
+import {AsyncStorage, Text} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
+import {BackgroundLayout} from '../../components/layouts';
 import {accountActions} from '../../store/actions';
 import Logo from '../../components/elements/logo';
-import BackgroundContainer from '../background-container';
 import {routeEnum, storageEnum} from '../../enums';
-import {StyledText} from './styles';
 import {services} from '../../utils';
 import CONFIG from '../../config';
+import styles from './styles';
 
 class Preload extends Component {
 
@@ -33,11 +33,12 @@ class Preload extends Component {
       navigation.replace(routeEnum.Messages);
     } else {
       dispatch(accountActions.remind())
-        .then(() => {
-          const {deviceId, user, keys} = this.props.account;
-          dispatch(accountActions.login({deviceId, user, keys}))
+        .then((data) => {
+          const {deviceId, hostname, user, keys} = this.props.account;
+          const password = data.password;
+          dispatch(accountActions.login({deviceId, hostname, user, keys, password}))
             .then(() => {
-              this.wsConnect({deviceId, user, keys});
+              this.wsConnect({deviceId, hostname, user, keys, password});
             })
             .catch((error) => {
               console.log('login error', error);
@@ -54,22 +55,22 @@ class Preload extends Component {
     }
   }
 
-  wsConnect = ({deviceId, user, keys}) => {
+  wsConnect = ({deviceId, hostname, user, keys, password}) => {
     services.websocketConnect({
       deviceId,
+      hostname,
       username: user.username,
-      password: keys.hashKey,
+      password,
+      hashKey: keys.hashKey,
     });
   };
 
   render() {
     return (
-      <BackgroundContainer barHidden>
+      <BackgroundLayout style={styles.container} background="preload" barHidden={true}>
         <Logo/>
-        <StyledText>
-          Do what you want
-        </StyledText>
-      </BackgroundContainer>
+        <Text style={styles.text}>Do what you want</Text>
+      </BackgroundLayout>
     );
   }
 }

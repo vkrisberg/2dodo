@@ -1,12 +1,11 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import {
-  TouchableWithoutFeedback,
-  ViewPropTypes
-} from 'react-native';
+import {View, Image, TouchableWithoutFeedback} from 'react-native';
 
-import {CommonWrapper, Label} from './styles';
-import Icon from './icon';
+import styles from './styles';
+
+import IMG_CHECKBOX_OFF from './img/checkbox.png';
+import IMG_CHECKBOX_ON from './img/checkbox_active.png';
 
 const hitSlop = {
   top: 8,
@@ -16,40 +15,68 @@ const hitSlop = {
 };
 
 export default class Checkbox extends PureComponent {
-  
+
   static propTypes = {
-    onPress: PropTypes.func.isRequired,
-    checked: PropTypes.bool,
-    style: ViewPropTypes.style,
-    label: PropTypes.string,
+    input: PropTypes.shape({}),
+    disabled: PropTypes.bool,
     color: PropTypes.string,
-    labelPadding: PropTypes.number
+    style: PropTypes.any,
   };
 
   static defaultProps = {
-    checked: false,
+    input: {},
+    disabled: false,
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      checked: !!props.input.value,
+    };
+  }
+
+  componentDidUpdate() {
+    const value = !!this.props.input.value;
+    if (this.state.checked !== value) {
+      this.setState({
+        checked: value,
+      });
+    }
+  }
+
+  onPress = () => {
+    const {input: {onChange}, disabled} = this.props;
+
+    if (!disabled) {
+      this.setState({checked: !this.state.checked}, () => {
+        if (onChange) {
+          onChange(this.state.checked);
+        }
+      });
+    }
   };
 
   render() {
     const {
-      style,
       color,
-      label,
-      checked,
-      labelPadding
+      style,
     } = this.props;
+    const imageStyles = [styles.image];
+
+    if (!this.state.checked && color) {
+      imageStyles.push({tintColor: color});
+    }
 
     return (
-      <TouchableWithoutFeedback hitSlop={hitSlop} onPress={this._onPress}>
-        <CommonWrapper style={style}>
-          <Label paddingLeft={labelPadding} color={color}>{label}</Label>
-          <Icon color={color} checked={checked} />
-        </CommonWrapper>
+      <TouchableWithoutFeedback hitSlop={hitSlop} onPress={this.onPress}>
+        <View style={[styles.container, style]}>
+          <Image
+            style={imageStyles}
+            tintColor={!this.state.checked && color}
+            source={this.state.checked ? IMG_CHECKBOX_ON : IMG_CHECKBOX_OFF}/>
+        </View>
       </TouchableWithoutFeedback>
     );
   }
-
-  _onPress = () => {
-    this.props.onPress(!this.props.checked);
-  };
 }

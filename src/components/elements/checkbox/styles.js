@@ -1,10 +1,9 @@
-import styled from 'styled-components';
+import {StyleSheet} from 'react-native';
 
-export const Label = styled.Text`
-  color: ${props => props.color || 'black'};
-  padding-right: ${({paddingLeft, label}) => paddingLeft ? paddingLeft :  label ? 60 : 0};
-`;
+export default StyleSheet.create({
+  container: {
+  },
 
-export const CommonWrapper = styled.View`
-  flex-direction: row;
-`;
+  image: {
+  },
+});
