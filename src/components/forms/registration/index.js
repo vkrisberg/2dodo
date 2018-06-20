@@ -48,7 +48,7 @@ export default class RegistrationForm extends PureComponent {
   onScrollEnd = (event) => {
     const direction = event.nativeEvent.locationX > this.startX ? 'back' : 'forward';
 
-    if (this.state.page > 0 && direction === 'back') {
+    if (this.state.page === 1 && direction === 'back') {
       this.previousPage();
     }
   };
@@ -82,6 +82,7 @@ export default class RegistrationForm extends PureComponent {
                                  context={context}
                                  defaultServer={server}
                                  initialValues={{page: 0}}
+                                 page={this.state.page}
                                  onSubmit={this.nextPage}/>
           <RegistrationEmailForm theme={theme}
                                  context={context}
