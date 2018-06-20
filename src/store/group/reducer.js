@@ -1,5 +1,6 @@
 import reducer from '../../utils/reducer';
 import {types} from './actions';
+import CONFIG from '../../config';
 
 const initState = {
   list: [],
@@ -9,6 +10,7 @@ const initState = {
     type: '',
     name: '',
     description: '',
+    hostname: CONFIG.hostname,
     owner: '',
     members: [],
     shortName: '',
@@ -142,9 +144,17 @@ export default reducer(initState, {
   },
 
   [types.DELETE_SUCCESS]: (state, action) => {
-    const list = state.list.filter((item) => {
-      return item.id !== action.payload;
-    });
+    let list = [];
+
+    if (typeof action.payload === 'string') {
+      list = state.list.filter((item) => {
+        return item.id !== action.payload;
+      });
+    } else {
+      list = state.list.filter((item) => {
+        return action.payload.indexOf(item.id) === -1;
+      });
+    }
 
     return {
       ...state,

@@ -192,7 +192,7 @@ export default {
           });
         }
 
-        // console.log('chat deleted', id);
+        // console.log('chats deleted', ids);
         dispatch({type: types.DELETE_SUCCESS, payload: ids});
         return true;
       } catch (e) {

@@ -1,4 +1,4 @@
-import {get, map, filter} from 'lodash';
+import {get, map, filter, omitBy, isUndefined} from 'lodash';
 
 import apiGroup from '../../api/group';
 import {services, wsMessage} from '../../utils';
@@ -51,7 +51,9 @@ export default {
         // });
 
         console.log('group list loaded', groupList.length);
-        const payload = [...groupList];
+        const payload = groupList.map((item) => {
+          return {...item};
+        });
         dispatch({type: types.LOAD_SUCCESS, payload});
         return payload;
       } catch (e) {
@@ -96,6 +98,7 @@ export default {
         const groupData = {
           ...data,
           id: wsMessage.generateUuid(),
+          hostname: account.hostname,
           owner: 'admin',
           shortName: data.name.substr(0, 1).toUpperCase(),
           dateCreate: dateNow,
@@ -107,7 +110,7 @@ export default {
         });
         const payload = {...group};
         // console.log('group created', group);
-        const apiResult = await apiGroup.createGroup(sendData);
+        await apiGroup.createGroup(sendData);
         dispatch({type: types.CREATE_SUCCESS, payload});
         return payload;
       } catch (e) {
@@ -122,14 +125,21 @@ export default {
       dispatch({type: types.UPDATE});
       try {
         const realm = services.getRealm();
+        data = omitBy(data, isUndefined);
+        const sendData = {
+          link: data.link,
+          name: data.name,
+          description: data.description || '',
+          avatar: data.avatar || null,
+        };
         data.dateUpdate = new Date();
-        let chat = {};
+        let group = {};
         await realm.write(() => {
-          chat = realm.create(dbEnum.Chat, data, true);
+          group = realm.create(dbEnum.Group, data, true);
         });
-        const payload = {...chat};
-        // console.log('chat updated', chat);
-        // TODO - send updated chat to members
+        const payload = {...group};
+        // console.log('group updated', group);
+        await apiGroup.updateGroup(sendData);
         dispatch({type: types.UPDATE_SUCCESS, payload});
         return payload;
       } catch (e) {
@@ -139,20 +149,60 @@ export default {
     };
   },
 
-  delete: (id) => {
+  delete: (ids) => {
     return async dispatch => {
       dispatch({type: types.DELETE});
       try {
         const realm = services.getRealm();
-        // const chat = realm.objects(dbEnum.Chat); // remove all chats for testing
-        const chat = realm.objectForPrimaryKey(dbEnum.Chat, id);
-        if (!chat) {
-          throw new Error('delete failed: chat is not found');
+        let groups = realm.objects(dbEnum.Group);
+        groups = groups.filter((item) => ids.indexOf(item.id) >= 0);
+
+        if (!groups || !groups.length) {
+          throw new Error('delete failed: groups are not found');
         }
+
         await realm.write(() => {
-          realm.delete(chat);
+          realm.delete(groups);
         });
-        // console.log('chat deleted', id);
+
+        for (let i = 0; i < ids.length; i++) {
+          const groupId = ids[i];
+          const messages = realm.objects(dbEnum.GroupMessage).filtered(`groupId = '${groupId}'`);
+          await realm.write(() => {
+            realm.delete(messages);
+          });
+        }
+
+        // console.log('groups deleted', ids);
+        dispatch({type: types.DELETE_SUCCESS, payload: ids});
+        return true;
+      } catch (e) {
+        dispatch({type: types.DELETE_FAILURE, error: e});
+        throw e;
+      }
+    };
+  },
+
+  deleteById: (id) => {
+    return async dispatch => {
+      dispatch({type: types.DELETE});
+      try {
+        const realm = services.getRealm();
+        const group = realm.objectForPrimaryKey(dbEnum.Group, id);
+
+        if (!group) {
+          throw new Error('delete failed: group is not found');
+        }
+
+        await realm.write(() => {
+          realm.delete(group);
+        });
+
+        const messages = realm.objects(dbEnum.GroupMessage).filtered(`groupId = '${id}'`);
+        await realm.write(() => {
+          realm.delete(messages);
+        });
+        // console.log('group deleted', id);
         dispatch({type: types.DELETE_SUCCESS, payload: id});
         return true;
       } catch (e) {

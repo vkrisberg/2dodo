@@ -3,45 +3,27 @@ import {actionEnum} from '../enums';
 import CONFIG from '../config';
 
 export default {
-  createGroup: async (data, contacts) => {
+  createGroup: async (data) => {
     const websocket = services.getWebsocket();
-    const meta = {
-      ...CONFIG.message,
-      id: data.id,
-    };
-    const clientMessage = await wsMessage.getClientMessage({
-      action: actionEnum.createChat,
-      members: contacts,
+    const serverMessage = await wsMessage.getServerMessage({
+      action: actionEnum.createGroup,
       data,
-      meta,
     });
 
-    for (let i = 0; i < clientMessage.messages.length; i++) {
-      websocket.send(JSON.stringify(clientMessage.messages[i]));
-    }
+    websocket.send(JSON.stringify(serverMessage.message));
 
-    return clientMessage;
+    return serverMessage;
   },
 
-  sendGroupMessage: async ({data, members, timeDead, encryptTime, hashKey}) => {
+  updateGroup: async (data) => {
     const websocket = services.getWebsocket();
-    const meta = {
-      ...CONFIG.message,
-      id: data.id,
-      chatId: data.chatId,
-    };
-    const chatMessage = await wsMessage.getChatMessage({
-      action: actionEnum.chatMessage,
-      members,
+    const serverMessage = await wsMessage.getServerMessage({
+      action: actionEnum.updateGroup,
       data,
-      timeDead,
-      encryptTime,
-      hashKey,
-      meta,
     });
 
-    websocket.send(JSON.stringify(chatMessage.message));
+    websocket.send(JSON.stringify(serverMessage.message));
 
-    return chatMessage;
+    return serverMessage;
   },
 };
