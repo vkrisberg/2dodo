@@ -184,6 +184,7 @@ Group.schema = {
     type: {type: 'string', indexed: true}, // group_chat/channel
     name: {type: 'string', indexed: true},
     description: 'string',
+    hostname: 'string',
     owner: 'string',
     members: 'string?[]',
     shortName: 'string?',

@@ -1,13 +1,13 @@
 import {StyleSheet} from 'react-native';
 import {colors, fonts, weights} from '../../../styles';
 
-export default ({theme, color, bgColor, fontSize}) => {
+export default ({theme, color, bgColor, borderColor, fontSize}) => {
   return StyleSheet.create({
     container: {
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: bgColor || 'transparent',
-      borderColor: color || colors[theme].black,
+      borderColor: borderColor || colors[theme].black,
       borderWidth: 3,
       width: 200,
       height: 40,

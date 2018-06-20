@@ -3,7 +3,7 @@
  */
 import {set, isObject, isArray, isEmpty, assignIn, omitBy, isNil, map} from 'lodash';
 
-import {pgplib, aeslib, hashlib, datetime} from './encrypt';
+import {pgplib, aeslib, hashlib, datetime, codeclib} from './encrypt';
 
 const defaultChatStruct = {
   type: 'client_message',
@@ -248,6 +248,10 @@ const getShortName = (contacts = []) => {
   return shortName.toUpperCase();
 };
 
+const avatarToBase64 = (avatar) => {
+  return codeclib.base64Encode(avatar);
+};
+
 export default {
   getChatMessage,
   getClientMessage,
@@ -261,4 +265,5 @@ export default {
   dateToRealm,
   generateUuid,
   getShortName,
+  avatarToBase64,
 };

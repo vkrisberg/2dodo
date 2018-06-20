@@ -75,6 +75,8 @@ const colors = {
     navbarDescription: '#9399a5',
     backButton: '#6a7686',
     addButton: '#62a3ff',
+    loginButtonText: '#3d76d3',
+    loginBorder: '#efefef',
     // Chat message
     messageTextMain: '#1f2225',
     messageTextSecond: '#9399a5',
@@ -124,6 +126,8 @@ const colors = {
     navbarDescription: '#9399a5',
     backButton: '#6a7686',
     addButton: '#62a3ff',
+    loginButtonText: '#3d76d3',
+    loginBorder: '#efefef',
     // Chat message
     messageTextMain: '#1f2225',
     messageTextSecond: '#9399a5',

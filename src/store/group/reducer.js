@@ -1,44 +1,33 @@
 import reducer from '../../utils/reducer';
 import {types} from './actions';
+import CONFIG from '../../config';
 
 const initState = {
   list: [],
-  sectionList: [],
   current: {
-    username: '', // login@hostname
-    nickname: '', // login
-    phones: [],
-    firstName: '',
-    secondName: '',
-    bio: '',
+    id: '', // unique chat id (uuid4)
+    link: '',
+    type: '',
+    name: '',
+    description: '',
+    hostname: CONFIG.hostname,
+    owner: '',
+    members: [],
+    shortName: '',
     avatar: '',
-    sound: '',
-    notification: true,
-    isBlocked: false,
-    settings: '',
-    publicKey: '',
+    lastMessage: {},
+    unreadCount: 0,
+    sort: 0,
+    pin: 0,
+    isMuted: false,
+    isDeleted: false,
     dateCreate: null,
     dateUpdate: null,
   },
   loading: false,
   error: null,
+  receiveError: null,
 };
-
-function getSectionList(list) {
-  const sectionList = [];
-
-  list.forEach((contact) => {
-    const title = contact.nickname[0].toUpperCase();
-    const index = sectionList.findIndex((item) => item.title === title);
-    if (index >= 0) {
-      sectionList[index].data.push(contact);
-    } else {
-      sectionList.push({title, data: [contact]});
-    }
-  });
-
-  return sectionList;
-}
 
 export default reducer(initState, {
 
@@ -54,7 +43,6 @@ export default reducer(initState, {
     return {
       ...state,
       list: action.payload,
-      sectionList: getSectionList(action.payload),
       loading: false,
     };
   },
@@ -101,13 +89,9 @@ export default reducer(initState, {
   },
 
   [types.CREATE_SUCCESS]: (state, action) => {
-    const list = state.list.filter((item) => item.username !== action.payload.username);
-    list.push(action.payload);
-
     return {
       ...state,
-      list,
-      sectionList: getSectionList(list),
+      list: [action.payload, ...state.list],
       loading: false,
     };
   },
@@ -130,7 +114,7 @@ export default reducer(initState, {
 
   [types.UPDATE_SUCCESS]: (state, action) => {
     const list = state.list.map((item) => {
-      if (item.username === action.payload.username) {
+      if (item.id === action.payload.id) {
         return action.payload;
       }
       return item;
@@ -139,7 +123,6 @@ export default reducer(initState, {
     return {
       ...state,
       list,
-      sectionList: getSectionList(list),
       loading: false,
     };
   },
@@ -161,14 +144,21 @@ export default reducer(initState, {
   },
 
   [types.DELETE_SUCCESS]: (state, action) => {
-    const list = state.list.filter((item) => {
-      return item.username !== action.payload;
-    });
+    let list = [];
+
+    if (typeof action.payload === 'string') {
+      list = state.list.filter((item) => {
+        return item.id !== action.payload;
+      });
+    } else {
+      list = state.list.filter((item) => {
+        return action.payload.indexOf(item.id) === -1;
+      });
+    }
 
     return {
       ...state,
       list,
-      sectionList: getSectionList(list),
       loading: false,
     };
   },
@@ -181,35 +171,25 @@ export default reducer(initState, {
     };
   },
 
-  [types.UPDATE_PUBKEY]: (state, action) => {
+  [types.RECEIVE_CHAT_SUCCESS]: (state, action) => {
     return {
       ...state,
-      loading: true,
-      error: null
+      list: [action.payload, ...state.list],
+      receiveError: null,
     };
   },
 
-  [types.UPDATE_PUBKEY_SUCCESS]: (state, action) => {
-    const list = state.list.map((item) => {
-      if (item.username === action.payload.username) {
-        return action.payload;
-      }
-      return item;
-    });
-
+  [types.RECEIVE_CHAT_FAILURE]: (state, action) => {
     return {
       ...state,
-      list,
-      sectionList: getSectionList(list),
-      loading: false,
+      receiveError: action.error,
     };
   },
 
-  [types.UPDATE_PUBKEY_FAILURE]: (state, action) => {
+  [types.SET_CURRENT_CHAT]: (state, action) => {
     return {
       ...state,
-      loading: false,
-      error: action.error,
+      current: action.payload,
     };
   },
 });

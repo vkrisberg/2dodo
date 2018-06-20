@@ -1,44 +1,32 @@
 import reducer from '../../utils/reducer';
 import {types} from './actions';
+import {types as chatTypes} from '../chat/actions';
 
 const initState = {
+  chat: '', // current chat
   list: [],
-  sectionList: [],
   current: {
-    username: '', // login@hostname
-    nickname: '', // login
-    phones: [],
-    firstName: '',
-    secondName: '',
-    bio: '',
-    avatar: '',
-    sound: '',
-    notification: true,
-    isBlocked: false,
-    settings: '',
-    publicKey: '',
+    id: '',
+    chatId: '',
+    type: 'text', // [text, audio, video, image, call]
+    username: '',
+    from: '',
+    text: '',
+    fileUrl: '',
+    user: {},
+    quote: {},
+    status: 'sending', // [sending, send, received, read, error]
+    isOwn: false,
+    isFavorite: false,
+    salt: '',
+    dateSend: null,
     dateCreate: null,
     dateUpdate: null,
   },
   loading: false,
   error: null,
+  receiveError: null,
 };
-
-function getSectionList(list) {
-  const sectionList = [];
-
-  list.forEach((contact) => {
-    const title = contact.nickname[0].toUpperCase();
-    const index = sectionList.findIndex((item) => item.title === title);
-    if (index >= 0) {
-      sectionList[index].data.push(contact);
-    } else {
-      sectionList.push({title, data: [contact]});
-    }
-  });
-
-  return sectionList;
-}
 
 export default reducer(initState, {
 
@@ -54,7 +42,6 @@ export default reducer(initState, {
     return {
       ...state,
       list: action.payload,
-      sectionList: getSectionList(action.payload),
       loading: false,
     };
   },
@@ -67,31 +54,7 @@ export default reducer(initState, {
     };
   },
 
-  [types.LOAD_ONE]: (state, action) => {
-    return {
-      ...state,
-      loading: true,
-      error: null
-    };
-  },
-
-  [types.LOAD_ONE_SUCCESS]: (state, action) => {
-    return {
-      ...state,
-      current: action.payload,
-      loading: false,
-    };
-  },
-
-  [types.LOAD_ONE_FAILURE]: (state, action) => {
-    return {
-      ...state,
-      loading: false,
-      error: action.error,
-    };
-  },
-
-  [types.CREATE]: (state, action) => {
+  [types.SEND]: (state, action) => {
     return {
       ...state,
       current: {...initState.current},
@@ -100,19 +63,15 @@ export default reducer(initState, {
     };
   },
 
-  [types.CREATE_SUCCESS]: (state, action) => {
-    const list = state.list.filter((item) => item.username !== action.payload.username);
-    list.push(action.payload);
-
+  [types.SEND_SUCCESS]: (state, action) => {
     return {
       ...state,
-      list,
-      sectionList: getSectionList(list),
+      list: [...state.list, action.payload],
       loading: false,
     };
   },
 
-  [types.CREATE_FAILURE]: (state, action) => {
+  [types.SEND_FAILURE]: (state, action) => {
     return {
       ...state,
       loading: false,
@@ -120,7 +79,7 @@ export default reducer(initState, {
     };
   },
 
-  [types.UPDATE]: (state, action) => {
+  [types.RESEND]: (state, action) => {
     return {
       ...state,
       loading: true,
@@ -128,9 +87,9 @@ export default reducer(initState, {
     };
   },
 
-  [types.UPDATE_SUCCESS]: (state, action) => {
+  [types.RESEND_SUCCESS]: (state, action) => {
     const list = state.list.map((item) => {
-      if (item.username === action.payload.username) {
+      if (item.id === action.payload.id) {
         return action.payload;
       }
       return item;
@@ -139,12 +98,42 @@ export default reducer(initState, {
     return {
       ...state,
       list,
-      sectionList: getSectionList(list),
       loading: false,
     };
   },
 
-  [types.UPDATE_FAILURE]: (state, action) => {
+  [types.RESEND_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      loading: false,
+      error: action.error,
+    };
+  },
+
+  [types.EDIT]: (state, action) => {
+    return {
+      ...state,
+      loading: true,
+      error: null
+    };
+  },
+
+  [types.EDIT_SUCCESS]: (state, action) => {
+    const list = state.list.map((item) => {
+      if (item.id === action.payload.id) {
+        return action.payload;
+      }
+      return item;
+    });
+
+    return {
+      ...state,
+      list,
+      loading: false,
+    };
+  },
+
+  [types.EDIT_FAILURE]: (state, action) => {
     return {
       ...state,
       loading: false,
@@ -162,13 +151,12 @@ export default reducer(initState, {
 
   [types.DELETE_SUCCESS]: (state, action) => {
     const list = state.list.filter((item) => {
-      return item.username !== action.payload;
+      return item.id !== action.payload;
     });
 
     return {
       ...state,
       list,
-      sectionList: getSectionList(list),
       loading: false,
     };
   },
@@ -181,35 +169,44 @@ export default reducer(initState, {
     };
   },
 
-  [types.UPDATE_PUBKEY]: (state, action) => {
+  [types.RECEIVE_MESSAGE_SUCCESS]: (state, action) => {
+    if (action.payload.chatId !== state.chat.id) {
+      return state;
+    }
+
     return {
       ...state,
-      loading: true,
-      error: null
+      list: [...state.list, action.payload],
+      receiveError: null,
     };
   },
 
-  [types.UPDATE_PUBKEY_SUCCESS]: (state, action) => {
-    const list = state.list.map((item) => {
-      if (item.username === action.payload.username) {
-        return action.payload;
-      }
-      return item;
-    });
-
+  [types.RECEIVE_MESSAGE_FAILURE]: (state, action) => {
     return {
       ...state,
-      list,
-      sectionList: getSectionList(list),
-      loading: false,
+      receiveError: action.error,
     };
   },
 
-  [types.UPDATE_PUBKEY_FAILURE]: (state, action) => {
+  [types.RECEIVE_STATUS_SUCCESS]: (state, action) => {
     return {
       ...state,
-      loading: false,
-      error: action.error,
+      receiveError: null,
+    };
+  },
+
+  [types.RECEIVE_STATUS_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      receiveError: action.error,
+    };
+  },
+
+  // Chat types
+  [chatTypes.SET_CURRENT_CHAT]: (state, action) => {
+    return {
+      ...state,
+      chat: action.payload,
     };
   },
 });
