@@ -11,7 +11,7 @@ import {
   Preload,
   Events,
 } from './containers';
-import {ContactAdd} from './containers/contacts';
+import {ContactAdd, ContactProfile} from './containers/contacts';
 import {ChatCreate, ChatMessage} from './containers/messages';
 
 export const MainStack = createStackNavigator({
@@ -35,6 +35,9 @@ export const MainStack = createStackNavigator({
   },
   ContactAdd: {
     screen: ContactAdd,
+  },
+  ContactProfile: {
+    screen: ContactProfile,
   },
   ChatCreate: {
     screen: ChatCreate,
