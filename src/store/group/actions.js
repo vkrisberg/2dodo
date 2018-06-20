@@ -90,7 +90,7 @@ export default {
           group_type: data.type,
           name: data.name,
           description: data.description || '',
-          avatar: data.avatar ? wsMessage.avatarToBase64(data.avatar) : null,
+          avatar: data.avatar || null,
           members: data.members || [],
         };
         const groupData = {
