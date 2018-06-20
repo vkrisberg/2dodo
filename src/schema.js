@@ -80,6 +80,7 @@ Contact.schema = {
     username: 'string', // login@hostname
     nickname: 'string', // login
     deviceId: 'string?',
+    groups: 'string?[]',
     phones: 'string?[]',
     firstName: {type: 'string', optional: true, indexed: true},
     secondName: {type: 'string', optional: true, indexed: true},
@@ -184,8 +185,9 @@ Group.schema = {
     type: {type: 'string', indexed: true}, // group_chat/channel
     name: {type: 'string', indexed: true},
     description: 'string',
+    role: 'string', // member/admin (my role)
     hostname: 'string',
-    owner: 'string',
+    owner: 'string', // login@hostname
     members: 'string?[]',
     shortName: 'string?',
     avatar: 'string?',
@@ -195,6 +197,9 @@ Group.schema = {
     pin: {type: 'int', default: 0},
     isMuted: {type: 'bool', default: false},
     isDeleted: {type: 'bool', indexed: true, default: false},
+    isBanned: {type: 'bool', default: false},
+    banReason: 'string?',
+    dateBan: 'date?',
     dateCreate: {type: 'date', indexed: true},
     dateUpdate: 'date',
   },

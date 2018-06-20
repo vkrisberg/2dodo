@@ -20,7 +20,8 @@ export default {
   // server actions
   getOpenKey: 'get_open_key',
   deliveryReport: 'delivery_report',
-  search: 'search',
+  searchUser: 'search',
   requestSync: 'request_sync',
   syncMessages: 'sync_messages',
+  getAccessLog: 'get_access_log',
 };

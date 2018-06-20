@@ -10,6 +10,7 @@ const initState = {
     type: '',
     name: '',
     description: '',
+    role: 'member', // member/admin
     hostname: CONFIG.hostname,
     owner: '',
     members: [],
@@ -21,6 +22,9 @@ const initState = {
     pin: 0,
     isMuted: false,
     isDeleted: false,
+    isBanned: false,
+    banReason: '',
+    dateBan: null,
     dateCreate: null,
     dateUpdate: null,
   },
@@ -171,22 +175,203 @@ export default reducer(initState, {
     };
   },
 
-  [types.RECEIVE_CHAT_SUCCESS]: (state, action) => {
+  [types.GET_GROUP]: (state, action) => {
     return {
       ...state,
-      list: [action.payload, ...state.list],
-      receiveError: null,
+      loading: true,
+      error: null
     };
   },
 
-  [types.RECEIVE_CHAT_FAILURE]: (state, action) => {
+  [types.GET_GROUP_SUCCESS]: (state, action) => {
     return {
       ...state,
-      receiveError: action.error,
+      loading: false,
     };
   },
 
-  [types.SET_CURRENT_CHAT]: (state, action) => {
+  [types.GET_GROUP_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      loading: false,
+      error: action.error,
+    };
+  },
+
+  [types.GET_PUBLIC_LIST]: (state, action) => {
+    return {
+      ...state,
+      loading: true,
+      error: null
+    };
+  },
+
+  [types.GET_PUBLIC_LIST_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      loading: false,
+    };
+  },
+
+  [types.GET_PUBLIC_LIST_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      loading: false,
+      error: action.error,
+    };
+  },
+
+  [types.INVITE]: (state, action) => {
+    return {
+      ...state,
+      loading: true,
+      error: null
+    };
+  },
+
+  [types.INVITE_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      loading: false,
+    };
+  },
+
+  [types.INVITE_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      loading: false,
+      error: action.error,
+    };
+  },
+
+  [types.SUBSCRIBE]: (state, action) => {
+    return {
+      ...state,
+      loading: true,
+      error: null
+    };
+  },
+
+  [types.SUBSCRIBE_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      loading: false,
+    };
+  },
+
+  [types.SUBSCRIBE_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      loading: false,
+      error: action.error,
+    };
+  },
+
+  [types.UNSUBSCRIBE]: (state, action) => {
+    return {
+      ...state,
+      loading: true,
+      error: null
+    };
+  },
+
+  [types.UNSUBSCRIBE_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      loading: false,
+    };
+  },
+
+  [types.UNSUBSCRIBE_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      loading: false,
+      error: action.error,
+    };
+  },
+
+  [types.GET_MEMBER]: (state, action) => {
+    return {
+      ...state,
+      loading: true,
+      error: null
+    };
+  },
+
+  [types.GET_MEMBER_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      loading: false,
+    };
+  },
+
+  [types.GET_MEMBER_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      loading: false,
+      error: action.error,
+    };
+  },
+
+  [types.UPDATE_MEMBER]: (state, action) => {
+    return {
+      ...state,
+      loading: true,
+      error: null
+    };
+  },
+
+  [types.UPDATE_MEMBER_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      loading: false,
+    };
+  },
+
+  [types.UPDATE_MEMBER_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      loading: false,
+      error: action.error,
+    };
+  },
+
+  [types.SEND_MESSAGE]: (state, action) => {
+    return {
+      ...state,
+      loading: true,
+      error: null
+    };
+  },
+
+  [types.SEND_MESSAGE_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      loading: false,
+    };
+  },
+
+  [types.SEND_MESSAGE_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      loading: false,
+      error: action.error,
+    };
+  },
+
+  [types.RECEIVE_INVITE]: (state, action) => {
+    return {
+      ...state,
+    };
+  },
+
+  [types.RECEIVE_MESSAGE]: (state, action) => {
+    return {
+      ...state,
+    };
+  },
+
+  [types.SET_CURRENT_GROUP]: (state, action) => {
     return {
       ...state,
       current: action.payload,

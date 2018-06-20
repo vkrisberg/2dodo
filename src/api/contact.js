@@ -9,6 +9,20 @@ export default {
       data: usernames,
     });
 
-    return websocket.send(JSON.stringify(serverMessage.message));
+    websocket.send(JSON.stringify(serverMessage.message));
+
+    return serverMessage;
+  },
+
+  search: async (username) => {
+    const websocket = services.getWebsocket();
+    const serverMessage = await wsMessage.getServerMessage({
+      action: actionEnum.searchUser,
+      data: username,
+    });
+
+    websocket.send(JSON.stringify(serverMessage.message));
+
+    return serverMessage;
   },
 };
