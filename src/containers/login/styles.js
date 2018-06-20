@@ -17,7 +17,7 @@ export const StyledRegistration = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin-top: ${sizes.isIphone5 ? '0' : '70'};
+  margin-top: ${sizes.isIphone5 ? '0' : '65'};
 `;
 
 export const RegistrationLabel = styled.Text`
@@ -42,15 +42,18 @@ export const LoginStyles = StyleSheet.create({
   },
 
   keysImportContainer: {
+    width: 315,
+    borderTopWidth: 1,
+    borderColor: colors.light.loginBorder,
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 15,
   },
 
   keysImportButton: {
-    backgroundColor: colors.light.whiteSmoke,
-    borderColor: colors.light.whiteSmoke,
-    width: 132,
-    height: 37,
-    marginTop: sizes.isIphone5 ? 0 : 10,
+    borderWidth: 0,
+    height: 'auto',
+    padding: 10,
+    marginTop: sizes.isIphone5 ? 0 : 5,
   },
 });

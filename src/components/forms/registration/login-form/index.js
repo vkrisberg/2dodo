@@ -26,11 +26,19 @@ class RegistrationLoginForm extends Component {
   };
 
   state = {
+    page: 0,
     checked: false,
   };
 
   componentWillUnmount() {
     this.props.reset();
+  }
+
+  componentDidUpdate() {
+    if (this.state.page !== this.props.page) {
+      this.setState({page: this.props.page});
+      this.props.change('page', this.props.page);
+    }
   }
 
   toggleServerInput = (checked) => {
@@ -42,7 +50,6 @@ class RegistrationLoginForm extends Component {
 
   onSubmit = () => {
     if (!this.props.handleSubmit()) {
-      this.props.change('page', 1);
       this.props.untouch('email');
     }
   };
@@ -125,7 +132,7 @@ class RegistrationLoginForm extends Component {
           </View>
           <View style={_styles.checkboxContainer}>
             <TextLabel theme={theme} color={colors[theme].blackText}>{context.t('UseSpecialServerParams')}</TextLabel>
-            <Checkbox input={{onChange: this.toggleServerInput}}/>
+            <Checkbox input={{value: this.state.checked, onChange: this.toggleServerInput}}/>
           </View>
           {this.renderServerInput(_styles)}
           <View style={_styles.buttonContainer}>

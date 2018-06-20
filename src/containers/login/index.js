@@ -167,7 +167,7 @@ class Login extends Component {
             <View style={LoginStyles.keysImportContainer}>
               <Button style={LoginStyles.keysImportButton}
                       color={colors.light.grayDarker}
-                      bgColor={colors.light.whiteSmoke}
+                      borderColor="transparent"
                       onPress={this.keysImport}>
                 {t('KeysImport')}
               </Button>
