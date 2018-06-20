@@ -33,6 +33,11 @@ export default (theme) => {
       flex: 1
     },
 
+    bodyProfile: {
+      paddingLeft: 0,
+      paddingRight: 0,
+    },
+
     content: {
       flex: 1,
       alignItems: 'center',
@@ -53,6 +58,16 @@ export default (theme) => {
       fontSize: 15,
       fontWeight: weights.medium,
       fontFamily: fonts.main,
+    },
+
+    editBtn: {
+      width: 'auto',
+      height: 'auto',
+      paddingHorizontal: 10,
+      borderWidth: 0,
+      justifyContent: 'flex-end',
+      position: 'absolute',
+      right: 10,
     },
   });
 };

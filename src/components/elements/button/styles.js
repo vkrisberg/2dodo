@@ -1,7 +1,7 @@
 import {StyleSheet} from 'react-native';
 import {colors, fonts, weights} from '../../../styles';
 
-export default ({theme, color, bgColor, borderColor}) => {
+export default ({theme, color, bgColor, borderColor, fontSize}) => {
   return StyleSheet.create({
     container: {
       alignItems: 'center',
@@ -17,8 +17,8 @@ export default ({theme, color, bgColor, borderColor}) => {
     text: {
       color: color || colors[theme].black,
       fontFamily: fonts.main,
-      fontSize: 16,
+      fontSize: fontSize || 16,
       fontWeight: weights.medium,
     },
   });
-}
+};
