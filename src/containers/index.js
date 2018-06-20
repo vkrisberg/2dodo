@@ -7,4 +7,4 @@ export {default as Login} from './login';
 export {Messages} from './messages';
 export {default as Preload} from './preload';
 export {default as Registration} from './registration';
-export {default as Settings} from './settings';
+export {Settings} from './settings';

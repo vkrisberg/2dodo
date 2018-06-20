@@ -13,6 +13,7 @@ import {
 } from './containers';
 import {ContactAdd, ContactProfile} from './containers/contacts';
 import {ChatCreate, ChatMessage} from './containers/messages';
+import {SettingsProfile} from './containers/settings';
 
 export const MainStack = createStackNavigator({
   Login: {
@@ -44,6 +45,9 @@ export const MainStack = createStackNavigator({
   },
   ChatMessage: {
     screen: ChatMessage,
+  },
+  SettingsProfile: {
+    screen: SettingsProfile,
   },
 }, {
   headerMode: 'none',

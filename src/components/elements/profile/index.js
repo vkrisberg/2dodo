@@ -85,7 +85,7 @@ export default class Profile extends PureComponent {
                 <Button
                   style={[_styles.actionBtn, {paddingVertical: 5,}]}
                   color={colors[theme].blue}
-                  fontSize={15}
+                  textStyle={{fontSize: 15,}}
                   onPress={onShowQrCode}>
                   {context.t('ShowQrCode')}
                 </Button>
