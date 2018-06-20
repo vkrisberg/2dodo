@@ -5,4 +5,5 @@ export {default as favoritesNavEnum} from './favorites-nav-enum';
 export {default as actionEnum} from './action-enum';
 export {default as messageEnum} from './message-enum';
 export {default as themeEnum} from './theme-enum';
+export {default as alphabetEnum} from './alphabet-enum';
 export {default as phonePrefixEnum} from './phone-prefix-enum';

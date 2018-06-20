@@ -37,6 +37,18 @@ export default (theme) => {
 
     chosen: {
       marginBottom: -6,
+      marginRight: 13,
+    },
+
+    swipeOut: {
+      backgroundColor: 'transparent',
+    },
+
+    btnContainer: {
+      width: '100%',
+      height: '100%',
+      justifyContent: 'center',
+      alignItems: 'flex-start',
     },
   });
 };
