@@ -85,7 +85,7 @@ export default {
         data.dateUpdate = data.dateCreate;
         let contact = {};
         await realm.write(() => {
-          contact = realm.create(dbEnum.Contact, data, false);
+          contact = realm.create(dbEnum.Contact, data, true); // TODO - change to 'false'
         });
         const payload = {...contact};
         // console.log('contact created', contact);
@@ -151,6 +151,10 @@ export default {
 
         if (data.error) {
           throw new Error(data.error);
+        }
+
+        if (!data.data || !data.data.length) {
+          throw new Error('no data');
         }
 
         for (let i = 0; i < data.data.length; i++) {

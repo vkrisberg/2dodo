@@ -3,6 +3,7 @@ import {types} from './actions';
 
 const initState = {
   list: [],
+  sectionList: [],
   current: {
     username: '', // login@hostname
     nickname: '', // login
@@ -23,6 +24,22 @@ const initState = {
   error: null,
 };
 
+function getSectionList(list) {
+  const sectionList = [];
+
+  list.forEach((contact) => {
+    const title = contact.nickname[0].toUpperCase();
+    const index = sectionList.findIndex((item) => item.title === title);
+    if (index >= 0) {
+      sectionList[index].data.push(contact);
+    } else {
+      sectionList.push({title, data: [contact]});
+    }
+  });
+
+  return sectionList;
+}
+
 export default reducer(initState, {
 
   [types.LOAD]: (state, action) => {
@@ -37,6 +54,7 @@ export default reducer(initState, {
     return {
       ...state,
       list: action.payload,
+      sectionList: getSectionList(action.payload),
       loading: false,
     };
   },
@@ -89,6 +107,7 @@ export default reducer(initState, {
     return {
       ...state,
       list,
+      sectionList: getSectionList(list),
       loading: false,
     };
   },
@@ -120,6 +139,7 @@ export default reducer(initState, {
     return {
       ...state,
       list,
+      sectionList: getSectionList(list),
       loading: false,
     };
   },
@@ -148,6 +168,7 @@ export default reducer(initState, {
     return {
       ...state,
       list,
+      sectionList: getSectionList(list),
       loading: false,
     };
   },
@@ -179,6 +200,7 @@ export default reducer(initState, {
     return {
       ...state,
       list,
+      sectionList: getSectionList(list),
       loading: false,
     };
   },
