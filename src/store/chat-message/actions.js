@@ -159,6 +159,9 @@ export default {
         const realm = services.getRealm();
         const {account} = getState();
         const chatMessage = realm.objectForPrimaryKey(dbEnum.ChatMessage, id);
+        if (!chatMessage) {
+          throw new Error(`chat message '${id}' is not found`);
+        }
         const chat = realm.objectForPrimaryKey(dbEnum.Chat, chatMessage.chatId);
         const members = filter(chat.members, (username) => username !== account.user.username);
         await realm.write(() => {
@@ -256,7 +259,7 @@ export default {
         }
 
         let encryptTime = get(message, 'encrypt_time', null);
-        encryptTime = wsMessage.dateSendToRealm(encryptTime);
+        encryptTime = wsMessage.rfcToRealm(encryptTime);
         let hashKeys = realm.objects(dbEnum.HashKey)
           .filtered(`chatId = '${meta.chatId}' AND dateSend = ${encryptTime}`);
         // when send a message to yourself
@@ -273,7 +276,7 @@ export default {
           ...decryptedData,
           status: messageEnum.received,
           isOwn: false,
-          dateSend: wsMessage.dateSendToDate(decryptedData.dateSend),
+          dateSend: wsMessage.rfcToDate(decryptedData.dateSend),
           dateCreate: dateNow,
           dateUpdate: dateNow,
         };
@@ -282,8 +285,8 @@ export default {
           chatMessage = realm.create(dbEnum.ChatMessage, messageData, true);
         });
         const payload = {...chatMessage};
-        // console.log('chat message received', chatMessage);
-        // TODO - send delivery report to server and client
+        // console.log('chat message received', payload);
+        // TODO - send delivery report to client
         const hashKeyData = {
           chatId: chatMessage.chatId,
           messageId: chatMessage.id,

@@ -157,6 +157,7 @@ ChatMessage.schema = {
     username: {type: 'string', indexed: true}, // login@hostname
     from: 'string?', // login@hostname@deviceId
     text: 'string?',
+    filename: 'string?',
     fileUrl: 'string?',
     user: 'Contact?',
     quote: 'ChatMessage?',
@@ -186,7 +187,7 @@ Group.schema = {
     name: {type: 'string', indexed: true},
     description: 'string',
     role: 'string', // member/admin (my role)
-    hostname: 'string',
+    hostname: 'string?',
     owner: 'string', // login@hostname
     members: 'string?[]',
     shortName: 'string?',
@@ -197,6 +198,7 @@ Group.schema = {
     pin: {type: 'int', default: 0},
     isMuted: {type: 'bool', default: false},
     isDeleted: {type: 'bool', indexed: true, default: false},
+    isSubscribed: {type: 'bool', default: true},
     isBanned: {type: 'bool', default: false},
     banReason: 'string?',
     dateBan: 'date?',
@@ -221,8 +223,9 @@ GroupMessage.schema = {
     groupType: 'string',
     type: {type: 'string', indexed: true, default: 'text'}, // [text, audio, video, image, call]
     username: {type: 'string', indexed: true}, // login@hostname
-    from: 'string', // login@hostname@deviceId
+    from: 'string?', // login@hostname@deviceId
     text: 'string?',
+    filename: 'string?',
     fileUrl: 'string?',
     user: 'Contact?',
     quote: 'GroupMessage?',
