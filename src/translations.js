@@ -104,6 +104,9 @@ const translations = {
     'Enabled': 'Вкл',
     'Disabled': 'Выкл',
     'Sound': 'Звук',
+    'SearchInGroups': 'Искать в группах',
+    'NoGroupsInvited': 'No groups invited',
+    'SearchGroups': 'You can search in group catalog',
   },
   'en': {
     // Main menu
@@ -210,6 +213,9 @@ const translations = {
     'Enabled': 'Enabled',
     'Disabled': 'Disabled',
     'Sound': 'Sound',
+    'SearchInGroups': 'Search in groups and channels',
+    'NoGroupsInvited': 'No groups invited',
+    'SearchGroups': 'You can search in group catalog',
   },
 };
 
