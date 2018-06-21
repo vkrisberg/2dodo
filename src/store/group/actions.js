@@ -2,7 +2,7 @@ import {get, map, filter, omitBy, isUndefined} from 'lodash';
 
 import {apiGroup, apiServer} from '../../api';
 import {services, wsMessage} from '../../utils';
-import {dbEnum} from '../../enums';
+import {dbEnum, messageEnum} from '../../enums';
 
 export const types = {
   LOAD: Symbol('LOAD'),
@@ -112,9 +112,7 @@ export default {
 
   create: (data) => {
     return async (dispatch, getState) => {
-      dispatch({type: types.CREATE});
       try {
-        const realm = services.getRealm();
         const {account} = getState();
 
         data = omitBy(data, isUndefined);
@@ -142,19 +140,42 @@ export default {
         const groupData = {
           ...data,
           id: wsMessage.generateUuid(),
+          role: 'admin',
           hostname: account.hostname,
-          owner: 'admin',
+          owner: account.user.username,
           shortName: data.name.substr(0, 1).toUpperCase(),
           dateCreate: dateNow,
           dateUpdate: dateNow,
         };
-        let group = {};
-        await realm.write(() => {
-          group = realm.create(dbEnum.Group, groupData, false);
-        });
-        const payload = {...group};
-        // console.log('group created', group);
+
         await apiGroup.createGroup(sendData);
+
+        dispatch({type: types.CREATE, payload: groupData});
+        return groupData;
+      } catch (e) {
+        dispatch({type: types.CREATE_FAILURE, error: e});
+        throw e;
+      }
+    };
+  },
+
+  createResult: (message) => {
+    return async (dispatch, getState) => {
+      try {
+        const realm = services.getRealm();
+
+        if (message.error || !message.data.success) {
+          throw new Error(message.error);
+        }
+
+        const {group} = getState();
+
+        let _group = {};
+        await realm.write(() => {
+          _group = realm.create(dbEnum.Group, group.current, false);
+        });
+        const payload = {..._group};
+        // console.log('group created', payload);
         dispatch({type: types.CREATE_SUCCESS, payload});
         return payload;
       } catch (e) {
@@ -166,11 +187,9 @@ export default {
 
   update: (data) => {
     return async dispatch => {
-      dispatch({type: types.UPDATE});
       try {
-        const realm = services.getRealm();
-
         data = omitBy(data, isUndefined);
+
         if (!data.link) {
           throw new Error('update group failed: link is empty');
         }
@@ -187,13 +206,34 @@ export default {
           avatar: data.avatar || '',
         };
 
-        let group = {};
-        await realm.write(() => {
-          group = realm.create(dbEnum.Group, data, true);
-        });
-        const payload = {...group};
-        // console.log('group updated', group);
         await apiGroup.updateGroup(sendData);
+
+        dispatch({type: types.UPDATE, payload: data});
+        return data;
+      } catch (e) {
+        dispatch({type: types.UPDATE_FAILURE, error: e});
+        throw e;
+      }
+    };
+  },
+
+  updateResult: (message) => {
+    return async (dispatch, getState) => {
+      try {
+        const realm = services.getRealm();
+
+        if (message.error || !message.data.success) {
+          throw new Error(message.error);
+        }
+
+        const {group} = getState();
+
+        let _group = {};
+        await realm.write(() => {
+          _group = realm.create(dbEnum.Group, group.current, true);
+        });
+        const payload = {..._group};
+        // console.log('group updated', payload);
         dispatch({type: types.UPDATE_SUCCESS, payload});
         return payload;
       } catch (e) {
@@ -205,7 +245,6 @@ export default {
 
   delete: (ids) => {
     return async dispatch => {
-      dispatch({type: types.DELETE});
       try {
         const realm = services.getRealm();
         let groups = realm.objects(dbEnum.Group);
@@ -213,6 +252,57 @@ export default {
 
         if (!groups || !groups.length) {
           throw new Error('delete failed: groups are not found');
+        }
+
+        for (let i = 0; i < groups.length; i++) {
+          await apiGroup.deleteGroup(groups[i].link);
+        }
+
+        dispatch({type: types.DELETE, payload: ids});
+        return true;
+      } catch (e) {
+        dispatch({type: types.DELETE_FAILURE, error: e});
+        throw e;
+      }
+    };
+  },
+
+  deleteById: (id) => {
+    return async dispatch => {
+      try {
+        const realm = services.getRealm();
+        const group = realm.objectForPrimaryKey(dbEnum.Group, id);
+
+        if (!group) {
+          throw new Error('delete failed: group is not found');
+        }
+
+        await apiGroup.deleteGroup(group.link);
+
+        dispatch({type: types.DELETE, payload: [id]});
+        return true;
+      } catch (e) {
+        dispatch({type: types.DELETE_FAILURE, error: e});
+        throw e;
+      }
+    };
+  },
+
+  deleteResult: (message) => {
+    return async (dispatch, getState) => {
+      try {
+        const realm = services.getRealm();
+
+        if (message.error || !message.data.success) {
+          throw new Error(message.error);
+        }
+
+        const {group} = getState();
+        let groups = realm.objects(dbEnum.Group);
+        groups = groups.filter((item) => group.deleted.indexOf(item.id) >= 0);
+
+        if (!groups || !groups.length) {
+          return group.deleted;
         }
 
         const deletedGroups = groups.map((item) => {
@@ -229,44 +319,10 @@ export default {
           await realm.write(() => {
             realm.delete(messages);
           });
-          await apiGroup.deleteGroup(group.link);
         }
-
-        // console.log('groups deleted', ids);
-        dispatch({type: types.DELETE_SUCCESS, payload: ids});
-        return true;
-      } catch (e) {
-        dispatch({type: types.DELETE_FAILURE, error: e});
-        throw e;
-      }
-    };
-  },
-
-  deleteById: (id) => {
-    return async dispatch => {
-      dispatch({type: types.DELETE});
-      try {
-        const realm = services.getRealm();
-        const group = realm.objectForPrimaryKey(dbEnum.Group, id);
-
-        if (!group) {
-          throw new Error('delete failed: group is not found');
-        }
-
-        const deletedGroup = {...group};
-
-        await realm.write(() => {
-          realm.delete(group);
-        });
-
-        const messages = realm.objects(dbEnum.GroupMessage).filtered(`groupId = '${id}'`);
-        await realm.write(() => {
-          realm.delete(messages);
-        });
-        await apiGroup.deleteGroup(deletedGroup.link);
-        // console.log('group deleted', id);
-        dispatch({type: types.DELETE_SUCCESS, payload: id});
-        return true;
+        // console.log('groups deleted', group.deleted);
+        dispatch({type: types.DELETE_SUCCESS, payload: group.deleted});
+        return group.deleted;
       } catch (e) {
         dispatch({type: types.DELETE_FAILURE, error: e});
         throw e;
@@ -289,6 +345,70 @@ export default {
     };
   },
 
+  getGroupResult: (message) => {
+    return async (dispatch, getState) => {
+      try {
+        const realm = services.getRealm();
+        const {account, group} = getState();
+        let payload = null;
+
+        if (message.error) {
+          throw new Error(message.error);
+        }
+
+        const data = get(message, 'data', null);
+
+        // subscribed to group and wait group info
+        if (group.subscribeLink) {
+          if (!data) {
+            dispatch({type: types.SUBSCRIBE_FAILURE, error: 'subscribe failed: data is null'});
+            return false;
+          }
+          const groupData = {
+            id: wsMessage.generateUuid(),
+            link: data.link,
+            type: data.group_type,
+            name: data.name,
+            description: data.description || '',
+            role: 'member',
+            hostname: account.hostname,
+            owner: data.owner,
+            avatar: data.avatar || '',
+            shortName: data.name.substr(0, 1).toUpperCase(),
+            dateCreate: wsMessage.rfcToDate(data.dt_create),
+            dateUpdate: new Date(),
+          };
+          let _group = {};
+          await realm.write(() => {
+            _group = realm.create(dbEnum.Group, groupData, false);
+          });
+          payload = {..._group};
+          // console.log('subscribed to group result', payload);
+          dispatch({type: types.SUBSCRIBE_SUCCESS, payload});
+          return payload;
+        }
+
+        // get group info success
+        if (!data) {
+          throw new Error('get group failed: data is null');
+        }
+
+        payload = {
+          ...data,
+          type: data.group_type,
+          dateCreate: wsMessage.rfcToDate(data.dt_create),
+        };
+        // console.log('get group result', payload);
+        dispatch({type: types.GET_GROUP_SUCCESS, payload});
+        return payload;
+      } catch (e) {
+        dispatch({type: types.GET_GROUP_FAILURE, error: e});
+        throw e;
+      }
+    };
+
+  },
+
   getPublicGroupList: () => {
     return async dispatch => {
       dispatch({type: types.GET_PUBLIC_LIST});
@@ -299,6 +419,19 @@ export default {
         throw e;
       }
     };
+  },
+
+  getPublicGroupListResult: (message) => {
+    if (message.error) {
+      return {type: types.GET_PUBLIC_LIST_FAILURE, error: message.error};
+    }
+
+    const payload = message.data.map((item) => {
+      item.type = item.group_type;
+      return item;
+    });
+
+    return {type: types.GET_PUBLIC_LIST_SUCCESS, payload};
   },
 
   inviteMembers: ({link, members}) => {
@@ -316,6 +449,39 @@ export default {
     };
   },
 
+  inviteResult: (message) => {
+    if (message.error || !message.data.success) {
+      return {type: types.INVITE_FAILURE, error: message.error};
+    }
+
+    return {type: types.INVITE_SUCCESS};
+  },
+
+  receiveInvite: (message) => {
+    return async dispatch => {
+      try {
+        // send delivery report
+        const msgEncryptTime =  get(message, 'encrypt_time', null);
+        await apiServer.deliveryReport(msgEncryptTime);
+
+        const link = get(message, 'data', null);
+        const from = get(message, 'from', null);
+
+        if (!link) {
+          throw new Error('receive invite failed: link is null');
+        }
+
+        const payload = {link, from};
+        // console.log('received invite', payload);
+        dispatch({type: types.RECEIVE_INVITE_SUCCESS, payload});
+        return link;
+      } catch (e) {
+        dispatch({type: types.RECEIVE_INVITE_FAILURE, error: e});
+        throw e;
+      }
+    };
+  },
+
   subscribeToGroup: (link) => {
     return async dispatch => {
       dispatch({type: types.SUBSCRIBE, payload: link});
@@ -323,12 +489,19 @@ export default {
         if (!link) {
           throw new Error('subscribe to group failed: link is empty');
         }
+        await apiGroup.getGroup(link);
         return await apiGroup.subscribeToGroup(link);
       } catch (e) {
         dispatch({type: types.SUBSCRIBE_FAILURE, error: e});
         throw e;
       }
     };
+  },
+
+  subscribeToGroupResult: (message) => {
+    if (message.error || !message.data.success) {
+      return {type: types.SUBSCRIBE_FAILURE, error: message.error};
+    }
   },
 
   unsubscribeFromGroup: (link) => {
@@ -339,6 +512,39 @@ export default {
           throw new Error('unsubscribe from group failed: link is empty');
         }
         return await apiGroup.unsubscribeFromGroup(link);
+      } catch (e) {
+        dispatch({type: types.UNSUBSCRIBE_FAILURE, error: e});
+        throw e;
+      }
+    };
+  },
+
+  unsubscribeFromGroupResult: (message) => {
+    return async (dispatch, getState) => {
+      const realm = services.getRealm();
+      try {
+        if (message.error || !message.data.success) {
+          throw new Error(message.error);
+        }
+
+        const {group} = getState();
+
+        const groups = realm.objects(dbEnum.Group).filtered(`link = '${group.unsubscribeLink}'`);
+        if (!groups || !groups.length) {
+          throw new Error(`group link '${group.unsubscribeLink}' is not found`);
+        }
+        if (groups.length > 1) {
+          throw new Error(`more than one group with link '${group.unsubscribeLink}' found`);
+        }
+
+        await realm.write(() => {
+          groups[0].isSubscribed = false;
+          groups[0].dateUpdate = new Date();
+        });
+        const payload = {...groups[0]};
+        // console.log('unsubscribed from group', payload);
+        dispatch({type: types.UNSUBSCRIBE_SUCCESS, payload});
+        return payload;
       } catch (e) {
         dispatch({type: types.UNSUBSCRIBE_FAILURE, error: e});
         throw e;
@@ -364,6 +570,28 @@ export default {
     };
   },
 
+  getGroupMemberResult: (message) => {
+    if (message.error) {
+      return {type: types.GET_MEMBER_FAILURE, error: message.error};
+    }
+
+    const data = get(message, 'data', null);
+
+    if (!data) {
+      return {type: types.GET_MEMBER_FAILURE, error: 'get group member result failed: no data'};
+    }
+
+    const payload = {
+      ...data,
+      link: data.group_chat_link,
+      isBanned: !!data.dt_ban,
+      dateBan: data.dt_ban ? wsMessage.rfcToDate(data.dt_ban) : '',
+      banReason: data.ban_reason,
+    };
+
+    return {type: types.GET_MEMBER_SUCCESS, payload};
+  },
+
   updateGroupMember: (data) => {
     return async dispatch => {
       dispatch({type: types.UPDATE_MEMBER, payload: data});
@@ -374,7 +602,16 @@ export default {
         if (!data.username) {
           throw new Error('update group member failed: username is empty');
         }
-        return await apiGroup.updateGroupMember(data);
+
+        const sendData = {
+          link: data.link,
+          username: data.username,
+          role: data.role,
+          dt_ban: wsMessage.dateToRfc(data.dateBan),
+          ban_reason: data.banReason,
+        };
+
+        return await apiGroup.updateGroupMember(sendData);
       } catch (e) {
         dispatch({type: types.UPDATE_MEMBER_FAILURE, error: e});
         throw e;
@@ -382,26 +619,12 @@ export default {
     };
   },
 
-  receiveInvite: (message) => {
-    return async dispatch => {
-      try {
-        const link = get(message, 'data', null);
+  updateGroupMemberResult: (message) => {
+    if (message.error || !message.data.success) {
+      return {type: types.UPDATE_MEMBER_FAILURE, error: message.error};
+    }
 
-        if (!link) {
-          throw new Error('receive invite failed: link is null');
-        }
-
-        // send delivery report
-        const msgEncryptTime =  get(message, 'encrypt_time', null);
-        await apiServer.deliveryReport(msgEncryptTime);
-
-        dispatch({type: types.RECEIVE_INVITE_SUCCESS, payload: link});
-        return link;
-      } catch (e) {
-        dispatch({type: types.RECEIVE_INVITE_FAILURE, error: e});
-        throw e;
-      }
-    };
+    return {type: types.UPDATE_MEMBER_SUCCESS};
   },
 
   setCurrentGroup: (data) => {

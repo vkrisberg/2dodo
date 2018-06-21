@@ -274,7 +274,7 @@ export default {
           name: map(contacts, 'nickname').join(', '),
           shortName: wsMessage.getShortName(contacts),
           isShown: false,
-          dateSend: wsMessage.dateSendToDate(decryptedData.dateSend),
+          dateSend: wsMessage.rfcToDate(decryptedData.dateSend),
           dateCreate: dateNow,
           dateUpdate: dateNow,
         };

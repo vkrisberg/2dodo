@@ -177,25 +177,25 @@ const hashFromMessage = (message) => {
 };
 
 /**
- * Convert dateSend to js Date
+ * Convert RFC date to js Date
  * @param date
  * @returns {*|Date}
  */
-const dateSendToDate = (date) => {
-  const dateSend = datetime.parseDate(date);
+const rfcToDate = (date) => {
+  const _date = datetime.parseDate(date);
 
-  return dateSend.toDate();
+  return _date.toDate();
 };
 
 /**
- * Convert dateSend to Realm DB timestamp
+ * Convert RFC date to Realm DB timestamp
  * @param date
  * @returns {string}
  */
-const dateSendToRealm = (date) => {
-  const dateSend = datetime.parseDate(date);
+const rfcToRealm = (date) => {
+  const _date = datetime.parseDate(date);
 
-  return datetime.getRealmDate(dateSend);
+  return datetime.getRealmDate(_date);
 };
 
 /**
@@ -248,6 +248,16 @@ const getShortName = (contacts = []) => {
   return shortName.toUpperCase();
 };
 
+const getUsername = (from) => {
+  const fromArr = from.split('@');
+  return `${fromArr[0]}@${fromArr[1]}`;
+};
+
+const getDeviceId = (from) => {
+  const fromArr = from.split('@');
+  return fromArr[2];
+};
+
 const avatarToBase64 = (avatar) => {
   return codeclib.base64Encode(avatar);
 };
@@ -259,11 +269,13 @@ export default {
   decryptChatMessage,
   decryptClientMessage,
   hashFromMessage,
-  dateSendToDate,
-  dateSendToRealm,
+  rfcToDate,
+  rfcToRealm,
   dateToRfc,
   dateToRealm,
   generateUuid,
   getShortName,
+  getUsername,
+  getDeviceId,
   avatarToBase64,
 };
