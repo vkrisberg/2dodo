@@ -61,7 +61,6 @@ export default {
 
   send: ({groupId, link, type = messageEnum.text, data = ''}) => {
     return async (dispatch, getState) => {
-      dispatch({type: types.SEND});
       try {
         const realm = services.getRealm();
         const {account} = getState();
@@ -82,6 +81,7 @@ export default {
           type,
           username: account.user.username,
           text: data,
+          status: messageEnum.sending,
           isOwn: true,
           dateSend: dateNow,
           dateCreate: dateNow,
@@ -91,9 +91,53 @@ export default {
         await realm.write(() => {
           groupMessage = realm.create(dbEnum.GroupMessage, messageData, false);
         });
-        const payload = {...groupMessage};
-        // console.log('group message created', groupMessage);
+
         await apiGroup.sendGroupMessage(sendData);
+
+        const payload = {...groupMessage};
+        // console.log('group message send', payload);
+        dispatch({type: types.SEND, payload});
+        return payload;
+      } catch (e) {
+        dispatch({type: types.SEND_FAILURE, error: e});
+        throw e;
+      }
+    };
+  },
+
+  sendResult: (message) => {
+    return async (dispatch, getState) => {
+      try {
+        const realm = services.getRealm();
+        const {groupMessage} = getState();
+        const _groupMessage = realm.objectForPrimaryKey(dbEnum.GroupMessage, groupMessage.current.id);
+
+        if (!_groupMessage) {
+          throw new Error(`group message '${groupMessage.current.id}' is not found`);
+        }
+
+        let payload = null;
+
+        // send result error
+        if (message.error || !message.data.success) {
+          await realm.write(() => {
+            _groupMessage.status = messageEnum.error;
+            _groupMessage.dateUpdate = new Date();
+          });
+
+          payload = {..._groupMessage};
+          // console.log('group message send error', payload);
+          dispatch({type: types.SEND_SUCCESS, payload});
+          return payload;
+        }
+
+        // send result success
+        await realm.write(() => {
+          _groupMessage.status = messageEnum.sent;
+          _groupMessage.dateUpdate = new Date();
+        });
+        payload = {..._groupMessage};
+        // console.log('group message send success', payload);
         dispatch({type: types.SEND_SUCCESS, payload});
         return payload;
       } catch (e) {
@@ -105,26 +149,33 @@ export default {
 
   resend: (id) => {
     return async dispatch => {
-      dispatch({type: types.RESEND});
       try {
         const realm = services.getRealm();
         const groupMessage = realm.objectForPrimaryKey(dbEnum.GroupMessage, id);
+
         if (!groupMessage) {
           throw new Error(`group message '${id}' is not found`);
         }
-        const payload = {...groupMessage};
+
+        await realm.write(() => {
+          groupMessage.status = messageEnum.sending;
+          groupMessage.dateUpdate = new Date();
+        });
+
         const sendData = {
           link: groupMessage.groupLink,
           message: JSON.stringify({
-            link: groupMessage.groupLink,
             type: groupMessage.type,
             data: groupMessage.text,
             dateSend: groupMessage.dateSend,
           }),
         };
+
         await apiGroup.sendGroupMessage(sendData);
+
+        const payload = {...groupMessage};
         // console.log('group message resend', payload);
-        dispatch({type: types.RESEND_SUCCESS, payload});
+        dispatch({type: types.RESEND, payload});
         return payload;
       } catch (e) {
         dispatch({type: types.RESEND_FAILURE, error: e});
@@ -187,7 +238,6 @@ export default {
         }
 
         const group = groups[0];
-
         const messageData = {
           id: wsMessage.generateUuid(),
           groupId: group.id,
@@ -197,6 +247,7 @@ export default {
           username: wsMessage.getUsername(message.from),
           from: message.from,
           text: dataMessage.data,
+          status:messageEnum.received,
           isOwn: false,
           dateSend: wsMessage.rfcToDate(dataMessage.dateSend),
           dateCreate: dateNow,

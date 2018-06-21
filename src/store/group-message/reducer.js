@@ -58,37 +58,14 @@ export default reducer(initState, {
   [types.SEND]: (state, action) => {
     return {
       ...state,
-      current: {...initState.current},
-      loading: true,
+      list: [...state.list, action.payload],
+      current: action.payload,
+      // loading: true,
       error: null
     };
   },
 
   [types.SEND_SUCCESS]: (state, action) => {
-    return {
-      ...state,
-      list: [...state.list, action.payload],
-      loading: false,
-    };
-  },
-
-  [types.SEND_FAILURE]: (state, action) => {
-    return {
-      ...state,
-      loading: false,
-      error: action.error,
-    };
-  },
-
-  [types.RESEND]: (state, action) => {
-    return {
-      ...state,
-      loading: true,
-      error: null
-    };
-  },
-
-  [types.RESEND_SUCCESS]: (state, action) => {
     const list = state.list.map((item) => {
       if (item.id === action.payload.id) {
         return action.payload;
@@ -99,14 +76,39 @@ export default reducer(initState, {
     return {
       ...state,
       list,
-      loading: false,
+      // loading: false,
+    };
+  },
+
+  [types.SEND_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      // loading: false,
+      error: action.error,
+    };
+  },
+
+  [types.RESEND]: (state, action) => {
+    const list = state.list.map((item) => {
+      if (item.id === action.payload.id) {
+        return action.payload;
+      }
+      return item;
+    });
+
+    return {
+      ...state,
+      list,
+      current: action.payload,
+      // loading: true,
+      error: null
     };
   },
 
   [types.RESEND_FAILURE]: (state, action) => {
     return {
       ...state,
-      loading: false,
+      // loading: false,
       error: action.error,
     };
   },

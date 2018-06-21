@@ -65,5 +65,12 @@ export default function ({event, store, navigation}) {
     case actionEnum.updateGroupMember:
       store.dispatch(groupActions.updateGroupMemberResult(data));
       break;
+    case actionEnum.sendGroupMessage:
+      if (data.encrypt_time) {
+        store.dispatch(groupMessageActions.receiveMessage(data));
+      } else {
+        store.dispatch(groupMessageActions.sendResult(data));
+      }
+      break;
   }
 };
