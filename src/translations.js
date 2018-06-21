@@ -107,6 +107,13 @@ const translations = {
     'SearchInGroups': 'Искать в группах',
     'NoGroupsInvited': 'No groups invited',
     'SearchGroups': 'You can search in group catalog',
+    'GroupCreate': 'Создать группу',
+    'Next': 'Далее',
+    'NextStep': 'Далее',
+    'CroupChat': 'Групповой чат',
+    'CreateChannel': 'Create bot or channel',
+    'FindGroup': 'Найти групповой чат',
+    'InviteUsers': 'Пригласить пользователей в группу',
   },
   'en': {
     // Main menu
@@ -216,6 +223,13 @@ const translations = {
     'SearchInGroups': 'Search in groups and channels',
     'NoGroupsInvited': 'No groups invited',
     'SearchGroups': 'You can search in group catalog',
+    'GroupCreate': 'Create group',
+    'Next': 'Next',
+    'NextStep': 'Next step',
+    'CroupChat': 'Group chat',
+    'CreateChannel': 'Create bot or channel',
+    'FindGroup': 'Find a group chat',
+    'InviteUsers': 'Invite users in group',
   },
 };
 
