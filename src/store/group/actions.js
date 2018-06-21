@@ -319,7 +319,7 @@ export default {
 
   subscribeToGroup: (link) => {
     return async dispatch => {
-      dispatch({type: types.SUBSCRIBE, payload: {link, members}});
+      dispatch({type: types.SUBSCRIBE, payload: link});
       try {
         if (!link) {
           throw new Error('subscribe to group failed: link is empty');
@@ -334,7 +334,7 @@ export default {
 
   unsubscribeFromGroup: (link) => {
     return async dispatch => {
-      dispatch({type: types.UNSUBSCRIBE, payload: {link, members}});
+      dispatch({type: types.UNSUBSCRIBE, payload: link});
       try {
         if (!link) {
           throw new Error('unsubscribe from group failed: link is empty');
@@ -342,6 +342,42 @@ export default {
         return await apiGroup.unsubscribeFromGroup(link);
       } catch (e) {
         dispatch({type: types.UNSUBSCRIBE_FAILURE, error: e});
+        throw e;
+      }
+    };
+  },
+
+  getGroupMember: (data) => {
+    return async dispatch => {
+      dispatch({type: types.GET_MEMBER, payload: data});
+      try {
+        if (!data.link) {
+          throw new Error('get group member failed: link is empty');
+        }
+        if (!data.username) {
+          throw new Error('get group member failed: username is empty');
+        }
+        return await apiGroup.getGroupMember(data);
+      } catch (e) {
+        dispatch({type: types.GET_MEMBER_FAILURE, error: e});
+        throw e;
+      }
+    };
+  },
+
+  updateGroupMember: (data) => {
+    return async dispatch => {
+      dispatch({type: types.UPDATE_MEMBER, payload: data});
+      try {
+        if (!data.link) {
+          throw new Error('get group member failed: link is empty');
+        }
+        if (!data.username) {
+          throw new Error('get group member failed: username is empty');
+        }
+        return await apiGroup.updateGroupMember(data);
+      } catch (e) {
+        dispatch({type: types.UPDATE_MEMBER_FAILURE, error: e});
         throw e;
       }
     };
