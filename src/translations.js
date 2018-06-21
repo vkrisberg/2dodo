@@ -68,6 +68,7 @@ const translations = {
     'HaveCall': 'Пропущенный звонок',
     // Buttons
     'Delete': 'Удалить',
+    'DeleteContact': 'Удалить контакт',
     // Errors
     'Required': 'Required',
     'LoginRegexpError': 'Login must be minimum 2 characters long and only contain a-z, 0-9 and _',
@@ -102,6 +103,7 @@ const translations = {
     'ClearHistory': 'Очистить историю',
     'Enabled': 'Вкл',
     'Disabled': 'Выкл',
+    'Sound': 'Звук',
   },
   'en': {
     // Main menu
@@ -172,6 +174,7 @@ const translations = {
     'HaveCall': 'Missed call',
     // Buttons
     'Delete': 'Delete',
+    'DeleteContact': 'Delete contact',
     // Errors
     'Required': 'Required',
     'LoginRegexpError': 'Login must be minimum 2 characters long and only contain a-z, 0-9 and _',
@@ -206,6 +209,7 @@ const translations = {
     'ClearHistory': 'Clear history',
     'Enabled': 'Enabled',
     'Disabled': 'Disabled',
+    'Sound': 'Sound',
   },
 };
 
