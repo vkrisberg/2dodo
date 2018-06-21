@@ -119,31 +119,28 @@ class Groups extends Component {
                 style={_styles.checkbox}/>
             </View>
           </View>
-          <View style={_styles.bottom}>
-            {checked === 'groupChat' &&
-              <View style={_styles.bottomWrap}>
-                <Text style={_styles.caption}>{context.t('InviteUsers')}</Text>
-                <ScrollView marginTop={-5}>
-                  <ContactList context={context} items={Contactslist} renderItem={this.renderContactList} showTop={false}/>
-                  <View style={_styles.btnContainer}>
-                    <Button
-                      style={_styles.btn}
-                      backgroundColor={colors[theme].white}
-                      onPress={this.onNext}>
-                      <Text style={_styles.btnText}>{context.t('NextStep')}</Text>
-                    </Button>
-                  </View>
-                </ScrollView>
-              </View>
-            }
-            {checked === 'createChannel' &&
-              <Text>CreateChannel</Text>
-            }
-            {checked === 'findGroup' &&
-              <Text>findGroup</Text>
-            }
-
-          </View>
+          <Text style={_styles.caption}>
+            {checked === 'groupChat' && context.t('InviteUsers')}
+            {checked === 'createChannel' && context.t('InviteUsers')}
+            {checked === 'findGroup' && context.t('InviteUsers')}
+          </Text>
+          {checked === 'groupChat' && <ContactList context={context} items={Contactslist} renderItem={this.renderContactList} showTop={false}/>}
+          {checked === 'groupChat' &&
+            <View style={_styles.btnContainer}>
+              <Button
+                style={_styles.btn}
+                backgroundColor={colors[theme].white}
+                onPress={this.onNext}>
+                <Text style={_styles.btnText}>{context.t('NextStep')}</Text>
+              </Button>
+            </View>
+          }
+          {checked === 'createChannel' &&
+            <Text>CreateChannel</Text>
+          }
+          {checked === 'findGroup' &&
+            <Text>findGroup</Text>
+          }
         </BackgroundLayout>
       </MainLayout>
     );

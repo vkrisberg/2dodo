@@ -63,28 +63,19 @@ export default (theme) => {
       paddingLeft: 0,
     },
 
-    bottom: {
-      width: '100%',
-      flexDirection: 'column',
-      alignItems: 'flex-start',
-    },
-
-    bottomWrap: {
-      width: '100%',
-    },
-
     caption: {
+      width: '100%',
       color: colors[theme].grayInput,
       fontSize: 14,
       fontWeight: weights.medium,
       fontFamily: fonts.main,
       paddingLeft: 10,
+      textAlign: 'left',
     },
 
     btnContainer: {
       width: '100%',
-      paddingBottom: 25,
-      paddingTop: 42,
+      paddingVertical: 25,
       justifyContent: 'center',
       alignItems: 'center',
     },
