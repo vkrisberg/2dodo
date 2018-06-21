@@ -17,4 +17,4 @@ export default ({theme, color, borderColor, borderWidth}) => {
       width: '100%',
     },
   });
-}
+};
