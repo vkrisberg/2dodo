@@ -10,7 +10,7 @@ import styles from './styles';
 
 import avatarBgIcon from '../../../images/icons/circle/circle.png';
 
-export default class ChatListItem extends Component {
+export default class GroupListItem extends Component {
 
   static propTypes = {
     item: PropTypes.object.isRequired,
@@ -32,9 +32,9 @@ export default class ChatListItem extends Component {
   getInitials = (name) => {
     const nameArr = name.split(' ');
     let initials = [];
-    nameArr.map(item =>
-      initials.push(item[0].toUpperCase())
-    );
+    nameArr.map((item, index) => {
+      if (index < 2) initials.push(item[0].toUpperCase());
+    });
     return initials.join('');
   };
 
@@ -50,66 +50,41 @@ export default class ChatListItem extends Component {
     this.props.onCheckboxPress && this.props.onCheckboxPress(this.props.item);
   };
 
-  renderLastMessage = (_styles) => {
-    const {item, context} = this.props;
-
-    if (item.lastMessage) {
-      return (
-        <Text style={_styles.limitText} numberOfLines={2} ellipsizeMode="tail">
-          {item.unreadCount > 0 && item.lastMessage.type === 'text' && context.t('HaveMessage')}
-          {item.unreadCount > 0 && item.lastMessage.type === 'audio' && context.t('HaveVoiceMessage')}
-          {item.unreadCount > 0 && item.lastMessage.type === 'video' && context.t('HaveVideo')}
-          {item.unreadCount > 0 && item.lastMessage.type === 'image' && context.t('HaveImage')}
-          {item.unreadCount > 0 && item.lastMessage.type === 'call' && context.t('HaveCall')}
-          {item.unreadCount === 0 && item.lastMessage.text}
-        </Text>
-      );
-    }
-
-    return (
-      <Text style={_styles.limitText} numberOfLines={2} ellipsizeMode="tail">
-        {context.t('NoMessagesYet')}
-      </Text>
-    );
-  };
 
   render() {
     const {item, theme, editMode, selectedItems} = this.props;
     const _styles = styles(theme);
-    const isToday = moment(item.dateUpdate).format('DD.MM.YY') === moment().format('DD.MM.YY');
+    const isToday = moment(item.properties.dateUpdate).format('DD.MM.YY') === moment().format('DD.MM.YY');
     const chosen = selectedItems[item.id];
-    // console.log('chosen', editMode, chosen)
+
     return (
       <TouchableOpacity onPress={this.onPress} onLongPress={this.onLongPress}>
         <View style={_styles.container}>
           {editMode && <View style={_styles.checkboxBlock}>
-            <Checkbox
-              style={_styles.chosen}
-              input={{value: !!chosen, onChange: this.onCheckboxPress}}/>
+            <Checkbox input={{value: !!chosen, onChange: this.onCheckboxPress}}/>
           </View>
           }
           <View style={_styles.image}>
             <Image source={avatarBgIcon} style={_styles.avatarBg}/>
-            {item.avatar && <Image source={{uri: item.avatar}} style={_styles.avatar}/>}
-            {!item.avatar && item.name &&
+            {!!item.properties.avatar && <Image source={{uri: item.properties.avatar}} style={_styles.avatar}/>}
+            {!item.properties.avatar && item.name &&
             <Text style={_styles.avatarInitials}>{this.getInitials(item.name)}</Text>}
-            {!item.name && !item.avatar && <AvatarIcon/>}
+            {!item.name && !item.properties.avatar && <AvatarIcon/>}
           </View>
           <View style={_styles.body}>
-            <Text style={_styles.name}>
-              {item.name}
-            </Text>
-            {this.renderLastMessage(_styles)}
+            <Text style={_styles.caption}>{item.name}</Text>
+            <Text style={[_styles.defaultText, _styles.subCaption]}>{item.properties.user}</Text>
+            <Text numberOfLines={1} style={[_styles.defaultText, _styles.descriptions]}>{item.properties.quote}</Text>
           </View>
           <View style={_styles.information}>
             <Text style={_styles.text}>
-              {isToday && moment(item.dateUpdate).format('HH:mm')}
-              {!isToday && moment(item.dateUpdate).format('DD.MM.YY')}
+              {isToday && moment(item.properties.dateUpdate).format('HH:mm')}
+              {!isToday && moment(item.properties.dateUpdate).format('DD.MM.YY')}
             </Text>
-            {item.unreadCount > 0 &&
+            {item.properties.unreadCount > 0 &&
             <View style={_styles.notReadenMessage}>
               <Text style={_styles.notReadenMessageText}>
-                {item.unreadCount}
+                {item.properties.unreadCount}
               </Text>
             </View>
             }
