@@ -336,36 +336,13 @@ export default reducer(initState, {
     };
   },
 
-  [types.SEND_MESSAGE]: (state, action) => {
-    return {
-      ...state,
-      loading: true,
-      error: null
-    };
-  },
-
-  [types.SEND_MESSAGE_SUCCESS]: (state, action) => {
-    return {
-      ...state,
-      loading: false,
-    };
-  },
-
-  [types.SEND_MESSAGE_FAILURE]: (state, action) => {
-    return {
-      ...state,
-      loading: false,
-      error: action.error,
-    };
-  },
-
-  [types.RECEIVE_INVITE]: (state, action) => {
+  [types.RECEIVE_INVITE_SUCCESS]: (state, action) => {
     return {
       ...state,
     };
   },
 
-  [types.RECEIVE_MESSAGE]: (state, action) => {
+  [types.RECEIVE_INVITE_FAILURE]: (state, action) => {
     return {
       ...state,
     };

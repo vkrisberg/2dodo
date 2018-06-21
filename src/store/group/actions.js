@@ -1,9 +1,8 @@
 import {get, map, filter, omitBy, isUndefined} from 'lodash';
 
-import apiGroup from '../../api/group';
+import {apiGroup, apiServer} from '../../api';
 import {services, wsMessage} from '../../utils';
 import {dbEnum} from '../../enums';
-import CONFIG from '../../config';
 
 export const types = {
   LOAD: Symbol('LOAD'),
@@ -370,14 +369,36 @@ export default {
       dispatch({type: types.UPDATE_MEMBER, payload: data});
       try {
         if (!data.link) {
-          throw new Error('get group member failed: link is empty');
+          throw new Error('update group member failed: link is empty');
         }
         if (!data.username) {
-          throw new Error('get group member failed: username is empty');
+          throw new Error('update group member failed: username is empty');
         }
         return await apiGroup.updateGroupMember(data);
       } catch (e) {
         dispatch({type: types.UPDATE_MEMBER_FAILURE, error: e});
+        throw e;
+      }
+    };
+  },
+
+  receiveInvite: (message) => {
+    return async dispatch => {
+      try {
+        const link = get(message, 'data', null);
+
+        if (!link) {
+          throw new Error('receive invite failed: link is null');
+        }
+
+        // send delivery report
+        const msgEncryptTime =  get(message, 'encrypt_time', null);
+        await apiServer.deliveryReport(msgEncryptTime);
+
+        dispatch({type: types.RECEIVE_INVITE_SUCCESS, payload: link});
+        return link;
+      } catch (e) {
+        dispatch({type: types.RECEIVE_INVITE_FAILURE, error: e});
         throw e;
       }
     };
