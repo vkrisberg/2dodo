@@ -51,7 +51,7 @@ export default reducer(initState, {
     return {
       ...state,
       loading: false,
-      error: action.error,
+      error: action.error.toString(),
     };
   },
 
@@ -84,7 +84,7 @@ export default reducer(initState, {
     return {
       ...state,
       // loading: false,
-      error: action.error,
+      error: action.error.toString(),
     };
   },
 
@@ -109,7 +109,7 @@ export default reducer(initState, {
     return {
       ...state,
       // loading: false,
-      error: action.error,
+      error: action.error.toString(),
     };
   },
 
@@ -137,7 +137,7 @@ export default reducer(initState, {
     return {
       ...state,
       loading: false,
-      error: action.error,
+      error: action.error.toString(),
     };
   },
 
@@ -156,7 +156,7 @@ export default reducer(initState, {
   [types.RECEIVE_MESSAGE_FAILURE]: (state, action) => {
     return {
       ...state,
-      receiveError: action.error,
+      receiveerror: action.error.toString(),
     };
   },
 

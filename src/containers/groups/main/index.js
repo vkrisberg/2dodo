@@ -1,14 +1,18 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {Text} from 'react-native';
+import {Alert} from 'react-native';
 
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
 import {GroupList} from '../../../components/lists';
 import {SearchInput, Navbar, NavbarDots, ButtonAdd, GroupListItem, ButtonNavbar} from '../../../components/elements';
+import {groupActions, groupMessageActions, contactActions} from '../../../store/actions';
+import {messageEnum} from '../../../enums';
+
 
 const list = [
   {
+    username: 'simpson',
     name: 'Simpson\'s Family',
     properties: {
       avatar: 'https://upload.wikimedia.org/wikipedia/en/thumb/0/0d/Simpsons_FamilyPicture.png/220px-Simpsons_FamilyPicture.png',
@@ -19,6 +23,7 @@ const list = [
     },
   },
   {
+    username: 'aigo',
     name: 'AIGO Big Group',
     properties: {
       quote: 'Mom, we need a new father!',
@@ -48,6 +53,37 @@ class Groups extends Component {
       selected: {},
     };
   }
+
+  componentDidMount() {
+    this.createGroup({
+      link: 'ramil_test_group',
+      type: messageEnum.groupChat,
+      name: 'Test Group',
+      description: 'Test group for tests',
+      avatar: '',
+      members: [],
+    });
+
+    this.sendGroupMessage({
+      groupId: 'd2071caea70c42b69a0da77fee2a83ab',
+      link: 'ramil_test_group',
+      data: 'Hello! This is test message!',
+    });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.group.error !== this.props.group.error && this.props.group.error) {
+      Alert.alert(this.props.group.error);
+    }
+  }
+
+  createGroup = (data) => {
+    this.props.dispatch(groupActions.create(data));
+  };
+
+  sendGroupMessage = (data) => {
+    this.props.dispatch(groupMessageActions.send(data));
+  };
 
   searchGroups = () => {};
 
@@ -114,4 +150,6 @@ class Groups extends Component {
 
 export default connect(state => ({
   account: state.account,
+  group: state.group,
+  groupMessage: state.groupMessage,
 }))(Groups);
