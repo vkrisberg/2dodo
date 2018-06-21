@@ -28,6 +28,13 @@ const initState = {
     dateCreate: null,
     dateUpdate: null,
   },
+  publicList: [], // public group list
+  deleted: [], // array of group ids
+  invite: null, // object
+  receiveInvite: null, // object
+  subscribeLink: null, // string
+  unsubscribeLink: null, // string
+  member: null, // object
   loading: false,
   error: null,
   receiveError: null,
@@ -86,7 +93,7 @@ export default reducer(initState, {
   [types.CREATE]: (state, action) => {
     return {
       ...state,
-      current: {...initState.current},
+      current: action.payload,
       loading: true,
       error: null
     };
@@ -96,6 +103,7 @@ export default reducer(initState, {
     return {
       ...state,
       list: [action.payload, ...state.list],
+      current: {},
       loading: false,
     };
   },
@@ -111,6 +119,7 @@ export default reducer(initState, {
   [types.UPDATE]: (state, action) => {
     return {
       ...state,
+      current: action.payload,
       loading: true,
       error: null
     };
@@ -127,6 +136,7 @@ export default reducer(initState, {
     return {
       ...state,
       list,
+      current: {},
       loading: false,
     };
   },
@@ -142,27 +152,21 @@ export default reducer(initState, {
   [types.DELETE]: (state, action) => {
     return {
       ...state,
+      deleted: action.payload,
       loading: true,
       error: null
     };
   },
 
   [types.DELETE_SUCCESS]: (state, action) => {
-    let list = [];
-
-    if (typeof action.payload === 'string') {
-      list = state.list.filter((item) => {
-        return item.id !== action.payload;
-      });
-    } else {
-      list = state.list.filter((item) => {
-        return action.payload.indexOf(item.id) === -1;
-      });
-    }
+    const list = state.list.filter((item) => {
+      return action.payload.indexOf(item.id) === -1;
+    });
 
     return {
       ...state,
       list,
+      deleted: [],
       loading: false,
     };
   },
@@ -186,6 +190,7 @@ export default reducer(initState, {
   [types.GET_GROUP_SUCCESS]: (state, action) => {
     return {
       ...state,
+      current: action.payload,
       loading: false,
     };
   },
@@ -209,6 +214,7 @@ export default reducer(initState, {
   [types.GET_PUBLIC_LIST_SUCCESS]: (state, action) => {
     return {
       ...state,
+      publicList: action.payload,
       loading: false,
     };
   },
@@ -224,6 +230,7 @@ export default reducer(initState, {
   [types.INVITE]: (state, action) => {
     return {
       ...state,
+      invite: action.payload,
       loading: true,
       error: null
     };
@@ -232,6 +239,7 @@ export default reducer(initState, {
   [types.INVITE_SUCCESS]: (state, action) => {
     return {
       ...state,
+      invite: null,
       loading: false,
     };
   },
@@ -244,9 +252,25 @@ export default reducer(initState, {
     };
   },
 
+  [types.RECEIVE_INVITE_SUCCESS]: (state, action) => {
+    return {
+      receiveInvite: action.payload,
+      ...state,
+    };
+  },
+
+  [types.RECEIVE_INVITE_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      error: action.error,
+    };
+  },
+
   [types.SUBSCRIBE]: (state, action) => {
     return {
       ...state,
+      subscribeLink: action.payload,
+      receiveInvite: null,
       loading: true,
       error: null
     };
@@ -255,6 +279,9 @@ export default reducer(initState, {
   [types.SUBSCRIBE_SUCCESS]: (state, action) => {
     return {
       ...state,
+      list: [action.payload, ...state.list],
+      current: {},
+      subscribeLink: null,
       loading: false,
     };
   },
@@ -270,14 +297,24 @@ export default reducer(initState, {
   [types.UNSUBSCRIBE]: (state, action) => {
     return {
       ...state,
+      unsubscribeLink: action.payload,
       loading: true,
       error: null
     };
   },
 
   [types.UNSUBSCRIBE_SUCCESS]: (state, action) => {
+    const list = state.list.map((item) => {
+      if (item.id === action.payload.id) {
+        return action.payload;
+      }
+      return item;
+    });
+
     return {
       ...state,
+      list,
+      unsubscribeLink: null,
       loading: false,
     };
   },
@@ -293,6 +330,7 @@ export default reducer(initState, {
   [types.GET_MEMBER]: (state, action) => {
     return {
       ...state,
+      member: null,
       loading: true,
       error: null
     };
@@ -301,6 +339,7 @@ export default reducer(initState, {
   [types.GET_MEMBER_SUCCESS]: (state, action) => {
     return {
       ...state,
+      member: action.payload,
       loading: false,
     };
   },
@@ -316,6 +355,7 @@ export default reducer(initState, {
   [types.UPDATE_MEMBER]: (state, action) => {
     return {
       ...state,
+      member: action.payload,
       loading: true,
       error: null
     };
@@ -324,6 +364,7 @@ export default reducer(initState, {
   [types.UPDATE_MEMBER_SUCCESS]: (state, action) => {
     return {
       ...state,
+      member: null,
       loading: false,
     };
   },
@@ -333,41 +374,6 @@ export default reducer(initState, {
       ...state,
       loading: false,
       error: action.error,
-    };
-  },
-
-  [types.SEND_MESSAGE]: (state, action) => {
-    return {
-      ...state,
-      loading: true,
-      error: null
-    };
-  },
-
-  [types.SEND_MESSAGE_SUCCESS]: (state, action) => {
-    return {
-      ...state,
-      loading: false,
-    };
-  },
-
-  [types.SEND_MESSAGE_FAILURE]: (state, action) => {
-    return {
-      ...state,
-      loading: false,
-      error: action.error,
-    };
-  },
-
-  [types.RECEIVE_INVITE]: (state, action) => {
-    return {
-      ...state,
-    };
-  },
-
-  [types.RECEIVE_MESSAGE]: (state, action) => {
-    return {
-      ...state,
     };
   },
 

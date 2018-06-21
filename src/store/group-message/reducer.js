@@ -1,14 +1,16 @@
 import reducer from '../../utils/reducer';
 import {types} from './actions';
-import {types as chatTypes} from '../chat/actions';
+import {types as groupTypes} from '../group/actions';
 
 const initState = {
-  chat: '', // current chat
+  group: '', // current group
   list: [],
   current: {
     id: '',
-    chatId: '',
-    type: 'text', // [text, audio, video, image, call]
+    groupId: '',
+    groupLink: '',
+    groupType: '',
+    type: 'text',
     username: '',
     from: '',
     text: '',
@@ -18,7 +20,6 @@ const initState = {
     status: 'sending', // [sending, send, received, read, error]
     isOwn: false,
     isFavorite: false,
-    salt: '',
     dateSend: null,
     dateCreate: null,
     dateUpdate: null,
@@ -57,37 +58,37 @@ export default reducer(initState, {
   [types.SEND]: (state, action) => {
     return {
       ...state,
-      current: {...initState.current},
-      loading: true,
+      list: [...state.list, action.payload],
+      current: action.payload,
+      // loading: true,
       error: null
     };
   },
 
   [types.SEND_SUCCESS]: (state, action) => {
+    const list = state.list.map((item) => {
+      if (item.id === action.payload.id) {
+        return action.payload;
+      }
+      return item;
+    });
+
     return {
       ...state,
-      list: [...state.list, action.payload],
-      loading: false,
+      list,
+      // loading: false,
     };
   },
 
   [types.SEND_FAILURE]: (state, action) => {
     return {
       ...state,
-      loading: false,
+      // loading: false,
       error: action.error,
     };
   },
 
   [types.RESEND]: (state, action) => {
-    return {
-      ...state,
-      loading: true,
-      error: null
-    };
-  },
-
-  [types.RESEND_SUCCESS]: (state, action) => {
     const list = state.list.map((item) => {
       if (item.id === action.payload.id) {
         return action.payload;
@@ -98,45 +99,16 @@ export default reducer(initState, {
     return {
       ...state,
       list,
-      loading: false,
+      current: action.payload,
+      // loading: true,
+      error: null
     };
   },
 
   [types.RESEND_FAILURE]: (state, action) => {
     return {
       ...state,
-      loading: false,
-      error: action.error,
-    };
-  },
-
-  [types.EDIT]: (state, action) => {
-    return {
-      ...state,
-      loading: true,
-      error: null
-    };
-  },
-
-  [types.EDIT_SUCCESS]: (state, action) => {
-    const list = state.list.map((item) => {
-      if (item.id === action.payload.id) {
-        return action.payload;
-      }
-      return item;
-    });
-
-    return {
-      ...state,
-      list,
-      loading: false,
-    };
-  },
-
-  [types.EDIT_FAILURE]: (state, action) => {
-    return {
-      ...state,
-      loading: false,
+      // loading: false,
       error: action.error,
     };
   },
@@ -170,7 +142,7 @@ export default reducer(initState, {
   },
 
   [types.RECEIVE_MESSAGE_SUCCESS]: (state, action) => {
-    if (action.payload.chatId !== state.chat.id) {
+    if (action.payload.groupId !== state.group.id) {
       return state;
     }
 
@@ -188,25 +160,11 @@ export default reducer(initState, {
     };
   },
 
-  [types.RECEIVE_STATUS_SUCCESS]: (state, action) => {
+  // Group types
+  [groupTypes.SET_CURRENT_GROUP]: (state, action) => {
     return {
       ...state,
-      receiveError: null,
-    };
-  },
-
-  [types.RECEIVE_STATUS_FAILURE]: (state, action) => {
-    return {
-      ...state,
-      receiveError: action.error,
-    };
-  },
-
-  // Chat types
-  [chatTypes.SET_CURRENT_CHAT]: (state, action) => {
-    return {
-      ...state,
-      chat: action.payload,
+      group: action.payload,
     };
   },
 });
