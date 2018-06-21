@@ -2,7 +2,7 @@ export {Contacts} from './contacts';
 export {default as Events} from './events';
 export {default as Favorites} from './favorites';
 export {default as ForgotPassword} from './forgot-password';
-export {default as Groups} from './groups';
+export {Groups} from './groups';
 export {default as Login} from './login';
 export {Messages} from './messages';
 export {default as Preload} from './preload';

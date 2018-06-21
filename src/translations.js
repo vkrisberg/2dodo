@@ -68,6 +68,7 @@ const translations = {
     'HaveCall': 'Пропущенный звонок',
     // Buttons
     'Delete': 'Удалить',
+    'DeleteContact': 'Удалить контакт',
     // Errors
     'Required': 'Required',
     'LoginRegexpError': 'Login must be minimum 2 characters long and only contain a-z, 0-9 and _',
@@ -102,6 +103,17 @@ const translations = {
     'ClearHistory': 'Очистить историю',
     'Enabled': 'Вкл',
     'Disabled': 'Выкл',
+    'Sound': 'Звук',
+    'SearchInGroups': 'Искать в группах',
+    'NoGroupsInvited': 'No groups invited',
+    'SearchGroups': 'You can search in group catalog',
+    'GroupCreate': 'Создать группу',
+    'Next': 'Далее',
+    'NextStep': 'Далее',
+    'CroupChat': 'Групповой чат',
+    'CreateChannel': 'Create bot or channel',
+    'FindGroup': 'Найти групповой чат',
+    'InviteUsers': 'Пригласить пользователей в группу',
   },
   'en': {
     // Main menu
@@ -172,6 +184,7 @@ const translations = {
     'HaveCall': 'Missed call',
     // Buttons
     'Delete': 'Delete',
+    'DeleteContact': 'Delete contact',
     // Errors
     'Required': 'Required',
     'LoginRegexpError': 'Login must be minimum 2 characters long and only contain a-z, 0-9 and _',
@@ -206,6 +219,17 @@ const translations = {
     'ClearHistory': 'Clear history',
     'Enabled': 'Enabled',
     'Disabled': 'Disabled',
+    'Sound': 'Sound',
+    'SearchInGroups': 'Search in groups and channels',
+    'NoGroupsInvited': 'No groups invited',
+    'SearchGroups': 'You can search in group catalog',
+    'GroupCreate': 'Create group',
+    'Next': 'Next',
+    'NextStep': 'Next step',
+    'CroupChat': 'Group chat',
+    'CreateChannel': 'Create bot or channel',
+    'FindGroup': 'Find a group chat',
+    'InviteUsers': 'Invite users in group',
   },
 };
 

@@ -7,6 +7,7 @@ import {colors} from '../../../styles';
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
 import {ArrowIcon} from '../../../components/icons';
 import {Button, Profile} from '../../../components/elements';
+import {ProfileForm} from '../../../components/forms';
 import styles from './styles';
 
 const user = {
@@ -22,7 +23,7 @@ const user = {
     secondName: {type: 'Simpson', optional: true, indexed: true},
     bio: 'I\'m Lisa and now I write a new single music on sax - brother say it dangerous to the ears!',
     avatar: 'http://i.imgur.com/4LClmI1.png',
-    sound: 'string?',
+    sound: 'Ufo Bell',
     notification: {type: 'bool', default: true},
     isBlocked: {type: 'bool', default: false},
     settings: 'string?',
@@ -80,6 +81,14 @@ class SettingsProfile extends Component {
 
   onDelete = () => alert('click on delete btn');
 
+  onRemoveBtn = () => alert('click on remove btn');
+
+  onAddBtn = () => alert('click on add btn');
+
+  onGroups = () => this.props.navigation.goBack();
+
+  onSound = () => this.props.navigation.goBack();
+
   render() {
     const {context} = this;
     const {account} = this.props;
@@ -109,7 +118,17 @@ class SettingsProfile extends Component {
           <View style={[_styles.body, _styles.bodyProfile]}>
             {
               editMode ?
-                <Text>edit form</Text> :
+                <ProfileForm
+                  theme={theme}
+                  context={context}
+                  user={user}
+                  onAvatar={this.onAvatar}
+                  onRemoveBtn={this.onRemoveBtn}
+                  onAddBtn={this.onAddBtn}
+                  onGroups={this.onGroups}
+                  onNotifications={this.onNotifications}
+                  onSound={this.onSound}
+                  onDelete={this.onDelete}/> :
                 <Profile
                   theme={theme}
                   context={context}

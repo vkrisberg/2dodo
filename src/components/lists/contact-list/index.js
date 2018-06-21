@@ -17,6 +17,7 @@ export default class ContactList extends Component {
     theme: PropTypes.string,
     context: PropTypes.object,
     sections: PropTypes.bool,
+    showTop: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -24,6 +25,7 @@ export default class ContactList extends Component {
     renderItem: () => {},
     theme: themeEnum.light,
     sections: false,
+    showTop: true,
   };
 
   constructor(props) {
@@ -56,7 +58,7 @@ export default class ContactList extends Component {
 
   render() {
     const {items} = this.state;
-    const {theme, context, renderItem, sections} = this.props;
+    const {theme, context, renderItem, sections, showTop} = this.props;
     const lng = RNLanguages.language.substr(0, 2);
     const _styles = styles(theme);
     let alphabet = generateAlphabet(alphabetEnum[lng].start, alphabetEnum[lng].end);
@@ -93,8 +95,8 @@ export default class ContactList extends Component {
 
       return (
         <View style={_styles.container}>
-          <View style={_styles.divider}/>
-          <Text style={_styles.caption}>{`${context.t('SearchResults')} (${items.length})`}</Text>
+          {showTop && <View style={_styles.divider}/>}
+          {showTop && <Text style={_styles.caption}>{`${context.t('SearchResults')} (${items.length})`}</Text>}
           <FlatList
             ref={ref => this.flatList = ref}
             data={items}

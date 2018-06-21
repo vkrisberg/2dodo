@@ -14,6 +14,7 @@ import {
 import {ContactAdd, ContactProfile} from './containers/contacts';
 import {ChatCreate, ChatMessage} from './containers/messages';
 import {SettingsProfile} from './containers/settings';
+import {GroupAdd} from './containers/groups';
 
 export const MainStack = createStackNavigator({
   Login: {
@@ -48,6 +49,9 @@ export const MainStack = createStackNavigator({
   },
   SettingsProfile: {
     screen: SettingsProfile,
+  },
+  GroupAdd: {
+    screen: GroupAdd,
   },
 }, {
   headerMode: 'none',
