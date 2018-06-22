@@ -88,6 +88,7 @@ const translations = {
     'AddContactQrCode': 'Нажмите здесь, чтобы использовать сканер QR-кода для добавления контакта друга',
     'NoContacts': 'У Вас еще нет контактов',
     'ContactProfile': 'Профиль',
+    'Search': 'Поиск',
     'SearchResults': 'Результаты поиска',
     // Chat
     'NoChats': 'У Вас еще нет чатов',
@@ -109,6 +110,7 @@ const translations = {
     'Enabled': 'Вкл',
     'Disabled': 'Выкл',
     'Sound': 'Звук',
+    'Call': 'Звонок',
     'SearchInGroups': 'Искать в группах и каналах',
     'SearchGroupsOnly': 'Искать в группах',
     'NoGroupsInvited': 'No groups invited',
@@ -212,6 +214,7 @@ const translations = {
     'AddContactQrCode': 'Tap here to use QR-code scanner to add friend contact',
     'NoContacts': 'Your have not contacts yet',
     'ContactProfile': 'Profile',
+    'Search': 'Search',
     'SearchResults': 'Search results',
     // Chat
     'NoChats': 'Your have not chats yet',
@@ -233,6 +236,7 @@ const translations = {
     'Enabled': 'Enabled',
     'Disabled': 'Disabled',
     'Sound': 'Sound',
+    'Call': 'Call',
     'SearchInGroups': 'Search in groups and channels',
     'SearchGroupsOnly': 'Search in groups',
     'NoGroupsInvited': 'No groups invited',

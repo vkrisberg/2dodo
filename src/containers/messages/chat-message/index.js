@@ -97,7 +97,7 @@ class ChatMessage extends PureComponent {
     return (
       <MainLayout netOffline={!account.net.connected}>
         <BackgroundLayout theme={theme} paddingHorizontal={10}>
-          <NavbarChat title={chat.current.name} description={'online'}/>
+          <NavbarChat title={chat.current.name} description={'online'} context={this.context}/>
           <SearchInput placeholder="Search in messages" onChange={this.onSearchChange}/>
           <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
             <MessageList

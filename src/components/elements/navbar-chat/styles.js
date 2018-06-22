@@ -32,5 +32,12 @@ export default ({theme}) => {
       height: 32,
       borderRadius: 16,
     },
+
+    iconsBlock: {
+      marginVertical: 5,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      paddingHorizontal: 40,
+    },
   });
-}
+};

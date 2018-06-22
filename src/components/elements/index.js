@@ -25,3 +25,4 @@ export {default as GroupListItem} from './group-list-item';
 export {default as MessageListItem} from './message-list-item';
 export {default as MessageInput} from './message-input';
 export {default as Profile} from './profile';
+export {default as Icon} from './icon';

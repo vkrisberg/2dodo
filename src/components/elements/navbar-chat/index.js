@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 import {View, TouchableOpacity, Text, Image} from 'react-native';
 import PropTypes from 'prop-types';
 
-import {Navbar, ButtonBack, ButtonNavbar, TextLabel} from '../index'
-import {AvatarIcon} from '../../icons'
+import {Navbar, ButtonBack, ButtonNavbar, TextLabel} from '../index';
+import {Icon} from '../../../components/elements';
+import {AvatarIcon} from '../../icons';
 import {themeEnum} from '../../../enums';
 import {colors, weights} from '../../../styles';
 import styles from './styles';
@@ -17,6 +18,7 @@ export default class NavbarChat extends Component {
     description: PropTypes.string,
     avatar: PropTypes.string,
     theme: PropTypes.string,
+    context: PropTypes.object,
     onAvatarPress: PropTypes.func,
     onMenuPress: PropTypes.func,
   };
@@ -28,6 +30,13 @@ export default class NavbarChat extends Component {
     theme: themeEnum.light,
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      showPanel: true,
+    };
+  }
+
   onAvatarPress = () => {
     this.props.onAvatarPress && this.props.onAvatarPress();
   };
@@ -35,6 +44,14 @@ export default class NavbarChat extends Component {
   onMenuPress = () => {
     this.props.onMenuPress && this.props.onMenuPress();
   };
+
+  onSearchIcon = () => {};
+
+  onSettings = () => {};
+
+  onSound = () => {};
+
+  onCall = () => {};
 
   renderTitle = (_styles) => {
     const {theme, title, description} = this.props;
@@ -51,7 +68,7 @@ export default class NavbarChat extends Component {
                      size={13}>{description}</TextLabel>
         </View>
         <TouchableOpacity style={_styles.menuContainer} onPress={this.onMenuPress}>
-          <Image style={_styles.menuDots} source={IMG_MENU_DOTS}/>
+          <Image style={_styles.menuDots} source={IMG_MENU_DOTS} tintColor={this.state.showPanel && colors[theme].blue}/>
         </TouchableOpacity>
       </View>
     );
@@ -68,15 +85,32 @@ export default class NavbarChat extends Component {
     );
   };
 
+  renderPanel = (_styles, theme) => {
+    const {context} = this.props;
+
+    return (
+      <View style={_styles.iconsBlock}>
+        <Icon type={'Search'} theme={theme} context={context} onPress={this.onSearchIcon}/>
+        <Icon type={'Settings'} theme={theme} context={context} onPress={this.onSettings}/>
+        <Icon type={'Sound'} theme={theme} context={context} onPress={this.onSound}/>
+        <Icon type={'Call'} theme={theme} context={context} onPress={this.onCall}/>
+      </View>
+    );
+  };
+
   render() {
     let {theme} = this.props;
+    const {showPanel} = this.state;
     const _styles = styles({theme});
 
     return (
-      <Navbar theme={theme}
-              renderTitle={this.renderTitle(_styles)}
-              renderLeft={<ButtonBack/>}
-              renderRight={this.renderAvatar(_styles)}/>
+      <View>
+        <Navbar theme={theme}
+          renderTitle={this.renderTitle(_styles)}
+          renderLeft={<ButtonBack/>}
+          renderRight={this.renderAvatar(_styles)}/>
+        {showPanel && this.renderPanel(_styles, theme)}
+      </View>
     );
   }
 }
