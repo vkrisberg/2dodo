@@ -89,5 +89,29 @@ export default (theme) => {
       fontWeight: weights.medium,
       fontFamily: fonts.main,
     },
+
+    searchBlock: {
+      flex: 1,
+      marginTop: 10,
+    },
+
+    styledInput: {
+      height: 40,
+    },
+
+    inputViewStyles: {
+      backgroundColor: 'transparent',
+      borderBottomWidth: 2,
+      borderBottomColor: colors[theme].grayLight,
+      borderRadius: 0,
+      marginHorizontal: 10,
+      paddingHorizontal: 0,
+      paddingRight: 10,
+      justifyContent: 'flex-start',
+    },
+
+    searchPlaceholder: {
+      left: 23,
+    },
   });
 };

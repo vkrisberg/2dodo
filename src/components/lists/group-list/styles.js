@@ -8,6 +8,7 @@ export default (theme) => {
       width: '100%',
       marginTop: 14,
       paddingHorizontal: 10,
+      paddingBottom: 20,
     },
 
     emptyBlockWrap: {
