@@ -33,7 +33,7 @@ export default class NavbarChat extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showPanel: true,
+      showPanel: false,
     };
   }
 
