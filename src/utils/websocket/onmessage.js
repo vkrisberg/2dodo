@@ -14,7 +14,7 @@ export default function ({event, store, navigation}) {
     case actionEnum.getOpenKey:
       store.dispatch(contactActions.updatePublicKey(data));
       break;
-    // chat
+    // chats
     case actionEnum.createChat:
       store.dispatch(chatActions.receiveChat(data));
       break;
@@ -30,7 +30,7 @@ export default function ({event, store, navigation}) {
     case actionEnum.chatMessageTyping:
       store.dispatch(chatMessageActions.receiveMessageStatus(data));
       break;
-    // group
+    // groups
     case actionEnum.createGroup:
       store.dispatch(groupActions.createResult(data));
       break;
@@ -71,6 +71,10 @@ export default function ({event, store, navigation}) {
       } else {
         store.dispatch(groupMessageActions.sendResult(data));
       }
+      break;
+    // contacts
+    case actionEnum.searchUser:
+      store.dispatch(contactActions.searchResult(data));
       break;
   }
 };

@@ -58,13 +58,6 @@ class Contacts extends Component {
   };
 
   componentDidMount() {
-    this.props.dispatch(contactActions.create({nickname: 'test', username: 'test@api.2do.do'}));
-    this.props.dispatch(contactActions.create({nickname: 'test2', username: 'test2@api.2do.do'}));
-    this.props.dispatch(contactActions.create({nickname: 'vova', username: 'vova@api.2do.do'}));
-    this.props.dispatch(contactActions.create({nickname: 'artem', username: 'artem@api.2do.do'}));
-    this.props.dispatch(contactActions.create({nickname: 'andrey', username: 'andrey@api.2do.do'}));
-    this.props.dispatch(contactActions.create({nickname: 'ivan', username: 'ivan@api.2do.do'}));
-    this.props.dispatch(contactActions.create({nickname: 'ramil', username: 'ramil@api.2do.do'}));
     this.loadContactList();
   }
 
@@ -138,7 +131,7 @@ class Contacts extends Component {
     this.setState({chosenMessage: [...chosenContacts, contact]});
   };
 
-  renderContactList = ({item}) => {
+  renderContactItem = ({item}) => {
     return (
       <ContactListItem
         item={item}
@@ -160,7 +153,7 @@ class Contacts extends Component {
             renderLeft={<NavbarDots/>}
             renderRight={this.renderNavbarButton()}/>
           <SearchInput placeholder="Search contacts" onChange={this.onSearchChange}/>
-          <ContactList context={context} items={contact.sectionList} renderItem={this.renderContactList} sections/>
+          <ContactList context={context} items={contact.sectionList} renderItem={this.renderContactItem} sections/>
         </BackgroundLayout>
       </MainLayout>
     );
