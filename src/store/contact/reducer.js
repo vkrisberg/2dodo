@@ -4,6 +4,7 @@ import {types} from './actions';
 const initState = {
   list: [],
   sectionList: [],
+  searchList: [],
   current: {
     username: '', // login@hostname
     nickname: '', // login
@@ -108,6 +109,7 @@ export default reducer(initState, {
       ...state,
       list,
       sectionList: getSectionList(list),
+      searchList: [],
       loading: false,
     };
   },
@@ -206,6 +208,30 @@ export default reducer(initState, {
   },
 
   [types.UPDATE_PUBKEY_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      loading: false,
+      error: action.error,
+    };
+  },
+
+  [types.SEARCH]: (state, action) => {
+    return {
+      ...state,
+      loading: true,
+      error: null
+    };
+  },
+
+  [types.SEARCH_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      searchList: action.payload,
+      loading: false,
+    };
+  },
+
+  [types.SEARCH_FAILURE]: (state, action) => {
     return {
       ...state,
       loading: false,

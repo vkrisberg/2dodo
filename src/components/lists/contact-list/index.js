@@ -40,8 +40,8 @@ export default class ContactList extends Component {
     };
   }
 
-  componentDidUpdate() {
-    if (this.state.items.length !== this.props.items.length) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.items !== this.props.items) {
       this.setState({items: this.props.items});
     }
   }

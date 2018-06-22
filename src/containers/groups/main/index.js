@@ -55,20 +55,20 @@ class Groups extends Component {
   }
 
   componentDidMount() {
-    this.createGroup({
-      link: 'ramil_test_group',
-      type: messageEnum.groupChat,
-      name: 'Test Group',
-      description: 'Test group for tests',
-      avatar: '',
-      members: [],
-    });
-
-    this.sendGroupMessage({
-      groupId: 'd2071caea70c42b69a0da77fee2a83ab',
-      link: 'ramil_test_group',
-      data: 'Hello! This is test message!',
-    });
+    // this.createGroup({
+    //   link: 'ramil_test_group',
+    //   type: messageEnum.groupChat,
+    //   name: 'Test Group',
+    //   description: 'Test group for tests',
+    //   avatar: '',
+    //   members: [],
+    // });
+    //
+    // this.sendGroupMessage({
+    //   groupId: 'd2071caea70c42b69a0da77fee2a83ab',
+    //   link: 'ramil_test_group',
+    //   data: 'Hello! This is test message!',
+    // });
   }
 
   componentDidUpdate(prevProps) {

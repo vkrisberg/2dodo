@@ -48,7 +48,7 @@ export default class MessagesList extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.items.length !== this.props.items.length) {
+    if (prevProps.items !== this.props.items) {
       this.setState({items: this.props.items});
     }
 

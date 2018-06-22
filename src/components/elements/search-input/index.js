@@ -78,6 +78,9 @@ export default class SearchInput extends Component {
             onFocus={this.onFocus}
             onBlur={this.onBlur}
             onChangeText={this.onChange}
+            autoCapitalize={'none'}
+            autoCorrect={false}
+            multiline={false}
           />
         </View>
       </View>

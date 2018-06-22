@@ -1,4 +1,6 @@
-import apiContact from '../../api/contact';
+import {get} from 'lodash';
+
+import {apiContact} from '../../api';
 import {services} from '../../utils';
 import {dbEnum} from '../../enums';
 
@@ -26,6 +28,10 @@ export const types = {
   UPDATE_PUBKEY: Symbol('UPDATE_PUBKEY'),
   UPDATE_PUBKEY_SUCCESS: Symbol('UPDATE_PUBKEY_SUCCESS'),
   UPDATE_PUBKEY_FAILURE: Symbol('UPDATE_PUBKEY_FAILURE'),
+
+  SEARCH: Symbol('SEARCH'),
+  SEARCH_SUCCESS: Symbol('SEARCH_SUCCESS'),
+  SEARCH_FAILURE: Symbol('SEARCH_FAILURE'),
 };
 
 export default {
@@ -177,8 +183,48 @@ export default {
         return contacts;
       } catch (e) {
         dispatch({type: types.UPDATE_PUBKEY_FAILURE, error: e});
+        // throw e;
+      }
+    };
+  },
+
+  search: (username) => {
+    return async dispatch => {
+      if (!username) {
+        dispatch({type: types.SEARCH_SUCCESS, payload: []});
+        return [];
+      }
+      dispatch({type: types.SEARCH});
+      try {
+        return await apiContact.search(username);
+      } catch (e) {
+        dispatch({type: types.SEARCH_FAILURE, error: e});
         throw e;
       }
+    };
+  },
+
+  searchResult: (message) => {
+    return async (dispatch, getState) => {
+      const {account} = getState();
+      const {username} = account.user;
+
+      if (message.error) {
+        dispatch({type: types.SEARCH_FAILURE, error: message.error});
+      }
+
+      let payload = get(message, 'data', []);
+      payload = payload.filter((item) => item !== username);
+      payload = payload.map((item) => {
+        return {
+          username: item,
+          nickname: item.split('@')[0],
+        };
+      });
+      // console.log('search contacts result', payload);
+
+      dispatch({type: types.SEARCH_SUCCESS, payload});
+      return payload;
     };
   },
 };
