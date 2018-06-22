@@ -6,6 +6,7 @@ export default (theme) => {
     header: {
       width: sizes.windowWidth,
       flexDirection: 'row',
+      paddingHorizontal: 10,
     },
 
     styledTitle: {
@@ -17,8 +18,6 @@ export default (theme) => {
 
     titleContainer: {
       width: '100%',
-      paddingLeft: 20,
-      paddingRight: 10,
       marginTop: 35,
       marginBottom: 13,
       flexDirection: 'row',
