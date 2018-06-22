@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import {Text, View, TouchableOpacity, ScrollView} from 'react-native';
 
 import {MainLayout, BackgroundLayout, DismissKeyboardLayout} from '../../../components/layouts';
-import {ContactList} from '../../../components/lists';
-import {Button, Checkbox, ContactListItem} from '../../../components/elements';
+import {ContactList, GroupList} from '../../../components/lists';
+import {Button, Checkbox, ContactListItem, SearchInput, GroupListItem} from '../../../components/elements';
 import {CreateChannel} from '../../../components/forms';
 import {ArrowIcon} from '../../../components/icons';
 import {colors} from "../../../styles";
@@ -27,7 +27,51 @@ const Contactslist = [
   {
     username: 'Professor',
   },
+];
 
+const list = [
+  {
+    name: 'Simpson\'s Family',
+    properties: {
+      avatar: 'https://upload.wikimedia.org/wikipedia/en/thumb/0/0d/Simpsons_FamilyPicture.png/220px-Simpsons_FamilyPicture.png',
+      quote: 'Mom, we need a new father!',
+      user: 'Lisa Simpson',
+      dateUpdate: '2018-06-21 21:30',
+      unreadCount: 24
+    },
+  },
+  {
+    name: 'AIGO Big Group',
+    properties: {
+      quote: 'Mom, we need a new father!',
+      user: 'Lisa Simpson',
+      dateUpdate: '2018-04-10 21:30',
+    },
+  },
+  {
+    name: 'AIGO Big Group',
+    properties: {
+      quote: 'Mom, we need a new father!',
+      user: 'Lisa Simpson',
+      dateUpdate: '2018-04-10 21:30',
+    },
+  },
+  {
+    name: 'AIGO Big Group',
+    properties: {
+      quote: 'Mom, we need a new father!',
+      user: 'Lisa Simpson',
+      dateUpdate: '2018-04-10 21:30',
+    },
+  },
+  {
+    name: 'AIGO Big Group',
+    properties: {
+      quote: 'Mom, we need a new father!',
+      user: 'Lisa Simpson',
+      dateUpdate: '2018-04-10 21:30',
+    },
+  },
 ];
 
 class Groups extends Component {
@@ -64,6 +108,13 @@ class Groups extends Component {
 
   onContactCheckboxPress = (contact) => {};
 
+  onSearchChange = () => {};
+
+  onEmptyBlock = () => {};
+
+  onGroupPress = () => {};
+
+  onGroupLongPress = () => {};
 
   renderContactList = ({item}) => {
     return (
@@ -73,6 +124,19 @@ class Groups extends Component {
         onPress={this.onContactPress(item)}
         onCheckboxPress={() => this.onContactCheckboxPress(item)}
         checkboxVisibility/>
+    );
+  };
+
+  renderGroupItem = ({item}) => {
+    const {account} = this.props;
+
+    return (
+      <GroupListItem item={item}
+        theme={account.user.theme}
+        context={this.context}
+        showRightBlock={false}
+        onPress={this.onGroupPress}
+        onLongPress={this.onGroupLongPress}/>
     );
   };
 
@@ -145,7 +209,20 @@ class Groups extends Component {
               </ScrollView>
             }
             {checked === 'findGroup' &&
-              <Text>findGroup</Text>
+              <View style={_styles.searchBlock}>
+                <SearchInput
+                  styledInput={_styles.styledInput}
+                  inputViewStyles={_styles.inputViewStyles}
+                  styledPlaceholder={_styles.searchPlaceholder}
+                  placeholder={context.t('SearchGlobalGroups')}
+                  onChange={this.onSearchChange}/>
+                <GroupList
+                  theme={theme}
+                  context={this.context}
+                  items={list}
+                  renderItem={this.renderGroupItem}
+                  onEmptyBlock={this.onEmptyBlock}/>
+              </View>
             }
           </DismissKeyboardLayout>
         </BackgroundLayout>
