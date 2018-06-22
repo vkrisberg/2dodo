@@ -21,12 +21,15 @@ export default class GroupListItem extends Component {
     onPress: PropTypes.func,
     onLongPress: PropTypes.func,
     onCheckboxPress: PropTypes.func,
+    showRightBlock: PropTypes.bool,
   };
 
   static defaultProps = {
     theme: themeEnum.light,
     editMode: false,
     selectedItems: {},
+    onCheckboxPress: {},
+    showRightBlock: true,
   };
 
   getInitials = (name) => {
@@ -52,7 +55,7 @@ export default class GroupListItem extends Component {
 
 
   render() {
-    const {item, theme, editMode, selectedItems} = this.props;
+    const {item, theme, editMode, selectedItems, showRightBlock} = this.props;
     const _styles = styles(theme);
     const isToday = moment(item.properties.dateUpdate).format('DD.MM.YY') === moment().format('DD.MM.YY');
     const chosen = selectedItems[item.id];
@@ -76,7 +79,7 @@ export default class GroupListItem extends Component {
             <Text style={[_styles.defaultText, _styles.subCaption]}>{item.properties.user}</Text>
             <Text numberOfLines={1} style={[_styles.defaultText, _styles.descriptions]}>{item.properties.quote}</Text>
           </View>
-          <View style={_styles.information}>
+          {showRightBlock && <View style={_styles.information}>
             <Text style={_styles.text}>
               {isToday && moment(item.properties.dateUpdate).format('HH:mm')}
               {!isToday && moment(item.properties.dateUpdate).format('DD.MM.YY')}
@@ -88,7 +91,7 @@ export default class GroupListItem extends Component {
               </Text>
             </View>
             }
-          </View>
+          </View>}
         </View>
       </TouchableOpacity>
     );
