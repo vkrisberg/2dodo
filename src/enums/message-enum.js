@@ -11,4 +11,7 @@ export default {
   received: 'received',
   read: 'read',
   error: 'error',
+  // group types
+  groupChat: 'group_chat',
+  channel: 'channel',
 };

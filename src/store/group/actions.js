@@ -175,12 +175,13 @@ export default {
           _group = realm.create(dbEnum.Group, group.current, false);
         });
         const payload = {..._group};
-        // console.log('group created', payload);
+        console.log('group created', payload);
         dispatch({type: types.CREATE_SUCCESS, payload});
         return payload;
       } catch (e) {
+        console.log('group created error', e);
         dispatch({type: types.CREATE_FAILURE, error: e});
-        throw e;
+        // throw e;
       }
     };
   },
@@ -238,7 +239,7 @@ export default {
         return payload;
       } catch (e) {
         dispatch({type: types.UPDATE_FAILURE, error: e});
-        throw e;
+        // throw e;
       }
     };
   },
@@ -325,7 +326,7 @@ export default {
         return group.deleted;
       } catch (e) {
         dispatch({type: types.DELETE_FAILURE, error: e});
-        throw e;
+        // throw e;
       }
     };
   },
@@ -403,7 +404,7 @@ export default {
         return payload;
       } catch (e) {
         dispatch({type: types.GET_GROUP_FAILURE, error: e});
-        throw e;
+        // throw e;
       }
     };
 
@@ -477,7 +478,7 @@ export default {
         return link;
       } catch (e) {
         dispatch({type: types.RECEIVE_INVITE_FAILURE, error: e});
-        throw e;
+        // throw e;
       }
     };
   },
@@ -547,7 +548,7 @@ export default {
         return payload;
       } catch (e) {
         dispatch({type: types.UNSUBSCRIBE_FAILURE, error: e});
-        throw e;
+        // throw e;
       }
     };
   },

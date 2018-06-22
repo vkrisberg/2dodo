@@ -142,7 +142,7 @@ export default {
         return payload;
       } catch (e) {
         dispatch({type: types.SEND_FAILURE, error: e});
-        throw e;
+        // throw e;
       }
     };
   },
@@ -264,7 +264,7 @@ export default {
       } catch (e) {
         console.log('group message received error', e);
         dispatch({type: types.RECEIVE_MESSAGE_FAILURE, error: e});
-        throw e;
+        // throw e;
       }
     };
   },

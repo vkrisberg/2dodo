@@ -62,7 +62,7 @@ export default reducer(initState, {
     return {
       ...state,
       loading: false,
-      error: action.error,
+      error: action.error.toString(),
     };
   },
 
@@ -86,7 +86,7 @@ export default reducer(initState, {
     return {
       ...state,
       loading: false,
-      error: action.error,
+      error: action.error.toString(),
     };
   },
 
@@ -112,7 +112,7 @@ export default reducer(initState, {
     return {
       ...state,
       loading: false,
-      error: action.error,
+      error: action.error.toString(),
     };
   },
 
@@ -145,7 +145,7 @@ export default reducer(initState, {
     return {
       ...state,
       loading: false,
-      error: action.error,
+      error: action.error.toString(),
     };
   },
 
@@ -175,7 +175,7 @@ export default reducer(initState, {
     return {
       ...state,
       loading: false,
-      error: action.error,
+      error: action.error.toString(),
     };
   },
 
@@ -199,7 +199,7 @@ export default reducer(initState, {
     return {
       ...state,
       loading: false,
-      error: action.error,
+      error: action.error.toString(),
     };
   },
 
@@ -223,7 +223,7 @@ export default reducer(initState, {
     return {
       ...state,
       loading: false,
-      error: action.error,
+      error: action.error.toString(),
     };
   },
 
@@ -248,7 +248,7 @@ export default reducer(initState, {
     return {
       ...state,
       loading: false,
-      error: action.error,
+      error: action.error.toString(),
     };
   },
 
@@ -262,7 +262,7 @@ export default reducer(initState, {
   [types.RECEIVE_INVITE_FAILURE]: (state, action) => {
     return {
       ...state,
-      error: action.error,
+      error: action.error.toString(),
     };
   },
 
@@ -290,7 +290,7 @@ export default reducer(initState, {
     return {
       ...state,
       loading: false,
-      error: action.error,
+      error: action.error.toString(),
     };
   },
 
@@ -323,7 +323,7 @@ export default reducer(initState, {
     return {
       ...state,
       loading: false,
-      error: action.error,
+      error: action.error.toString(),
     };
   },
 
@@ -348,7 +348,7 @@ export default reducer(initState, {
     return {
       ...state,
       loading: false,
-      error: action.error,
+      error: action.error.toString(),
     };
   },
 
@@ -373,7 +373,7 @@ export default reducer(initState, {
     return {
       ...state,
       loading: false,
-      error: action.error,
+      error: action.error.toString(),
     };
   },
 
