@@ -3,9 +3,10 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {Text, View, TouchableOpacity, ScrollView} from 'react-native';
 
-import {MainLayout, BackgroundLayout} from '../../../components/layouts';
+import {MainLayout, BackgroundLayout, DismissKeyboardLayout} from '../../../components/layouts';
 import {ContactList} from '../../../components/lists';
 import {Button, Checkbox, ContactListItem} from '../../../components/elements';
+import {CreateChannel} from '../../../components/forms';
 import {ArrowIcon} from '../../../components/icons';
 import {colors} from "../../../styles";
 import styles from './styles';
@@ -85,47 +86,48 @@ class Groups extends Component {
     return (
       <MainLayout netOffline={!account.net.connected}>
         <BackgroundLayout theme={theme} paddingHorizontal={10}>
-          <View style={_styles.header}>
-            <View style={_styles.titleContainer}>
-              <TouchableOpacity onPress={this.goBack}>
-                <ArrowIcon />
-              </TouchableOpacity>
-              <Text style={_styles.styledTitle}>{context.t('GroupCreate')}</Text>
-              <Button
-                style={_styles.editBtn}
-                color={colors[theme].blue}
-                onPress={this.onNext}>
-                {context.t('Next')}
-              </Button>
+          <DismissKeyboardLayout style={{width: '100%', flex: 1}}>
+            <View style={_styles.header}>
+              <View style={_styles.titleContainer}>
+                <TouchableOpacity onPress={this.goBack}>
+                  <ArrowIcon />
+                </TouchableOpacity>
+                <Text style={_styles.styledTitle}>{context.t('GroupCreate')}</Text>
+                <Button
+                  style={_styles.editBtn}
+                  color={colors[theme].blue}
+                  onPress={this.onNext}>
+                  {context.t('Next')}
+                </Button>
+              </View>
             </View>
-          </View>
-          <View style={_styles.top}>
-            <View style={_styles.actionItem}>
-              <Text style={_styles.text}>{context.t('CroupChat')}</Text>
-              <Checkbox
-                input={{value: checked === 'groupChat', onChange: () => this.onCheckboxPress('groupChat')}}
-                style={_styles.checkbox}/>
+            <View style={_styles.top}>
+              <View style={_styles.actionItem}>
+                <Text style={_styles.text}>{context.t('CroupChat')}</Text>
+                <Checkbox
+                  input={{value: checked === 'groupChat', onChange: () => this.onCheckboxPress('groupChat')}}
+                  style={_styles.checkbox}/>
+              </View>
+              <View style={_styles.actionItem}>
+                <Text style={_styles.text}>{context.t('CreateChannel')}</Text>
+                <Checkbox
+                  input={{value: checked === 'createChannel', onChange: () => this.onCheckboxPress('createChannel')}}
+                  style={_styles.checkbox}/>
+              </View>
+              <View style={_styles.actionItem}>
+                <Text style={_styles.text}>{context.t('FindGroup')}</Text>
+                <Checkbox
+                  input={{value: checked === 'findGroup', onChange: () => this.onCheckboxPress('findGroup')}}
+                  style={_styles.checkbox}/>
+              </View>
             </View>
-            <View style={_styles.actionItem}>
-              <Text style={_styles.text}>{context.t('CreateChannel')}</Text>
-              <Checkbox
-                input={{value: checked === 'createChannel', onChange: () => this.onCheckboxPress('createChannel')}}
-                style={_styles.checkbox}/>
-            </View>
-            <View style={_styles.actionItem}>
-              <Text style={_styles.text}>{context.t('FindGroup')}</Text>
-              <Checkbox
-                input={{value: checked === 'findGroup', onChange: () => this.onCheckboxPress('findGroup')}}
-                style={_styles.checkbox}/>
-            </View>
-          </View>
-          <Text style={_styles.caption}>
-            {checked === 'groupChat' && context.t('InviteUsers')}
-            {checked === 'createChannel' && context.t('InviteUsers')}
-            {checked === 'findGroup' && context.t('InviteUsers')}
-          </Text>
-          {checked === 'groupChat' && <ContactList context={context} items={Contactslist} renderItem={this.renderContactList} showTop={false}/>}
-          {checked === 'groupChat' &&
+            <Text style={_styles.caption}>
+              {checked === 'groupChat' && context.t('InviteUsers')}
+              {checked === 'createChannel' && context.t('InviteUsers')}
+              {checked === 'findGroup' && context.t('SearchGroupsOnly')}
+            </Text>
+            {checked === 'groupChat' && <ContactList context={context} items={Contactslist} renderItem={this.renderContactList} showTop={false}/>}
+            {checked === 'groupChat' &&
             <View style={_styles.btnContainer}>
               <Button
                 style={_styles.btn}
@@ -134,13 +136,18 @@ class Groups extends Component {
                 <Text style={_styles.btnText}>{context.t('NextStep')}</Text>
               </Button>
             </View>
-          }
-          {checked === 'createChannel' &&
-            <Text>CreateChannel</Text>
-          }
-          {checked === 'findGroup' &&
-            <Text>findGroup</Text>
-          }
+            }
+            {checked === 'createChannel' &&
+              <ScrollView>
+                <CreateChannel
+                  theme={theme}
+                  context={context}/>
+              </ScrollView>
+            }
+            {checked === 'findGroup' &&
+              <Text>findGroup</Text>
+            }
+          </DismissKeyboardLayout>
         </BackgroundLayout>
       </MainLayout>
     );

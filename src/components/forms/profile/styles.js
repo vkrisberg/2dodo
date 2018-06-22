@@ -62,7 +62,7 @@ export default (theme) => {
     divider: {
       width: sizes.windowWidth,
       height: 15,
-      backgroundColor: colors[theme].blueKrayola,
+      backgroundColor: colors[theme].blueKrayolaDim,
       marginLeft: -20,
     },
 
