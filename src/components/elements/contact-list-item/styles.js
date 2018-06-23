@@ -10,6 +10,7 @@ export default (theme) => {
       justifyContent: 'center',
       alignItems: 'center',
       marginVertical: 5,
+      paddingHorizontal: 10,
     },
 
     image: {

@@ -3,29 +3,32 @@ import PropTypes from 'prop-types';
 import RNLanguages from 'react-native-languages';
 import {View, Text, FlatList, SectionList} from 'react-native';
 
-import {alphabetEnum} from '../../../enums';
-import {generateAlphabet} from '../../../utils';
+import {TextLabel} from '../../elements';
 import {ContactsEmptyIcon} from '../../icons/index';
-import {themeEnum} from '../../../enums';
+import {themeEnum, alphabetEnum} from '../../../enums';
+import {generateAlphabet} from '../../../utils';
 import styles from './styles';
+import {colors} from '../../../styles';
 
 export default class ContactList extends Component {
 
   static propTypes = {
     items: PropTypes.array,
     renderItem: PropTypes.func,
+    sections: PropTypes.bool,
+    showSearchResult: PropTypes.bool,
     theme: PropTypes.string,
     context: PropTypes.object,
-    sections: PropTypes.bool,
-    showTop: PropTypes.bool,
+    style: PropTypes.any,
   };
 
   static defaultProps = {
     items: [],
-    renderItem: () => {},
+    renderItem: () => {
+    },
     theme: themeEnum.light,
     sections: false,
-    showTop: true,
+    showSearchResult: true,
   };
 
   constructor(props) {
@@ -56,63 +59,92 @@ export default class ContactList extends Component {
 
   _keyExtractor = (item) => item.username;
 
+  renderSearchResult = (_styles) => {
+    const {theme, context} = this.props;
+
+    if (this.props.showSearchResult) {
+      return (
+        <TextLabel style={_styles.searchResult}
+                   color={colors[theme].grayInput}
+                   size={13}>
+          {`${context.t('SearchResults')} (${this.state.items.length})`}
+        </TextLabel>
+      );
+    }
+  };
+
+  renderSectionList = (_styles) => {
+    const {items} = this.state;
+    const {renderItem} = this.props;
+    const lng = RNLanguages.language.substr(0, 2);
+    const alphabet = generateAlphabet(alphabetEnum[lng].start, alphabetEnum[lng].end);
+
+    return (
+      <View style={_styles.sectionContainer}>
+        <SectionList
+          ref={ref => this.flatList = ref}
+          sections={items}
+          renderItem={renderItem}
+          onLayout={e => this.updateLayoutHeight(e)}
+          onContentSizeChange={(w, h) => this.updateContentSize(w, h)}
+          keyExtractor={this._keyExtractor}
+          renderSectionHeader={({section: {title}}) => (
+            <View style={_styles.sectionHeader}>
+              <Text style={_styles.sectionLeft}>{title}</Text>
+              {!(title === 'Me' || title === 'Я') && <View style={[_styles.divider]}/>}
+            </View>
+          )}
+        />
+        <View style={_styles.alphabet}>
+          {
+            alphabet.map((letter, index) =>
+              <Text key={index} style={_styles.alphabetLetter}>{letter}</Text>
+            )
+          }
+        </View>
+      </View>
+    );
+  };
+
+  renderFlatList = (_styles) => {
+    const {items} = this.state;
+    const {renderItem} = this.props;
+
+    return (
+      <View>
+        {this.renderSearchResult(_styles)}
+        <FlatList
+          ref={ref => this.flatList = ref}
+          data={items}
+          renderItem={renderItem}
+          onLayout={e => this.updateLayoutHeight(e)}
+          onContentSizeChange={(w, h) => this.updateContentSize(w, h)}
+          keyExtractor={this._keyExtractor}
+        />
+      </View>
+    );
+  };
+
   render() {
     const {items} = this.state;
-    const {theme, context, renderItem, sections, showTop} = this.props;
-    const lng = RNLanguages.language.substr(0, 2);
+    const {sections, theme, context, style} = this.props;
     const _styles = styles(theme);
-    let alphabet = generateAlphabet(alphabetEnum[lng].start, alphabetEnum[lng].end);
 
-    if (items.length) {
-      if (sections) {
-        return (
-          <View style={_styles.sectionWrapper}>
-            <SectionList
-              style={_styles.section}
-              ref={ref => this.flatList = ref}
-              sections={items}
-              renderItem={renderItem}
-              onLayout={e => this.updateLayoutHeight(e)}
-              onContentSizeChange={(w, h) => this.updateContentSize(w, h)}
-              keyExtractor={this._keyExtractor}
-              renderSectionHeader={({section: {title}}) => (
-                <View style={_styles.sectionHeader}>
-                  <Text style={_styles.sectionLeft}>{title}</Text>
-                  {!(title === 'Me' || title === 'Я') && <View style={[_styles.divider]}/>}
-                </View>
-              )}
-            />
-            <View style={_styles.alphabet}>
-              {
-                alphabet.map( (letter, index) =>
-                  <Text key={index} style={_styles.alphabetLetter}>{letter}</Text>
-                )
-              }
-            </View>
-          </View>
-        );
-      }
-
+    if (!items.length) {
       return (
-        <View style={_styles.container}>
-          {showTop && <View style={_styles.divider}/>}
-          {showTop && <Text style={_styles.caption}>{`${context.t('SearchResults')} (${items.length})`}</Text>}
-          <FlatList
-            ref={ref => this.flatList = ref}
-            data={items}
-            renderItem={renderItem}
-            onLayout={e => this.updateLayoutHeight(e)}
-            onContentSizeChange={(w, h) => this.updateContentSize(w, h)}
-            keyExtractor={this._keyExtractor}
-          />
+        <View style={_styles.emptyContainer}>
+          <View style={_styles.emptyWrapper}>
+            <ContactsEmptyIcon/>
+            <TextLabel style={_styles.text} color={colors[theme].blackText}>{context.t('NoContacts')}</TextLabel>
+          </View>
         </View>
       );
     }
 
     return (
-      <View style={_styles.emptyContactsView}>
-        <ContactsEmptyIcon/>
-        <Text style={_styles.text}>{context.t('NoContacts')}</Text>
+      <View style={[_styles.container, style]}>
+        {sections && this.renderSectionList(_styles)}
+        {!sections && this.renderFlatList(_styles)}
       </View>
     );
   }

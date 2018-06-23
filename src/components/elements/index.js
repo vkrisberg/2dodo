@@ -1,4 +1,5 @@
 export {default as Avatar} from './avatar';
+export {default as AvatarIcon} from './avatar-icon';
 export {default as Button} from './button';
 export {default as ButtonSkip} from './button-skip';
 export {default as ButtonTheme} from './button-theme';

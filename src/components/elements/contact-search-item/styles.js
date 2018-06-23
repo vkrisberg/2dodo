@@ -3,6 +3,10 @@ import {StyleSheet} from "react-native";
 
 export default (theme) => {
   return StyleSheet.create({
+    container: {
+      width: '100%',
+    },
+
     wrapper: {
       width: '100%',
       height: 50,
@@ -10,6 +14,7 @@ export default (theme) => {
       justifyContent: 'center',
       alignItems: 'center',
       marginVertical: 5,
+      paddingHorizontal: 10,
     },
 
     image: {
@@ -28,11 +33,8 @@ export default (theme) => {
       justifyContent: 'center',
     },
 
-    name: {
-      fontFamily: fonts.main,
-      fontWeight: weights.semiBold,
-      fontSize: 16,
-      color: colors[theme].grayBlue,
+    secondText: {
+      marginTop: 5,
     },
 
     chosen: {

@@ -20,6 +20,8 @@ const initState = {
     publicKey: '',
     dateCreate: null,
     dateUpdate: null,
+    isOnline: false,
+    inContacts: false, // for searchList
   },
   loading: false,
   error: null,
@@ -109,7 +111,6 @@ export default reducer(initState, {
       ...state,
       list,
       sectionList: getSectionList(list),
-      searchList: [],
       loading: false,
     };
   },
@@ -224,9 +225,15 @@ export default reducer(initState, {
   },
 
   [types.SEARCH_SUCCESS]: (state, action) => {
+    const searchList = action.payload.map((item) => {
+      const inContacts = state.list.find((contact) => contact.username === item.username);
+      item.inContacts = !!inContacts;
+      return item;
+    });
+
     return {
       ...state,
-      searchList: action.payload,
+      searchList,
       loading: false,
     };
   },
@@ -236,6 +243,13 @@ export default reducer(initState, {
       ...state,
       loading: false,
       error: action.error,
+    };
+  },
+
+  [types.CLEAR_SEARCH_LIST]: (state, action) => {
+    return {
+      ...state,
+      searchList: [],
     };
   },
 });

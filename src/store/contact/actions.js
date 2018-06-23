@@ -32,6 +32,8 @@ export const types = {
   SEARCH: Symbol('SEARCH'),
   SEARCH_SUCCESS: Symbol('SEARCH_SUCCESS'),
   SEARCH_FAILURE: Symbol('SEARCH_FAILURE'),
+
+  CLEAR_SEARCH_LIST: Symbol('CLEAR_SEARCH_LIST'),
 };
 
 export default {
@@ -54,7 +56,10 @@ export default {
         }
         console.log('contacts loaded', contacts.length);
         const payload = contacts.map((item) => {
-          return {...item};
+          return {
+            ...item,
+            fullName: item.fullName,
+          };
         });
         dispatch({type: types.LOAD_SUCCESS, payload});
         return payload;
@@ -72,7 +77,10 @@ export default {
         const realm = services.getRealm();
         const contact = realm.objectForPrimaryKey(dbEnum.Contact, username);
         // console.log('contact loaded', contact);
-        const payload = {...contact};
+        const payload = {
+          ...contact,
+          fullName: contact.fullName,
+        };
         dispatch({type: types.LOAD_ONE_SUCCESS, payload});
         return payload;
       } catch (e) {
@@ -93,7 +101,10 @@ export default {
         await realm.write(() => {
           contact = realm.create(dbEnum.Contact, data, true); // TODO - change to 'false'
         });
-        const payload = {...contact};
+        const payload = {
+          ...contact,
+          fullName: contact.fullName,
+        };
         // console.log('contact created', contact);
         apiContact.getOpenKey([payload.username]);
         dispatch({type: types.CREATE_SUCCESS, payload});
@@ -115,7 +126,10 @@ export default {
         await realm.write(() => {
           contact = realm.create(dbEnum.Contact, data, true);
         });
-        const payload = {...contact};
+        const payload = {
+          ...contact,
+          fullName: contact.fullName,
+        };
         // console.log('contact updated', contact);
         dispatch({type: types.UPDATE_SUCCESS, payload});
         return payload;
@@ -226,5 +240,9 @@ export default {
       dispatch({type: types.SEARCH_SUCCESS, payload});
       return payload;
     };
+  },
+
+  clearSearchList: () => {
+    return {type: types.CLEAR_SEARCH_LIST};
   },
 };

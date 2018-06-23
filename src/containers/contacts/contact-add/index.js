@@ -30,7 +30,9 @@ class ContactAdd extends Component {
     this.searchTimerId = null;
   }
 
-  goBack = () => this.props.navigation.goBack();
+  componentWillUnmount() {
+    this.props.dispatch(contactActions.clearSearchList());
+  }
 
   goQrScanner = () => {
   };
@@ -41,7 +43,7 @@ class ContactAdd extends Component {
     }
 
     this.props.dispatch(contactActions.create(data)).then(() => {
-      this.goBack();
+      this.props.navigation.goBack();
     });
   };
 
@@ -65,6 +67,7 @@ class ContactAdd extends Component {
     return (
       <ContactSearchItem
         item={item}
+        context={this.context}
         onPress={this.onContactPress(item)}
         onCheckboxPress={() => this.onCheckboxPress(item)}
       />

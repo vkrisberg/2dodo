@@ -1,29 +1,28 @@
-import React, {Component} from 'react';
-import {TouchableOpacity, Text, View, Image} from 'react-native';
+import React, {PureComponent} from 'react';
+import {TouchableOpacity, View, Image} from 'react-native';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 
-import {Checkbox} from '../index';
-import {AvatarIcon} from '../../icons';
+import {AvatarIcon, TextLabel} from '../index';
 import {themeEnum} from '../../../enums';
+import {colors} from '../../../styles';
 import styles from './styles';
 
-export default class ContactSearchItem extends Component {
+import IMG_ARROW_RIGHT from '../../../images/icons/arrow-right/arrow_right.png';
+
+export default class ContactSearchItem extends PureComponent {
 
   static propTypes = {
     item: PropTypes.object.isRequired,
-    checked: PropTypes.bool,
+    showOnline: PropTypes.bool,
     onPress: PropTypes.func,
     onLongPress: PropTypes.func,
-    onCheckboxPress: PropTypes.func,
     theme: PropTypes.string,
-    checkboxVisibility: PropTypes.bool,
+    context: PropTypes.object,
   };
 
   static defaultProps = {
-    checked: false,
     theme: themeEnum.light,
-    checkboxVisibility: false,
+    showOnline: false,
   };
 
   onPress = () => {
@@ -34,31 +33,46 @@ export default class ContactSearchItem extends Component {
     this.props.onLongPress && this.props.onLongPress(this.props.item);
   };
 
-  onCheckboxPress = () => {
-    this.props.onCheckboxPress && this.props.onCheckboxPress(this.props.item);
+  renderLabel = (_styles) => {
+    const {item, showOnline, theme, context} = this.props;
+    const inContacts = item.inContacts ? context.t('InContacts') : '';
+    let label = `@${item.nickname}`;
+
+    if (showOnline) {
+      label = item.isOnline ? context.t('online') : context.t('offline');
+
+      return (
+        <TextLabel style={_styles.secondText} size={13} weight={colors.medium} color={colors[theme].grayInput}>
+          {label}
+        </TextLabel>
+      );
+    }
+
+    return (
+      <TextLabel style={_styles.secondText} size={13} weight={colors.medium} color={colors[theme].grayInput}>
+        {label} <TextLabel size={13} weight={colors.medium} color={colors[theme].navbarTitle}>{inContacts}</TextLabel>
+      </TextLabel>
+    );
   };
 
   render() {
-    const {item, checked, theme, checkboxVisibility} = this.props;
+    const {item, theme} = this.props;
     const _styles = styles(theme);
+    const name = item.fullName || item.username;
 
     return (
-      <TouchableOpacity onPress={this.onPress} onLongPress={this.onLongPress} style={{width: '100%'}}>
+      <TouchableOpacity style={_styles.container} onPress={this.onPress} onLongPress={this.onLongPress}>
         <View style={_styles.wrapper}>
-          {checkboxVisibility && <Checkbox
-            style={_styles.chosen}
-            input={{value: checked, onChange: this.onCheckboxPress}}/>}
           <View style={_styles.image}>
-            <AvatarIcon/>
+            <AvatarIcon theme={theme} source={item.avatar} label={name}/>
           </View>
           <View style={_styles.body}>
-            <Text style={_styles.name}>
-              {item.username}
-            </Text>
-            <Text>
-              {moment(item.dateUpdate).format('DD.MM.YY')}
-            </Text>
+            <TextLabel size={16} weight={colors.semiBold} color={colors[theme].grayBlue}>
+              {name}
+            </TextLabel>
+            {this.renderLabel(_styles)}
           </View>
+          <Image source={IMG_ARROW_RIGHT}/>
         </View>
       </TouchableOpacity>
     );
