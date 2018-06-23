@@ -2,79 +2,97 @@ import React, {Component} from 'react';
 import {View, Text, TextInput, Image, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
 
+import {TextLabel} from '../index';
 import {SearchIcon} from '../../icons';
 import {themeEnum} from '../../../enums';
+import {colors} from '../../../styles';
 import styles from './styles';
-import CloseIcon from './img/close.png';
+
+import IMG_CLOSE_ICON from './img/close.png';
 
 export default class SearchInput extends Component {
   static propTypes = {
+    value: PropTypes.string,
     theme: PropTypes.string,
     placeholder: PropTypes.string,
     onChange: PropTypes.func,
-    styledInput: PropTypes.object,
-    inputViewStyles: PropTypes.object,
-    styledPlaceholder: PropTypes.object,
+    style: PropTypes.any,
   };
 
   static defaultProps = {
+    value: '',
     theme: themeEnum.light,
-    onChange: () => {},
-    styledInput: {},
-    inputViewStyles: {},
-    styledPlaceholder: {},
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      isFocused: false,
-      value: null
+      focused: false,
+      value: props.value,
     };
   }
 
-  onFocus = () => !this.state.isFocused && this.setState({isFocused: true});
+  onFocus = () => {
+    !this.state.focused && this.setState({focused: true});
+  };
 
   onBlur = () => {
-    const {isFocused, value} = this.state;
-
-    isFocused && this.setState({isFocused: false});
+    this.state.focused && this.setState({focused: false});
   };
 
   onChange = (value) => {
-    if (this.props.onChange) {
-      this.props.onChange(value);
-    }
-
     this.setState({value});
+    this.props.onChange && this.props.onChange(value);
   };
 
-  onClearInput = () => {
-    this.setState({
-      value: null,
-    });
+  onClear = () => {
+    this.setState({value: ''});
+    this.props.onChange && this.props.onChange('');
+  };
+
+  renderPlaceholder = (_styles) => {
+    const {theme} = this.props;
+    const {focused, value} = this.state;
+
+    if (!focused && !value) {
+      return (
+        <TextLabel style={_styles.placeholder} color={colors[theme].grayInput} size={13}>
+          {this.props.placeholder}
+        </TextLabel>
+      );
+    }
+  };
+
+  renderClearButton = (_styles) => {
+    if (this.state.focused) {
+      return (
+        <TouchableOpacity style={_styles.closeIcon} onPress={this.onClear}>
+          <Image source={IMG_CLOSE_ICON}/>
+        </TouchableOpacity>
+      );
+    }
   };
 
   render() {
-    const {isFocused, value} = this.state;
-    const {theme, styledInput, inputViewStyles, styledPlaceholder} = this.props;
+    const {theme, style} = this.props;
+    const {focused, value} = this.state;
     const _styles = styles(theme);
+    const colorIcon = focused ? colors[theme].grayBlue : colors[theme].grayIcon;
 
     return (
-      <View style={[_styles.searchInputView, inputViewStyles]}>
-        <View style={_styles.iconContainer}>
-          <SearchIcon/>
-          {isFocused && value && <TouchableOpacity onPress={this.onClearInput} style={_styles.closeIcon}>
-            <Image source={CloseIcon}/>
-          </TouchableOpacity>}
+      <View style={[_styles.container, style]}>
+        <View style={_styles.searchIcon}>
+          <SearchIcon color={colorIcon}/>
         </View>
-        {!isFocused && !value && <Text style={[_styles.styledText, styledPlaceholder]}>{this.props.placeholder}</Text>}
-        <View style={_styles.inputView}>
+        {this.renderClearButton(_styles)}
+        {this.renderPlaceholder(_styles)}
+        <View style={_styles.inputContainer}>
           <TextInput
-            style={[_styles.styledInput, styledInput]}
+            value={value}
+            style={_styles.input}
             underlineColorAndroid="transparent"
-            selectionColor="#62a3ff"
+            selectionColor={colors[theme].blue}
             onFocus={this.onFocus}
             onBlur={this.onBlur}
             onChangeText={this.onChange}

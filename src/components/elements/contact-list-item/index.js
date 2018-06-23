@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import {TouchableOpacity, Text, View, Image} from 'react-native';
 import Swipeout from 'react-native-swipeout';
 import PropTypes from 'prop-types';
@@ -14,7 +13,7 @@ import deleteBtn from '../../../images/icons/delete/delete.png';
 import writeBtn from '../../../images/icons/write/write.png';
 import callBtn from '../../../images/icons/call/call.png';
 
-class ContactListItem extends Component {
+export default class ContactListItem extends Component {
 
   static propTypes = {
     item: PropTypes.object.isRequired,
@@ -103,5 +102,3 @@ class ContactListItem extends Component {
     );
   }
 }
-
-export default connect()(ContactListItem);

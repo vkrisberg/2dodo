@@ -1,52 +1,48 @@
-import {colors} from "../../../styles";
 import {StyleSheet} from "react-native";
+import {colors, fonts, weights} from '../../../styles';
 
 export default (theme) => {
   return StyleSheet.create({
-    searchInputView: {
+    container: {
+      alignItems: 'center',
+      justifyContent: 'center',
       width: '100%',
       height: 30,
       backgroundColor: colors[theme].grayBg,
-      paddingVertical: 0,
-      paddingHorizontal: 10,
-      marginTop: 8,
-      borderRadius: 30,
-      alignItems: 'center',
-      justifyContent: 'center',
+      borderRadius: 15,
+      marginTop: 10,
     },
 
-    iconContainer: {
-      width: '100%',
-      alignSelf: 'flex-start',
-    },
-
-    styledText: {
+    placeholder: {
       position: 'absolute',
-      fontSize: 13,
-      color: colors[theme].grayInput,
     },
 
-    inputView: {
+    searchIcon: {
       position: 'absolute',
-      top: 0,
-      width: '100%',
-      paddingLeft: 33,
-      paddingRight: 35,
-      alignItems: 'center',
-    },
-
-    styledInput: {
-      height: 30,
-      width: '100%',
-      padding: 0,
-      fontSize: 13,
-      color: colors[theme].grayBlue,
+      left: 10,
     },
 
     closeIcon: {
       position: 'absolute',
-      right: 0,
-      zIndex: 2,
+      right: 10,
+      zIndex: 9,
+    },
+
+    inputContainer: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingHorizontal: 35,
+      width: '100%',
+    },
+
+    input: {
+      color: colors[theme].grayBlue,
+      fontFamily: fonts.main,
+      fontSize: 13,
+      fontWeight: weights.regular,
+      height: 30,
+      width: '100%',
     },
   });
 };

@@ -213,7 +213,7 @@ export default {
         dispatch({type: types.SEARCH_FAILURE, error: message.error});
       }
 
-      let payload = get(message, 'data', []);
+      let payload = get(message, 'data', []) || [];
       payload = payload.filter((item) => item !== username);
       payload = payload.map((item) => {
         return {
