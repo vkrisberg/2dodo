@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, {Component} from 'react';
 import {View, ScrollView} from 'react-native';
 import PropTypes from 'prop-types';
 
@@ -8,7 +8,7 @@ import RegistrationSettingsForm from './settings-form';
 import {phonePrefixEnum} from '../../../enums';
 import {sizes} from '../../../styles';
 
-export default class RegistrationForm extends PureComponent {
+export default class RegistrationForm extends Component {
 
   static propTypes = {
     context: PropTypes.object,

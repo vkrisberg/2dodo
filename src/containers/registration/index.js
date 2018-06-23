@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Alert, AsyncStorage} from 'react-native';
+import {StackActions, NavigationActions} from 'react-navigation';
 import ImagePicker from 'react-native-image-picker';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
@@ -11,6 +12,11 @@ import {routeEnum, dbEnum} from '../../enums';
 import {services} from '../../utils';
 import storageEnum from '../../enums/storage-enum';
 import CONFIG from '../../config';
+
+const goToMessagesAction = StackActions.reset({
+  index: 0,
+  actions: [NavigationActions.navigate({routeName: routeEnum.Messages})],
+});
 
 class Registration extends Component {
   static propTypes = {
@@ -121,9 +127,11 @@ class Registration extends Component {
 
   updateSettings = async (data) => {
     const {account} = this.props;
+    const {firstName, secondName} = data;
     const password = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
 
-    // TODO - save firstName, secondName to database
+
+    this.props.dispatch(accountActions.updateProfile({firstName, secondName}));
 
     this.wsConnect({
       deviceId: account.deviceId,
@@ -133,7 +141,7 @@ class Registration extends Component {
       password,
     });
 
-    this.props.navigation.replace(routeEnum.Messages);
+    this.props.navigation.dispatch(goToMessagesAction);
   };
 
   updateAvatar = () => {
@@ -149,8 +157,8 @@ class Registration extends Component {
     });
   };
 
-  changeTheme = (theme) => {
-    this.props.dispatch(accountActions.changeTheme(theme));
+  updateTheme = (theme) => {
+    this.props.dispatch(accountActions.updateTheme(theme));
   };
 
   render() {
@@ -164,7 +172,7 @@ class Registration extends Component {
                             onRegister={this.registration}
                             onSettings={this.updateSettings}
                             onAvatar={this.updateAvatar}
-                            onTheme={this.changeTheme}/>
+                            onTheme={this.updateTheme}/>
         </BackgroundLayout>
       </MainLayout>
     );
