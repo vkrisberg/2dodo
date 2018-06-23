@@ -1,4 +1,5 @@
 import {AsyncStorage} from 'react-native';
+import {merge} from 'lodash';
 
 import apiAccount from '../../api/account';
 import {services, wsMessage} from '../../utils';
@@ -25,12 +26,19 @@ export const types = {
   REGISTER_SUCCESS: Symbol('REGISTER_SUCCESS'),
   REGISTER_FAILURE: Symbol('REGISTER_FAILURE'),
 
+  PROFILE_UPDATE: Symbol('PROFILE_UPDATE'),
+  PROFILE_UPDATE_SUCCESS: Symbol('PROFILE_UPDATE_SUCCESS'),
+  PROFILE_UPDATE_FAILURE: Symbol('PROFILE_UPDATE_FAILURE'),
+
+  THEME_UPDATE: Symbol('THEME_UPDATE'),
+  THEME_UPDATE_SUCCESS: Symbol('THEME_UPDATE_SUCCESS'),
+  THEME_UPDATE_FAILURE: Symbol('THEME_UPDATE_FAILURE'),
+
   AVATAR_UPDATE: Symbol('AVATAR_UPDATE'),
   AVATAR_UPDATE_SUCCESS: Symbol('AVATAR_UPDATE_SUCCESS'),
   AVATAR_UPDATE_FAILURE: Symbol('AVATAR_UPDATE_FAILURE'),
 
   NET_UPDATE: Symbol('NET_UPDATE'),
-  THEME_CHANGE: Symbol('THEME_CHANGE'),
 };
 
 export default {
@@ -44,7 +52,7 @@ export default {
       dispatch({type: types.REMIND});
       try {
         //--- TODO - remove after test
-        // await AsyncStorage.clear();
+        await AsyncStorage.clear();
         // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
         // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
         // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
@@ -146,9 +154,59 @@ export default {
     return {type: types.NET_UPDATE, payload: connectionInfo};
   },
 
-  changeTheme: (theme) => {
-    // TODO - save to database
-    return {type: types.THEME_CHANGE, payload: theme};
+  updateProfile: (data) => {
+    return async (dispatch, getState) => {
+      dispatch({type: types.PROFILE_UPDATE});
+      try {
+        const realm = services.getRealm();
+        const {account} = getState();
+        const dateNow = new Date();
+
+        const realmAccount = realm.objectForPrimaryKey(dbEnum.Account, account.user.username);
+        if (!realmAccount) {
+          throw new Error('account not found in database');
+        }
+        await realm.write(() => {
+          realmAccount.user = merge({}, realmAccount.user, data);
+          realmAccount.dateUpdate = dateNow;
+        });
+        const payload = {...realmAccount.user};
+        // console.log('profile updated', payload);
+        // TODO - send settings to server
+        dispatch({type: types.PROFILE_UPDATE_SUCCESS, payload});
+        return realmAccount;
+      } catch (e) {
+        dispatch({type: types.PROFILE_UPDATE_FAILURE, error: e});
+        throw e;
+      }
+    };
+  },
+
+  updateTheme: (theme) => {
+    return async (dispatch, getState) => {
+      dispatch({type: types.THEME_UPDATE});
+      try {
+        const realm = services.getRealm();
+        const {account} = getState();
+        const dateNow = new Date();
+
+        const realmAccount = realm.objectForPrimaryKey(dbEnum.Account, account.user.username);
+        if (!realmAccount) {
+          throw new Error('account not found in database');
+        }
+        await realm.write(() => {
+          realmAccount.user.theme = theme;
+          realmAccount.dateUpdate = dateNow;
+        });
+        // console.log('theme updated', realmAccount.user);
+        // TODO - send settings to server
+        dispatch({type: types.THEME_UPDATE_SUCCESS, payload: theme});
+        return realmAccount;
+      } catch (e) {
+        dispatch({type: types.THEME_UPDATE_FAILURE, error: e});
+        throw e;
+      }
+    };
   },
 
   updateAvatar: (avatarBase64) => {
@@ -158,15 +216,17 @@ export default {
         const realm = services.getRealm();
         const {account} = getState();
         const dateNow = new Date();
+
         const realmAccount = realm.objectForPrimaryKey(dbEnum.Account, account.user.username);
-        if (realmAccount) {
-          await realm.write(() => {
-            realmAccount.user.avatar = avatarBase64;
-            realmAccount.dateUpdate = dateNow;
-          });
-          // console.log('avatar updated', realmAccount);
-          // TODO - send avatar to server
+        if (!realmAccount) {
+          throw new Error('account not found in database');
         }
+        await realm.write(() => {
+          realmAccount.user.avatar = avatarBase64;
+          realmAccount.dateUpdate = dateNow;
+        });
+        // console.log('avatar updated', realmAccount.user);
+        // TODO - send settings to server
         dispatch({type: types.AVATAR_UPDATE_SUCCESS, payload: avatarBase64});
         return realmAccount;
       } catch (e) {

@@ -6,6 +6,7 @@ import CONFIG from '../../config';
 const initState = {
   authorized: false,
 
+  // profile
   user: {
     username: '', // login@hostname
     nickname: '', // login
@@ -18,6 +19,7 @@ const initState = {
     theme: themeEnum.light, // [light, night]
   },
 
+  // secure keys
   keys: {
     publicKey: null,
     privateKey: null,
@@ -220,13 +222,27 @@ export default reducer(initState, {
     };
   },
 
-  [types.THEME_CHANGE]: (state, action) => {
+  [types.PROFILE_UPDATE]: (state, action) => {
     return {
       ...state,
-      user: {
-        ...state.user,
-        theme: action.payload,
-      },
+      updating: true,
+      error: null
+    };
+  },
+
+  [types.PROFILE_UPDATE_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      user: action.payload,
+      updating: false,
+    };
+  },
+
+  [types.PROFILE_UPDATE_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      updating: false,
+      error: action.error,
     };
   },
 
@@ -250,6 +266,33 @@ export default reducer(initState, {
   },
 
   [types.AVATAR_UPDATE_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      updating: false,
+      error: action.error,
+    };
+  },
+
+  [types.THEME_UPDATE]: (state, action) => {
+    return {
+      ...state,
+      updating: true,
+      error: null
+    };
+  },
+
+  [types.THEME_UPDATE_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      user: {
+        ...state.user,
+        theme: action.payload,
+      },
+      updating: false,
+    };
+  },
+
+  [types.THEME_UPDATE_FAILURE]: (state, action) => {
     return {
       ...state,
       updating: false,
