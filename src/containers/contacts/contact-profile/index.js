@@ -8,7 +8,7 @@ import {MainLayout, BackgroundLayout} from '../../../components/layouts';
 import {ArrowIcon} from '../../../components/icons';
 import {Button, Profile} from '../../../components/elements';
 import {ProfileForm} from '../../../components/forms';
-import styles from '../styles';
+import styles from './styles';
 
 const user = {
   name: 'Lisa Simpson',

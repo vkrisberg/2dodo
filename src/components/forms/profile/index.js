@@ -11,7 +11,7 @@ import styles from './styles';
 
 import removeIcon from '../../../images/icons/remove/remove.png';
 import addIcon from '../../../images/icons/add/add.png';
-import arrowIcon from '../../../images/icons/arrow/arrow.png';
+import arrowIcon from '../../../images/icons/arrow-right/arrow_right.png';
 
 class ProfileForm extends Component {
 

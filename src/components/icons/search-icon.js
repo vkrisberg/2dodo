@@ -3,10 +3,12 @@ import {Svg, Path} from 'react-native-svg';
 
 export default class SearchIcon extends PureComponent {
   render() {
+    const {color} = this.props;
+
     return(
       <Svg width="17" height="17">
         <Path
-          fill="rgb(165, 170, 180)"
+          fill={color || '#a4a7ae'}
           d="M16.370,15.764 C16.046,16.088 15.522,16.088 15.199,15.764
           L12.241,12.808 C11.017,13.777 9.490,14.379 7.808,14.379 C3.845,14.379 0.632,11.168 0.632,7.207
           C0.632,3.246 3.845,0.034 7.808,0.034 C11.771,0.034 14.984,3.246 14.984,7.207 C14.984,8.888 14.381,10.414

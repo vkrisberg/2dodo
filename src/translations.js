@@ -125,6 +125,10 @@ const translations = {
     'InviteUsers': 'Пригласить пользователей в группу',
     'Create': 'Создать',
     'PrivateChannel': 'Private channel',
+    // Contact
+    'online': 'в сети',
+    'offline': 'не в сети',
+    'InContacts': 'в контактах',
   },
   'en': {
     // Main menu
@@ -213,7 +217,7 @@ const translations = {
     'AddContact': 'Add contact',
     'AddContactPlaceholder': 'Search contacts for @nickname',
     'AddContactQrCode': 'Tap here to use QR-code scanner to add friend contact',
-    'NoContacts': 'Your have not contacts yet',
+    'NoContacts': 'Your have no contacts yet',
     'ContactProfile': 'Profile',
     'Search': 'Search',
     'SearchResults': 'Search results',
@@ -252,6 +256,10 @@ const translations = {
     'InviteUsers': 'Invite users in group',
     'Create': 'Create and invite',
     'PrivateChannel': 'Private channel',
+    // Contact
+    'online': 'online',
+    'offline': 'offline',
+    'InContacts': 'in contacts',
   },
 };
 

@@ -1,15 +1,16 @@
 import React, {Component} from 'react';
-import {TouchableWithoutFeedback, TouchableOpacity, KeyboardAvoidingView, Text, View, Image} from 'react-native';
+import {TouchableOpacity, Text, View, Image} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
-import Wrapper from '../../../components/layouts/wrapper';
+import {MainLayout, BackgroundLayout} from '../../../components/layouts';
 import {ContactList} from '../../../components/lists';
-import {SearchInput, ContactListItem} from '../../../components/elements';
-import {ArrowIcon} from '../../../components/icons';
+import {SearchInput, Navbar, ContactSearchItem, ButtonBack, TextLabel} from '../../../components/elements';
 import {contactActions} from '../../../store/actions';
-import styles from '../styles';
-import QrIcon from './img/qr.png';
+import {colors} from '../../../styles';
+import styles from './styles';
+
+import IMG_QR_ICON from './img/qr.png';
 
 class ContactAdd extends Component {
   static propTypes = {
@@ -29,9 +30,12 @@ class ContactAdd extends Component {
     this.searchTimerId = null;
   }
 
-  goBack = () => this.props.navigation.goBack();
+  componentWillUnmount() {
+    this.props.dispatch(contactActions.clearSearchList());
+  }
 
-  goQrScanner = () => {};
+  goQrScanner = () => {
+  };
 
   addContact = (data) => {
     if (!data.nickname || !data.username) {
@@ -39,7 +43,7 @@ class ContactAdd extends Component {
     }
 
     this.props.dispatch(contactActions.create(data)).then(() => {
-      this.goBack();
+      this.props.navigation.goBack();
     });
   };
 
@@ -61,8 +65,9 @@ class ContactAdd extends Component {
 
   renderContactItem = ({item}) => {
     return (
-      <ContactListItem
+      <ContactSearchItem
         item={item}
+        context={this.context}
         onPress={this.onContactPress(item)}
         onCheckboxPress={() => this.onCheckboxPress(item)}
       />
@@ -71,15 +76,19 @@ class ContactAdd extends Component {
 
   renderContacts = (_styles) => {
     const {contact} = this.props;
+    const {theme} = this.props.account.user;
 
     if (!contact.searchList || !contact.searchList.length) {
       return (
-        <TouchableWithoutFeedback onPress={this.goQrScanner}>
-          <View style={_styles.infoBlock}>
-            <Image source={QrIcon}/>
-            <Text style={_styles.infoText}>{this.context.t('AddContactQrCode')}</Text>
-          </View>
-        </TouchableWithoutFeedback>
+        <View style={_styles.emptyContainer}>
+          <TouchableOpacity onPress={this.goQrScanner}>
+            <View style={_styles.emptyWrapper}>
+              <Image source={IMG_QR_ICON}/>
+              <TextLabel style={_styles.text}
+                         color={colors[theme].blackText}>{this.context.t('AddContactQrCode')}</TextLabel>
+            </View>
+          </TouchableOpacity>
+        </View>
       );
     }
 
@@ -89,29 +98,19 @@ class ContactAdd extends Component {
   };
 
   render() {
-    const {context} = this;
+    const {account} = this.props;
     const {theme} = this.props.account.user;
     const _styles = styles(theme);
 
     return (
-      <Wrapper scrolled>
-        <View style={_styles.header}>
-          <View style={_styles.titleContainer}>
-            <TouchableOpacity onPress={this.goBack}>
-              <ArrowIcon/>
-            </TouchableOpacity>
-            <Text style={_styles.styledTitle}>
-              {context.t('AddContact')}
-            </Text>
-          </View>
-        </View>
-        <View style={_styles.body}>
-          <SearchInput placeholder={context.t('AddContactPlaceholder')} onChange={this.onSearchChange}/>
-          <View style={_styles.content}>
-            {this.renderContacts(_styles)}
-          </View>
-        </View>
-      </Wrapper>
+      <MainLayout netOffline={!account.net.connected}>
+        <BackgroundLayout theme={account.user.theme} paddingHorizontal={10}>
+          <Navbar renderTitle={this.context.t('AddContact')}
+                  renderLeft={<ButtonBack/>}/>
+          <SearchInput placeholder={this.context.t('AddContactPlaceholder')} onChange={this.onSearchChange}/>
+          {this.renderContacts(_styles)}
+        </BackgroundLayout>
+      </MainLayout>
     );
   }
 }

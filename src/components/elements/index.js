@@ -1,4 +1,5 @@
 export {default as Avatar} from './avatar';
+export {default as AvatarIcon} from './avatar-icon';
 export {default as Button} from './button';
 export {default as ButtonSkip} from './button-skip';
 export {default as ButtonTheme} from './button-theme';
@@ -20,6 +21,7 @@ export {default as NavbarChat} from './navbar-chat';
 export {default as NavbarFavorites} from './navbar-favorites';
 export {default as NavbarDots} from './navbar-dots';
 export {default as ContactListItem} from './contact-list-item';
+export {default as ContactSearchItem} from './contact-search-item';
 export {default as ChatListItem} from './chat-list-item';
 export {default as GroupListItem} from './group-list-item';
 export {default as MessageListItem} from './message-list-item';

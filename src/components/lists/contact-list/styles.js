@@ -1,54 +1,40 @@
-import {colors, fonts, weights, sizes} from "../../../styles";
 import {StyleSheet} from "react-native";
+import {colors, fonts, weights} from "../../../styles";
 
 export default (theme) => {
   return StyleSheet.create({
     container: {
       flex: 1,
       width: '100%',
-      marginTop: 14,
-      paddingHorizontal: 10,
     },
 
-    divider: {
+    emptyContainer: {
+      flex: 1,
       width: '100%',
-      height: 2,
-      backgroundColor: colors[theme].grayLight,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingBottom: 50,
     },
 
-    emptyContactsView: {
-      width: sizes.windowWidth,
-      position: 'absolute',
-      top: '45%',
-      justifyContent: 'center',
+    emptyWrapper: {
       alignItems: 'center',
+      justifyContent: 'center',
     },
 
     text: {
-      fontWeight: weights.medium,
-      fontSize: 15,
-      fontFamily: fonts.main,
-      color: colors[theme].grayDarker,
-      marginTop: 17,
+      marginTop: 15,
     },
 
-    caption: {
-      color: colors[theme].grayInput,
-      fontWeight: weights.medium,
-      fontSize: 13,
-      fontFamily: fonts.main,
-      marginVertical: 11,
+    searchResult: {
+      marginLeft: 10,
+      marginVertical: 10,
     },
 
-    sectionWrapper: {
-      width: '100%',
+    sectionContainer: {
       flex: 1,
+      width: '100%',
       marginTop: 12,
       flexDirection: 'row',
-    },
-
-    section: {
-      flex: 1,
     },
 
     sectionHeader: {
@@ -77,6 +63,12 @@ export default (theme) => {
       color: colors[theme].grayLightQuartz,
       marginBottom: 11,
       textAlign: 'right',
+    },
+
+    divider: {
+      width: '100%',
+      borderTopWidth: 1,
+      borderColor: colors[theme].grayLight,
     },
   });
 };

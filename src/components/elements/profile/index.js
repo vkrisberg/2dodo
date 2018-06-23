@@ -10,7 +10,7 @@ import {colors} from '../../../styles';
 
 import writeIcon from '../../../images/icons/write/write.png';
 import callIcon from '../../../images/icons/call/call_transparent.png';
-import arrowIcon from '../../../images/icons/arrow/arrow.png';
+import arrowIcon from '../../../images/icons/arrow-right/arrow_right.png';
 
 export default class Profile extends PureComponent {
 
