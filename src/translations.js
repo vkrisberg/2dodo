@@ -142,6 +142,9 @@ const translations = {
     'online': 'в сети',
     'offline': 'не в сети',
     'InContacts': 'в контактах',
+    'ProfileRequest': 'Profile request',
+    'ProfileRequestDescription': 'User <{username}> has added you to their contact list. Send your profile data?',
+    'Accept': 'Accept',
   },
   'en': {
     // Main menu
@@ -286,6 +289,9 @@ const translations = {
     'online': 'online',
     'offline': 'offline',
     'InContacts': 'in contacts',
+    'ProfileRequest': 'Profile request',
+    'ProfileRequestDescription': 'User <{username}> has added you to their contact list. Send your profile data?',
+    'Accept': 'Accept',
   },
 };
 

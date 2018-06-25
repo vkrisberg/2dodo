@@ -1,8 +1,8 @@
 import {get} from 'lodash';
 
-import {apiContact} from '../../api';
-import {services} from '../../utils';
-import {dbEnum} from '../../enums';
+import {apiContact, apiServer} from '../../api';
+import {services, wsMessage} from '../../utils';
+import {dbEnum, routeEnum} from '../../enums';
 
 export const types = {
   LOAD: Symbol('LOAD'),
@@ -29,6 +29,9 @@ export const types = {
   UPDATE_PUBKEY_SUCCESS: Symbol('UPDATE_PUBKEY_SUCCESS'),
   UPDATE_PUBKEY_FAILURE: Symbol('UPDATE_PUBKEY_FAILURE'),
 
+  RECEIVE_PUBKEY_SUCCESS: Symbol('RECEIVE_PUBKEY_SUCCESS'),
+  RECEIVE_PUBKEY_FAILURE: Symbol('RECEIVE_PUBKEY_FAILURE'),
+
   SEARCH: Symbol('SEARCH'),
   SEARCH_SUCCESS: Symbol('SEARCH_SUCCESS'),
   SEARCH_FAILURE: Symbol('SEARCH_FAILURE'),
@@ -36,6 +39,8 @@ export const types = {
   CLEAR_SEARCH_LIST: Symbol('CLEAR_SEARCH_LIST'),
 
   REQUEST_PROFILE: Symbol('REQUEST_PROFILE'),
+  RECEIVE_REQUEST_PROFILE: Symbol('RECEIVE_REQUEST_PROFILE'),
+
   SEND_PROFILE: Symbol('SEND_PROFILE'),
 
   RECEIVE_PROFILE_SUCCESS: Symbol('RECEIVE_PROFILE_SUCCESS'),
@@ -168,23 +173,55 @@ export default {
     };
   },
 
-  updatePublicKey: (data) => {
+  updatePublicKey: (username) => {
     return async dispatch => {
       dispatch({type: types.UPDATE_PUBKEY});
       try {
         const realm = services.getRealm();
+        const dateNow = new Date();
+        let contact = realm.objectForPrimaryKey(dbEnum.Contact, username);
+        if (!contact) {
+          const data = {
+            username,
+            nickname: wsMessage.getNickname(username),
+            dateCreate: dateNow,
+            dateUpdate: dateNow,
+          };
+          await realm.write(() => {
+            contact = realm.create(dbEnum.Contact, data, true);
+          });
+        }
+        const payload = {
+          ...contact,
+          fullName: contact.fullName,
+        };
+        // console.log('contact created', payload);
+        apiContact.getOpenKey([username]);
+        dispatch({type: types.UPDATE_PUBKEY_SUCCESS, payload});
+        return payload;
+      } catch (e) {
+        dispatch({type: types.UPDATE_PUBKEY_FAILURE, error: e});
+        throw e;
+      }
+    };
+  },
+
+  receivePublicKey: (message) => {
+    return async dispatch => {
+      try {
+        const realm = services.getRealm();
         const contacts = [];
 
-        if (data.error) {
-          throw new Error(data.error);
+        if (message.error) {
+          throw new Error(message.error);
         }
 
-        if (!data.data || !data.data.length) {
+        if (!message.data || !message.data.length) {
           throw new Error('no data');
         }
 
-        for (let i = 0; i < data.data.length; i++) {
-          const item = data.data[i];
+        for (let i = 0; i < message.data.length; i++) {
+          const item = message.data[i];
 
           // TODO - remove after fixing on server
           item.name += '@api.2do.do';
@@ -199,10 +236,10 @@ export default {
             contacts.push({...contact});
           }
         }
-        dispatch({type: types.UPDATE_PUBKEY_SUCCESS, payload: contacts});
+        dispatch({type: types.RECEIVE_PUBKEY_SUCCESS, payload: contacts});
         return contacts;
       } catch (e) {
-        dispatch({type: types.UPDATE_PUBKEY_FAILURE, error: e});
+        dispatch({type: types.RECEIVE_PUBKEY_FAILURE, error: e});
         // throw e;
       }
     };
@@ -266,17 +303,40 @@ export default {
     };
   },
 
-  sendProfile: ({contacts}) => {
+  receiveRequestProfile: (message) => {
+    return async dispatch => {
+      try {
+        // send delivery report
+        const msgEncryptTime = get(message, 'encrypt_time', null);
+        await apiServer.deliveryReport(msgEncryptTime);
+
+        const navigation = services.getNavigation();
+        const from = get(message, 'from', '');
+        const username = wsMessage.getUsername(from);
+        if (!username) {
+          return false;
+        }
+        dispatch({type: types.RECEIVE_REQUEST_PROFILE, payload: username});
+        navigation.navigate(routeEnum.RequestProfileModal);
+        return username;
+      } catch (e) {
+        console.log('receive request profile error', e);
+      }
+    };
+  },
+
+  sendProfile: (contacts) => {
     return async (dispatch, getState) => {
       dispatch({type: types.SEND_PROFILE, payload: contacts});
       try {
         const {account} = getState();
-        const {phones, firstName, secondName, bio, avatar} = account.user;
+        // TODO - send avatar when backend fixed
+        const {phones, firstName, secondName, bio} = account.user;
         if (!contacts || !contacts.length) {
           return false;
         }
         return await apiContact.sendProfile({
-          data: {phones, firstName, secondName, bio, avatar},
+          data: {phones, firstName, secondName, bio},
           contacts,
         });
       } catch (e) {

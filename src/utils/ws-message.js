@@ -5,7 +5,7 @@ import {set, isObject, isArray, isEmpty, assignIn, omitBy, isNil, map} from 'lod
 
 import {pgplib, aeslib, hashlib, datetime, codeclib} from './encrypt';
 
-const defaultChatStruct = {
+const defaultClientStruct = {
   type: 'client_message',
   action: null,
   data: null,
@@ -61,7 +61,7 @@ const getClientAesMessage = async ({action, data, members, timeDead, encryptTime
   const hashData = nextEncryptTime + encodedData + salt;
   const nextHashKey = hashlib.hexSha256(hashData);
 
-  let message = assignIn({}, defaultChatStruct, params);
+  let message = assignIn({}, defaultClientStruct, params);
   message = omitBy(message, isNil);
 
   return {
@@ -128,9 +128,9 @@ const getClientPgpMessage = async ({type = 'client_message', action, data, membe
  * @returns {Promise<{message: *}>}
  */
 const getClientMessage = async ({type = 'client_message', action, data, to}) => {
-  let params = {type, action, data, to};
+  let params = {type, action, data, to, encrypt_time: datetime.getRfcDate()};
 
-  let message = assignIn({}, defaultServiceStruct, params);
+  let message = assignIn({}, defaultClientStruct, params);
   message = omitBy(message, isNil);
 
   return {
@@ -268,8 +268,19 @@ const getShortName = (contacts = []) => {
 };
 
 const getUsername = (from) => {
+  if (!from) {
+    return '';
+  }
   const fromArr = from.split('@');
   return `${fromArr[0]}@${fromArr[1]}`;
+};
+
+const getNickname = (username) => {
+  if (!username) {
+    return '';
+  }
+  const usernameArr = username.split('@');
+  return usernameArr[0];
 };
 
 const getDeviceId = (from) => {
@@ -296,6 +307,7 @@ export default {
   generateUuid,
   getShortName,
   getUsername,
+  getNickname,
   getDeviceId,
   avatarToBase64,
 };
