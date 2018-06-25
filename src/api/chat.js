@@ -9,7 +9,7 @@ export default {
       ...CONFIG.message,
       id: data.id,
     };
-    const clientMessage = await wsMessage.getClientMessage({
+    const clientMessage = await wsMessage.getClientPgpMessage({
       action: actionEnum.createChat,
       members: contacts,
       data,
@@ -30,7 +30,7 @@ export default {
       id: data.id,
       chatId: data.chatId,
     };
-    const chatMessage = await wsMessage.getChatMessage({
+    const chatMessage = await wsMessage.getClientAesMessage({
       action: actionEnum.chatMessage,
       members,
       data,

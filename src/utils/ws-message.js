@@ -22,7 +22,7 @@ const defaultServiceStruct = {
 };
 
 /**
- * Get chat message structure
+ * Get AES encrypted client message structure
  * @param action
  * @param data
  * @param members
@@ -32,7 +32,7 @@ const defaultServiceStruct = {
  * @param meta
  * @returns {Promise<{message: *, hashKey: *}>}
  */
-const getChatMessage = async ({action, data, members, timeDead, encryptTime, hashKey, meta}) => {
+const getClientAesMessage = async ({action, data, members, timeDead, encryptTime, hashKey, meta}) => {
   if (isNil(data) || !isObject(data)) {
     throw new Error('\'data\' is not an object or empty');
   }
@@ -71,7 +71,7 @@ const getChatMessage = async ({action, data, members, timeDead, encryptTime, has
 };
 
 /**
- * Get encrypted client message structure
+ * Get RSA encrypted client message structure
  * @param type
  * @param action
  * @param data
@@ -79,7 +79,7 @@ const getChatMessage = async ({action, data, members, timeDead, encryptTime, has
  * @param meta
  * @returns {Promise<{}>}
  */
-const getClientMessage = async ({type = 'client_message', action, data, members, meta}) => {
+const getClientPgpMessage = async ({type = 'client_message', action, data, members, meta}) => {
   if (isNil(data) || !isObject(data)) {
     throw new Error('\'data\' is not an object or empty');
   }
@@ -116,6 +116,25 @@ const getClientMessage = async ({type = 'client_message', action, data, members,
   return {
     messages,
     hashKey: nextHashKey,
+  };
+};
+
+/**
+ * Get non-encrypted client message structure
+ * @param type
+ * @param action
+ * @param data
+ * @param to
+ * @returns {Promise<{message: *}>}
+ */
+const getClientMessage = async ({type = 'client_message', action, data, to}) => {
+  let params = {type, action, data, to};
+
+  let message = assignIn({}, defaultServiceStruct, params);
+  message = omitBy(message, isNil);
+
+  return {
+    message,
   };
 };
 
@@ -263,7 +282,8 @@ const avatarToBase64 = (avatar) => {
 };
 
 export default {
-  getChatMessage,
+  getClientAesMessage,
+  getClientPgpMessage,
   getClientMessage,
   getServerMessage,
   decryptChatMessage,
