@@ -10,29 +10,6 @@ import {Button, Profile} from '../../../components/elements';
 import {ProfileForm} from '../../../components/forms';
 import styles from './styles';
 
-const user = {
-  name: 'Lisa Simpson',
-  primaryKey: 'username',
-  properties: {
-    username: '@sipsonlisa',
-    nickname: 'string',
-    groups: ['Teamfootball'],
-    deviceId: 'string',
-    phones: ['+7 (940) 810-77-21'],
-    firstName: {type: 'Lisa', optional: true, indexed: true},
-    secondName: {type: 'Simpson', optional: true, indexed: true},
-    bio: 'I\'m Lisa and now I write a new single music on sax - brother say it dangerous to the ears!',
-    avatar: 'http://i.imgur.com/4LClmI1.png',
-    sound: 'Ufo Bell',
-    notification: {type: 'bool', default: true},
-    isBlocked: {type: 'bool', default: false},
-    settings: 'string?',
-    publicKey: 'string?',
-    dateCreate: 'date',
-    dateUpdate: '2018-06-15',
-  },
-};
-
 class ContactProfile extends Component {
   static propTypes = {
     account: PropTypes.object,
@@ -95,6 +72,7 @@ class ContactProfile extends Component {
     const {theme} = this.props.account.user;
     const {editMode} = this.state;
     const _styles = styles(theme);
+    let user = this.props.navigation.getParam('data');
 
     return (
       <MainLayout netOffline={!account.net.connected}>

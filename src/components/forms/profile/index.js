@@ -68,14 +68,14 @@ class ProfileForm extends Component {
   render() {
     const {theme, context, user, onAvatar, onRemoveBtn, onAddBtn, onGroups, onNotifications, onSound, onDelete} = this.props;
     const _styles = styles(theme);
-    const namesArr = user.name.split(' ');
+    const namesArr = user.username.split(' ');
 
     return (
       <ScrollView style={_styles.wrapper}>
         <View style={_styles.container}>
           <KeyboardAvoidingView behavior="position" enabled>
             <View style={_styles.header}>
-              <Avatar source={user.properties.avatar} onPress={onAvatar} style={_styles.avatar}/>
+              <Avatar source={user.avatar} onPress={onAvatar} style={_styles.avatar}/>
               <View style={_styles.headerRight}>
                 <Field
                   name="firstName"
@@ -85,35 +85,35 @@ class ProfileForm extends Component {
                   keyboardType={'text'}
                   autoCapitalize={'none'}
                   autoCorrect={false}/>
-                <Field
+                {namesArr[1] && <Field
                   name="secondName"
                   component={this.renderInput}
                   input={namesArr[1] && {value: namesArr[1]}}
                   placeholder={context.t('Secondname')}
                   keyboardType={'text'}
                   autoCapitalize={'none'}
-                  autoCorrect={false}/>
+                  autoCorrect={false}/>}
               </View>
             </View>
             <View style={_styles.phones}>
-              {
-                user.properties.phones.length && user.properties.phones.map( (phone, i) =>
-                  <View style={_styles.phoneItem}>
-                    <TouchableOpacity onPress={onRemoveBtn}>
-                      <Image source={removeIcon}/>
-                    </TouchableOpacity>
-                    <Text style={_styles.phoneText}>{context.t('Phone')}</Text>
-                    <Field
-                      name={`phone-${i}`}
-                      component={this.renderInput}
-                      input={{value: phone}}
-                      placeholder={context.t('Phone')}
-                      keyboardType={'numeric'}
-                      autoCapitalize={'none'}
-                      autoCorrect={false}/>
-                  </View>
-                )
-              }
+              {/*{*/}
+                {/*user.phones.length && user.phones.map( (phone, i) =>*/}
+                  {/*<View style={_styles.phoneItem}>*/}
+                    {/*<TouchableOpacity onPress={onRemoveBtn}>*/}
+                      {/*<Image source={removeIcon}/>*/}
+                    {/*</TouchableOpacity>*/}
+                    {/*<Text style={_styles.phoneText}>{context.t('Phone')}</Text>*/}
+                    {/*<Field*/}
+                      {/*name={`phone-${i}`}*/}
+                      {/*component={this.renderInput}*/}
+                      {/*input={{value: phone}}*/}
+                      {/*placeholder={context.t('Phone')}*/}
+                      {/*keyboardType={'numeric'}*/}
+                      {/*autoCapitalize={'none'}*/}
+                      {/*autoCorrect={false}/>*/}
+                  {/*</View>*/}
+                {/*)*/}
+              {/*}*/}
               <View style={_styles.phoneItem}>
                 <TouchableOpacity onPress={onAddBtn}>
                   <Image source={addIcon}/>
@@ -136,7 +136,7 @@ class ProfileForm extends Component {
                 {context.t('Groups')}
               </Text>
               <View style={_styles.actionItemRight}>
-                <Text style={[_styles.defaultText, _styles.actionSubtext]}>{user.properties.groups[0] || context.t('Groups')}</Text>
+                <Text style={[_styles.defaultText, _styles.actionSubtext]}>{user.groups[0] || context.t('Groups')}</Text>
                 <Image source={arrowIcon}/>
               </View>
             </TouchableOpacity>
@@ -154,7 +154,7 @@ class ProfileForm extends Component {
                 {context.t('Sound')}
               </Text>
               <View style={_styles.actionItemRight}>
-                <Text style={[_styles.defaultText, _styles.actionSubtext]}>{user.properties.sound || context.t('Sound')}</Text>
+                <Text style={[_styles.defaultText, _styles.actionSubtext]}>{user.sound || context.t('Sound')}</Text>
                 <Image source={arrowIcon}/>
               </View>
             </TouchableOpacity>
