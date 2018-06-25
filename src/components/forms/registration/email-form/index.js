@@ -14,12 +14,14 @@ class RegistrationEmailForm extends Component {
   static propTypes = {
     theme: PropTypes.string,
     context: PropTypes.object,
+    disabled: PropTypes.bool,
     onSubmit: PropTypes.func,
     handleSubmit: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     theme: themeEnum.light,
+    disabled: false,
   };
 
   renderField = (props) => {
@@ -58,7 +60,7 @@ class RegistrationEmailForm extends Component {
   };
 
   render() {
-    const {theme, context} = this.props;
+    const {theme, context, disabled} = this.props;
     const _styles = styles(theme);
 
     return (
@@ -99,11 +101,14 @@ class RegistrationEmailForm extends Component {
             <Checkbox input={{value: true}} disabled={true}/>
           </View>
           <View style={_styles.buttonContainer}>
-            <Button onPress={this.props.handleSubmit}>{context.t('Done')}</Button>
+            <Button disabled={disabled} onPress={this.props.handleSubmit}>{context.t('Done')}</Button>
           </View>
         </KeyboardAvoidingView>
         <View style={_styles.skipContainer}>
-          <ButtonSkip onSkip={this.props.handleSubmit} color={colors[theme].grayDarker} marginBottom={15}>
+          <ButtonSkip disabled={disabled}
+                      onSkip={this.props.handleSubmit}
+                      color={colors[theme].grayDarker}
+                      marginBottom={15}>
             {context.t('SkipThisStep')}
           </ButtonSkip>
         </View>

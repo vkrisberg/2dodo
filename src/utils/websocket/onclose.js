@@ -1,20 +1,18 @@
 import {AsyncStorage} from 'react-native';
-import routeEnum from '../../enums/route-enum';
-import storageEnum from '../../enums/storage-enum';
-import CONFIG from '../../config';
-import {types} from '../../store/account/actions';
+import {accountActions} from '../../store/actions';
 
 export default function ({event, store, navigation}) {
   if (event.wasClean) {
-    console.log('websocket closed clear');
-    AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
-    AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
-    AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
-    store.dispatch({type: types.LOGOUT_SUCCESS});
-    navigation.replace(routeEnum.Login);
+    console.log('websocket closed clean');
+    store.dispatch(accountActions.logoutResult({clean: true, error: null}));
   } else {
-    store.dispatch({type: types.LOGIN_FAILURE});
-    console.log('websocket failed');
+    const {code, reason} = event;
+    console.log('websocket closed failed');
+    console.log('code: ' + code + ' reason: ' + reason);
+    if (code === 1001) {
+      store.dispatch(accountActions.logoutResult({clean: true, error: null}));
+    } else if (code && reason) {
+      store.dispatch(accountActions.connectResult({connected: false, error: {code, reason}}));
+    }
   }
-  console.log('code: ' + event.code + ' reason: ' + event.reason);
 };

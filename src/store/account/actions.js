@@ -1,18 +1,21 @@
 import {AsyncStorage} from 'react-native';
+import {NavigationActions, StackActions} from 'react-navigation';
 import {merge} from 'lodash';
 
 import apiAccount from '../../api/account';
-import {services, wsMessage} from '../../utils';
+import {services} from '../../utils';
 import {pgplib, hashlib} from '../../utils/encrypt';
 import {storageEnum, dbEnum} from '../../enums';
 import CONFIG from '../../config';
+import routeEnum from '../../enums/route-enum';
 
 export const types = {
   UPDATE: Symbol('UPDATE'),
 
-  LOGIN: Symbol('LOGIN'),
-  LOGIN_SUCCESS: Symbol('LOGIN_SUCCESS'),
-  LOGIN_FAILURE: Symbol('LOGIN_FAILURE'),
+  CONNECT: Symbol('CONNECT'),
+  CONNECT_SUCCESS: Symbol('CONNECT_SUCCESS'),
+  CONNECT_FAILURE: Symbol('CONNECT_FAILURE'),
+  RECONNECT: Symbol('RECONNECT'),
 
   LOGOUT: Symbol('LOGOUT'),
   LOGOUT_SUCCESS: Symbol('LOGOUT_SUCCESS'),
@@ -40,6 +43,16 @@ export const types = {
 
   NET_UPDATE: Symbol('NET_UPDATE'),
 };
+
+const goToMessagesAction = StackActions.reset({
+  index: 0,
+  actions: [NavigationActions.navigate({routeName: routeEnum.Messages})],
+});
+
+const goToLoginAction = StackActions.reset({
+  index: 0,
+  actions: [NavigationActions.navigate({routeName: routeEnum.Login})],
+});
 
 export default {
 
@@ -94,14 +107,65 @@ export default {
     };
   },
 
-  login: ({deviceId, hostname, user, keys, password}) => {
+  connect: ({deviceId, hostname, user, keys, password}) => {
     return async dispatch => {
       try {
-        dispatch({type: types.LOGIN, payload: {deviceId, hostname, user, keys, password}});
-        // dispatch({type: types.LOGIN_SUCCESS});
+        AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.username}`, user.username);
+        AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.password}`, password);
+        services.websocketConnect({
+          deviceId,
+          hostname,
+          username: user.username,
+          password,
+          hashKey: keys.hashKey,
+        });
+        dispatch({type: types.CONNECT, payload: {deviceId, hostname, user, keys, password}});
       } catch (e) {
-        dispatch({type: types.LOGIN_FAILURE, error: e});
+        dispatch({type: types.CONNECT_FAILURE, error: e});
         throw e;
+      }
+    };
+  },
+
+  connectResult: ({connected, error}) => {
+    return async (dispatch, getState) => {
+      const {account} = getState();
+      const navigation = services.getNavigation();
+      try {
+        // login failed
+        if (!connected && account.connecting) {
+          throw new Error('connect failed: login error');
+        }
+        // try reconnect when disconnected
+        if (!connected && !account.connecting) {
+          if (account.connectionAttempts < 3) {
+            console.log('reconnect...', account.connectionAttempts);
+            const {deviceId, hostname, password, user, keys} = account;
+            services.websocketConnect({
+              deviceId,
+              hostname,
+              username: user.username,
+              password,
+              hashKey: keys.hashKey,
+            });
+            dispatch({type: types.RECONNECT});
+            return;
+          }
+          // connection attempts ended
+          throw new Error(error);
+        }
+        AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`, 'true');
+        navigation.dispatch(goToMessagesAction);
+        dispatch({type: types.CONNECT_SUCCESS});
+      } catch (e) {
+        AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
+        AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
+        AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
+        if (!account.connecting) {
+          navigation.dispatch(goToLoginAction);
+        }
+        dispatch({type: types.CONNECT_FAILURE, error: e});
+        // throw e;
       }
     };
   },
@@ -110,10 +174,30 @@ export default {
     return async dispatch => {
       dispatch({type: types.LOGOUT});
       try {
-        // dispatch({type: types.LOGOUT_SUCCESS});
+        const websocket = services.getWebsocket();
+        websocket.close();
       } catch (e) {
         dispatch({type: types.LOGOUT_FAILURE, error: e});
         throw e;
+      }
+    };
+  },
+
+  logoutResult: ({clean, error}) => {
+    return async dispatch => {
+      try {
+        const navigation = services.getNavigation();
+        if (!clean) {
+          throw new Error(error);
+        }
+        AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
+        AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
+        AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
+        navigation.dispatch(goToLoginAction);
+        dispatch({type: types.LOGOUT_SUCCESS});
+      } catch (e) {
+        dispatch({type: types.LOGOUT_FAILURE, error: e});
+        // throw e;
       }
     };
   },
