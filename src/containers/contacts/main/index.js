@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, Text, View} from 'react-native';
+import {TouchableOpacity, Text, View, Modal} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -150,8 +150,8 @@ class Contacts extends Component {
       <MainLayout netOffline={!account.net.connected}>
         <BackgroundLayout theme={account.user.theme} paddingHorizontal={10}>
           <Navbar renderTitle={context.t('Contacts')}
-            renderLeft={<NavbarDots/>}
-            renderRight={this.renderNavbarButton()}/>
+                  renderLeft={<NavbarDots/>}
+                  renderRight={this.renderNavbarButton()}/>
           <SearchInput placeholder="Search contacts" onChange={this.onSearchChange}/>
           <ContactList context={context} items={contact.sectionList} renderItem={this.renderContactItem} sections/>
         </BackgroundLayout>

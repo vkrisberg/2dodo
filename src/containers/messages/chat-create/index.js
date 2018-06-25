@@ -94,7 +94,7 @@ class ChatCreate extends Component {
         <BackgroundLayout theme={account.user.theme} paddingHorizontal={10}>
           <Navbar renderTitle={this.context.t('CreateChat')}
                   renderLeft={<ButtonBack/>}/>
-          <SearchInput placeholder="Search in chats" onChange={this.searchChats}/>
+          <SearchInput placeholder="Search in chats" onChange={this.onSearchChange}/>
           <ContactList context={this.context}
                        items={contact.sectionList}
                        sections

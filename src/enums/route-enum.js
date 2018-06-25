@@ -12,4 +12,6 @@ export default {
   Preload: 'Preload',
   Registration: 'Registration',
   Settings: 'Settings',
+  // modals
+  RequestProfileModal: 'RequestProfileModal',
 };

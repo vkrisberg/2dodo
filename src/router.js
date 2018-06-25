@@ -1,9 +1,6 @@
-import React, {Component} from 'react';
 import {createStackNavigator} from 'react-navigation';
-import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
 
-import Tabs from './tab-navigator';
+import TabNavigator from './tab-navigator';
 import {
   Login,
   Registration,
@@ -13,8 +10,9 @@ import {
 } from './containers';
 import {ContactAdd, ContactProfile} from './containers/contacts';
 import {ChatCreate, ChatMessage} from './containers/messages';
-import {SettingsProfile} from './containers/settings';
 import {GroupAdd} from './containers/groups';
+import {SettingsProfile} from './containers/settings';
+import {RequestProfileModal} from './containers/modals';
 
 export const MainStack = createStackNavigator({
   Login: {
@@ -27,7 +25,7 @@ export const MainStack = createStackNavigator({
     screen: ForgotPassword,
   },
   Messages: {
-    screen: Tabs,
+    screen: TabNavigator,
   },
   Events: {
     screen: Events,
@@ -57,35 +55,34 @@ export const MainStack = createStackNavigator({
   headerMode: 'none',
   initialRouteName: 'Preload',
   gesturesEnabled: false,
-  drawerLockMode: 'locked-closed',
   navigationOptions: {
-    header: false,
+    header: null,
     headerBackTitle: null
-  }
+  },
 });
 
-class AppWithNavigationState extends Component {
-  static propTypes = {
-    dispatch: PropTypes.func.isRequired,
-    nav: PropTypes.object.isRequired,
-  };
-
-  render() {
-    const {dispatch, nav} = this.props;
-
-    return (
-      <MainStack
-        // navigation={{
-        //   dispatch,
-        //   state: nav,
-        //   addListener,
-        // }}
-      />
-    );
-  }
-}
-
-export default connect(state => ({
-  nav: state.nav,
-}))(AppWithNavigationState);
-
+export const RootStack = createStackNavigator({
+  Main: {
+    screen: MainStack,
+  },
+  RequestProfileModal: {
+    screen: RequestProfileModal,
+  },
+}, {
+  mode: 'modal',
+  headerMode: 'none',
+  initialRouteName: 'Main',
+  gesturesEnabled: false,
+  navigationOptions: {
+    header: null,
+    headerBackTitle: null
+  },
+  cardStyle: {
+    backgroundColor: 'transparent',
+    opacity: 1,
+  },
+  transitionConfig: () => ({
+    transitionSpec: {duration: 0},
+    screenInterpolator: () => {},
+  }),
+});

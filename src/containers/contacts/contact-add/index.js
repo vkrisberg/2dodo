@@ -42,7 +42,8 @@ class ContactAdd extends Component {
       return;
     }
 
-    this.props.dispatch(contactActions.create(data)).then(() => {
+    this.props.dispatch(contactActions.create(data)).then((result) => {
+      this.props.dispatch(contactActions.requestProfile(result.username));
       this.props.navigation.goBack();
     });
   };
