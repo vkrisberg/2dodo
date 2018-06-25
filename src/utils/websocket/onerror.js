@@ -1,12 +1,7 @@
-import routeEnum from '../../enums/route-enum';
 import {AsyncStorage} from "react-native";
-import storageEnum from '../../enums/storage-enum';
-import CONFIG from '../../config';
+import {accountActions} from '../../store/actions';
 
 export default async function ({error, store, navigation}) {
   console.log('websocket error');
-  AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
-  AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
-  AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
-  navigation.navigate(routeEnum.Login);
+  store.dispatch(accountActions.connectResult({connected: false, error: error}));
 };

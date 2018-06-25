@@ -15,7 +15,7 @@ const translations = {
     'Enter': 'Enter',
     'LoginEmptyError': 'Заполните поля логин и пароль',
     'LoginEnterError': 'Неверный логин или пароль',
-    'LoginAuthError': 'Ошибка при авторизации на сервере',
+    'LoginAuthError': 'Ошибка при авторизации',
     'ForBestSecurity': 'Для лучшей безопасности',
     'CreateNewKey': 'Создать новый ключ',
     'ForgotPassword': 'Восстановление пароля',
@@ -46,6 +46,9 @@ const translations = {
     'EditUser': 'Изменение профиля',
     'GoToApp': 'В приложение',
     'SkipThisStep': 'Пропустить этот шаг',
+    'RegistrationProgress': 'Регистрация в процессе',
+    'RegistrationSuccess': 'Регистрация прошла успешно',
+    'RegistrationFailed': 'Ошибка регистрации',
     // Settings
     'SetYourPhoto': 'Выберите ваш аватар',
     'DayLight': 'Дневная',
@@ -71,6 +74,7 @@ const translations = {
     'HaveVideo': 'Отправил(а) вам видео...',
     'HaveImage': 'Отправил(а) вам изображение...',
     'HaveCall': 'Пропущенный звонок',
+    'Logout': 'Выход',
     // Buttons
     'Delete': 'Удалить',
     'DeleteContact': 'Удалить контакт',
@@ -146,7 +150,7 @@ const translations = {
     'Enter': 'Enter',
     'LoginEmptyError': 'Fill login and password fields',
     'LoginEnterError': 'Wrong username or password',
-    'LoginAuthError': 'Authorization server error',
+    'LoginAuthError': 'Authorization failed',
     'ForBestSecurity': 'For best security',
     'CreateNewKey': 'Create a new key',
     'ForgotPassword': 'Forgot password',
@@ -177,6 +181,9 @@ const translations = {
     'EditUser': 'Edit user',
     'GoToApp': 'Go to app',
     'SkipThisStep': 'Skip this step',
+    'RegistrationProgress': 'Registration in progress',
+    'RegistrationSuccess': 'Registration success',
+    'RegistrationFailed': 'Registration failed',
     // Settings
     'SetYourPhoto': 'Set your photo',
     'DayLight': 'Day light',
@@ -202,6 +209,7 @@ const translations = {
     'HaveVideo': 'Send your a video...',
     'HaveImage': 'Send your an image...',
     'HaveCall': 'Missed call',
+    'Logout': 'Logout',
     // Buttons
     'Delete': 'Delete',
     'DeleteContact': 'Delete contact',

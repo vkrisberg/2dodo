@@ -21,8 +21,7 @@ class Preload extends Component {
 
   constructor(props) {
     super(props);
-    const {navigation} = props;
-    services.websocketInit({navigation});
+    services.navigationInit(props.navigation);
   }
 
   componentDidMount() {
@@ -36,13 +35,9 @@ class Preload extends Component {
         .then((data) => {
           const {deviceId, hostname, user, keys} = this.props.account;
           const password = data.password;
-          dispatch(accountActions.login({deviceId, hostname, user, keys, password}))
-            .then(() => {
-              this.wsConnect({deviceId, hostname, user, keys, password});
-            })
-            .catch((error) => {
-              console.log('login error', error);
-            });
+          dispatch(accountActions.connect({deviceId, hostname, user, keys, password})).catch((error) => {
+            console.log('login error', error);
+          });
         })
         .catch(async () => {
           const skipEvents = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.skipEvents}`);
@@ -54,16 +49,6 @@ class Preload extends Component {
         });
     }
   }
-
-  wsConnect = ({deviceId, hostname, user, keys, password}) => {
-    services.websocketConnect({
-      deviceId,
-      hostname,
-      username: user.username,
-      password,
-      hashKey: keys.hashKey,
-    });
-  };
 
   render() {
     return (

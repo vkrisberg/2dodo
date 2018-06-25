@@ -17,6 +17,7 @@ class LoginForm extends Component {
   static propTypes = {
     context: PropTypes.object,
     errors: PropTypes.object,
+    disabled: PropTypes.bool,
     onSubmit: PropTypes.func,
     handleSubmit: PropTypes.func.isRequired,
   };
@@ -26,7 +27,7 @@ class LoginForm extends Component {
   }
 
   render() {
-    const {handleSubmit, context, errors} = this.props;
+    const {handleSubmit, context, errors, disabled} = this.props;
 
     return (
       <Container>
@@ -71,6 +72,7 @@ class LoginForm extends Component {
         <Button color={colors.light.loginButtonText}
                 borderColor={colors.light.white}
                 bgColor={colors.light.white}
+                disabled={disabled}
                 onPress={handleSubmit}>{context.t('Enter')}</Button>
       </Container>
     );

@@ -14,15 +14,15 @@ class RegistrationLoginForm extends Component {
   static propTypes = {
     theme: PropTypes.string,
     context: PropTypes.object,
-    errors: PropTypes.any,
     defaultServer: PropTypes.string,
+    disabled: PropTypes.bool,
     onSubmit: PropTypes.func,
     handleSubmit: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     theme: themeEnum.light,
-    errors: [],
+    disabled: false,
   };
 
   state = {
@@ -93,7 +93,7 @@ class RegistrationLoginForm extends Component {
   };
 
   render() {
-    const {theme, context} = this.props;
+    const {theme, context, disabled} = this.props;
     const _styles = styles(theme);
 
     return (
@@ -136,7 +136,7 @@ class RegistrationLoginForm extends Component {
           </View>
           {this.renderServerInput(_styles)}
           <View style={_styles.buttonContainer}>
-            <Button onPress={this.onSubmit}>{context.t('Continue')}</Button>
+            <Button disabled={disabled} onPress={this.onSubmit}>{context.t('Continue')}</Button>
           </View>
         </KeyboardAvoidingView>
       </View>

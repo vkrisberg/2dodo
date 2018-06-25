@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Alert, AsyncStorage} from 'react-native';
-import {StackActions, NavigationActions} from 'react-navigation';
 import ImagePicker from 'react-native-image-picker';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
@@ -8,15 +7,10 @@ import PropTypes from 'prop-types';
 import {MainLayout, BackgroundLayout} from '../../components/layouts';
 import {RegistrationForm} from '../../components/forms';
 import {accountActions} from '../../store/actions';
-import {routeEnum, dbEnum} from '../../enums';
+import {dbEnum} from '../../enums';
 import {services} from '../../utils';
 import storageEnum from '../../enums/storage-enum';
 import CONFIG from '../../config';
-
-const goToMessagesAction = StackActions.reset({
-  index: 0,
-  actions: [NavigationActions.navigate({routeName: routeEnum.Messages})],
-});
 
 class Registration extends Component {
   static propTypes = {
@@ -75,21 +69,12 @@ class Registration extends Component {
     });
   };
 
-  wsConnect = ({deviceId, hostname, user, keys, password}) => {
-    services.websocketConnect({
-      deviceId,
-      hostname,
-      username: user.username,
-      password,
-      hashKey: keys.hashKey,
-    });
-  };
-
   registration = async (data) => {
+    const {context} = this;
     const {account, dispatch} = this.props;
 
     if (account.loading) {
-      Alert.alert('Account is loading');
+      Alert.alert(context.t('RegistrationProgress'));
       return false;
     }
 
@@ -107,7 +92,7 @@ class Registration extends Component {
 
     return await dispatch(accountActions.register(sendData))
       .then((data) => {
-        Alert.alert('Registration success');
+        Alert.alert(context.t('RegistrationSuccess'));
         console.log('registration success', this.props.account);
         AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.username}`, data.username);
         AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.password}`, data.password);
@@ -118,30 +103,31 @@ class Registration extends Component {
       .catch((error) => {
         Alert.alert(error.response.data.message);
         console.log('registration error', error.response.status, error.response.data);
-        if (error.response.status === 400) {
-          // this.props.navigation.navigate(routeEnum.Login);
-        }
         return false;
       });
   };
 
   updateSettings = async (data) => {
+    const {context} = this;
     const {account} = this.props;
     const {firstName, secondName} = data;
     const password = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
 
 
-    this.props.dispatch(accountActions.updateProfile({firstName, secondName}));
-
-    this.wsConnect({
-      deviceId: account.deviceId,
-      hostname: account.hostname,
-      user: account.user,
-      keys: account.keys,
-      password,
+    this.props.dispatch(accountActions.updateProfile({firstName, secondName})).then(() => {
+      this.props.dispatch(accountActions.connect({
+        deviceId: account.deviceId,
+        hostname: account.hostname,
+        user: account.user,
+        keys: account.keys,
+        password,
+      })).catch((error) => {
+        console.log('login error', error);
+        Alert.alert(context.t('LoginAuthError'));
+      });
+    }, (error) => {
+      Alert.alert(error.toString());
     });
-
-    this.props.navigation.dispatch(goToMessagesAction);
   };
 
   updateAvatar = () => {

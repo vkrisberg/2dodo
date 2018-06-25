@@ -10,11 +10,12 @@ export default class ButtonSkip extends PureComponent {
       onSkip,
       children,
       color,
-      marginBottom
+      marginBottom,
+      disabled,
     } = this.props;
 
     return (
-      <TouchableWithoutFeedback onPress={onSkip}>
+      <TouchableWithoutFeedback disabled={disabled} onPress={onSkip}>
         <SkipWrapper marginBottom={marginBottom}>
           <StyledSkip color={color}>
             {children}

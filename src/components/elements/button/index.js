@@ -44,6 +44,7 @@ export default class Button extends PureComponent {
     let {theme, color, bgColor, disabled, borderColor, style} = this.props;
     if (disabled) {
       color = colors[theme].disableButtonText;
+      borderColor = colors[theme].disableButtonText;
       bgColor = colors[theme].disableButtonBg;
     }
     const _styles = styles({theme, color, bgColor, borderColor});
