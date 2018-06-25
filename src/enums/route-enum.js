@@ -1,6 +1,7 @@
 export default {
   Contacts: 'Contacts',
   ContactAdd: 'ContactAdd',
+  ContactProfile: 'ContactProfile',
   Events: 'Events',
   Favorites: 'Favorites',
   ForgotPassword: 'ForgotPassword',
