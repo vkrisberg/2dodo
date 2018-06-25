@@ -118,7 +118,7 @@ class Contacts extends Component {
   };
 
   onContactPress = (contact) => {
-
+    this.props.navigation.navigate(routeEnum.ContactProfile, {data: contact});
   };
 
   onCheckboxPress = (contact) => {
@@ -135,8 +135,8 @@ class Contacts extends Component {
     return (
       <ContactListItem
         item={item}
-        checked={this.isContactChosen(item)}
-        onPress={this.onContactPress(item)}
+        checked={() => this.isContactChosen(item)}
+        onPress={() => this.onContactPress(item)}
         onCheckboxPress={() => this.onCheckboxPress(item)}
       />
     );
