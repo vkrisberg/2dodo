@@ -52,7 +52,7 @@ export default {
       dispatch({type: types.REMIND});
       try {
         //--- TODO - remove after test
-        await AsyncStorage.clear();
+        // await AsyncStorage.clear();
         // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
         // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
         // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
