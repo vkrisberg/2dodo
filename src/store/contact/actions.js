@@ -34,6 +34,12 @@ export const types = {
   SEARCH_FAILURE: Symbol('SEARCH_FAILURE'),
 
   CLEAR_SEARCH_LIST: Symbol('CLEAR_SEARCH_LIST'),
+
+  REQUEST_PROFILE: Symbol('REQUEST_PROFILE'),
+  SEND_PROFILE: Symbol('SEND_PROFILE'),
+
+  RECEIVE_PROFILE_SUCCESS: Symbol('RECEIVE_PROFILE_SUCCESS'),
+  RECEIVE_PROFILE_FAILURE: Symbol('RECEIVE_PROFILE_FAILURE'),
 };
 
 export default {
@@ -244,5 +250,43 @@ export default {
 
   clearSearchList: () => {
     return {type: types.CLEAR_SEARCH_LIST};
+  },
+
+  requestProfile: (username) => {
+    return async dispatch => {
+      dispatch({type: types.REQUEST_PROFILE, payload: username});
+      try {
+        if (!username) {
+          return false;
+        }
+        return await apiContact.requestProfile([username]);
+      } catch (e) {
+        console.log('request profile error', e);
+      }
+    };
+  },
+
+  sendProfile: ({contacts}) => {
+    return async (dispatch, getState) => {
+      dispatch({type: types.SEND_PROFILE, payload: contacts});
+      try {
+        const {account} = getState();
+        const {phones, firstName, secondName, bio, avatar} = account.user;
+        if (!contacts || !contacts.length) {
+          return false;
+        }
+        return await apiContact.sendProfile({
+          data: {phones, firstName, secondName, bio, avatar},
+          contacts,
+        });
+      } catch (e) {
+        console.log('send profile error', e);
+      }
+    };
+  },
+
+  receiveProfile: (message) => {
+    return async dispatch => {
+    };
   },
 };

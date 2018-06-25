@@ -1,4 +1,7 @@
 export default {
+  // contact actions
+  requestProfile: 'request_profile',
+  sendProfile: 'send_profile',
   // chat actions
   createChat: 'create_chat',
   chatMessage: 'chat_message', // send

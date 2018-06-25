@@ -23,6 +23,8 @@ const initState = {
     isOnline: false,
     inContacts: false, // for searchList
   },
+  requestProfile: null,
+  sendProfile: null,
   loading: false,
   error: null,
 };
@@ -250,6 +252,45 @@ export default reducer(initState, {
     return {
       ...state,
       searchList: [],
+    };
+  },
+
+  [types.REQUEST_PROFILE]: (state, action) => {
+    return {
+      ...state,
+      requestProfile: action.payload,
+    };
+  },
+
+  [types.SEND_PROFILE]: (state, action) => {
+    return {
+      ...state,
+      sendProfile: action.payload,
+    };
+  },
+
+  [types.RECEIVE_PROFILE_SUCCESS]: (state, action) => {
+    const list = state.list.map((item) => {
+      if (item.username === action.payload.username) {
+        return {
+          ...item,
+          ...action.payload,
+        };
+      }
+      return item;
+    });
+
+    return {
+      list,
+      requestProfile: null,
+      ...state,
+    };
+  },
+
+  [types.RECEIVE_PROFILE_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      error: action.error,
     };
   },
 });
