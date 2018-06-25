@@ -39,6 +39,9 @@ const initState = {
     connected: true,
   },
 
+  connectionAttempts: 0,
+  connecting: false,
+
   loading: false,
   updating: false,
   error: null,
@@ -53,29 +56,40 @@ export default reducer(initState, {
     };
   },
 
-  [types.LOGIN]: (state, action) => {
+  [types.CONNECT]: (state, action) => {
     return {
       ...state,
       ...action.payload,
-      loading: true,
+      connecting: true,
       error: null
     };
   },
 
-  [types.LOGIN_SUCCESS]: (state, action) => {
+  [types.CONNECT_SUCCESS]: (state, action) => {
     return {
       ...state,
       authorized: true,
-      loading: false,
+      connectionAttempts: 0,
+      connecting: false,
     };
   },
 
-  [types.LOGIN_FAILURE]: (state, action) => {
+  [types.CONNECT_FAILURE]: (state, action) => {
     return {
       ...state,
       authorized: false,
-      loading: false,
-      error: action.error,
+      connectionAttempts: 0,
+      connecting: false,
+      error: action.error.toString(),
+    };
+  },
+
+  [types.RECONNECT]: (state, action) => {
+    return {
+      ...state,
+      connectionAttempts: state.connectionAttempts + 1,
+      connecting: false,
+      error: null,
     };
   },
 
@@ -105,7 +119,7 @@ export default reducer(initState, {
     return {
       ...state,
       loading: false,
-      error: action.error,
+      error: action.error.toString(),
     };
   },
 
@@ -142,7 +156,7 @@ export default reducer(initState, {
         ...initState.keys,
       },
       loading: false,
-      error: action.error,
+      error: action.error.toString(),
     };
   },
 
@@ -208,7 +222,7 @@ export default reducer(initState, {
     return {
       ..._state,
       loading: false,
-      error: action.error,
+      error: action.error.toString(),
     };
   },
 

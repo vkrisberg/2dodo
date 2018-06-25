@@ -30,6 +30,7 @@ class RegistrationSettingsForm extends Component {
     context: PropTypes.object,
     user: PropTypes.object,
     initialValues: PropTypes.object,
+    disabled: PropTypes.bool,
     onAvatar: PropTypes.func,
     onTheme: PropTypes.func,
     onSubmit: PropTypes.func,
@@ -38,6 +39,7 @@ class RegistrationSettingsForm extends Component {
 
   static defaultProps = {
     theme: themeEnum.light,
+    disabled: false,
   };
 
   onThemeChange(theme) {
@@ -71,7 +73,7 @@ class RegistrationSettingsForm extends Component {
   };
 
   render() {
-    const {theme, context, user} = this.props;
+    const {theme, context, user, disabled} = this.props;
     const _styles = styles(theme);
 
     return (
@@ -117,7 +119,9 @@ class RegistrationSettingsForm extends Component {
             <TextLabel theme={theme}
                        color={colors[theme].blackText}
                        textAlign={'center'}>{context.t('GetAccessToPushNotifications')}</TextLabel>
-            <Button color="black" style={_styles.button} onPress={this.props.handleSubmit}>{context.t('GoToApp')}</Button>
+            <Button style={_styles.button}
+                    disabled={disabled}
+                    onPress={this.props.handleSubmit}>{context.t('GoToApp')}</Button>
           </View>
         </KeyboardAvoidingView>
       </View>

@@ -17,9 +17,7 @@ import {
   LoginStyles,
 } from './styles';
 import {colors, sizes} from '../../styles';
-import storageEnum from '../../enums/storage-enum';
 import {validation} from '../../utils';
-import CONFIG from '../../config';
 
 class Login extends Component {
 
@@ -45,21 +43,21 @@ class Login extends Component {
     this.realm = services.getRealm();
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
+    if (!prevProps.account.error && this.props.account.error && this.props.account.error.indexOf('login error') > 0) {
+      Alert.alert(this.context.t('LoginEnterError'));
+      this.setState({
+        errors: {
+          login: true,
+          password: true,
+        },
+      });
+    }
+
     if (this.state.errors.login || this.state.errors.password) {
       setTimeout(() => this.setState({errors: {}}), 2000);
     }
   }
-
-  wsConnect = ({deviceId, hostname, user, keys, password}) => {
-    services.websocketConnect({
-      deviceId,
-      hostname,
-      username: user.username,
-      password,
-      hashKey: keys.hashKey,
-    });
-  };
 
   login = async (data) => {
     const {dispatch, account} = this.props;
@@ -97,6 +95,7 @@ class Login extends Component {
     const realmAccount = this.realm.objectForPrimaryKey(dbEnum.Account, username);
 
     if (!realmAccount) {
+      Alert.alert(this.context.t('LoginEnterError'));
       this.setState({
         errors: {
           login: true,
@@ -107,23 +106,16 @@ class Login extends Component {
     }
 
     const {deviceId, hostname, user, keys} = realmAccount;
-    dispatch(accountActions.login({deviceId, hostname, user, keys, password}))
-      .then(() => {
-        AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.username}`, username);
-        AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.password}`, password);
-        this.wsConnect({deviceId, hostname, user, keys, password});
-        this.props.navigation.replace(routeEnum.Messages);
-      })
-      .catch((error) => {
-        console.error('login error', error);
-        Alert.alert(this.context.t('LoginAuthError'));
-        this.setState({
-          errors: {
-            login: true,
-            password: true,
-          },
-        });
+    dispatch(accountActions.connect({deviceId, hostname, user, keys, password})).catch((error) => {
+      console.error('login error', error);
+      Alert.alert(this.context.t('LoginAuthError'));
+      this.setState({
+        errors: {
+          login: true,
+          password: true,
+        },
       });
+    });
   };
 
   keysImport = () => {
@@ -154,7 +146,10 @@ class Login extends Component {
             <KeyboardAvoidingView style={LoginStyles.container} behavior="position" enabled>
               <Logo style={LoginStyles.logo}/>
               <StyledText>{t('LoginWelcome')}</StyledText>
-              <LoginForm context={this.context} errors={this.state.errors} onSubmit={this.login}/>
+              <LoginForm context={this.context}
+                         errors={this.state.errors}
+                         disabled={!account.net.connected || account.connecting}
+                         onSubmit={this.login}/>
             </KeyboardAvoidingView>
             <Link style={LoginStyles.forgot}
                   to={routeEnum.ForgotPassword}

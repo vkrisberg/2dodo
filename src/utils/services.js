@@ -13,8 +13,9 @@ class Services {
     ws.init({store});
   }
 
-  websocketInit({store, navigation}) {
-    ws.init({store, navigation});
+  navigationInit(navigation) {
+    this.navigation = navigation;
+    ws.init({navigation});
   }
 
   websocketConnect({deviceId, hostname, username, password, hashKey, url}) {
@@ -47,6 +48,10 @@ class Services {
     }
     this.ws = ws.connect(this.wsConfig);
     return this.ws;
+  }
+
+  getNavigation() {
+    return this.navigation;
   }
 }
 
