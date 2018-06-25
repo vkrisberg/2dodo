@@ -3,9 +3,10 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {View, Text, TouchableOpacity, Image, TouchableHighlight, ScrollView} from 'react-native';
 
-import {colors} from "../../../styles";
+import {accountActions} from '../../../store/actions';
+import {colors} from '../../../styles';
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
-import {Navbar, NavbarDots, Avatar, Button} from '../../../components/elements';
+import {Navbar, NavbarDots, Avatar, Button, ButtonNavbar} from '../../../components/elements';
 import styles from './styles';
 
 import arrowIcon from '../../../images/icons/arrow-right/arrow_right.png';
@@ -44,6 +45,16 @@ class Settings extends Component {
 
   static contextTypes = {
     t: PropTypes.func.isRequired,
+  };
+
+  logout = () => {
+    this.props.dispatch(accountActions.logout());
+  };
+
+  renderNavbarButton = () => {
+    return (
+      <ButtonNavbar position="right" onPress={this.logout}>{this.context.t('Logout')}</ButtonNavbar>
+    );
   };
 
   onAvatar = () => alert('click on avatar');
@@ -89,7 +100,8 @@ class Settings extends Component {
         <BackgroundLayout theme={theme} paddingHorizontal={10}>
           <Navbar
             renderTitle={context.t('Settings')}
-            renderLeft={<NavbarDots/>}/>
+            renderLeft={<NavbarDots/>}
+            renderRight={this.renderNavbarButton()}/>
           <ScrollView style={_styles.container}>
             <View style={_styles.header}>
               <Avatar source={user.properties.avatar} onPress={this.onAvatar}/>
