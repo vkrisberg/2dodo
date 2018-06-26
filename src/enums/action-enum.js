@@ -27,4 +27,5 @@ export default {
   requestSync: 'request_sync',
   syncMessages: 'sync_messages',
   getAccessLog: 'get_access_log',
+  getOnlineUsers: 'get_online_users',
 };

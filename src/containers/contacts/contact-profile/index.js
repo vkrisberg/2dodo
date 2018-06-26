@@ -85,6 +85,11 @@ class ContactProfile extends Component {
   onClearHistory = () => alert('click on clear history btn');
 
   onDelete = (username) => {
+    if (this.state.editMode) {
+      this.setState({
+        editMode: false,
+      });
+    }
     this.props.dispatch(contactActions.delete(username));
     this.goBack();
   };

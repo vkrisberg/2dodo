@@ -29,6 +29,7 @@ const initState = {
   requestProfile: null,
   receiveRequestProfile: null,
   sendProfile: null,
+  getOnlineUsers: null,
   loading: false,
   error: null,
 };
@@ -316,6 +317,37 @@ export default reducer(initState, {
   },
 
   [types.RECEIVE_PROFILE_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      error: action.error,
+    };
+  },
+
+  [types.GET_ONLINE_USERS]: (state, action) => {
+    return {
+      ...state,
+      getOnlineUsers: action.payload,
+    };
+  },
+
+  [types.RECEIVE_ONLINE_USERS_SUCCESS]: (state, action) => {
+    const onlineUsers = action.payload.map((item) => item.name);
+    const list = state.list.map((item) => {
+      if (onlineUsers.indexOf(item.username) >= 0) {
+        item.isOnline = true;
+      }
+      return item;
+    });
+
+    return {
+      ...state,
+      list,
+      sectionList: getSectionList(list),
+      getOnlineUsers: null,
+    };
+  },
+
+  [types.RECEIVE_ONLINE_USERS_FAILURE]: (state, action) => {
     return {
       ...state,
       error: action.error,

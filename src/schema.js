@@ -3,7 +3,7 @@
  */
 class User {
   get fullName() {
-    return `${this.firstName} ${this.secondName}`;
+    return `${this.firstName || ''} ${this.secondName || ''}`.trim();
   }
 }
 
@@ -65,7 +65,7 @@ Account.schema = {
  */
 class Contact {
   get fullName() {
-    return `${this.firstName} ${this.secondName}`;
+    return `${this.firstName || ''} ${this.secondName || ''}`.trim();
   }
 
   get hostname() {
