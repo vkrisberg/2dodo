@@ -58,9 +58,7 @@ class Contacts extends Component {
   };
 
   componentDidMount() {
-    this.loadContactList().then(() => {
-      this.getOnlineUsers();
-    });
+    this.loadContactList();
   }
 
   loadContact = (username) => {
@@ -69,10 +67,6 @@ class Contacts extends Component {
 
   loadContactList = (filter, sort, descending) => {
     return this.props.dispatch(contactActions.loadList(filter, sort, descending));
-  };
-
-  getOnlineUsers = (usernames) => {
-    return this.props.dispatch(contactActions.getOnlineUsers(usernames));
   };
 
   searchContacts = (text) => {

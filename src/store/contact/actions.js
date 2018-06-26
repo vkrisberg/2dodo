@@ -72,13 +72,16 @@ export default {
         if (filter) {
           contacts = contacts.filtered(filter);
         }
-        console.log('contacts loaded', contacts.length);
         const payload = contacts.map((item) => {
           return {
             ...item,
             fullName: item.fullName,
           };
         });
+        // get online users request
+        const usernames = contacts.map((item) => item.username);
+        await apiContact.getOnlineUsers(usernames);
+        console.log('contacts loaded', payload.length);
         dispatch({type: types.LOAD_SUCCESS, payload});
         return payload;
       } catch (e) {

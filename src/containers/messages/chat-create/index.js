@@ -80,6 +80,7 @@ class ChatCreate extends Component {
     return (
       <ContactListItem
         item={item}
+        context={this.context}
         checkboxVisibility
         onPress={this.onCreateChat}
       />
