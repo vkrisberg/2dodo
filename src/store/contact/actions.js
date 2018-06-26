@@ -346,7 +346,68 @@ export default {
   },
 
   receiveProfile: (message) => {
-    return async dispatch => {
+    return async (dispatch, getState) => {
+      try {
+        const realm = services.getRealm();
+        const {account} = getState();
+        const dateNow = new Date();
+
+        // send delivery report
+        const msgEncryptTime = get(message, 'encrypt_time', null);
+        await apiServer.deliveryReport(msgEncryptTime);
+
+        if (message.error) {
+          throw new Error(message.error);
+        }
+
+        const dataPayload = get(message, 'data.payload', null);
+        if (!dataPayload) {
+          throw new Error('receive profile error: data.payload is empty');
+        }
+
+        const decryptedData = await wsMessage.decryptClientMessage({
+          data: dataPayload,
+          privateKey: account.keys.privateKey,
+          password: account.password,
+        });
+
+        const from = get(message, 'from', '');
+        const username = wsMessage.getUsername(from);
+        if (!username) {
+          throw new Error('receive profile error: username is empty');
+        }
+
+        let contact = realm.objectForPrimaryKey(dbEnum.Contact, username);
+        let contactData = {};
+        if (contact) {
+          contactData = {...contact, dateUpdate: dateNow};
+        } else {
+          contactData = {
+            username,
+            nickname: wsMessage.getNickname(username),
+            dateCreate: dateNow,
+            dateUpdate: dateNow,
+          };
+        }
+
+        const {phones, firstName, secondName, bio, avatar} = decryptedData;
+        contactData = {...contactData, phones, firstName, secondName, bio, avatar};
+
+        await realm.write(() => {
+          contact = realm.create(dbEnum.Contact, contactData, true);
+        });
+
+        const payload = {
+          ...contact,
+          fullName: contact.fullName,
+        };
+        // console.log('contact profile updated', payload);
+        dispatch({type: types.RECEIVE_PROFILE_SUCCESS, payload});
+        return payload;
+      } catch (e) {
+        dispatch({type: types.RECEIVE_PROFILE_FAILURE, error: e});
+        // throw e;
+      }
     };
   },
 };
