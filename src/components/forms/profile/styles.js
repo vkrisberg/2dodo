@@ -91,10 +91,11 @@ export default (theme) => {
     },
 
     actionBtn: {
-      width: 'auto',
+      width: '100%',
       height: 'auto',
       borderWidth: 0,
-      alignSelf: 'flex-start',
+      justifyContent: 'flex-start',
+      alignItems: 'flex-start',
       paddingVertical: 13,
       marginVertical: 13,
     },

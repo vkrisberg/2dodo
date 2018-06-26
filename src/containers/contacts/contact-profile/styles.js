@@ -8,21 +8,8 @@ export default (theme) => {
       flexDirection: 'row',
     },
 
-    styledTitle: {
-      fontWeight: weights.bold,
-      fontSize: 28,
-      marginLeft: 20,
-      color: colors[theme].navbarTitle,
-    },
-
-    titleContainer: {
-      width: '100%',
-      paddingLeft: 20,
+    navbar: {
       paddingRight: 10,
-      marginTop: 35,
-      marginBottom: 10,
-      flexDirection: 'row',
-      alignItems: 'center',
     },
 
     body: {
@@ -63,9 +50,9 @@ export default (theme) => {
     editBtn: {
       width: 'auto',
       height: 'auto',
-      paddingHorizontal: 10,
+      paddingLeft: 10,
       borderWidth: 0,
-      justifyContent: 'flex-end',
+      alignItems: 'flex-end',
       position: 'absolute',
       right: 10,
     },
