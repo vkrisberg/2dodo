@@ -148,7 +148,7 @@ class Groups extends Component {
     const _styles = styles(theme);
 
     return (
-      <MainLayout netOffline={!account.net.connected}>
+      <MainLayout netOffline={!account.net.connected} wsConnected={account.connected}>
         <BackgroundLayout theme={theme} paddingHorizontal={10}>
           <DismissKeyboardLayout style={{width: '100%', flex: 1}}>
             <View style={_styles.header}>

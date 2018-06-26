@@ -154,8 +154,12 @@ export default {
           // connection attempts ended
           throw new Error(error);
         }
-        AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`, 'true');
-        navigation.dispatch(goToMessagesAction);
+        // go to Messages when log in
+        if (account.connecting) {
+          AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`, 'true');
+          navigation.dispatch(goToMessagesAction);
+        }
+
         dispatch({type: types.CONNECT_SUCCESS});
       } catch (e) {
         AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
