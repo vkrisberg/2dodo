@@ -45,6 +45,8 @@ export const types = {
 
   RECEIVE_PROFILE_SUCCESS: Symbol('RECEIVE_PROFILE_SUCCESS'),
   RECEIVE_PROFILE_FAILURE: Symbol('RECEIVE_PROFILE_FAILURE'),
+
+  SET_CURRENT_CONTACT: Symbol('SET_CURRENT_CONTACT'),
 };
 
 export default {
@@ -141,7 +143,7 @@ export default {
           ...contact,
           fullName: contact.fullName,
         };
-        // console.log('contact updated', contact);
+        // console.log('contact updated', payload);
         dispatch({type: types.UPDATE_SUCCESS, payload});
         return payload;
       } catch (e) {
@@ -409,5 +411,9 @@ export default {
         // throw e;
       }
     };
+  },
+
+  setCurrent: (data) => {
+    return ({type: types.SET_CURRENT_CONTACT, payload: data});
   },
 };
