@@ -120,6 +120,7 @@ class Groups extends Component {
     return (
       <ContactListItem
         item={item}
+        context={this.context}
         checked={this.isContactChosen(item)}
         onPress={this.onContactPress(item)}
         onCheckboxPress={() => this.onContactCheckboxPress(item)}
