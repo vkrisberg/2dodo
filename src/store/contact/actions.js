@@ -46,6 +46,11 @@ export const types = {
   RECEIVE_PROFILE_SUCCESS: Symbol('RECEIVE_PROFILE_SUCCESS'),
   RECEIVE_PROFILE_FAILURE: Symbol('RECEIVE_PROFILE_FAILURE'),
 
+  GET_ONLINE_USERS: Symbol('GET_ONLINE_USERS'),
+
+  RECEIVE_ONLINE_USERS_SUCCESS: Symbol('RECEIVE_ONLINE_USERS_SUCCESS'),
+  RECEIVE_ONLINE_USERS_FAILURE: Symbol('RECEIVE_ONLINE_USERS_FAILURE'),
+
   SET_CURRENT_CONTACT: Symbol('SET_CURRENT_CONTACT'),
 };
 
@@ -408,6 +413,48 @@ export default {
         return payload;
       } catch (e) {
         dispatch({type: types.RECEIVE_PROFILE_FAILURE, error: e});
+        // throw e;
+      }
+    };
+  },
+
+  getOnlineUsers: (usernames = []) => {
+    return async (dispatch, getState) => {
+      try {
+        const {contact} = getState();
+        if (!usernames || !usernames.length) {
+          usernames = contact.list.map((item) => item.username);
+        }
+        // console.log('get online users', usernames);
+        await apiContact.getOnlineUsers(usernames);
+        dispatch({type: types.GET_ONLINE_USERS, payload: usernames});
+        return usernames;
+      } catch (e) {
+        console.log('get online users error', e);
+      }
+    };
+  },
+
+  receiveOnlineUsers: (message) => {
+    return async (dispatch, getState) => {
+      try {
+        // send delivery report
+        const msgEncryptTime = get(message, 'encrypt_time', null);
+        await apiServer.deliveryReport(msgEncryptTime);
+
+        if (message.error) {
+          throw new Error(message.error);
+        }
+
+        const payload = get(message, 'data', null);
+        if (!payload) {
+          return false;
+        }
+        // console.log('get online users result', payload);
+        dispatch({type: types.RECEIVE_ONLINE_USERS_SUCCESS, payload});
+        return payload;
+      } catch (e) {
+        dispatch({type: types.RECEIVE_ONLINE_USERS_FAILURE, error: e});
         // throw e;
       }
     };
