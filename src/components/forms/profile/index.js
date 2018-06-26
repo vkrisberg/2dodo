@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import {View, KeyboardAvoidingView, ScrollView, TouchableOpacity, Text, Image, Alert} from 'react-native';
-import {Field, reduxForm} from 'redux-form';
+import {Field, reduxForm, formValues} from 'redux-form';
 import ImagePicker from 'react-native-image-picker';
 import PropTypes from 'prop-types';
 
-import validate from './validate';
 import {Input, Avatar, Button, FieldError} from '../../elements';
 import {themeEnum} from '../../../enums';
 import {colors} from '../../../styles';
+import validate from './validate';
 import styles from './styles';
 
 import removeIcon from '../../../images/icons/remove/remove.png';
@@ -30,13 +30,18 @@ class ProfileForm extends Component {
 
   static defaultProps = {
     theme: themeEnum.light,
-    onAvatar: () => {},
-    onRemoveBtn: () => {},
-    onAddBtn: () => {},
-    onGroups: () => {},
-    onNotifications: () => {},
-    onSound: () => {},
-    onDelete: () => {},
+    onRemoveBtn: () => {
+    },
+    onAddBtn: () => {
+    },
+    onGroups: () => {
+    },
+    onNotifications: () => {
+    },
+    onSound: () => {
+    },
+    onDelete: () => {
+    },
   };
 
   componentDidMount() {
@@ -50,6 +55,19 @@ class ProfileForm extends Component {
       allowsEditing: true,
     };
   }
+
+  onAvatar = () => {
+    ImagePicker.showImagePicker(this.imagePickerOptions, (response) => {
+      if (response.didCancel) {
+      }
+      else if (response.error) {
+        Alert.alert('Error', response.error);
+      }
+      else {
+        this.props.change('avatar', response.data);
+      }
+    });
+  };
 
   renderInput = (props) => {
     const _styles = styles(this.props.theme);
@@ -77,16 +95,10 @@ class ProfileForm extends Component {
     );
   };
 
-  onAvatar = () => {
-    ImagePicker.showImagePicker(this.imagePickerOptions, (response) => {
-      if (response.didCancel) {}
-      else if (response.error) {
-        Alert.alert('Error', response.error);
-      }
-      else {
-        this.props.change('avatar', response.data);
-      }
-    });
+  renderAvatar = (props) => {
+    return (
+      <Avatar source={props.input.value} {...props}/>
+    );
   };
 
   render() {
@@ -99,38 +111,34 @@ class ProfileForm extends Component {
         <View style={_styles.container}>
           <KeyboardAvoidingView behavior="position" enabled>
             <View style={_styles.header}>
-              <Avatar source={user.avatar} onPress={this.onAvatar} style={_styles.avatar}/>
+              <Field
+                name="avatar"
+                component={this.renderAvatar}
+                onPress={this.onAvatar}/>
               <View style={_styles.headerRight}>
                 <Field
                   name="firstName"
                   component={this.renderInput}
-                  input={!!user.firstName && {value: user.firstName}}
                   placeholder={context.t('Firstname')}
-                  keyboardType={'text'}
-                  autoCapitalize={'none'}
                   autoCorrect={false}/>
                 <Field
                   name="secondName"
                   component={this.renderInput}
-                  input={!!user.secondName && {value: user.secondName}}
                   placeholder={context.t('Secondname')}
-                  keyboardType={'text'}
-                  autoCapitalize={'none'}
                   autoCorrect={false}/>
               </View>
             </View>
             <View style={_styles.phones}>
               {
-                !!Object.keys(user.phones).length && Object.keys(user.phones).map( (phone, i) =>
-                  <View style={_styles.phoneItem}>
+                !!Object.keys(user.phones).length && Object.keys(user.phones).map((phone, i) =>
+                  <View key={i} style={_styles.phoneItem}>
                     <TouchableOpacity onPress={onRemoveBtn}>
                       <Image source={removeIcon}/>
                     </TouchableOpacity>
                     <Text style={_styles.phoneText}>{context.t('Phone')}</Text>
                     <Field
-                      name={`phone-${i}`}
+                      name={`phones[${i}]`}
                       component={this.renderInput}
-                      input={{value: user.phones[phone]}}
                       placeholder={context.t('Phone')}
                       keyboardType={'numeric'}
                       autoCapitalize={'none'}
@@ -144,7 +152,7 @@ class ProfileForm extends Component {
                 </TouchableOpacity>
                 <Text style={_styles.phoneText}>{context.t('Phone')}</Text>
                 <Field
-                  name={'phone'}
+                  name={'phones[1]'}
                   component={this.renderInput}
                   placeholder={context.t('Phone')}
                   keyboardType={'numeric'}
@@ -160,7 +168,8 @@ class ProfileForm extends Component {
                 {context.t('Groups')}
               </Text>
               <View style={_styles.actionItemRight}>
-                <Text style={[_styles.defaultText, _styles.actionSubtext]}>{user.groups[0] || context.t('Groups')}</Text>
+                <Text
+                  style={[_styles.defaultText, _styles.actionSubtext]}>{user.groups[0] || context.t('Groups')}</Text>
                 <Image source={arrowIcon}/>
               </View>
             </TouchableOpacity>
@@ -197,6 +206,6 @@ class ProfileForm extends Component {
 
 export default reduxForm({
   form: 'profile',
-  destroyOnUnmount: false,
+  destroyOnUnmount: true,
   forceUnregisterOnUnmount: true,
 })(ProfileForm);

@@ -2,16 +2,16 @@ import Reactotron from 'reactotron-react-native'
 import React, {Component} from 'react';
 import {TouchableOpacity, Text, View} from 'react-native';
 import {connect} from 'react-redux';
+import {get, values} from 'lodash';
 import PropTypes from 'prop-types';
-import {submit} from 'redux-form';
 
 import {colors} from '../../../styles';
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
 import {ArrowIcon} from '../../../components/icons';
 import {Button, Profile} from '../../../components/elements';
 import {ProfileForm} from '../../../components/forms';
-import styles from './styles';
 import {contactActions} from '../../../store/actions';
+import styles from './styles';
 
 class ContactProfile extends Component {
   static propTypes = {
@@ -24,17 +24,25 @@ class ContactProfile extends Component {
     t: PropTypes.func.isRequired,
   };
 
+  state = {
+    editMode: false,
+  };
+
   constructor(props) {
     super(props);
-    this.state = {
-      editMode: false,
-    };
+
+    const contact = props.navigation.getParam('data');
+    props.dispatch(contactActions.setCurrent(contact));
   }
 
   goBack = () => this.props.navigation.goBack();
 
   onDone = () => {
-    this.props.dispatch(submit('profile'));
+    const data = get(this.props.form, 'profile.values', {});
+    data.phones = values(data.phones);
+    data.groups = values(data.groups);
+    this.props.dispatch(contactActions.update(data));
+
     this.setState({
       editMode: false,
     });
@@ -56,11 +64,11 @@ class ContactProfile extends Component {
 
   onFilesBtn = () => alert('click on media files btn');
 
-  onSettings = () => this.props.navigation.goBack();
+  onSettings = () => alert('click on settings files btn');
 
   onShareBtn = () => alert('click on share btn');
 
-  onNotifications = () => this.props.navigation.goBack();
+  onNotifications = () => alert('click on notifications files btn');
 
   onBlockUser = () => alert('click on block user btn');
 
@@ -72,21 +80,16 @@ class ContactProfile extends Component {
 
   onAddBtn = () => alert('click on add btn');
 
-  onGroups = () => this.props.navigation.goBack();
+  onGroups = () => alert('click on groups files btn');
 
-  onSound = () => this.props.navigation.goBack();
-
-  updateProfile = (data) => {
-    this.props.dispatch(contactActions.update(data));
-  };
+  onSound = () => alert('click on sounds files btn');
 
   render() {
     const {context} = this;
-    const {account} = this.props;
-    const {theme} = this.props.account.user;
+    const {account, contact} = this.props;
+    const {theme} = account.user;
     const {editMode} = this.state;
     const _styles = styles(theme);
-    let user = this.props.navigation.getParam('data');
 
     return (
       <MainLayout netOffline={!account.net.connected}>
@@ -119,21 +122,20 @@ class ContactProfile extends Component {
           <View style={[_styles.body, _styles.bodyProfile]}>
             {
               editMode ?
-                <ProfileForm
+                contact.current.username && <ProfileForm
                   theme={theme}
                   context={context}
-                  initialValues={user}
+                  initialValues={contact.current}
                   onRemoveBtn={this.onRemoveBtn}
                   onAddBtn={this.onAddBtn}
                   onGroups={this.onGroups}
                   onNotifications={this.onNotifications}
                   onSound={this.onSound}
-                  onDelete={this.onDelete}
-                  onSubmit={this.updateProfile}/> :
-                <Profile
+                  onDelete={this.onDelete}/> :
+                contact.current.username && <Profile
                   theme={theme}
                   context={context}
-                  user={user}
+                  user={contact.current}
                   onShowQrCode={this.onShowQrCode}
                   onWriteBtn={this.onWriteBtn}
                   onCallBtn={this.onCallBtn}
@@ -155,4 +157,6 @@ class ContactProfile extends Component {
 
 export default connect(state => ({
   account: state.account,
+  contact: state.contact,
+  form: state.form,
 }))(ContactProfile);

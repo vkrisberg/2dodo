@@ -56,7 +56,6 @@ export default (theme) => {
       width: 'auto',
       height: 'auto',
       borderWidth: 0,
-      fontSize: 15,
     },
 
     actions: {

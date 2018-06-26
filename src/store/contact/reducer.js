@@ -8,6 +8,8 @@ const initState = {
   current: {
     username: '', // login@hostname
     nickname: '', // login
+    deviceId: '',
+    groups: [],
     phones: [],
     firstName: '',
     secondName: '',
@@ -147,6 +149,7 @@ export default reducer(initState, {
       ...state,
       list,
       sectionList: getSectionList(list),
+      current: action.payload,
       loading: false,
     };
   },
@@ -316,6 +319,13 @@ export default reducer(initState, {
     return {
       ...state,
       error: action.error,
+    };
+  },
+
+  [types.SET_CURRENT_CONTACT]: (state, action) => {
+    return {
+      ...state,
+      current: action.payload,
     };
   },
 });
