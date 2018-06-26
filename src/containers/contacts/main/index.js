@@ -135,7 +135,7 @@ class Contacts extends Component {
     return (
       <ContactListItem
         item={item}
-        checked={() => this.isContactChosen(item)}
+        checked={this.isContactChosen(item)}
         onPress={() => this.onContactPress(item)}
         onCheckboxPress={() => this.onCheckboxPress(item)}
       />
