@@ -39,8 +39,9 @@ const initState = {
     connected: true,
   },
 
-  connectionAttempts: 0,
+  connected: false,
   connecting: false,
+  connectionAttempts: 0,
 
   loading: false,
   updating: false,
@@ -61,6 +62,7 @@ export default reducer(initState, {
       ...state,
       ...action.payload,
       connecting: true,
+      connected: false,
       error: null
     };
   },
@@ -71,6 +73,7 @@ export default reducer(initState, {
       authorized: true,
       connectionAttempts: 0,
       connecting: false,
+      connected: true,
     };
   },
 
@@ -80,6 +83,7 @@ export default reducer(initState, {
       authorized: false,
       connectionAttempts: 0,
       connecting: false,
+      connected: false,
       error: action.error.toString(),
     };
   },
@@ -89,6 +93,7 @@ export default reducer(initState, {
       ...state,
       connectionAttempts: state.connectionAttempts + 1,
       connecting: false,
+      connected: false,
       error: null,
     };
   },

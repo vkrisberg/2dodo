@@ -9,18 +9,28 @@ export default class MainLayout extends PureComponent {
   static propTypes = {
     scrolled: PropTypes.bool,
     netOffline: PropTypes.bool,
+    wsConnected: PropTypes.bool,
     style: PropTypes.any,
   };
 
   static defaultProps = {
     scrolled: false,
     netOffline: false,
+    wsConnected: true,
   };
 
   renderNetInfo = () => {
     return (
       <View style={styles.netinfo}>
-        <Text style={styles.netinfoText}>Network Error: device is offline</Text>
+        <Text style={styles.netinfoText}>Network error. Device is offline...</Text>
+      </View>
+    );
+  };
+
+  renderWsInfo = () => {
+    return (
+      <View style={styles.wsinfo}>
+        <Text style={styles.wsinfoText}>Server connection problems. Please wait...</Text>
       </View>
     );
   };
@@ -42,6 +52,7 @@ export default class MainLayout extends PureComponent {
     return (
       <View style={[styles.container, this.props.style]}>
         {this.props.netOffline && this.renderNetInfo()}
+        {!this.props.wsConnected && this.renderWsInfo()}
         {this.props.children}
       </View>
     );

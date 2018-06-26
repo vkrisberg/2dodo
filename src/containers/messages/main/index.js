@@ -196,7 +196,7 @@ class Messages extends Component {
     const {theme} = account.user;
 
     return (
-      <MainLayout netOffline={!account.net.connected}>
+      <MainLayout netOffline={!account.net.connected} wsConnected={account.connected}>
         <BackgroundLayout theme={theme} paddingHorizontal={10}>
           <Navbar renderTitle={this.context.t('Messages')}
                   renderLeft={<NavbarDots/>}
