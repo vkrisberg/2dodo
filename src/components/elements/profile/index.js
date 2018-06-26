@@ -46,6 +46,10 @@ export default class Profile extends PureComponent {
     onSettings: () => {},
   };
 
+  onDelete = (username) => {
+    this.props.onDelete(username);
+  };
+
   _renderUserInfoItem = (caption, text) => {
     const {theme} = this.props;
     const _styles = styles(theme);
@@ -53,7 +57,7 @@ export default class Profile extends PureComponent {
     return (
       <View style={_styles.userInfoItem}>
         <Text style={[_styles.userInfoText, {color: colors[theme].grayInput}]}>{caption}</Text>
-        <View>
+        {text && <View>
           {typeof text === 'object' ?
             Object.keys(text).map((item, index) =>
               <View key={index}>
@@ -62,12 +66,12 @@ export default class Profile extends PureComponent {
             ) :
             <Text style={[_styles.userInfoText, {color: colors[theme].grayBlue, fontSize: 15,}]}>{text}</Text>
           }
-        </View>
+        </View>}
       </View>
     );
   };
   render() {
-    const {theme, context, user, onShowQrCode, onWriteBtn, onCallBtn, onKeysBtn, onFilesBtn, onSettings, onShareBtn, onNotifications, onBlockUser, onClearHistory, onDelete} = this.props;
+    const {theme, context, user, onShowQrCode, onWriteBtn, onCallBtn, onKeysBtn, onFilesBtn, onSettings, onShareBtn, onNotifications, onBlockUser, onClearHistory} = this.props;
     const _styles = styles(theme);
 
     return (
@@ -77,7 +81,12 @@ export default class Profile extends PureComponent {
             <View style={_styles.userData}>
               <Avatar source={user.avatar} style={_styles.avatar}/>
               <View style={_styles.info}>
-                <Text style={_styles.name}>{user.username}</Text>
+                <Text style={_styles.name}>
+                  {user.firstName || user.secondName ?
+                    `${user.firstName} ${user.secondName}` :
+                    user.username
+                  }
+                </Text>
                 <Text style={_styles.lastVisit}>{moment(user.dateUpdate).format('DD.MM.YY')}</Text>
                 <Button
                   style={[_styles.actionBtn, {paddingVertical: 5, alignItems: 'flex-start'}]}
@@ -103,10 +112,10 @@ export default class Profile extends PureComponent {
           </View>
           <View style={_styles.body}>
             <View>
-              {user.username && this._renderUserInfoItem(context.t('UserName'), user.username)}
-              {!!Object.keys(user.groups).length && this._renderUserInfoItem(context.t('UserGroups'), user.groups)}
-              {!!Object.keys(user.phones).length && this._renderUserInfoItem(context.t('UserPhones'), user.phones)}
-              {user.bio && this._renderUserInfoItem(context.t('UserBio'), user.bio)}
+              {this._renderUserInfoItem(context.t('UserName'), user.username)}
+              {this._renderUserInfoItem(context.t('UserGroups'), user.groups)}
+              {this._renderUserInfoItem(context.t('UserPhones'), user.phones)}
+              {this._renderUserInfoItem(context.t('UserBio'), user.bio)}
             </View>
             <View style={_styles.divider}/>
             <View style={_styles.actionsBlock}>
@@ -157,7 +166,7 @@ export default class Profile extends PureComponent {
               </Button>
               <Button
                 style={_styles.operationBtn}
-                onPress={onDelete}>
+                onPress={() => this.onDelete(user.username)}>
                 <Text style={[_styles.operationText, {color: colors[theme].redLight,}]}>{context.t('Delete')}</Text>
               </Button>
             </View>

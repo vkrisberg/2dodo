@@ -1,14 +1,12 @@
-import Reactotron from 'reactotron-react-native'
 import React, {Component} from 'react';
-import {TouchableOpacity, Text, View} from 'react-native';
+import {View} from 'react-native';
 import {connect} from 'react-redux';
 import {get, values} from 'lodash';
 import PropTypes from 'prop-types';
 
 import {colors} from '../../../styles';
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
-import {ArrowIcon} from '../../../components/icons';
-import {Button, Profile} from '../../../components/elements';
+import {Button, Profile, Navbar, ButtonBack} from '../../../components/elements';
 import {ProfileForm} from '../../../components/forms';
 import {contactActions} from '../../../store/actions';
 import styles from './styles';
@@ -34,6 +32,18 @@ class ContactProfile extends Component {
     const contact = props.navigation.getParam('data');
     props.dispatch(contactActions.setCurrent(contact));
   }
+
+  renderNavbarButton = (_styles, theme, context) => {
+    const {editMode} = this.state;
+    return (
+      <Button
+        style={_styles.editBtn}
+        color={colors[theme].blue}
+        onPress={editMode ? this.onDone : this.onEdit}>
+        {editMode ? context.t('Done') : context.t('Edit')}
+      </Button>
+    );
+  };
 
   goBack = () => this.props.navigation.goBack();
 
@@ -74,7 +84,10 @@ class ContactProfile extends Component {
 
   onClearHistory = () => alert('click on clear history btn');
 
-  onDelete = () => alert('click on delete btn');
+  onDelete = (username) => {
+    this.props.dispatch(contactActions.delete(username));
+    this.goBack();
+  };
 
   onRemoveBtn = () => alert('click on remove btn');
 
@@ -93,36 +106,17 @@ class ContactProfile extends Component {
 
     return (
       <MainLayout netOffline={!account.net.connected} wsConnected={account.connected}>
-        <BackgroundLayout theme={theme}>
-          <View style={_styles.header}>
-            <View style={_styles.titleContainer}>
-              <TouchableOpacity onPress={this.goBack}>
-                <ArrowIcon />
-              </TouchableOpacity>
-              <Text style={_styles.styledTitle}>
-                {editMode ? context.t('EditUser') : context.t('ContactProfile')}
-              </Text>
-              {
-                editMode ?
-                  <Button
-                    style={_styles.editBtn}
-                    color={colors[theme].blue}
-                    onPress={this.onDone}>
-                    {context.t('Done')}
-                  </Button> :
-                  <Button
-                    style={_styles.editBtn}
-                    color={colors[theme].blue}
-                    onPress={this.onEdit}>
-                    {context.t('Edit')}
-                  </Button>
-              }
-            </View>
-          </View>
+        <BackgroundLayout theme={theme} paddingHorizontal={10}>
+          <Navbar
+            style={_styles.navbar}
+            renderTitle={editMode ? context.t('EditUser') : context.t('ContactProfile')}
+            renderLeft={<ButtonBack/>}
+            renderRight={() => this.renderNavbarButton(_styles, theme, context)}/>
+
           <View style={[_styles.body, _styles.bodyProfile]}>
             {
               editMode ?
-                contact.current.username && <ProfileForm
+                contact.current.username ? <ProfileForm
                   theme={theme}
                   context={context}
                   initialValues={contact.current}
@@ -131,8 +125,8 @@ class ContactProfile extends Component {
                   onGroups={this.onGroups}
                   onNotifications={this.onNotifications}
                   onSound={this.onSound}
-                  onDelete={this.onDelete}/> :
-                contact.current.username && <Profile
+                  onDelete={this.onDelete}/> : null :
+                contact.current.username ? <Profile
                   theme={theme}
                   context={context}
                   user={contact.current}
@@ -146,7 +140,7 @@ class ContactProfile extends Component {
                   onNotifications={this.onNotifications}
                   onBlockUser={this.onBlockUser}
                   onClearHistory={this.onClearHistory}
-                  onDelete={this.onDelete}/>
+                  onDelete={this.onDelete}/> : null
             }
           </View>
         </BackgroundLayout>

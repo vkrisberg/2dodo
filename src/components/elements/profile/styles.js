@@ -62,6 +62,7 @@ export default (theme) => {
       flexShrink: 0,
       alignSelf: 'flex-end',
       flexDirection: 'row',
+      marginRight: 5,
     },
 
     writeIcon: {

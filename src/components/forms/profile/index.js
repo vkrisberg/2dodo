@@ -101,8 +101,12 @@ class ProfileForm extends Component {
     );
   };
 
+  onDelete = (username) => {
+    this.props.onDelete(username);
+  };
+
   render() {
-    const {theme, context, onRemoveBtn, onAddBtn, onGroups, onNotifications, onSound, onDelete} = this.props;
+    const {theme, context, onRemoveBtn, onAddBtn, onGroups, onNotifications, onSound} = this.props;
     const user = this.props.initialValues;
     const _styles = styles(theme);
 
@@ -194,7 +198,7 @@ class ProfileForm extends Component {
             <View style={_styles.divider}/>
             <Button
               style={_styles.actionBtn}
-              onPress={onDelete}>
+              onPress={() => this.onDelete(user.username)}>
               <Text style={[_styles.defaultText, {color: colors[theme].redLight,}]}>{context.t('DeleteContact')}</Text>
             </Button>
           </View>
