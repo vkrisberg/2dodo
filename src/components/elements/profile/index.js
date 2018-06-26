@@ -56,14 +56,13 @@ export default class Profile extends PureComponent {
       <View style={_styles.userInfoItem}>
         <Text style={[_styles.userInfoText, {color: colors[theme].grayInput}]}>{caption}</Text>
         <View>
-          {
-            Array.isArray(text) ?
-              text.map((item, index) =>
-                <View key={index}>
-                  <Text style={[_styles.userInfoText, {color: colors[theme].grayBlue, marginBottom: index !== text.length ? 4 : 10,}]}>{item}</Text>
-                </View>
-              ) :
-              <Text style={[_styles.userInfoText, {color: colors[theme].grayBlue, fontSize: 15,}]}>{text}</Text>
+          {typeof text === 'object' ?
+            Object.keys(text).map((item, index) =>
+              <View key={index}>
+                <Text style={[_styles.userInfoText, {color: colors[theme].grayBlue, marginBottom: index !== text.length ? 4 : 10,}]}>{text[item]}</Text>
+              </View>
+            ) :
+            <Text style={[_styles.userInfoText, {color: colors[theme].grayBlue, fontSize: 15,}]}>{text}</Text>
           }
         </View>
       </View>
@@ -83,7 +82,7 @@ export default class Profile extends PureComponent {
                 <Text style={_styles.name}>{user.username}</Text>
                 <Text style={_styles.lastVisit}>{moment(user.dateUpdate).format('DD.MM.YY')}</Text>
                 <Button
-                  style={[_styles.actionBtn, {paddingVertical: 5,}]}
+                  style={[_styles.actionBtn, {paddingVertical: 5, alignItems: 'flex-start'}]}
                   color={colors[theme].blue}
                   textStyle={{fontSize: 15,}}
                   onPress={onShowQrCode}>
@@ -107,8 +106,8 @@ export default class Profile extends PureComponent {
           <View style={_styles.body}>
             <View>
               {user.username && this._renderUserInfoItem(context.t('UserName'), user.username)}
-              {/*{user.groups && this._renderUserInfoItem(context.t('UserGroups'), user.groups)}*/}
-              {/*{user.phones && this._renderUserInfoItem(context.t('UserPhones'), user.phones)}*/}
+              {!!Object.keys(user.groups).length && this._renderUserInfoItem(context.t('UserGroups'), user.groups)}
+              {!!Object.keys(user.phones).length && this._renderUserInfoItem(context.t('UserPhones'), user.phones)}
               {user.bio && this._renderUserInfoItem(context.t('UserBio'), user.bio)}
             </View>
             <View style={_styles.divider}/>

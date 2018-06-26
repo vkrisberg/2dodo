@@ -96,24 +96,24 @@ class ProfileForm extends Component {
               </View>
             </View>
             <View style={_styles.phones}>
-              {/*{*/}
-                {/*user.phones.length && user.phones.map( (phone, i) =>*/}
-                  {/*<View style={_styles.phoneItem}>*/}
-                    {/*<TouchableOpacity onPress={onRemoveBtn}>*/}
-                      {/*<Image source={removeIcon}/>*/}
-                    {/*</TouchableOpacity>*/}
-                    {/*<Text style={_styles.phoneText}>{context.t('Phone')}</Text>*/}
-                    {/*<Field*/}
-                      {/*name={`phone-${i}`}*/}
-                      {/*component={this.renderInput}*/}
-                      {/*input={{value: phone}}*/}
-                      {/*placeholder={context.t('Phone')}*/}
-                      {/*keyboardType={'numeric'}*/}
-                      {/*autoCapitalize={'none'}*/}
-                      {/*autoCorrect={false}/>*/}
-                  {/*</View>*/}
-                {/*)*/}
-              {/*}*/}
+              {
+                !!Object.keys(user.phones).length && Object.keys(user.phones).map( (phone, i) =>
+                  <View style={_styles.phoneItem}>
+                    <TouchableOpacity onPress={onRemoveBtn}>
+                      <Image source={removeIcon}/>
+                    </TouchableOpacity>
+                    <Text style={_styles.phoneText}>{context.t('Phone')}</Text>
+                    <Field
+                      name={`phone-${i}`}
+                      component={this.renderInput}
+                      input={{value: user.phones[phone]}}
+                      placeholder={context.t('Phone')}
+                      keyboardType={'numeric'}
+                      autoCapitalize={'none'}
+                      autoCorrect={false}/>
+                  </View>
+                )
+              }
               <View style={_styles.phoneItem}>
                 <TouchableOpacity onPress={onAddBtn}>
                   <Image source={addIcon}/>
