@@ -90,7 +90,7 @@ class ChatCreate extends Component {
     const {account, contact} = this.props;
 
     return (
-      <MainLayout netOffline={!account.net.connected}>
+      <MainLayout netOffline={!account.net.connected} wsConnected={account.connected}>
         <BackgroundLayout theme={account.user.theme} paddingHorizontal={10}>
           <Navbar renderTitle={this.context.t('CreateChat')}
                   renderLeft={<ButtonBack/>}/>

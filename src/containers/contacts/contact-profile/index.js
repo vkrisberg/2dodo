@@ -105,7 +105,7 @@ class ContactProfile extends Component {
     const _styles = styles(theme);
 
     return (
-      <MainLayout netOffline={!account.net.connected}>
+      <MainLayout netOffline={!account.net.connected} wsConnected={account.connected}>
         <BackgroundLayout theme={theme} paddingHorizontal={10}>
           <Navbar
             style={_styles.navbar}

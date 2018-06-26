@@ -147,7 +147,7 @@ class Contacts extends Component {
     const {contact, account} = this.props;
 
     return (
-      <MainLayout netOffline={!account.net.connected}>
+      <MainLayout netOffline={!account.net.connected} wsConnected={account.connected}>
         <BackgroundLayout theme={account.user.theme} paddingHorizontal={10}>
           <Navbar renderTitle={context.t('Contacts')}
                   renderLeft={<NavbarDots/>}

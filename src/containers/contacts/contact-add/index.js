@@ -104,7 +104,7 @@ class ContactAdd extends Component {
     const _styles = styles(theme);
 
     return (
-      <MainLayout netOffline={!account.net.connected}>
+      <MainLayout netOffline={!account.net.connected} wsConnected={account.connected}>
         <BackgroundLayout theme={account.user.theme} paddingHorizontal={10}>
           <Navbar renderTitle={this.context.t('AddContact')}
                   renderLeft={<ButtonBack/>}/>

@@ -95,7 +95,7 @@ class ChatMessage extends PureComponent {
     const {theme} = account.user;
 
     return (
-      <MainLayout netOffline={!account.net.connected}>
+      <MainLayout netOffline={!account.net.connected} wsConnected={account.connected}>
         <BackgroundLayout theme={theme} paddingHorizontal={10}>
           <NavbarChat title={chat.current.name} description={'online'} context={this.context}/>
           <SearchInput placeholder="Search in messages" onChange={this.onSearchChange}/>
