@@ -18,7 +18,6 @@ export default class Profile extends PureComponent {
     theme: PropTypes.string,
     context: PropTypes.object,
     user: PropTypes.object,
-    onAvatar: PropTypes.func,
     onShowQrCode: PropTypes.func,
     onWriteBtn: PropTypes.func,
     onCallBtn: PropTypes.func,
@@ -34,7 +33,6 @@ export default class Profile extends PureComponent {
 
   static defaultProps = {
     theme: themeEnum.light,
-    onAvatar: () => {},
     onShowQrCode: () => {},
     onWriteBtn: () => {},
     onCallBtn: () => {},
@@ -69,7 +67,7 @@ export default class Profile extends PureComponent {
     );
   };
   render() {
-    const {theme, context, user, onAvatar, onShowQrCode, onWriteBtn, onCallBtn, onKeysBtn, onFilesBtn, onSettings, onShareBtn, onNotifications, onBlockUser, onClearHistory, onDelete} = this.props;
+    const {theme, context, user, onShowQrCode, onWriteBtn, onCallBtn, onKeysBtn, onFilesBtn, onSettings, onShareBtn, onNotifications, onBlockUser, onClearHistory, onDelete} = this.props;
     const _styles = styles(theme);
 
     return (
@@ -77,7 +75,7 @@ export default class Profile extends PureComponent {
         <View style={_styles.container}>
           <View style={_styles.header}>
             <View style={_styles.userData}>
-              <Avatar source={user.avatar} onPress={onAvatar} style={_styles.avatar}/>
+              <Avatar source={user.avatar} style={_styles.avatar}/>
               <View style={_styles.info}>
                 <Text style={_styles.name}>{user.username}</Text>
                 <Text style={_styles.lastVisit}>{moment(user.dateUpdate).format('DD.MM.YY')}</Text>
