@@ -299,18 +299,16 @@ export default reducer(initState, {
   [types.RECEIVE_PROFILE_SUCCESS]: (state, action) => {
     const list = state.list.map((item) => {
       if (item.username === action.payload.username) {
-        return {
-          ...item,
-          ...action.payload,
-        };
+        return action.payload;
       }
       return item;
     });
 
     return {
-      list,
-      requestProfile: null,
       ...state,
+      list,
+      sectionList: getSectionList(list),
+      requestProfile: null,
     };
   },
 

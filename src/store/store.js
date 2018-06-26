@@ -2,7 +2,7 @@ import {applyMiddleware, combineReducers, createStore} from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import loggerMiddleware from 'redux-logger';
 import {i18nState} from 'redux-i18n';
-import { reducer as formReducer } from 'redux-form';
+import {reducer as formReducer} from 'redux-form';
 import * as reducers from './reducers';
 
 export default createStore(
