@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {View, KeyboardAvoidingView, ScrollView, TouchableOpacity, Text, Image} from 'react-native';
+import {View, KeyboardAvoidingView, ScrollView, TouchableOpacity, Text, Image, Alert} from 'react-native';
 import {Field, reduxForm} from 'redux-form';
+import ImagePicker from 'react-native-image-picker';
 import PropTypes from 'prop-types';
 
 import validate from './validate';
@@ -18,8 +19,7 @@ class ProfileForm extends Component {
   static propTypes = {
     theme: PropTypes.string,
     context: PropTypes.object,
-    user: PropTypes.object,
-    onAvatar: PropTypes.func,
+    initialValues: PropTypes.object,
     onRemoveBtn: PropTypes.func,
     onAddBtn: PropTypes.func,
     onGroups: PropTypes.func,
@@ -38,6 +38,18 @@ class ProfileForm extends Component {
     onSound: () => {},
     onDelete: () => {},
   };
+
+  componentDidMount() {
+    this.imagePickerOptions = {
+      title: this.props.context.t('ChooseYourPhoto'),
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+      noData: false,
+      allowsEditing: true,
+    };
+  }
 
   renderInput = (props) => {
     const _styles = styles(this.props.theme);
@@ -65,34 +77,46 @@ class ProfileForm extends Component {
     );
   };
 
+  onAvatar = () => {
+    ImagePicker.showImagePicker(this.imagePickerOptions, (response) => {
+      if (response.didCancel) {}
+      else if (response.error) {
+        Alert.alert('Error', response.error);
+      }
+      else {
+        this.props.change('avatar', response.data);
+      }
+    });
+  };
+
   render() {
-    const {theme, context, user, onAvatar, onRemoveBtn, onAddBtn, onGroups, onNotifications, onSound, onDelete} = this.props;
+    const {theme, context, onRemoveBtn, onAddBtn, onGroups, onNotifications, onSound, onDelete} = this.props;
+    const user = this.props.initialValues;
     const _styles = styles(theme);
-    const namesArr = user.username.split(' ');
 
     return (
       <ScrollView style={_styles.wrapper}>
         <View style={_styles.container}>
           <KeyboardAvoidingView behavior="position" enabled>
             <View style={_styles.header}>
-              <Avatar source={user.avatar} onPress={onAvatar} style={_styles.avatar}/>
+              <Avatar source={user.avatar} onPress={this.onAvatar} style={_styles.avatar}/>
               <View style={_styles.headerRight}>
                 <Field
                   name="firstName"
                   component={this.renderInput}
-                  input={namesArr[0] && {value: namesArr[0]}}
+                  input={!!user.firstName && {value: user.firstName}}
                   placeholder={context.t('Firstname')}
                   keyboardType={'text'}
                   autoCapitalize={'none'}
                   autoCorrect={false}/>
-                {namesArr[1] && <Field
+                <Field
                   name="secondName"
                   component={this.renderInput}
-                  input={namesArr[1] && {value: namesArr[1]}}
+                  input={!!user.secondName && {value: user.secondName}}
                   placeholder={context.t('Secondname')}
                   keyboardType={'text'}
                   autoCapitalize={'none'}
-                  autoCorrect={false}/>}
+                  autoCorrect={false}/>
               </View>
             </View>
             <View style={_styles.phones}>
@@ -175,5 +199,4 @@ export default reduxForm({
   form: 'profile',
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true,
-  validate,
 })(ProfileForm);
