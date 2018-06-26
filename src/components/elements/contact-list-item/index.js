@@ -17,6 +17,7 @@ export default class ContactListItem extends Component {
 
   static propTypes = {
     item: PropTypes.object.isRequired,
+    context: PropTypes.object,
     checked: PropTypes.bool,
     onPress: PropTypes.func,
     onLongPress: PropTypes.func,
@@ -56,7 +57,7 @@ export default class ContactListItem extends Component {
   };
 
   render() {
-    const {item, checked, theme, checkboxVisibility} = this.props;
+    const {item, context, checked, theme, checkboxVisibility} = this.props;
     const _styles = styles(theme);
 
     const swipeoutBtns = [
@@ -90,10 +91,10 @@ export default class ContactListItem extends Component {
             </View>
             <View style={_styles.body}>
               <Text style={_styles.name}>
-                {item.username}
+                {item.fullName || item.username}
               </Text>
               <Text>
-                {moment(item.dateUpdate).format('DD.MM.YY')}
+                {item.isOnline ? context.t('online') : context.t('offline')}
               </Text>
             </View>
           </View>

@@ -14,6 +14,9 @@ export default function ({event, store, navigation}) {
     case actionEnum.getOpenKey:
       store.dispatch(contactActions.receivePublicKey(data));
       break;
+    case actionEnum.getOnlineUsers:
+      store.dispatch(contactActions.receiveOnlineUsers(data));
+      break;
     // chats
     case actionEnum.createChat:
       store.dispatch(chatActions.receiveChat(data));

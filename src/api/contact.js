@@ -61,4 +61,21 @@ export default {
 
     return clientMessage;
   },
+
+  getOnlineUsers: async (usernames) => {
+    if (!usernames || !usernames.length) {
+      return null;
+    }
+
+    const websocket = services.getWebsocket();
+    const serverMessage = await wsMessage.getServerMessage({
+      action: actionEnum.getOnlineUsers,
+      data: usernames,
+      to: '',
+    });
+
+    websocket.send(JSON.stringify(serverMessage.message));
+
+    return serverMessage;
+  },
 };
