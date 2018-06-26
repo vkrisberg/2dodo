@@ -10,7 +10,7 @@ import store from './store/store';
 import {accountActions} from './store/actions';
 import translations from './translations';
 import {services} from './utils';
-import AppWithNavigationState from './router';
+import {RootStack} from './router';
 
 export default class App extends Component {
 
@@ -34,7 +34,8 @@ export default class App extends Component {
       deviceName: RNDeviceInfo.getDeviceName(),
       platform: Platform.OS,
     };
-    this.language = RNLanguages.language.substr(0, 2);
+    // TODO - get language from system
+    this.language = 'en'; // RNLanguages.language.substr(0, 2);
 
     store.dispatch(accountActions.update(device));
     store.dispatch(setTranslations(translations));
@@ -69,7 +70,7 @@ export default class App extends Component {
     return (
       <Provider store={store}>
         <I18n translations={{}} initialLang={this.language} fallbackLang="en" useReducer={true}>
-          <AppWithNavigationState/>
+          <RootStack/>
         </I18n>
       </Provider>
     );

@@ -23,7 +23,9 @@ const initState = {
     isOnline: false,
     inContacts: false, // for searchList
   },
+  updatePubKey: null,
   requestProfile: null,
+  receiveRequestProfile: null,
   sendProfile: null,
   loading: false,
   error: null,
@@ -189,15 +191,34 @@ export default reducer(initState, {
   [types.UPDATE_PUBKEY]: (state, action) => {
     return {
       ...state,
-      loading: true,
+      updatePubKey: null,
       error: null
     };
   },
 
   [types.UPDATE_PUBKEY_SUCCESS]: (state, action) => {
+    const list = state.list.filter((item) => item.username !== action.payload.username);
+    list.push(action.payload);
+
+    return {
+      ...state,
+      list,
+      sectionList: getSectionList(list),
+    };
+  },
+
+  [types.UPDATE_PUBKEY_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      error: action.error,
+    };
+  },
+
+  [types.RECEIVE_PUBKEY_SUCCESS]: (state, action) => {
     const list = state.list.map((item) => {
-      if (item.username === action.payload.username) {
-        return action.payload;
+      const findContact = action.payload.find((contact) => contact.username === item.username);
+      if (findContact) {
+        return findContact;
       }
       return item;
     });
@@ -205,15 +226,14 @@ export default reducer(initState, {
     return {
       ...state,
       list,
+      updatePubKey: action.payload[0],
       sectionList: getSectionList(list),
-      loading: false,
     };
   },
 
-  [types.UPDATE_PUBKEY_FAILURE]: (state, action) => {
+  [types.RECEIVE_PUBKEY_FAILURE]: (state, action) => {
     return {
       ...state,
-      loading: false,
       error: action.error,
     };
   },
@@ -259,6 +279,13 @@ export default reducer(initState, {
     return {
       ...state,
       requestProfile: action.payload,
+    };
+  },
+
+  [types.RECEIVE_REQUEST_PROFILE]: (state, action) => {
+    return {
+      ...state,
+      receiveRequestProfile: action.payload,
     };
   },
 

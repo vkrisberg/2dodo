@@ -12,7 +12,7 @@ export default function ({event, store, navigation}) {
   switch (data.action) {
     // server
     case actionEnum.getOpenKey:
-      store.dispatch(contactActions.updatePublicKey(data));
+      store.dispatch(contactActions.receivePublicKey(data));
       break;
     // chats
     case actionEnum.createChat:
@@ -75,6 +75,12 @@ export default function ({event, store, navigation}) {
     // contacts
     case actionEnum.searchUser:
       store.dispatch(contactActions.searchResult(data));
+      break;
+    case actionEnum.requestProfile:
+      store.dispatch(contactActions.receiveRequestProfile(data));
+      break;
+    case actionEnum.sendProfile:
+      store.dispatch(contactActions.receiveProfile(data));
       break;
   }
 };
