@@ -1,7 +1,9 @@
+import Reactotron from 'reactotron-react-native'
 import React, {Component} from 'react';
 import {TouchableOpacity, Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import {submit} from 'redux-form';
 
 import {colors} from '../../../styles';
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
@@ -9,10 +11,13 @@ import {ArrowIcon} from '../../../components/icons';
 import {Button, Profile} from '../../../components/elements';
 import {ProfileForm} from '../../../components/forms';
 import styles from './styles';
+import {contactActions} from '../../../store/actions';
 
 class ContactProfile extends Component {
   static propTypes = {
     account: PropTypes.object,
+    dispatch: PropTypes.func,
+    form: PropTypes.object,
   };
 
   static contextTypes = {
@@ -28,13 +33,18 @@ class ContactProfile extends Component {
 
   goBack = () => this.props.navigation.goBack();
 
-  onEdit = () => {
+  onDone = () => {
+    this.props.dispatch(submit('profile'));
     this.setState({
-      editMode: !this.state.editMode,
+      editMode: false,
     });
   };
 
-  onAvatar = () => alert('click on avatar');
+  onEdit = () => {
+    this.setState({
+      editMode: true,
+    });
+  };
 
   onShowQrCode = () => alert('click on show QR-code');
 
@@ -66,6 +76,10 @@ class ContactProfile extends Component {
 
   onSound = () => this.props.navigation.goBack();
 
+  updateProfile = (data) => {
+    this.props.dispatch(contactActions.update(data));
+  };
+
   render() {
     const {context} = this;
     const {account} = this.props;
@@ -85,12 +99,21 @@ class ContactProfile extends Component {
               <Text style={_styles.styledTitle}>
                 {editMode ? context.t('EditUser') : context.t('ContactProfile')}
               </Text>
-              <Button
-                style={_styles.editBtn}
-                color={colors[theme].blue}
-                onPress={this.onEdit}>
-                {editMode ? context.t('Done') : context.t('Edit')}
-              </Button>
+              {
+                editMode ?
+                  <Button
+                    style={_styles.editBtn}
+                    color={colors[theme].blue}
+                    onPress={this.onDone}>
+                    {context.t('Done')}
+                  </Button> :
+                  <Button
+                    style={_styles.editBtn}
+                    color={colors[theme].blue}
+                    onPress={this.onEdit}>
+                    {context.t('Edit')}
+                  </Button>
+              }
             </View>
           </View>
           <View style={[_styles.body, _styles.bodyProfile]}>
@@ -99,19 +122,18 @@ class ContactProfile extends Component {
                 <ProfileForm
                   theme={theme}
                   context={context}
-                  user={user}
-                  onAvatar={this.onAvatar}
+                  initialValues={user}
                   onRemoveBtn={this.onRemoveBtn}
                   onAddBtn={this.onAddBtn}
                   onGroups={this.onGroups}
                   onNotifications={this.onNotifications}
                   onSound={this.onSound}
-                  onDelete={this.onDelete}/> :
+                  onDelete={this.onDelete}
+                  onSubmit={this.updateProfile}/> :
                 <Profile
                   theme={theme}
                   context={context}
                   user={user}
-                  onAvatar={this.onAvatar}
                   onShowQrCode={this.onShowQrCode}
                   onWriteBtn={this.onWriteBtn}
                   onCallBtn={this.onCallBtn}
