@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import {colors} from '../../../styles';
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
-import {Button, Profile, Navbar, ButtonBack} from '../../../components/elements';
+import {Profile, Navbar, ButtonBack, ButtonNavbar} from '../../../components/elements';
 import {ProfileForm} from '../../../components/forms';
 import {contactActions} from '../../../store/actions';
 import styles from './styles';
@@ -36,12 +36,12 @@ class ContactProfile extends Component {
   renderNavbarButton = (_styles, theme, context) => {
     const {editMode} = this.state;
     return (
-      <Button
-        style={_styles.editBtn}
-        color={colors[theme].blue}
+      <ButtonNavbar
+        position="right"
+        color={colors[theme].blueCornFlower}
         onPress={editMode ? this.onDone : this.onEdit}>
         {editMode ? context.t('Done') : context.t('Edit')}
-      </Button>
+      </ButtonNavbar>
     );
   };
 
