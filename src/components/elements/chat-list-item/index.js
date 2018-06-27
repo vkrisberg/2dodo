@@ -50,13 +50,25 @@ export default class ChatListItem extends Component {
     this.props.onCheckboxPress && this.props.onCheckboxPress(this.props.item);
   };
 
+  renderTextMessage = (message, _styles) => {
+    return (
+      <View>
+        {!message.isOwn
+        && <Text style={_styles.username} numberOfLines={1} ellipsizeMode="tail">{message.username}</Text>}
+        <Text style={_styles.limitText} numberOfLines={2} ellipsizeMode="tail">{message.text}</Text>
+      </View>
+    );
+  };
+
   renderLastMessage = (_styles) => {
     const {item, context} = this.props;
 
     if (item.lastMessage) {
+      if (item.unreadCount > 0 && item.lastMessage.type === 'text') {
+        return this.renderTextMessage(item.lastMessage, _styles);
+      }
       return (
         <Text style={_styles.limitText} numberOfLines={2} ellipsizeMode="tail">
-          {item.unreadCount > 0 && item.lastMessage.type === 'text' && context.t('HaveMessage')}
           {item.unreadCount > 0 && item.lastMessage.type === 'audio' && context.t('HaveVoiceMessage')}
           {item.unreadCount > 0 && item.lastMessage.type === 'video' && context.t('HaveVideo')}
           {item.unreadCount > 0 && item.lastMessage.type === 'image' && context.t('HaveImage')}

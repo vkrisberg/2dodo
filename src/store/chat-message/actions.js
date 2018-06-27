@@ -75,7 +75,7 @@ export default {
         }
         console.log('chat messages loaded', messages.length);
         const payload = messages.map((item) => {
-          return {...item};
+          return JSON.parse(JSON.stringify(item));
         });
         dispatch({type: types.LOAD_SUCCESS, payload});
         return payload;
@@ -119,8 +119,22 @@ export default {
         await realm.write(() => {
           chatMessage = realm.create(dbEnum.ChatMessage, messageData, false);
         });
-        const payload = {...chatMessage};
-        // console.log('chat message created', chatMessage);
+        const payload = JSON.parse(JSON.stringify(chatMessage));
+        // console.log('chat message created', payload);
+
+        // set last message
+        const realmChat = realm.objectForPrimaryKey(dbEnum.Chat, chatId);
+        if (realmChat) {
+          await realm.write(() => {
+            realmChat.lastMessage = chatMessage;
+            realmChat.dateUpdate = dateNow;
+          });
+        }
+        const chatPayload = {
+          ...realmChat,
+          lastMessage: {...realmChat.lastMessage}
+        };
+
         const hashKeys = realm.objects(dbEnum.HashKey)
           .sorted('dateSend', true)
           .filtered(`chatId = '${chatId}'`);
@@ -143,7 +157,7 @@ export default {
           dateSend: chatMessage.dateSend,
         };
         await hashKeyAdd(hashKeyData);
-        dispatch({type: types.SEND_SUCCESS, payload});
+        dispatch({type: types.SEND_SUCCESS, payload, chat: chatPayload});
         return payload;
       } catch (e) {
         dispatch({type: types.SEND_FAILURE, error: e});
@@ -167,7 +181,7 @@ export default {
         await realm.write(() => {
           chatMessage.status = messageEnum.sending;
         });
-        const payload = {...chatMessage};
+        const payload = JSON.parse(JSON.stringify(chatMessage));
         // console.log('chat message resend', payload);
         const dateSend = wsMessage.dateToRealm(chatMessage.dateSend);
         const hashKeys = realm.objects(dbEnum.HashKey)
@@ -198,7 +212,7 @@ export default {
         await realm.write(() => {
           chatMessage = realm.create(dbEnum.ChatMessage, data, true);
         });
-        const payload = {...chatMessage};
+        const payload = JSON.parse(JSON.stringify(chatMessage));
         // console.log('chat message updated', chatMessage);
         // TODO - send updated chat message to members
         dispatch({type: types.EDIT_SUCCESS, payload});
@@ -233,9 +247,15 @@ export default {
   },
 
   receiveMessage: (message) => {
-    return async dispatch => {
+    return async (dispatch, getState) => {
       const realm = services.getRealm();
       try {
+        // send delivery report
+        const msgEncryptTime =  get(message, 'encrypt_time', null);
+        await apiServer.deliveryReport(msgEncryptTime);
+
+        const {chat} = getState();
+        const currentChatId = chat.current.id;
         const dateNow = new Date();
         const meta = get(message, 'data.meta', null);
         if (!meta) {
@@ -249,17 +269,13 @@ export default {
         if (error) {
           throw new Error({type: 'server', error});
         }
-        // send delivery report
-        const msgEncryptTime =  get(message, 'encrypt_time', null);
-        await apiServer.deliveryReport(msgEncryptTime);
 
         const realmChatMessage = realm.objectForPrimaryKey(dbEnum.ChatMessage, meta.id);
         if (realmChatMessage) {
           throw new Error('chat message has already received');
         }
 
-        let encryptTime = get(message, 'encrypt_time', null);
-        encryptTime = wsMessage.rfcToRealm(encryptTime);
+        const encryptTime = wsMessage.rfcToRealm(msgEncryptTime);
         let hashKeys = realm.objects(dbEnum.HashKey)
           .filtered(`chatId = '${meta.chatId}' AND dateSend = ${encryptTime}`);
         // when send a message to yourself
@@ -284,9 +300,25 @@ export default {
         await realm.write(() => {
           chatMessage = realm.create(dbEnum.ChatMessage, messageData, true);
         });
-        const payload = {...chatMessage};
+        const payload = JSON.parse(JSON.stringify(chatMessage));
         // console.log('chat message received', payload);
+
+        // set last message and increment unreadCount
+        const realmChat = realm.objectForPrimaryKey(dbEnum.Chat, meta.chatId);
+        if (realmChat) {
+          await realm.write(() => {
+            if (currentChatId !== meta.chatId) {
+              realmChat.unreadCount += 1;
+            }
+            realmChat.lastMessage = chatMessage;
+            realmChat.dateUpdate = dateNow;
+          });
+        }
+        const chatPayload = JSON.parse(JSON.stringify(realmChat));
+
         // TODO - send delivery report to client
+
+        // create and add hashKey
         const hashKeyData = {
           chatId: chatMessage.chatId,
           messageId: chatMessage.id,
@@ -294,7 +326,8 @@ export default {
           dateSend: chatMessage.dateSend,
         };
         await hashKeyAdd(hashKeyData);
-        dispatch({type: types.RECEIVE_MESSAGE_SUCCESS, payload});
+
+        dispatch({type: types.RECEIVE_MESSAGE_SUCCESS, payload, chat: chatPayload});
         return payload;
       } catch (e) {
         console.log('chat message received error', e);

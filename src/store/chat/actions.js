@@ -68,7 +68,7 @@ export default {
 
         console.log('chat list loaded', chatList.length);
         const payload = chatList.map((item) => {
-          return {...item};
+          return JSON.parse(JSON.stringify(item));
         });
         dispatch({type: types.LOAD_SUCCESS, payload});
         return payload;
@@ -86,7 +86,7 @@ export default {
         const realm = services.getRealm();
         const chat = realm.objectForPrimaryKey(dbEnum.Chat, id);
         // console.log('chat loaded', chat);
-        const payload = {...chat};
+        const payload = JSON.parse(JSON.stringify(chat));
         dispatch({type: types.LOAD_ONE_SUCCESS, payload});
         return payload;
       } catch (e) {
@@ -126,7 +126,7 @@ export default {
         await realm.write(() => {
           chat = realm.create(dbEnum.Chat, chatData, false);
         });
-        const payload = {...chat};
+        const payload = JSON.parse(JSON.stringify(chat));
         // console.log('chat created', chat);
         const apiResult = await apiChat.createChat(sendData, contacts);
         const hashKeyData = {
@@ -154,7 +154,7 @@ export default {
         await realm.write(() => {
           chat = realm.create(dbEnum.Chat, data, true);
         });
-        const payload = {...chat};
+        const payload = JSON.parse(JSON.stringify(chat));
         // console.log('chat updated', chat);
         // TODO - send updated chat to members
         dispatch({type: types.UPDATE_SUCCESS, payload});
@@ -282,8 +282,8 @@ export default {
         await realm.write(() => {
           chat = realm.create(dbEnum.Chat, chatData, true);
         });
-        const payload = {...chat};
-        // console.log('chat received', chat);
+        const payload = JSON.parse(JSON.stringify(chat));
+        // console.log('chat received', payload);
         const hashKeyData = {
           chatId: chat.id,
           hashKey: wsMessage.hashFromMessage(decryptedData),
@@ -299,7 +299,25 @@ export default {
     };
   },
 
-  setCurrentChat: (data) => {
-    return {type: types.SET_CURRENT_CHAT, payload: data};
+  setCurrentChat: (chat) => {
+    return async dispatch => {
+      try {
+        const realm = services.getRealm();
+        if (chat.unreadCount > 0) {
+          const realmChat = realm.objectForPrimaryKey(dbEnum.Chat, chat.id);
+          if (realmChat) {
+            await realm.write(() => {
+              realmChat.unreadCount = 0;
+              realmChat.dateUpdate = new Date();
+            });
+            chat = JSON.parse(JSON.stringify(realmChat));
+          }
+        }
+        dispatch({type: types.SET_CURRENT_CHAT, payload: chat});
+        return chat;
+      } catch (e) {
+        throw e;
+      }
+    };
   },
 };
