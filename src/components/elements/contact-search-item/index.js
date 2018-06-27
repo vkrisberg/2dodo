@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import {AvatarIcon, TextLabel} from '../index';
 import {themeEnum} from '../../../enums';
-import {colors} from '../../../styles';
+import {colors, weights} from '../../../styles';
 import styles from './styles';
 
 import IMG_ARROW_RIGHT from '../../../images/icons/arrow-right/arrow_right.png';
@@ -42,15 +42,15 @@ export default class ContactSearchItem extends PureComponent {
       label = item.isOnline ? context.t('online') : context.t('offline');
 
       return (
-        <TextLabel style={_styles.secondText} size={13} weight={colors.medium} color={colors[theme].grayInput}>
+        <TextLabel style={_styles.secondText} size={13} weight={weights.medium} color={colors[theme].grayInput}>
           {label}
         </TextLabel>
       );
     }
 
     return (
-      <TextLabel style={_styles.secondText} size={13} weight={colors.medium} color={colors[theme].grayInput}>
-        {label} <TextLabel size={13} weight={colors.medium} color={colors[theme].navbarTitle}>{inContacts}</TextLabel>
+      <TextLabel style={_styles.secondText} size={13} weight={weights.medium} color={colors[theme].grayInput}>
+        {label} <TextLabel size={13} weight={weights.medium} color={colors[theme].navbarTitle}>{inContacts}</TextLabel>
       </TextLabel>
     );
   };
@@ -67,7 +67,7 @@ export default class ContactSearchItem extends PureComponent {
             <AvatarIcon theme={theme} source={item.avatar} label={name}/>
           </View>
           <View style={_styles.body}>
-            <TextLabel size={16} weight={colors.semiBold} color={colors[theme].grayBlue}>
+            <TextLabel size={16} weight={weights.semiBold} color={colors[theme].grayBlue}>
               {name}
             </TextLabel>
             {this.renderLabel(_styles)}
