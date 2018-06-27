@@ -3,18 +3,20 @@ import {validation} from '../../../utils';
 export default (values) => {
   const errors = {};
 
-  if (values.server && !validation.httpsRegex.test(values.server)) {
-    errors.server = 'ServerRegexpError';
+  if (values.firstName && !validation.nameRegex.test(values.firstName)) {
+    errors.firstName = 'NameRegexpError';
   }
 
-  if (values.page === 1 && !values.email) {
-    errors.email = 'Required';
-  } else if (values.page === 1 && !validation.emailRegex.test(values.email)) {
-    errors.email = 'EmailRegexpError';
+  if (values.secondName && !validation.nameRegex.test(values.secondName)) {
+    errors.secondName = 'NameRegexpError';
   }
 
-  if (values.page === 1 && values.phone && !validation.phoneRegex.test(values.phone)) {
-    errors.phone = 'PhoneRegexpError';
+  if (values.bio && values.bio.length < 10) {
+    errors.bio = 'BioRegexpError';
+  }
+
+  if (values.phones && !validation.phoneRegex.test(values.phones)) {
+    errors.phones = 'PhoneRegexpError';
   }
 
   return errors;

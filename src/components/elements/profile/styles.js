@@ -102,11 +102,12 @@ export default (theme) => {
     },
 
     operationBtn: {
-      width: 'auto',
+      width: '100%',
       height: 'auto',
       paddingVertical: 13,
       paddingRight: 15,
       borderWidth: 0,
+      alignItems: 'flex-start',
     },
 
     operationLink: {

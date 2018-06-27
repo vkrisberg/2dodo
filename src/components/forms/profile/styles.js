@@ -26,6 +26,12 @@ export default (theme) => {
       marginTop: -10,
     },
 
+    inputContainer: {
+      width: '100%',
+      justifyContent: 'flex-start',
+      alignItems: 'flex-start',
+    },
+
     input: {
       color: colors[theme].grayBlue,
       borderRadius: 0,
