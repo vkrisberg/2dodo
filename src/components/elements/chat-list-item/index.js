@@ -3,12 +3,9 @@ import {TouchableOpacity, View, Image, Text} from 'react-native';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
-import {Checkbox} from '../index';
-import {AvatarIcon} from '../../icons';
+import {Checkbox, AvatarIcon} from '../index';
 import {themeEnum} from '../../../enums';
 import styles from './styles';
-
-import avatarBgIcon from '../../../images/icons/circle/circle.png';
 
 export default class ChatListItem extends Component {
 
@@ -27,15 +24,6 @@ export default class ChatListItem extends Component {
     theme: themeEnum.light,
     editMode: false,
     selectedItems: {},
-  };
-
-  getInitials = (name) => {
-    const nameArr = name.split(' ');
-    let initials = [];
-    nameArr.map(item =>
-      initials.push(item[0].toUpperCase())
-    );
-    return initials.join('');
   };
 
   onPress = () => {
@@ -89,7 +77,8 @@ export default class ChatListItem extends Component {
     const _styles = styles(theme);
     const isToday = moment(item.dateUpdate).format('DD.MM.YY') === moment().format('DD.MM.YY');
     const chosen = selectedItems[item.id];
-    // console.log('chosen', editMode, chosen)
+    const avatarSource = item.contacts && item.contacts.length ? item.contacts[0].avatar : item.avatar;
+
     return (
       <TouchableOpacity onPress={this.onPress} onLongPress={this.onLongPress}>
         <View style={_styles.container}>
@@ -100,11 +89,7 @@ export default class ChatListItem extends Component {
           </View>
           }
           <View style={_styles.image}>
-            <Image source={avatarBgIcon} style={_styles.avatarBg}/>
-            {item.avatar && <Image source={{uri: item.avatar}} style={_styles.avatar}/>}
-            {!item.avatar && item.name &&
-            <Text style={_styles.avatarInitials}>{this.getInitials(item.name)}</Text>}
-            {!item.name && !item.avatar && <AvatarIcon/>}
+            <AvatarIcon theme={theme} source={avatarSource} label={item.shortName}/>
           </View>
           <View style={_styles.body}>
             <Text style={_styles.name}>

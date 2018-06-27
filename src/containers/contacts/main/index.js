@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
 import {ContactList} from '../../../components/lists';
 import {Navbar, SearchInput, NavbarDots, ButtonAdd, ContactListItem} from '../../../components/elements';
-import {contactActions} from '../../../store/actions';
+import {chatActions, contactActions} from '../../../store/actions';
 import {routeEnum} from '../../../enums';
 
 class Contacts extends Component {
@@ -52,6 +52,12 @@ class Contacts extends Component {
     this.props.navigation.navigate(routeEnum.ContactAdd);
   };
 
+  onPressChatBtn = (contact) => {
+    this.props.dispatch(chatActions.create([contact])).then((chat) => {
+      this.props.navigation.navigate(routeEnum.ChatMessage, {chat});
+    });
+  };
+
   onPressDeleteBtn =(username) => {
     const {context} = this;
 
@@ -92,6 +98,7 @@ class Contacts extends Component {
         checked={this.isContactChosen(item)}
         onPress={() => this.onContactPress(item)}
         onCheckboxPress={() => this.onCheckboxPress(item)}
+        onPressChatBtn={this.onPressChatBtn}
         onPressDeleteBtn={this.onPressDeleteBtn}
       />
     );

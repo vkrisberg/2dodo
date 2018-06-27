@@ -254,7 +254,7 @@ const translations = {
     'Search': 'Search',
     'SearchResults': 'Search results',
     // Chat
-    'NoChats': 'Your have not chats yet',
+    'NoChats': 'Your have no chats yet',
     'NoMessages': 'No messages',
     'CreateChat': 'Create chat',
     'Message': 'Message',

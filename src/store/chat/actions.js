@@ -1,7 +1,8 @@
-import {get, map, filter} from 'lodash';
+import {get, map, filter, keyBy} from 'lodash';
 
 import {apiChat, apiServer} from '../../api';
 import {services, wsMessage} from '../../utils';
+import {hashlib} from '../../utils/encrypt';
 import {dbEnum} from '../../enums';
 import CONFIG from '../../config';
 
@@ -108,11 +109,18 @@ export default {
           throw new Error('contacts is empty');
         }
         const members = map(contacts, 'username');
+        // find contacts
+        const query = members.join("' OR username = '");
+        const realmContacts = realm.objects(dbEnum.Contact).filtered(`username = '${query}'`);
+        // put yourself to members
         members.push(account.user.username);
+        const membersHash = hashlib.hexSha256(members.sort().toString());
+
         const sendData = {
           id: wsMessage.generateUuid(),
           owner: account.user.username,
           members,
+          membersHash,
           salt: wsMessage.generateUuid(),
           dateSend: dateNow,
         };
@@ -120,9 +128,20 @@ export default {
           ...sendData,
           name: map(contacts, 'nickname').join(', '),
           shortName: wsMessage.getShortName(contacts),
+          avatar: contacts[0].avatar,
+          contacts: realmContacts,
           dateCreate: dateNow,
           dateUpdate: dateNow,
         };
+
+        // doesn't create new chat if exist
+        const chats = realm.objects(dbEnum.Chat)
+          .filtered(`membersHash = '${membersHash}' AND isDeleted = false`);
+        if (chats && chats.length) {
+          dispatch({type: types.CREATE_SUCCESS, payload: null});
+          return JSON.parse(JSON.stringify(chats[0]));
+        }
+
         let chat = {};
         await realm.write(() => {
           chat = realm.create(dbEnum.Chat, chatData, false);
@@ -265,21 +284,29 @@ export default {
           privateKey: account.keys.privateKey,
           password: account.password,
         });
+        const membersHash = hashlib.hexSha256(decryptedData.members.sort().toString());
         const members = filter(decryptedData.members, (username) => username !== account.user.username);
         const contacts = map(members, (username) => {
           return {
             username: username,
-            nickname: username.split('@')[0],
+            nickname: wsMessage.getNickname(username),
           };
         });
+        // find contacts in db
+        const query = members.join("' OR username = '");
+        const realmContacts = realm.objects(dbEnum.Contact).filtered(`username = '${query}'`);
+
         const chatData = {
           ...decryptedData,
+          membersHash,
           name: map(contacts, 'nickname').join(', '),
           shortName: wsMessage.getShortName(contacts),
-          isShown: false,
+          avatar: realmContacts.length ? realmContacts[0].avatar : '',
+          contacts: realmContacts,
           dateSend: wsMessage.rfcToDate(decryptedData.dateSend),
           dateCreate: dateNow,
           dateUpdate: dateNow,
+          // isDeleted: true,
         };
         let chat = {};
         await realm.write(() => {

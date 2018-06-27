@@ -22,6 +22,7 @@ export default class ContactListItem extends Component {
     onLongPress: PropTypes.func,
     onCheckboxPress: PropTypes.func,
     onPressDeleteBtn: PropTypes.func,
+    onPressChatBtn: PropTypes.func,
     theme: PropTypes.string,
     checkboxVisibility: PropTypes.bool,
   };
@@ -49,8 +50,8 @@ export default class ContactListItem extends Component {
     this.props.onPressDeleteBtn(username);
   };
 
-  onPressWriteBtn = () => {
-    alert('press write btn');
+  onPressChatBtn = () => {
+    this.props.onPressChatBtn && this.props.onPressChatBtn(this.props.item);
   };
 
   onPressCallBtn = () => {
@@ -70,7 +71,7 @@ export default class ContactListItem extends Component {
       },
       {
         backgroundColor: 'transparent',
-        onPress: this.onPressWriteBtn,
+        onPress: this.onPressChatBtn,
         component: <View style={_styles.btnContainer}><Image source={writeBtn}/></View>,
       },
       {
@@ -81,7 +82,7 @@ export default class ContactListItem extends Component {
     ];
 
     return (
-      <Swipeout right={swipeoutBtns} buttonWidth={50} style={_styles.swipeOut}>
+      <Swipeout right={swipeoutBtns} buttonWidth={50} autoClose={true} style={_styles.swipeOut}>
         <TouchableOpacity onPress={this.onPress} onLongPress={this.onLongPress} style={{width: '100%'}}>
           <View style={_styles.wrapper}>
             {checkboxVisibility && <Checkbox

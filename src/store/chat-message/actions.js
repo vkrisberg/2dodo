@@ -257,6 +257,7 @@ export default {
         const {chat} = getState();
         const currentChatId = chat.current.id;
         const dateNow = new Date();
+        const from = get(message, 'from', null);
         const meta = get(message, 'data.meta', null);
         if (!meta) {
           throw new Error('data.meta is null');
@@ -280,6 +281,7 @@ export default {
           .filtered(`chatId = '${meta.chatId}' AND dateSend = ${encryptTime}`);
         // when send a message to yourself
         hashKeys = uniqBy(hashKeys, 'hashKey');
+        // console.log('hashKeys', hashKeys.length, meta.chatId, encryptTime);
         if (!hashKeys.length || hashKeys.length > 1) {
           throw new Error('hashKey not found or more than one');
         }
@@ -288,8 +290,13 @@ export default {
           data: dataPayload,
           hashKey: hashKeys[0].hashKey,
         });
+
+        const realmContact = realm.objectForPrimaryKey(dbEnum.Contact, decryptedData.username);
+
         const messageData = {
           ...decryptedData,
+          from,
+          contact: realmContact,
           status: messageEnum.received,
           isOwn: false,
           dateSend: wsMessage.rfcToDate(decryptedData.dateSend),
@@ -338,7 +345,7 @@ export default {
           throw e.error;
         }
         dispatch({type: types.RECEIVE_MESSAGE_FAILURE, error: e});
-        throw e;
+        // throw e;
       }
     };
   },

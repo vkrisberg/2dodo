@@ -85,6 +85,10 @@ export default reducer(initState, {
   },
 
   [types.CREATE_SUCCESS]: (state, action) => {
+    if (!action.payload) {
+      return state;
+    }
+
     return {
       ...state,
       list: [action.payload, ...state.list],
