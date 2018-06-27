@@ -1,5 +1,6 @@
 import reducer from '../../utils/reducer';
 import {types} from './actions';
+import {types as chatMessageTypes} from '../chat-message/actions';
 
 const initState = {
   list: [],
@@ -182,9 +183,46 @@ export default reducer(initState, {
   },
 
   [types.SET_CURRENT_CHAT]: (state, action) => {
+    const list = state.list.map((item) => {
+      if (item.id === action.payload.id) {
+        return action.payload;
+      }
+      return item;
+    });
+
     return {
       ...state,
+      list,
       current: action.payload,
+    };
+  },
+
+  // Chat Message types
+  [chatMessageTypes.SEND_SUCCESS]: (state, action) => {
+    const list = state.list.map((item) => {
+      if (item.id === action.chat.id) {
+        return action.chat;
+      }
+      return item;
+    });
+
+    return {
+      ...state,
+      list,
+    };
+  },
+
+  [chatMessageTypes.RECEIVE_MESSAGE_SUCCESS]: (state, action) => {
+    const list = state.list.map((item) => {
+      if (item.id === action.chat.id) {
+        return action.chat;
+      }
+      return item;
+    });
+
+    return {
+      ...state,
+      list,
     };
   },
 });

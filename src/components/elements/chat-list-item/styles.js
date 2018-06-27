@@ -91,6 +91,14 @@ export default (theme) => {
       marginLeft: 5,
     },
 
+    username: {
+      color: colors[theme].grayBlue,
+      fontFamily: fonts.main,
+      fontSize: 13,
+      fontWeight: weights.medium,
+      overflow: 'hidden',
+    },
+
     limitText: {
       color: colors[theme].grayText,
       fontFamily: fonts.main,

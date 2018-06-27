@@ -37,6 +37,10 @@ class ChatMessage extends PureComponent {
     this.loadContactList();
   }
 
+  componentWillUnmount() {
+    this.props.dispatch(chatActions.setCurrentChat({}));
+  }
+
   loadContactList = (filter, sort, descending) => {
     return this.props.dispatch(contactActions.loadList(filter, sort, descending));
   };

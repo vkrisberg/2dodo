@@ -65,7 +65,6 @@ export default class ContactListItem extends Component {
     const swipeoutBtns = [
       {
         backgroundColor: 'transparent',
-        underlayColor: 'blue',
         onPress: () => this.onPressDeleteBtn(item.username),
         component: <View style={_styles.btnContainer}><Image source={deleteBtn}/></View>,
       },
