@@ -91,8 +91,8 @@ class ContactProfile extends Component {
       context.t('DeleteContact'),
       context.t('DeleteContactConfirm'),
       [
-        {text: 'Cancel'},
-        {text: 'OK', onPress: () => {
+        {text: context.t('Cancel')},
+        {text: context.t('Delete'), onPress: () => {
           if (this.state.editMode) {
             this.setState({
               editMode: false,
