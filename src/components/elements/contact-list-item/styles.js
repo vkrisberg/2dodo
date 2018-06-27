@@ -30,10 +30,7 @@ export default (theme) => {
     },
 
     name: {
-      fontFamily: fonts.main,
-      fontWeight: weights.semiBold,
-      fontSize: 16,
-      color: colors[theme].grayBlue,
+      marginBottom: 6,
     },
 
     chosen: {
