@@ -6,6 +6,7 @@ import {MainLayout, BackgroundLayout} from '../../../components/layouts';
 import {ContactList} from '../../../components/lists';
 import {SearchInput, Navbar, ContactListItem, ButtonBack} from '../../../components/elements';
 import {chatActions, contactActions} from '../../../store/actions';
+import {routeEnum} from '../../../enums';
 
 const list = [
   {
@@ -63,16 +64,13 @@ class ChatCreate extends Component {
     );
   };
 
-  goBack = () => this.props.navigation.goBack();
-
   onSearchChange = (text) => {
     this.searchContacts(text);
   };
 
   onCreateChat = (contact) => {
     this.createChat([contact]).then((chat) => {
-      this.goBack();
-      // this.props.navigation.navigate(routeEnum.ChatMessage, {chat});
+      this.props.navigation.replace(routeEnum.ChatMessage, {chat});
     });
   };
 
@@ -94,7 +92,7 @@ class ChatCreate extends Component {
         <BackgroundLayout theme={account.user.theme} paddingHorizontal={10}>
           <Navbar renderTitle={this.context.t('CreateChat')}
                   renderLeft={<ButtonBack/>}/>
-          <SearchInput placeholder="Search in chats" onChange={this.onSearchChange}/>
+          <SearchInput placeholder="Search contacts" onChange={this.onSearchChange}/>
           <ContactList context={this.context}
                        items={contact.sectionList}
                        sections

@@ -126,9 +126,11 @@ Chat.schema = {
     name: 'string',
     owner: 'string', // login@hostname
     members: 'string[]', // [login@hostname, ...]
+    membersHash: 'string?', // sha256 hash from members
     shortName: 'string?',
     avatar: 'string?',
     lastMessage: 'ChatMessage?',
+    contacts: 'Contact[]',
     unreadCount: {type: 'int', default: 0},
     sort: {type: 'int', default: 0},
     pin: {type: 'int', default: 0},
@@ -159,8 +161,8 @@ ChatMessage.schema = {
     text: 'string?',
     filename: 'string?',
     fileUrl: 'string?',
-    user: 'Contact?',
-    quote: 'ChatMessage?',
+    contact: 'Contact?',
+    quote: 'string?', // ChatMessage json string
     status: {type: 'string', default: 'sending'}, // [sending, sent, received, read, error]
     isOwn: {type: 'bool', default: false},
     isFavorite: {type: 'bool', indexed: true, default: false},
@@ -227,8 +229,8 @@ GroupMessage.schema = {
     text: 'string?',
     filename: 'string?',
     fileUrl: 'string?',
-    user: 'Contact?',
-    quote: 'GroupMessage?',
+    contact: 'Contact?',
+    quote: 'string?', // GroupMessage json string
     status: {type: 'string', default: 'sending'}, // [sending, sent, received, read, error]
     isOwn: {type: 'bool', default: false},
     isFavorite: {type: 'bool', indexed: true, default: false},
