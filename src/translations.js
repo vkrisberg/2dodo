@@ -86,6 +86,7 @@ const translations = {
     // Buttons
     'Delete': 'Удалить',
     'DeleteContact': 'Удалить контакт',
+    'DeleteContactConfirm': 'Вы уверенны, что хотите удалить контакт?',
     // Errors
     'Required': 'Required',
     'LoginRegexpError': 'Login must be minimum 2 characters long and only contain a-z, 0-9 and _',
@@ -233,6 +234,7 @@ const translations = {
     // Buttons
     'Delete': 'Delete',
     'DeleteContact': 'Delete contact',
+    'DeleteContactConfirm': 'Are you sure you want to delete the contact?',
     // Errors
     'Required': 'Required',
     'LoginRegexpError': 'Login must be minimum 2 characters long and only contain a-z, 0-9 and _',

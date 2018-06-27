@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View} from 'react-native';
+import {View, Alert} from 'react-native';
 import {connect} from 'react-redux';
 import {get, values} from 'lodash';
 import PropTypes from 'prop-types';
@@ -85,13 +85,25 @@ class ContactProfile extends Component {
   onClearHistory = () => alert('click on clear history btn');
 
   onDelete = (username) => {
-    if (this.state.editMode) {
-      this.setState({
-        editMode: false,
-      });
-    }
-    this.props.dispatch(contactActions.delete(username));
-    this.goBack();
+    const {context} = this;
+
+    Alert.alert(
+      context.t('DeleteContact'),
+      context.t('DeleteContactConfirm'),
+      [
+        {text: context.t('Cancel')},
+        {text: context.t('Delete'), onPress: () => {
+          if (this.state.editMode) {
+            this.setState({
+              editMode: false,
+            });
+          }
+          this.props.dispatch(contactActions.delete(username));
+          this.goBack();
+        }},
+      ],
+      {cancelable: false},
+    );
   };
 
   onRemoveBtn = () => alert('click on remove btn');
