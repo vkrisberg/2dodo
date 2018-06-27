@@ -64,16 +64,15 @@ export default class ChatListItem extends Component {
     const {item, context} = this.props;
 
     if (item.lastMessage) {
-      if (item.unreadCount > 0 && item.lastMessage.type === 'text') {
+      if (item.lastMessage.type === 'text') {
         return this.renderTextMessage(item.lastMessage, _styles);
       }
       return (
         <Text style={_styles.limitText} numberOfLines={2} ellipsizeMode="tail">
-          {item.unreadCount > 0 && item.lastMessage.type === 'audio' && context.t('HaveVoiceMessage')}
-          {item.unreadCount > 0 && item.lastMessage.type === 'video' && context.t('HaveVideo')}
-          {item.unreadCount > 0 && item.lastMessage.type === 'image' && context.t('HaveImage')}
-          {item.unreadCount > 0 && item.lastMessage.type === 'call' && context.t('HaveCall')}
-          {item.unreadCount === 0 && item.lastMessage.text}
+          {item.lastMessage.type === 'audio' && context.t('HaveVoiceMessage')}
+          {item.lastMessage.type === 'video' && context.t('HaveVideo')}
+          {item.lastMessage.type === 'image' && context.t('HaveImage')}
+          {item.lastMessage.type === 'call' && context.t('HaveCall')}
         </Text>
       );
     }

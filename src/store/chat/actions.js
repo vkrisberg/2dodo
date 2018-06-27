@@ -56,6 +56,7 @@ export default {
       try {
         const realm = services.getRealm();
         let chatList = realm.objects(dbEnum.Chat)
+          .filtered(`isDeleted = false`)
           .sorted(sort, descending);
         if (filter) {
           chatList = chatList.filtered(filter);
@@ -179,16 +180,18 @@ export default {
         }
 
         await realm.write(() => {
-          realm.delete(chats);
+          for (let i = 0; i < chats.length; i++) {
+            chats[i].isDeleted = true;
+            chats[i].unreadCount = 0;
+            chats[i].dateUpdate = new Date();
+          }
         });
 
         for (let i = 0; i < ids.length; i++) {
           const chatId = ids[i];
           const messages = realm.objects(dbEnum.ChatMessage).filtered(`chatId = '${chatId}'`);
-          const hashKeys = realm.objects(dbEnum.HashKey).filtered(`chatId = '${chatId}'`);
           await realm.write(() => {
             realm.delete(messages);
-            realm.delete(hashKeys);
           });
         }
 
@@ -215,14 +218,14 @@ export default {
         }
 
         await realm.write(() => {
-          realm.delete(chat);
+          chat.isDeleted = true;
+          chat.unreadCount = 0;
+          chat.dateUpdate = new Date();
         });
 
         const messages = realm.objects(dbEnum.ChatMessage).filtered(`chatId = '${id}'`);
-        const hashKeys = realm.objects(dbEnum.HashKey).filtered(`chatId = '${id}'`);
         await realm.write(() => {
           realm.delete(messages);
-          realm.delete(hashKeys);
         });
         // console.log('chat deleted', id);
         dispatch({type: types.DELETE_SUCCESS, payload: id});
@@ -299,7 +302,7 @@ export default {
     };
   },
 
-  setCurrentChat: (chat) => {
+  setCurrentChat: (chat, clearMessages = false) => {
     return async dispatch => {
       try {
         const realm = services.getRealm();
@@ -313,7 +316,7 @@ export default {
             chat = JSON.parse(JSON.stringify(realmChat));
           }
         }
-        dispatch({type: types.SET_CURRENT_CHAT, payload: chat});
+        dispatch({type: types.SET_CURRENT_CHAT, payload: chat, clearMessages});
         return chat;
       } catch (e) {
         throw e;

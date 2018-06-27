@@ -311,6 +311,7 @@ export default {
               realmChat.unreadCount += 1;
             }
             realmChat.lastMessage = chatMessage;
+            realmChat.isDeleted = false;
             realmChat.dateUpdate = dateNow;
           });
         }
