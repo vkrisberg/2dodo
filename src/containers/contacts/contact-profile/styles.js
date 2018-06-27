@@ -8,10 +8,6 @@ export default (theme) => {
       flexDirection: 'row',
     },
 
-    navbar: {
-      paddingRight: 10,
-    },
-
     body: {
       width: sizes.windowWidth,
       paddingRight: 10,
@@ -45,16 +41,6 @@ export default (theme) => {
       fontSize: 15,
       fontWeight: weights.medium,
       fontFamily: fonts.main,
-    },
-
-    editBtn: {
-      width: 'auto',
-      height: 'auto',
-      paddingLeft: 10,
-      borderWidth: 0,
-      alignItems: 'flex-end',
-      position: 'absolute',
-      right: 10,
     },
   });
 };

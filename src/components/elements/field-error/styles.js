@@ -1,20 +1,20 @@
 import {StyleSheet} from 'react-native';
 import {colors, fonts, weights} from '../../../styles';
 
-export default ({theme}) => {
+export default (theme, type) => {
   return StyleSheet.create({
     container: {
       alignItems: 'center',
-      marginTop: -5,
+      marginTop: type === 'main' ? -5 : 5,
       marginBottom: 10,
     },
 
     text: {
-      color: colors[theme].red,
+      color: type === 'main' ? colors[theme].red : colors[theme].redLight,
       fontFamily: fonts.main,
-      fontSize: 15,
+      fontSize: type === 'main' ? 15 : 14,
       fontWeight: weights.medium,
-      marginBottom: 5,
+      marginBottom: type === 'main' ? 5 : 0,
     },
   });
 }

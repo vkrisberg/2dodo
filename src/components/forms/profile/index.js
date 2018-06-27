@@ -84,13 +84,13 @@ class ProfileForm extends Component {
     }
 
     return (
-      <View style={{width: '100%'}}>
+      <View style={_styles.inputContainer}>
         <Input
           {...props}
           style={_styles.input}
           theme={theme}
           error={touched && error}/>
-        <FieldError theme={theme} errors={errors} path={props.input.name}/>
+        <FieldError theme={theme} errors={errors} path={props.input.name} type={'second'}/>
       </View>
     );
   };
@@ -129,6 +129,11 @@ class ProfileForm extends Component {
                   name="secondName"
                   component={this.renderInput}
                   placeholder={context.t('Secondname')}
+                  autoCorrect={false}/>
+                <Field
+                  name="bio"
+                  component={this.renderInput}
+                  placeholder={context.t('Bio')}
                   autoCorrect={false}/>
               </View>
             </View>
@@ -212,4 +217,5 @@ export default reduxForm({
   form: 'profile',
   destroyOnUnmount: true,
   forceUnregisterOnUnmount: true,
+  validate,
 })(ProfileForm);

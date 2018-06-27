@@ -1,43 +1,13 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, Text, View, Modal} from 'react-native';
+import {TouchableOpacity, Text, View, Modal, Alert} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
 import {ContactList} from '../../../components/lists';
-import {Navbar, SearchInput, NavbarDots, ButtonNavbar, ButtonAdd, ContactListItem} from '../../../components/elements';
+import {Navbar, SearchInput, NavbarDots, ButtonAdd, ContactListItem} from '../../../components/elements';
 import {contactActions} from '../../../store/actions';
 import {routeEnum} from '../../../enums';
-
-const list = [
-  {
-    title: 'Me',
-    data: [
-      {
-        username: 'Bart Simpson',
-      }
-    ],
-  },
-  {
-    title: 'A',
-    data: [
-      {
-        username: 'Anna'
-      },
-      {
-        username: 'Alla'
-      },
-    ],
-  },
-  {
-    title: 'B',
-    data: [
-      {
-        username: 'Bady'
-      }
-    ],
-  },
-];
 
 class Contacts extends Component {
 
@@ -74,14 +44,6 @@ class Contacts extends Component {
     return this.loadContactList(filter);
   };
 
-  updateContact = (data) => {
-    return this.props.dispatch(contactActions.update(data));
-  };
-
-  deleteContact = (username) => {
-    return this.props.dispatch(contactActions.delete(username));
-  };
-
   onSearchChange = (text) => {
     this.searchContacts(text);
   };
@@ -90,27 +52,18 @@ class Contacts extends Component {
     this.props.navigation.navigate(routeEnum.ContactAdd);
   };
 
-  onUpdate = (username) => {
-    this.loadContact(username).then(() => {
-      // TODO: show contact updating form
-    });
-  };
+  onPressDeleteBtn =(username) => {
+    const {context} = this;
 
-  onDelete = (username) => {
-    // TODO: show contact deleting confirmation form
-    // this.deleteContact(username);
-  };
-
-  renderNavbarButton = () => {
-    const {editMode} = this.state;
-
-    if (editMode) {
-      return (
-        <ButtonNavbar position="right" onPress={this.onDelete}>{this.context.t('Delete')}</ButtonNavbar>
-      );
-    }
-
-    return <ButtonAdd onPress={this.onCreate}/>;
+    Alert.alert(
+      context.t('DeleteContact'),
+      context.t('DeleteContactConfirm'),
+      [
+        {text: context.t('Cancel')},
+        {text: context.t('Delete'), onPress: () => this.props.dispatch(contactActions.delete(username))}
+      ],
+      {cancelable: false},
+    );
   };
 
   isContactChosen = (contact) => {
@@ -139,6 +92,7 @@ class Contacts extends Component {
         checked={this.isContactChosen(item)}
         onPress={() => this.onContactPress(item)}
         onCheckboxPress={() => this.onCheckboxPress(item)}
+        onPressDeleteBtn={this.onPressDeleteBtn}
       />
     );
   };
@@ -152,7 +106,7 @@ class Contacts extends Component {
         <BackgroundLayout theme={account.user.theme} paddingHorizontal={10}>
           <Navbar renderTitle={context.t('Contacts')}
                   renderLeft={<NavbarDots/>}
-                  renderRight={this.renderNavbarButton()}/>
+                  renderRight={<ButtonAdd onPress={this.onCreate}/>}/>
           <SearchInput placeholder="Search contacts" onChange={this.onSearchChange}/>
           <ContactList context={context} items={contact.sectionList} renderItem={this.renderContactItem} sections/>
         </BackgroundLayout>

@@ -13,12 +13,14 @@ export default class FieldError extends Component {
     path: PropTypes.string,
     textStyle: PropTypes.any,
     style: PropTypes.any,
+    type: PropTypes.oneOf(['main', 'second']),
   };
 
   static defaultProps = {
     theme: themeEnum.light,
     errors: [],
     path: '',
+    type: 'main',
   };
 
   renderItems(_styles) {
@@ -52,8 +54,8 @@ export default class FieldError extends Component {
   }
 
   render() {
-    const {theme, style} = this.props;
-    const _styles = styles({theme});
+    const {theme, style, type} = this.props;
+    const _styles = styles(theme, type);
     const items = this.renderItems(_styles);
 
     if (!items || !items.length) {
