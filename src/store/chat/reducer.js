@@ -213,12 +213,13 @@ export default reducer(initState, {
   },
 
   [chatMessageTypes.RECEIVE_MESSAGE_SUCCESS]: (state, action) => {
-    const list = state.list.map((item) => {
-      if (item.id === action.chat.id) {
-        return action.chat;
-      }
-      return item;
-    });
+    let list = [...state.list];
+    const index = list.findIndex((item) => item.id === action.chat.id);
+    if (index >= 0) {
+      list[index] = action.chat;
+    } else {
+      list.unshift(action.chat);
+    }
 
     return {
       ...state,
