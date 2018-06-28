@@ -82,10 +82,7 @@ export default class Profile extends PureComponent {
               <Avatar source={user.avatar} style={_styles.avatar}/>
               <View style={_styles.info}>
                 <Text style={_styles.name}>
-                  {user.firstName || user.secondName ?
-                    `${user.firstName} ${user.secondName}` :
-                    user.username
-                  }
+                  {user.fullName ? user.fullName : user.username}
                 </Text>
                 <Text style={_styles.lastVisit}>{moment(user.dateUpdate).format('DD.MM.YY')}</Text>
                 <Button

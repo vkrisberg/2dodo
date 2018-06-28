@@ -66,7 +66,11 @@ class Contacts extends Component {
       context.t('DeleteContactConfirm'),
       [
         {text: context.t('Cancel')},
-        {text: context.t('Delete'), onPress: () => this.props.dispatch(contactActions.delete(username))}
+        {text: context.t('Delete'), onPress: () => {
+          this.props.dispatch(contactActions.delete(username)).then(() => {
+            this.props.dispatch(chatActions.loadList());
+          });
+        }}
       ],
       {cancelable: false},
     );

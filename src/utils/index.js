@@ -9,3 +9,4 @@ export {default as services} from './services';
 export {default as wsMessage} from './ws-message';
 export {default as validation} from './validation';
 export {default as generateAlphabet} from './generate-alphabet';
+export {default as helpers} from './helpers';

@@ -8,6 +8,7 @@ export default {
   isSecure: true,
   storagePrefix: '@2dodo',
   maxHashCount: 10,
+  maxConnectionAttempts: 10,
   realm: {
     schema: Schema,
     schemaVersion: 1,
