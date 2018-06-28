@@ -27,6 +27,10 @@ class ChatMessage extends PureComponent {
   constructor(props) {
     super(props);
 
+    this.state = {
+      quote: null,
+    };
+
     this.chat = {};
   }
 
@@ -73,7 +77,12 @@ class ChatMessage extends PureComponent {
   };
 
   onMessagePress = (message) => {
-    // console.log('onMessagePress', message);
+    this.setState({
+      quote: {
+        name: message.username,
+        text: message.text,
+      },
+    });
   };
 
   onSubmitText = (text) => {
@@ -92,6 +101,12 @@ class ChatMessage extends PureComponent {
     return (
       <MessageListItem item={item} onPress={this.onMessagePress}/>
     );
+  };
+
+  onPressQuote = () => {
+    this.setState({
+      quote: null,
+    });
   };
 
   render() {
@@ -113,6 +128,8 @@ class ChatMessage extends PureComponent {
             <MessageInput
               theme={theme}
               context={this.context}
+              quote={this.state.quote}
+              onPressQuote={this.onPressQuote}
               disabled={!account.net.connected}
               onSubmit={this.onSubmitText}/>
           </KeyboardAvoidingView>
