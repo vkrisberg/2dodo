@@ -45,6 +45,7 @@ const initState = {
 
   loading: false,
   updating: false,
+  logout: false,
   error: null,
 };
 
@@ -71,7 +72,7 @@ export default reducer(initState, {
     return {
       ...state,
       authorized: true,
-      connectionAttempts: 0,
+      // connectionAttempts: 0,
       connecting: false,
       connected: true,
     };
@@ -102,6 +103,7 @@ export default reducer(initState, {
     return {
       ...state,
       loading: true,
+      logout: true,
       error: null
     };
   },
@@ -116,7 +118,9 @@ export default reducer(initState, {
       keys: {
         ...initState.keys,
       },
-      loading: false
+      connectionAttempts: 0,
+      loading: false,
+      logout: false,
     };
   },
 
@@ -124,6 +128,7 @@ export default reducer(initState, {
     return {
       ...state,
       loading: false,
+      logout: false,
       error: action.error.toString(),
     };
   },

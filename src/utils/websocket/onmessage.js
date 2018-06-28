@@ -83,7 +83,9 @@ export default function ({event, store, navigation}) {
       store.dispatch(contactActions.receiveRequestProfile(data));
       break;
     case actionEnum.sendProfile:
-      store.dispatch(contactActions.receiveProfile(data));
+      store.dispatch(contactActions.receiveProfile(data)).then(() => {
+        store.dispatch(chatActions.loadList())
+      });
       break;
   }
 };

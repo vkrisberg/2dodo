@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import {TextLabel} from '../index';
 import {themeEnum} from '../../../enums';
 import {colors, weights} from '../../../styles';
+import {validation} from '../../../utils'
 import styles from './styles';
 
 import IMG_CIRCLE from '../../../images/icons/circle/circle.png';
@@ -37,8 +38,9 @@ export default class AvatarIcon extends PureComponent {
     }
 
     if (source && typeof source === 'string') {
+      const prefix = !validation.base64PrefixRegex.test(source) ? 'data:image/jpeg;base64,' : '';
       return (
-        <Image style={_styles.avatar} source={{uri: `data:image/jpeg;base64,${source}`}}/>
+        <Image style={_styles.avatar} source={{uri: prefix + source}}/>
       );
     }
 

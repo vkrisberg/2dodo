@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
 import {ContactList} from '../../../components/lists';
 import {SearchInput, Navbar, ContactSearchItem, ButtonBack, TextLabel} from '../../../components/elements';
-import {contactActions} from '../../../store/actions';
+import {chatActions, contactActions} from '../../../store/actions';
 import {colors} from '../../../styles';
 import styles from './styles';
 
@@ -44,6 +44,7 @@ class ContactAdd extends Component {
 
     this.props.dispatch(contactActions.create(data)).then((result) => {
       this.props.dispatch(contactActions.requestProfile(result.username));
+      this.props.dispatch(chatActions.loadList());
       this.props.navigation.goBack();
     });
   };
