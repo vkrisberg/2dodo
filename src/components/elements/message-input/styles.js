@@ -12,7 +12,6 @@ export default ({theme}) => {
       justifyContent: 'flex-start',
       height: HEIGHT,
       width: sizes.windowWidth,
-      marginLeft: -10,
     },
 
     leftButton: {
@@ -76,5 +75,16 @@ export default ({theme}) => {
       alignItems: 'center',
       justifyContent: 'center',
     },
+
+    quoteContainer: {
+      borderTopWidth: 1,
+      borderTopColor: colors[theme].grayLight,
+    },
+
+    quote: {
+      borderRadius: 0,
+      marginBottom: 0,
+      paddingHorizontal: 10,
+    },
   });
-}
+};
