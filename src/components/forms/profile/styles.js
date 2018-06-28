@@ -86,7 +86,7 @@ export default (theme) => {
     },
 
     actionSubtext: {
-      color: colors[theme].navbarDescription,
+      color: colors[theme].messageTextSecond,
       marginRight: 13,
     },
 

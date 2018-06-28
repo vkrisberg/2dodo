@@ -63,7 +63,7 @@ export default class NavbarChat extends Component {
                      weight={weights.bold}
                      size={18}>{title}</TextLabel>
           <TextLabel theme={theme}
-                     color={colors[theme].navbarDescription}
+                     color={colors[theme].messageTextSecond}
                      weight={weights.medium}
                      size={13}>{description}</TextLabel>
         </View>

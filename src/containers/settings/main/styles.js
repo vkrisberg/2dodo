@@ -98,7 +98,7 @@ export default (theme) => {
     },
 
     settingsText: {
-      color: colors[theme].navbarDescription,
+      color: colors[theme].messageTextSecond,
       marginRight: 13,
     },
 
