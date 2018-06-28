@@ -7,6 +7,7 @@ export default ({theme, verticalOffset}) => {
       flex: 1,
       // height: sizes.windowHeight - sizes.navbarHeight - verticalOffset,
       width: '100%',
+      paddingHorizontal: 10,
     },
 
     emptyContainer: {

@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import {View, Image, TextInput, TouchableOpacity} from 'react-native';
+import {View, Image, TextInput, TouchableOpacity, Text} from 'react-native';
 import PropTypes from 'prop-types';
 
-import {Button} from '../index';
+import {Button, Quote} from '../index';
 import {themeEnum} from '../../../enums';
 import {colors} from '../../../styles';
 import styles from './styles';
@@ -21,11 +21,15 @@ export default class MessageInput extends Component {
     context: PropTypes.object,
     disabled: PropTypes.bool,
     onSubmit: PropTypes.func,
+    quote: PropTypes.string,
+    onPressQuote: PropTypes.func,
   };
 
   static defaultProps = {
     theme: themeEnum.light,
     disabled: false,
+    quote: null,
+    onPressQuote: () => {},
   };
 
   constructor(props) {
@@ -122,14 +126,22 @@ export default class MessageInput extends Component {
   };
 
   render() {
-    let {theme} = this.props;
+    let {theme, quote, onPressQuote} = this.props;
     const _styles = styles({theme});
 
     return (
-      <View style={_styles.container}>
-        {this.renderLeftButton(_styles)}
-        {this.renderInput(_styles)}
-        {this.renderRightButton(_styles)}
+      <View>
+        {
+          quote &&
+            <TouchableOpacity onPress={onPressQuote} style={_styles.quoteContainer}>
+              <Quote data={JSON.stringify(quote)} theme={theme} style={_styles.quote}/>
+            </TouchableOpacity>
+        }
+        <View style={_styles.container}>
+          {this.renderLeftButton(_styles)}
+          {this.renderInput(_styles)}
+          {this.renderRightButton(_styles)}
+        </View>
       </View>
     );
   }
