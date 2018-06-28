@@ -194,6 +194,7 @@ Group.schema = {
     members: 'string?[]',
     shortName: 'string?',
     avatar: 'string?',
+    contacts: 'Contact[]',
     lastMessage: 'GroupMessage?',
     unreadCount: {type: 'int', default: 0},
     sort: {type: 'int', default: 0},

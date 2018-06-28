@@ -3,6 +3,7 @@ import {get} from 'lodash';
 import {apiContact, apiServer} from '../../api';
 import {services, wsMessage} from '../../utils';
 import {dbEnum, routeEnum} from '../../enums';
+import CONFIG from '../../config';
 
 export const types = {
   LOAD: Symbol('LOAD'),
@@ -52,6 +53,44 @@ export const types = {
   RECEIVE_ONLINE_USERS_FAILURE: Symbol('RECEIVE_ONLINE_USERS_FAILURE'),
 
   SET_CURRENT_CONTACT: Symbol('SET_CURRENT_CONTACT'),
+};
+
+const linkContact = async (username) => {
+  const realm = services.getRealm();
+  const contact = realm.objectForPrimaryKey(dbEnum.Contact, username);
+  if (!contact) {
+    return;
+  }
+  // link to chats
+  const chats = realm.objects(dbEnum.Chat);
+  let count = chats.length;
+  for (let i = 0; i < count; i++) {
+    const chat = chats[i];
+    const isMember = chat.members.indexOf(contact.username) >= 0;
+    if (isMember) {
+      const exist = chat.contacts && chat.contacts.find((item) => item.username === contact.username);
+      if (!exist) {
+        realm.write(() => {
+          chat.contacts.push(contact);
+          if (chat.members.length === 2) {
+            chat.avatar = contact.avatar;
+          }
+        });
+      }
+    }
+  }
+  // link to messages
+  const chatMessages = realm.objects(dbEnum.ChatMessage)
+    .filtered(`username = '${contact.username}'`);
+  count = chatMessages.length;
+  for (let i = 0; i < count; i++) {
+    const chatMessage = chatMessages[i];
+    if (!chatMessage.contact) {
+      realm.write(() => {
+        chatMessages[i].contact = contact;
+      });
+    }
+  }
 };
 
 export default {
@@ -116,18 +155,31 @@ export default {
       dispatch({type: types.CREATE});
       try {
         const realm = services.getRealm();
+        // get public key when contact exist
+        const realmContact = realm.objectForPrimaryKey(dbEnum.Contact, data.username);
+        if (realmContact) {
+          apiContact.getOpenKey([data.username]);
+          dispatch({type: types.CREATE_SUCCESS, payload: null});
+          return {
+            ...realmContact,
+            fullName: realmContact.fullName,
+          };
+        }
+        // create new contact
         data.dateCreate = new Date();
         data.dateUpdate = data.dateCreate;
         let contact = {};
         await realm.write(() => {
-          contact = realm.create(dbEnum.Contact, data, true); // TODO - change to 'false'
+          contact = realm.create(dbEnum.Contact, data, false);
         });
         const payload = {
           ...contact,
           fullName: contact.fullName,
         };
-        // console.log('contact created', contact);
         apiContact.getOpenKey([payload.username]);
+        // link contact
+        linkContact(contact.username);
+        // console.log('contact created', payload);
         dispatch({type: types.CREATE_SUCCESS, payload});
         return payload;
       } catch (e) {
@@ -356,6 +408,7 @@ export default {
   },
 
   receiveProfile: (message) => {
+    console.log('PROF', message)
     return async (dispatch, getState) => {
       try {
         const realm = services.getRealm();

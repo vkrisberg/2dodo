@@ -291,6 +291,7 @@ export default {
           hashKey: hashKeys[0].hashKey,
         });
 
+        // link contact
         const realmContact = realm.objectForPrimaryKey(dbEnum.Contact, decryptedData.username);
 
         const messageData = {

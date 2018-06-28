@@ -111,6 +111,13 @@ export default reducer(initState, {
   },
 
   [types.CREATE_SUCCESS]: (state, action) => {
+    if (!action.payload) {
+      return {
+        ...state,
+        loading: false,
+      };
+    }
+
     const list = state.list.filter((item) => item.username !== action.payload.username);
     list.push(action.payload);
 
