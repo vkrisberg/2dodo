@@ -280,12 +280,12 @@ const getNickname = (username) => {
     return '';
   }
   const usernameArr = username.split('@');
-  return usernameArr[0];
+  return usernameArr[0] || '';
 };
 
 const getDeviceId = (from) => {
   const fromArr = from.split('@');
-  return fromArr[2];
+  return fromArr[2] || '';
 };
 
 const avatarToBase64 = (avatar) => {

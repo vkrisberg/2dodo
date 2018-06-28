@@ -5,16 +5,17 @@ import PropTypes from 'prop-types';
 import {TextLabel} from '../../../components/elements';
 import {themeEnum} from '../../../enums';
 import {colors, weights} from '../../../styles';
+import {helpers} from '../../../utils';
 import styles from './styles';
 
 import IMG_QUOTE from './img/quote.png';
 
-export default class Quote extends PureComponent {
+export default class MessageQuote extends PureComponent {
 
   static propTypes = {
-    data: PropTypes.object.isRequired,
+    message: PropTypes.object.isRequired,
     theme: PropTypes.string,
-    style: PropTypes.object,
+    style: PropTypes.any,
   };
 
   static defaultProps = {
@@ -22,16 +23,16 @@ export default class Quote extends PureComponent {
   };
 
   render() {
-    const {theme, style} = this.props;
-    const data = JSON.parse(this.props.data);
+    const {message, theme, style} = this.props;
     const _styles = styles(theme);
+    const nickname = helpers.getNickname(message.username);
 
     return (
       <View style={[_styles.quoteContainer, style]}>
         <Image source={IMG_QUOTE}/>
         <View style={_styles.quoteBlock}>
-          <TextLabel size={15} weight={weights.semiBold} color={colors[theme].messageTextMain} style={_styles.name}>{data.name}</TextLabel>
-          <TextLabel size={15} weight={weights.medium} color={colors[theme].messageTextMain}>{data.text}</TextLabel>
+          <TextLabel size={15} weight={weights.semiBold} color={colors[theme].messageTextMain} style={_styles.name}>{nickname}</TextLabel>
+          <TextLabel size={15} weight={weights.medium} color={colors[theme].messageTextMain}>{message.text}</TextLabel>
         </View>
       </View>
     );
