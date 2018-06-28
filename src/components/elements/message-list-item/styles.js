@@ -12,6 +12,7 @@ export default ({theme}) => {
       marginVertical: 5,
       marginLeft: 40,
       padding: 10,
+      paddingBottom: 30,
     },
 
     containerLeft: {
@@ -22,6 +23,7 @@ export default ({theme}) => {
       marginVertical: 5,
       marginRight: 40,
       padding: 10,
+      paddingBottom: 30,
     },
 
     textWrapper: {
@@ -29,8 +31,18 @@ export default ({theme}) => {
 
     dateWrapper: {
       position: 'absolute',
-      bottom: 6,
-      right: 10,
+      bottom: 4,
+      right: 4,
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingVertical: 3,
+      paddingHorizontal: 5,
+      borderRadius: 15,
+      backgroundColor: colors[theme].whiteOpacity,
+    },
+
+    statusIcon: {
+      marginRight: 3,
     },
   });
 };

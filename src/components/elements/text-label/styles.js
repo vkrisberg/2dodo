@@ -1,7 +1,7 @@
 import {StyleSheet} from 'react-native';
 import {colors, fonts} from '../../../styles';
 
-export default ({theme, color, size, weight, textAlign}) => {
+export default ({theme, color, size, weight, textAlign, fontStyle}) => {
   return StyleSheet.create({
     text: {
       color: color || colors[theme].black,
@@ -9,6 +9,7 @@ export default ({theme, color, size, weight, textAlign}) => {
       fontSize: size,
       fontWeight: weight,
       textAlign: textAlign,
+      fontStyle: fontStyle,
     },
   });
 }
