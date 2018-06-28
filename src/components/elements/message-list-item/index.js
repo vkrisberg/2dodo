@@ -3,7 +3,7 @@ import {View, TouchableOpacity, Text, Image} from 'react-native';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
-import {TextLabel, Quote} from '../index';
+import {TextLabel, MessageQuote} from '../index';
 import {themeEnum} from '../../../enums';
 import {colors, weights, fontStyle} from '../../../styles';
 import styles from './styles';
@@ -47,12 +47,12 @@ export default class MessageListItem extends PureComponent {
     const style = {backgroundColor: isOwn ? colors[theme].white : colors[theme].grayLight};
 
     return (
-      <Quote data={quote} theme={theme} style={style}/>
+      <MessageQuote message={JSON.parse(quote)} theme={theme} style={style}/>
     );
   };
 
   render() {
-    const {item, theme, context} = this.props;
+    const {item, theme} = this.props;
     const _styles = styles({theme});
     const containerStyle = item.isOwn ? _styles.containerRight : _styles.containerLeft;
     const textColor = item.isOwn ? colors[theme].white : colors[theme].messageTextMain;

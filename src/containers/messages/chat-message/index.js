@@ -78,10 +78,20 @@ class ChatMessage extends PureComponent {
 
   onMessagePress = (message) => {
     this.setState({
-      quote: {
-        name: message.username,
-        text: message.text,
-      },
+      quote: message,
+      // quote: {
+      //   name: message.username,
+      //   text: message.text,
+      // },
+    });
+  };
+
+  onMessageLongPress = (message) => {
+  };
+
+  onQuotePress = () => {
+    this.setState({
+      quote: null,
     });
   };
 
@@ -89,24 +99,26 @@ class ChatMessage extends PureComponent {
     const {account} = this.props;
     const messageData = {
       username: account.user.username,
+      quote: JSON.stringify(this.state.quote),
       text,
     };
 
     this.sendChatMessage({data: messageData, chatId: this.chat.id}).then(() => {
-      this.setState({text: ''});
+      this.setState({quote: null});
     });
   };
 
   renderMessage = ({item}) => {
-    return (
-      <MessageListItem item={item} onPress={this.onMessagePress}/>
-    );
-  };
+    const {theme} = this.props.account.user;
 
-  onPressQuote = () => {
-    this.setState({
-      quote: null,
-    });
+    return (
+      <MessageListItem
+        theme={theme}
+        context={this.context}
+        item={item}
+        onPress={this.onMessagePress}
+        onLongPress={this.onMessageLongPress}/>
+    );
   };
 
   render() {
@@ -129,8 +141,8 @@ class ChatMessage extends PureComponent {
               theme={theme}
               context={this.context}
               quote={this.state.quote}
-              onPressQuote={this.onPressQuote}
-              disabled={!account.net.connected}
+              onPressQuote={this.onQuotePress}
+              disabled={!account.net.connected || !account.connected}
               onSubmit={this.onSubmitText}/>
           </KeyboardAvoidingView>
         </BackgroundLayout>

@@ -97,7 +97,7 @@ class SettingsProfile extends Component {
     const _styles = styles(theme);
 
     return (
-      <MainLayout netOffline={!account.net.connected}>
+      <MainLayout netOffline={!account.net.connected} wsConnected={account.connected}>
         <BackgroundLayout theme={theme}>
           <View style={_styles.header}>
             <View style={_styles.titleContainer}>

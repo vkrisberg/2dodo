@@ -96,7 +96,7 @@ class Settings extends Component {
 
 
     return (
-      <MainLayout netOffline={!account.net.connected}>
+      <MainLayout netOffline={!account.net.connected} wsConnected={account.connected}>
         <BackgroundLayout theme={theme} paddingHorizontal={10}>
           <Navbar
             renderTitle={context.t('Settings')}

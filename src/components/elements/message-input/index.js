@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {View, Image, TextInput, TouchableOpacity, Text} from 'react-native';
 import PropTypes from 'prop-types';
 
-import {Button, Quote} from '../index';
+import {Button, MessageQuote} from '../index';
 import {themeEnum} from '../../../enums';
 import {colors} from '../../../styles';
 import styles from './styles';
@@ -14,14 +14,14 @@ import IMG_EMOJI from './img/emoji.png';
 import IMG_MICROPHONE from './img/microphone.png';
 import IMG_CHECK_BLUE from './img/check_blue.png';
 
-export default class MessageInput extends Component {
+export default class MessageInput extends PureComponent {
 
   static propTypes = {
     theme: PropTypes.string,
     context: PropTypes.object,
     disabled: PropTypes.bool,
     onSubmit: PropTypes.func,
-    quote: PropTypes.string,
+    quote: PropTypes.object,
     onPressQuote: PropTypes.func,
   };
 
@@ -134,7 +134,7 @@ export default class MessageInput extends Component {
         {
           quote &&
             <TouchableOpacity onPress={onPressQuote} style={_styles.quoteContainer}>
-              <Quote data={JSON.stringify(quote)} theme={theme} style={_styles.quote}/>
+              <MessageQuote message={quote} theme={theme} style={_styles.quote}/>
             </TouchableOpacity>
         }
         <View style={_styles.container}>
