@@ -35,13 +35,19 @@ const weights = {
   black: '900',
 };
 
+const fontStyle = {
+  normal: 'normal',
+  italic: 'italic',
+};
+
 const colors = {
   light: {
     white: '#ffffff',
+    whiteSmoke: '#f4f4f4',
+    whiteOpacity: 'rgba(255,255,255,.9)',
     black: '#000000',
     blackText: '#1f2225',
     blackNight: '#272727',
-    whiteSmoke: '#f4f4f4',
     gray: '#c1c1c1',
     grayDarker: '#808694',
     grayPlaceholder: '#bec2c9',
@@ -65,6 +71,7 @@ const colors = {
     blueKrayola: '#afb5c1',
     blueKrayolaDim: '#f4f5f7',
     blueCornFlower: '#4b8eed',
+    blueStatus: '#5395f3',
     orange: '#fe8b24',
     netInfoBg: 'rgba(44,44,44,0.9)',
     netInfoRedBg: 'rgba(255,102,89,0.9)',
@@ -77,7 +84,6 @@ const colors = {
     tabBarInactiveBg: '#ffffff',
     bgMain: '#ffffff',
     navbarTitle: '#26292d',
-    navbarDescription: '#9399a5',
     backButton: '#6a7686',
     addButton: '#62a3ff',
     loginButtonText: '#3d76d3',
@@ -94,10 +100,11 @@ const colors = {
   },
   night: {
     white: '#ffffff',
+    whiteSmoke: '#f4f4f4',
+    whiteOpacity: 'rgba(255,255,255,.9)',
     black: '#000000',
     blackText: '#1f2225',
     blackNight: '#272727',
-    whiteSmoke: '#f4f4f4',
     gray: '#c1c1c1',
     grayDarker: '#808694',
     grayPlaceholder: '#bec2c9',
@@ -121,6 +128,7 @@ const colors = {
     blueKrayola: '#afb5c1',
     blueKrayolaDim: '#f4f5f7',
     blueCornFlower: '#4b8eed',
+    blueStatus: '#5395f3',
     orange: '#fe8b24',
     netInfoBg: 'rgba(44,44,44,0.9)',
     netInfoRedBg: 'rgba(255,102,89,0.9)',
@@ -133,7 +141,6 @@ const colors = {
     tabBarInactiveBg: '#ffffff',
     bgMain: '#242424',
     navbarTitle: '#26292d',
-    navbarDescription: '#9399a5',
     backButton: '#6a7686',
     addButton: '#62a3ff',
     loginButtonText: '#3d76d3',
@@ -154,5 +161,6 @@ export {
   sizes,
   fonts,
   weights,
+  fontStyle,
   colors,
-}
+};
