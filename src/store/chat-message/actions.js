@@ -35,6 +35,9 @@ export const types = {
   SEND_MEDIA: Symbol('SEND_MEDIA'),
   SEND_MEDIA_SUCCESS: Symbol('SEND_MEDIA_SUCCESS'),
   SEND_MEDIA_FAILURE: Symbol('SEND_MEDIA_FAILURE'),
+
+  CLEAR_MESSAGES: Symbol('CLEAR_MESSAGES'),
+  CLEAR_MESSAGES_SUCCESS: Symbol('CLEAR_MESSAGES_SUCCESS'),
 };
 
 const hashKeyAdd = async (data) => {
@@ -358,6 +361,13 @@ export default {
 
   sendMedia: (message) => {
     return async dispatch => {
+    };
+  },
+
+  clearMessages: () => {
+    return async dispatch => {
+      dispatch({type: types.CLEAR_MESSAGES});
+      dispatch({type: types.CLEAR_MESSAGES_SUCCESS});
     };
   },
 };

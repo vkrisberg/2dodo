@@ -3,7 +3,7 @@ import {types} from './actions';
 import {types as chatTypes} from '../chat/actions';
 
 const initState = {
-  chat: '', // current chat
+  chat: {}, // current chat
   list: [],
   current: {
     id: '',
@@ -24,6 +24,7 @@ const initState = {
     dateUpdate: null,
   },
   loading: false,
+  clearing: false,
   error: null,
   receiveError: null,
 };
@@ -199,6 +200,22 @@ export default reducer(initState, {
     return {
       ...state,
       receiveError: action.error,
+    };
+  },
+
+  [types.CLEAR_MESSAGES]: (state, action) => {
+    return {
+      ...state,
+      clearing: true,
+    };
+  },
+
+  [types.CLEAR_MESSAGES_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      chat: {},
+      list: [],
+      clearing: false,
     };
   },
 

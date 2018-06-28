@@ -1,7 +1,7 @@
-import {get, map, filter, keyBy} from 'lodash';
+import {get, map, filter, keyBy, isEmpty, size} from 'lodash';
 
 import {apiChat, apiServer} from '../../api';
-import {services, wsMessage} from '../../utils';
+import {helpers, services, wsMessage} from '../../utils';
 import {hashlib} from '../../utils/encrypt';
 import {dbEnum} from '../../enums';
 import CONFIG from '../../config';
@@ -70,7 +70,13 @@ export default {
 
         console.log('chat list loaded', chatList.length);
         const payload = chatList.map((item) => {
-          return JSON.parse(JSON.stringify(item));
+          let chat = item;
+          if (!isEmpty(item.contacts) && size(item.contacts) === 1) {
+            chat = {...item};
+            chat.name = helpers.getFullName(chat.contacts[0]);
+            chat.avatar = chat.contacts[0].avatar;
+          }
+          return JSON.parse(JSON.stringify(chat));
         });
         dispatch({type: types.LOAD_SUCCESS, payload});
         return payload;
@@ -126,7 +132,7 @@ export default {
         };
         const chatData = {
           ...sendData,
-          name: map(contacts, 'nickname').join(', '),
+          name: map(contacts, (item) => `@${item.nickname}`).join(', '),
           shortName: wsMessage.getShortName(contacts),
           avatar: contacts[0].avatar,
           contacts: realmContacts,

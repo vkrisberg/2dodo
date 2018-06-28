@@ -8,6 +8,7 @@ import {NavbarChat, SearchInput, MessageListItem, MessageInput} from '../../../c
 import {chatActions, chatMessageActions, contactActions} from '../../../store/actions';
 import {MessageList} from '../../../components/lists';
 import styles from './styles';
+import {routeEnum} from '../../../enums';
 
 class ChatMessage extends PureComponent {
 
@@ -36,13 +37,11 @@ class ChatMessage extends PureComponent {
 
   componentDidMount() {
     this.chat = this.props.navigation.getParam('chat');
-    this.props.dispatch(chatActions.setCurrentChat(this.chat));
-    this.loadChatMessages(this.chat.id);
-    this.loadContactList();
-  }
-
-  componentWillUnmount() {
-    this.props.dispatch(chatActions.setCurrentChat({}, true));
+    this.props.dispatch(chatMessageActions.clearMessages()).then(() => {
+      this.props.dispatch(chatActions.setCurrentChat(this.chat));
+      this.props.dispatch(contactActions.getOnlineUsers());
+      this.loadChatMessages(this.chat.id);
+    });
   }
 
   loadContactList = (filter, sort, descending) => {
@@ -76,6 +75,11 @@ class ChatMessage extends PureComponent {
     return this.loadChatMessages(this.chat.id, filter);
   };
 
+  onNavbarAvatarPress = () => {
+    const {contact} = this.props;
+    this.props.navigation.navigate(routeEnum.ContactProfile, {data: contact.current});
+  };
+
   onMessagePress = (message) => {
     this.setState({
       quote: message,
@@ -99,7 +103,7 @@ class ChatMessage extends PureComponent {
     const {account} = this.props;
     const messageData = {
       username: account.user.username,
-      quote: JSON.stringify(this.state.quote),
+      quote: this.state.quote ? JSON.stringify(this.state.quote) : null,
       text,
     };
 
@@ -122,18 +126,22 @@ class ChatMessage extends PureComponent {
   };
 
   render() {
-    const {account, chat, chatMessage} = this.props;
+    const {account, chat, chatMessage, contact} = this.props;
     const {theme} = account.user;
+    const navbarDescription = contact.current.isOnline ? this.context.t('online') : this.context.t('offline');
 
     return (
       <MainLayout netOffline={!account.net.connected} wsConnected={account.connected}>
         <BackgroundLayout theme={theme} paddingHorizontal={10}>
-          <NavbarChat title={chat.current.name} description={'online'} context={this.context}/>
+          <NavbarChat context={this.context}
+                      title={chat.current.name}
+                      description={navbarDescription}
+                      avatar={chat.current.avatar}
+                      onAvatarPress={this.onNavbarAvatarPress}/>
           <SearchInput placeholder="Search in messages" onChange={this.onSearchChange}/>
           <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
             <MessageList
               items={chatMessage.list}
-              verticalOffset={116}
               renderItem={this.renderMessage}
               theme={account.user.theme}
               context={this.context}/>
