@@ -408,7 +408,6 @@ export default {
   },
 
   receiveProfile: (message) => {
-    console.log('PROF', message)
     return async (dispatch, getState) => {
       try {
         const realm = services.getRealm();
@@ -503,9 +502,6 @@ export default {
         }
 
         const payload = get(message, 'data', null);
-        if (!payload) {
-          return false;
-        }
         // console.log('get online users result', payload);
         dispatch({type: types.RECEIVE_ONLINE_USERS_SUCCESS, payload});
         return payload;

@@ -3,8 +3,7 @@ import {View, TouchableOpacity, Text, Image} from 'react-native';
 import PropTypes from 'prop-types';
 
 import {Navbar, ButtonBack, ButtonNavbar, TextLabel} from '../index';
-import {Icon} from '../../../components/elements';
-import {AvatarIcon} from '../../icons';
+import {Icon, AvatarIcon} from '../../../components/elements';
 import {themeEnum} from '../../../enums';
 import {colors, weights} from '../../../styles';
 import styles from './styles';
@@ -55,6 +54,7 @@ export default class NavbarChat extends Component {
 
   renderTitle = (_styles) => {
     const {theme, title, description} = this.props;
+
     return (
       <View style={_styles.container}>
         <View style={_styles.titleContainer}>
@@ -74,13 +74,12 @@ export default class NavbarChat extends Component {
     );
   };
 
-  renderAvatar = (_styles) => {
-    const {theme, avatar} = this.props;
+  renderAvatar = () => {
+    const {theme, title, avatar} = this.props;
 
     return (
       <ButtonNavbar theme={theme} position="right" onPress={this.onAvatarPress}>
-        {avatar && <Image style={_styles.avatar} source={{uri: `data:image/jpeg;base64,${avatar}`}}/>}
-        {!avatar && <AvatarIcon/>}
+        <AvatarIcon theme={theme} source={avatar} label={title} width={32} height={32}/>
       </ButtonNavbar>
     );
   };
@@ -108,7 +107,7 @@ export default class NavbarChat extends Component {
         <Navbar theme={theme}
           renderTitle={this.renderTitle(_styles)}
           renderLeft={<ButtonBack/>}
-          renderRight={this.renderAvatar(_styles)}/>
+          renderRight={this.renderAvatar()}/>
         {showPanel && this.renderPanel(_styles, theme)}
       </View>
     );

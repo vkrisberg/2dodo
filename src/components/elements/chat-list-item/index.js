@@ -80,7 +80,7 @@ export default class ChatListItem extends Component {
     const _styles = styles(theme);
     const isToday = moment(item.dateUpdate).format('DD.MM.YY') === moment().format('DD.MM.YY');
     const chosen = selectedItems[item.id];
-    const avatarSource = !isEmpty(item.contacts) ? item.contacts[0].avatar : item.avatar;
+    const avatarSource = item.avatar ? item.avatar : !isEmpty(item.contacts) && item.contacts[0].avatar;
 
     return (
       <TouchableOpacity onPress={this.onPress} onLongPress={this.onLongPress}>
@@ -92,7 +92,7 @@ export default class ChatListItem extends Component {
           </View>
           }
           <View style={_styles.image}>
-            <AvatarIcon theme={theme} source={avatarSource} label={item.shortName}/>
+            <AvatarIcon theme={theme} source={avatarSource} label={item.name}/>
           </View>
           <View style={_styles.body}>
             <Text style={_styles.name}>

@@ -1,5 +1,6 @@
 import reducer from '../../utils/reducer';
 import {types} from './actions';
+import {types as chatTypes} from '../chat/actions';
 
 const initState = {
   list: [],
@@ -338,17 +339,21 @@ export default reducer(initState, {
   },
 
   [types.RECEIVE_ONLINE_USERS_SUCCESS]: (state, action) => {
-    const onlineUsers = action.payload.map((item) => item.name);
+    const onlineUsers = action.payload ? action.payload.map((item) => item.name) : [];
     const list = state.list.map((item) => {
       if (onlineUsers.indexOf(item.username) >= 0) {
         item.isOnline = true;
       }
       return item;
     });
+    // set current - to show in the chat-message screen on navbar
+    let current = state.current || initState.current;
+    current.isOnline = onlineUsers.indexOf(current.username) >= 0;
 
     return {
       ...state,
       list,
+      current,
       sectionList: getSectionList(list),
       getOnlineUsers: null,
     };
@@ -365,6 +370,20 @@ export default reducer(initState, {
     return {
       ...state,
       current: action.payload,
+    };
+  },
+
+  // Chat types
+  [chatTypes.SET_CURRENT_CHAT]: (state, action) => {
+    let contact = {};
+    const {contacts} = action.payload;
+    if (contacts && contacts[0]) {
+      contact = state.list.find((item) => item.username === contacts[0].username);
+    }
+
+    return {
+      ...state,
+      current: contact || initState.current,
     };
   },
 });
