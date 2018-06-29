@@ -48,14 +48,17 @@ export default class ContactListItem extends Component {
 
   onPressDeleteBtn = (username) => {
     this.props.onPressDeleteBtn(username);
+    this.swipeContainer._close();
   };
 
   onPressChatBtn = () => {
     this.props.onPressChatBtn && this.props.onPressChatBtn(this.props.item);
+    this.swipeContainer._close();
   };
 
   onPressCallBtn = () => {
     alert('press call btn');
+    this.swipeContainer._close();
   };
 
   renderSwipeBtns = () => {
@@ -84,7 +87,7 @@ export default class ContactListItem extends Component {
     ];
 
     return (
-      <Swipeout right={swipeoutBtns} buttonWidth={140} autoClose={true} style={_styles.swipeOut}>
+      <Swipeout right={swipeoutBtns} buttonWidth={140} autoClose={true} style={_styles.swipeOut} ref={ref => this.swipeContainer = ref}>
         <TouchableOpacity onPress={this.onPress} onLongPress={this.onLongPress} style={{width: '100%'}}>
           <View style={_styles.wrapper}>
             {checkboxVisibility && <Checkbox
