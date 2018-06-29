@@ -23,6 +23,7 @@ const initState = {
     dateCreate: null,
     dateUpdate: null,
   },
+  statusSentDate: null, // Date
   loading: false,
   clearing: false,
   error: null,
@@ -189,6 +190,13 @@ export default reducer(initState, {
     };
   },
 
+  [types.SEND_STATUS]: (state, action) => {
+    return {
+      ...state,
+      statusSentDate: action.payload,
+    };
+  },
+
   [types.RECEIVE_STATUS_SUCCESS]: (state, action) => {
     return {
       ...state,
@@ -225,6 +233,7 @@ export default reducer(initState, {
       ...state,
       chat: action.payload,
       list: action.clearMessages ? [] : state.list,
+      statusSentDate: null,
     };
   },
 });

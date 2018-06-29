@@ -29,6 +29,8 @@ export const types = {
   RECEIVE_MESSAGE_SUCCESS: Symbol('RECEIVE_MESSAGE_SUCCESS'),
   RECEIVE_MESSAGE_FAILURE: Symbol('RECEIVE_MESSAGE_FAILURE'),
 
+  SEND_STATUS: Symbol('SEND_STATUS'),
+
   RECEIVE_STATUS_SUCCESS: Symbol('RECEIVE_STATUS_SUCCESS'),
   RECEIVE_STATUS_FAILURE: Symbol('RECEIVE_STATUS_FAILURE'),
 
@@ -53,6 +55,11 @@ const hashKeyAdd = async (data) => {
       realm.delete(hashKeys[0]);
     });
   }
+};
+
+const sendMessageStatus = async ({id, chatId, members, status}) => {
+  const data = {id, chatId};
+  apiChat.sendChatMessageStatus({data, members, status});
 };
 
 export default {
@@ -258,7 +265,7 @@ export default {
         const msgEncryptTime =  get(message, 'encrypt_time', null);
         await apiServer.deliveryReport(msgEncryptTime);
 
-        const {chat} = getState();
+        const {account, chat} = getState();
         const currentChatId = chat.current.id;
         const dateNow = new Date();
         const from = get(message, 'from', null);
@@ -329,7 +336,16 @@ export default {
         }
         const chatPayload = JSON.parse(JSON.stringify(realmChat));
 
-        // TODO - send delivery report to client
+        // send message status report to clients
+        const members = filter(realmChat.members, (username) => username !== account.user.username);
+        if (members.length) {
+          sendMessageStatus({
+            id: meta.id,
+            chatId: meta.chatId,
+            status: chatMessage.status,
+            members,
+          });
+        }
 
         // create and add hashKey
         const hashKeyData = {
@@ -352,6 +368,22 @@ export default {
         dispatch({type: types.RECEIVE_MESSAGE_FAILURE, error: e});
         // throw e;
       }
+    };
+  },
+
+  sendMessageTyping: (chat) => {
+    return async (dispatch, getState) => {
+      const {account} = getState();
+      const members = filter(chat.members, (username) => username !== account.user.username);
+      if (members.length) {
+        sendMessageStatus({
+          id: '',
+          chatId: chat.id,
+          status: messageEnum.typing,
+          members,
+        });
+      }
+      dispatch({type: types.SEND_STATUS, payload: new Date()});
     };
   },
 
