@@ -114,6 +114,7 @@ export default {
         };
         const messageData = {
           ...sendData,
+          status: messageEnum.sent,
           isOwn: true,
           dateCreate: dateNow,
           dateUpdate: dateNow,
@@ -182,7 +183,7 @@ export default {
         const chat = realm.objectForPrimaryKey(dbEnum.Chat, chatMessage.chatId);
         const members = filter(chat.members, (username) => username !== account.user.username);
         await realm.write(() => {
-          chatMessage.status = messageEnum.sending;
+          chatMessage.status = messageEnum.sent;
         });
         const payload = JSON.parse(JSON.stringify(chatMessage));
         // console.log('chat message resend', payload);
@@ -301,7 +302,7 @@ export default {
           ...decryptedData,
           from,
           contact: realmContact,
-          status: messageEnum.received,
+          status: currentChatId !== meta.chatId ? messageEnum.received : messageEnum.read,
           isOwn: false,
           dateSend: wsMessage.rfcToDate(decryptedData.dateSend),
           dateCreate: dateNow,
