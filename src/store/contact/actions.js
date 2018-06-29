@@ -2,7 +2,7 @@ import {get} from 'lodash';
 
 import {apiContact, apiServer} from '../../api';
 import {services, wsMessage} from '../../utils';
-import {dbEnum, routeEnum} from '../../enums';
+import {dbEnum, messageEnum, routeEnum} from '../../enums';
 import CONFIG from '../../config';
 
 export const types = {
@@ -62,35 +62,35 @@ const linkContact = async (username) => {
     return;
   }
   // link to chats
-  const chats = realm.objects(dbEnum.Chat);
+  const chats = realm.objects(dbEnum.Chat)
+    .snapshot();
   let count = chats.length;
-  for (let i = 0; i < count; i++) {
-    const chat = chats[i];
-    const isMember = chat.members.indexOf(contact.username) >= 0;
-    if (isMember) {
-      const exist = chat.contacts && chat.contacts.find((item) => item.username === contact.username);
-      if (!exist) {
-        realm.write(() => {
-          chat.contacts.push(contact);
-          if (chat.members.length === 2) {
-            chat.avatar = contact.avatar;
+  await realm.write(() => {
+    for (let i = 0; i < count; i++) {
+      const isMember = chats[i].members.indexOf(contact.username) >= 0;
+      if (isMember) {
+        const exist = chats[i].contacts && chats[i].contacts.find((item) => item.username === contact.username);
+        if (!exist) {
+          chats[i].contacts.push(contact);
+          if (chats[i].members.length === 2) {
+            chats[i].avatar = contact.avatar;
           }
-        });
+        }
       }
     }
-  }
+  });
   // link to messages
   const chatMessages = realm.objects(dbEnum.ChatMessage)
-    .filtered(`username = '${contact.username}'`);
+    .filtered(`username = '${contact.username}'`)
+    .snapshot();
   count = chatMessages.length;
-  for (let i = 0; i < count; i++) {
-    const chatMessage = chatMessages[i];
-    if (!chatMessage.contact) {
-      realm.write(() => {
+  await realm.write(() => {
+    for (let i = 0; i < count; i++) {
+      if (!chatMessages[i].contact) {
         chatMessages[i].contact = contact;
-      });
+      }
     }
-  }
+  });
 };
 
 export default {

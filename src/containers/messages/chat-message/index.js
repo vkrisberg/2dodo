@@ -10,6 +10,8 @@ import {MessageList} from '../../../components/lists';
 import styles from './styles';
 import {routeEnum} from '../../../enums';
 
+const TYPING_SHOW_TIMEOUT = 3000;
+
 class ChatMessage extends PureComponent {
 
   static propTypes = {
@@ -30,6 +32,7 @@ class ChatMessage extends PureComponent {
 
     this.state = {
       quote: null,
+      typing: null,
     };
 
     this.chat = {};
@@ -40,8 +43,20 @@ class ChatMessage extends PureComponent {
     this.props.dispatch(chatMessageActions.clearMessages()).then(() => {
       this.props.dispatch(chatActions.setCurrentChat(this.chat));
       this.props.dispatch(contactActions.getOnlineUsers());
-      this.loadChatMessages(this.chat.id);
+      this.loadChatMessages(this.chat.id).then(() => {
+        // send read status
+        this.props.dispatch(chatMessageActions.sendMessagesRead(this.chat));
+      });
     });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.chatMessage.typing && prevProps.chatMessage.typing !== this.props.chatMessage.typing) {
+      this.setState({typing: true});
+      setTimeout(() => {
+        this.setState({typing: false});
+      }, TYPING_SHOW_TIMEOUT);
+    }
   }
 
   loadContactList = (filter, sort, descending) => {
@@ -148,6 +163,7 @@ class ChatMessage extends PureComponent {
               items={chatMessage.list}
               renderItem={this.renderMessage}
               theme={account.user.theme}
+              typing={this.state.typing}
               context={this.context}/>
             <MessageInput
               theme={theme}

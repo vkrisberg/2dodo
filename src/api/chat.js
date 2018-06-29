@@ -49,7 +49,7 @@ export default {
     const websocket = services.getWebsocket();
     const meta = {
       ...CONFIG.message,
-      id: data.id || '',
+      ids: data.ids || [],
       chatId: data.chatId,
     };
 
@@ -70,7 +70,6 @@ export default {
       data: {meta, payload: null},
       to: members,
     });
-    console.log('SEND STATUS', clientMessage)
     websocket.send(JSON.stringify(clientMessage.message));
 
     return clientMessage;

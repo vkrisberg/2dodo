@@ -140,6 +140,7 @@ const translations = {
     'InviteUsers': 'Пригласить пользователей в группу',
     'Create': 'Создать',
     'PrivateChannel': 'Private channel',
+    'typing': 'typing',
     // Contact
     'online': 'в сети',
     'offline': 'не в сети',
@@ -289,6 +290,7 @@ const translations = {
     'InviteUsers': 'Invite users in group',
     'Create': 'Create and invite',
     'PrivateChannel': 'Private channel',
+    'typing': 'typing',
     // Contact
     'online': 'online',
     'offline': 'offline',

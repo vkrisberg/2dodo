@@ -197,15 +197,17 @@ export default {
       dispatch({type: types.DELETE});
       try {
         const realm = services.getRealm();
-        let chats = realm.objects(dbEnum.Chat);
+        let chats = realm.objects(dbEnum.Chat)
+          .snapshot();
         chats = chats.filter((item) => ids.indexOf(item.id) >= 0);
 
         if (!chats || !chats.length) {
           throw new Error('delete failed: chats are not found');
         }
 
+        const len = chats.length;
         await realm.write(() => {
-          for (let i = 0; i < chats.length; i++) {
+          for (let i = 0; i < len; i++) {
             chats[i].isDeleted = true;
             chats[i].unreadCount = 0;
             chats[i].dateUpdate = new Date();
@@ -214,7 +216,8 @@ export default {
 
         for (let i = 0; i < ids.length; i++) {
           const chatId = ids[i];
-          const messages = realm.objects(dbEnum.ChatMessage).filtered(`chatId = '${chatId}'`);
+          const messages = realm.objects(dbEnum.ChatMessage)
+            .filtered(`chatId = '${chatId}'`);
           await realm.write(() => {
             realm.delete(messages);
           });
