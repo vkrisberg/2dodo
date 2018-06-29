@@ -238,8 +238,8 @@ export default reducer(initState, {
     return {
       ...state,
       list,
-      updatePubKey: action.payload[0],
       sectionList: getSectionList(list),
+      updatePubKey: action.payload[0],
     };
   },
 
