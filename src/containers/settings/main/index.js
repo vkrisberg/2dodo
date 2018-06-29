@@ -11,6 +11,7 @@ import styles from './styles';
 
 import arrowIcon from '../../../images/icons/arrow-right/arrow_right.png';
 import shareIcon from '../../../images/icons/share/share.png';
+import {routeEnum} from '../../../enums';
 
 const settingsItems = [
   'SoundsAndNotifications',
@@ -63,7 +64,19 @@ class Settings extends Component {
 
   onQrCode = () => alert('click on qr');
 
-  onSettingsRow = () => alert('click on settings row');
+  onSounds = () => {
+    this.props.navigation.navigate(routeEnum.SoundSettings);
+  };
+
+  onSettingsRow = (row) => {
+    switch (row) {
+      case 'SoundsAndNotifications':
+        this.onSounds();
+        break;
+      default:
+        alert(row);
+    }
+  };
 
   renderSettingsRow = (item, index, noLastBorder) => {
     const {theme} = this.props.account.user;
@@ -72,7 +85,7 @@ class Settings extends Component {
     return (
       <TouchableHighlight
         key={index}
-        onPress={this.onSettingsRow}
+        onPress={() => this.onSettingsRow(item)}
         underlayColor={colors[theme].blueKrayolaDim}
         style={_styles.settingsRowContainer}>
         <View style={[_styles.settingsRow, noLastBorder === index && {borderBottomWidth: 0}]}>

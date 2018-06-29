@@ -13,6 +13,7 @@ export default {
   Preload: 'Preload',
   Registration: 'Registration',
   Settings: 'Settings',
+  SoundSettings: 'SoundSettings',
   // modals
   RequestProfileModal: 'RequestProfileModal',
 };

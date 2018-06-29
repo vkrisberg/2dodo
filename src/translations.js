@@ -83,6 +83,7 @@ const translations = {
     'Help': 'Помощь',
     'Questions': 'Вопросы',
     'UseCode': 'Пин-код',
+    'SoundSettings': 'Настройки звука',
     // Buttons
     'Delete': 'Удалить',
     'DeleteContact': 'Удалить контакт',
@@ -232,6 +233,7 @@ const translations = {
     'Help': 'Help',
     'Questions': 'Questions',
     'UseCode': 'Use code',
+    'SoundSettings': 'Sound settings',
     // Buttons
     'Delete': 'Delete',
     'DeleteContact': 'Delete contact',
