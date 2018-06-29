@@ -15,6 +15,7 @@ export default class MessagesList extends Component {
     items: PropTypes.array,
     renderItem: PropTypes.func,
     verticalOffset: PropTypes.number,
+    typing: PropTypes.bool,
     theme: PropTypes.string,
     context: PropTypes.object,
     style: PropTypes.any,
@@ -24,6 +25,7 @@ export default class MessagesList extends Component {
     items: [],
     renderItem: () => null,
     verticalOffset: 0,
+    typing: false,
     theme: themeEnum.light,
   };
 
@@ -54,6 +56,10 @@ export default class MessagesList extends Component {
 
     if (prevState.items !== this.state.items) {
       this.flatList && this.flatList.scrollToEnd({animated: false});
+    }
+
+    if (this.props.typing && prevProps.typing !== this.props.typing) {
+      this.flatList && this.flatList.scrollToEnd();
     }
   }
 
@@ -108,7 +114,7 @@ export default class MessagesList extends Component {
 
   render() {
     const {items} = this.state;
-    const {renderItem, verticalOffset, theme, context, style} = this.props;
+    const {renderItem, verticalOffset, theme, context, style, typing} = this.props;
     const _styles = styles({theme, verticalOffset});
 
     if (!items.length) {
@@ -131,6 +137,9 @@ export default class MessagesList extends Component {
           onLayout={e => this.updateLayoutHeight(e)}
           onContentSizeChange={(w, h) => this.updateContentSize(w, h)}
           keyExtractor={this._keyExtractor}/>
+        <View style={{height: 30}}>
+          {typing && <TextLabel>{context.t('typing')}</TextLabel>}
+        </View>
       </View>
     );
   }
