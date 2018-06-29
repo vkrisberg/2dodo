@@ -115,12 +115,5 @@ export default (theme) => {
     chosen: {
       marginBottom: -6,
     },
-
-    btnContainer: {
-      width: '100%',
-      height: '100%',
-      justifyContent: 'center',
-      alignItems: 'flex-start',
-    },
   });
 };

@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, View, Image, Text} from 'react-native';
+import {TouchableOpacity, View, Text} from 'react-native';
 import Swipeout from 'react-native-swipeout';
 import PropTypes from 'prop-types';
 import {isEmpty} from 'lodash';
 import moment from 'moment';
 
-import {Checkbox, AvatarIcon} from '../index';
+import {Checkbox, AvatarIcon, ButtonsSwipe} from '../index';
 import {themeEnum} from '../../../enums';
 import {helpers} from '../../../utils';
 import styles from './styles';
@@ -37,6 +37,19 @@ export default class ChatListItem extends Component {
     onPressDeleteBtn: () => {},
     onPressPinBtn: () => {},
     onPressSoundBtn: () => {},
+  };
+
+  renderSwipeBtns = () => {
+    return (
+      <ButtonsSwipe
+        firstBtnImage={pinBtn}
+        secondBtnImage={soundBtn}
+        thirdBtnImage={deleteBtn}
+        firstBtnHandler={this.onPressPinBtn}
+        secondBtnHandler={this.onPressSoundBtn}
+        thirdBtnHandler={this.onPressDeleteBtn}
+      />
+    );
   };
 
   onPressDeleteBtn = () => {
@@ -108,23 +121,12 @@ export default class ChatListItem extends Component {
     const swipeoutBtns = [
       {
         backgroundColor: 'transparent',
-        onPress: () => this.onPressPinBtn,
-        component: <View style={_styles.btnContainer}><Image source={pinBtn}/></View>,
-      },
-      {
-        backgroundColor: 'transparent',
-        onPress: this.onPressSoundBtn,
-        component: <View style={_styles.btnContainer}><Image source={soundBtn}/></View>,
-      },
-      {
-        backgroundColor: 'transparent',
-        onPress: this.onPressDeleteBtn,
-        component: <View style={_styles.btnContainer}><Image source={deleteBtn}/></View>,
+        component: this.renderSwipeBtns(),
       },
     ];
 
     return (
-      <Swipeout right={swipeoutBtns} buttonWidth={50} autoClose={true} style={_styles.swipeOut}>
+      <Swipeout right={swipeoutBtns} buttonWidth={145} autoClose={true} style={_styles.swipeOut}>
         <TouchableOpacity onPress={this.onPress} onLongPress={this.onLongPress}>
           <View style={_styles.container}>
             {editMode && <View style={_styles.checkboxBlock}>

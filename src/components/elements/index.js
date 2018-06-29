@@ -29,3 +29,4 @@ export {default as MessageQuote} from './message-quote';
 export {default as MessageInput} from './message-input';
 export {default as Profile} from './profile';
 export {default as Icon} from './icon';
+export {default as ButtonsSwipe} from './buttons-swipe';
