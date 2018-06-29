@@ -9,9 +9,9 @@ export default class ButtonsSwipe extends PureComponent {
 
   static propTypes = {
     theme: PropTypes.string,
-    firstBtnImage: PropTypes.object,
-    secondBtnImage: PropTypes.object,
-    thirdBtnImage: PropTypes.object,
+    firstBtnImage: PropTypes.any,
+    secondBtnImage: PropTypes.any,
+    thirdBtnImage: PropTypes.any,
     firstBtnHandler: PropTypes.func,
     secondBtnHandler: PropTypes.func,
     thirdBtnHandler: PropTypes.func,
