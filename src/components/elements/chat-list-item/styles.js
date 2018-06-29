@@ -3,6 +3,10 @@ import {colors, fonts, weights, sizes} from "../../../styles";
 
 export default (theme) => {
   return StyleSheet.create({
+    swipeOut: {
+      backgroundColor: 'transparent',
+    },
+
     container: {
       flexDirection: 'row',
       height: 50,
@@ -110,6 +114,13 @@ export default (theme) => {
 
     chosen: {
       marginBottom: -6,
+    },
+
+    btnContainer: {
+      width: '100%',
+      height: '100%',
+      justifyContent: 'center',
+      alignItems: 'flex-start',
     },
   });
 };
