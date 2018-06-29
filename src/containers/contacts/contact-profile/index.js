@@ -8,7 +8,7 @@ import {colors} from '../../../styles';
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
 import {Profile, Navbar, ButtonBack, ButtonNavbar} from '../../../components/elements';
 import {ProfileForm} from '../../../components/forms';
-import {contactActions} from '../../../store/actions';
+import {chatActions, contactActions} from '../../../store/actions';
 import styles from './styles';
 
 class ContactProfile extends Component {
@@ -51,7 +51,9 @@ class ContactProfile extends Component {
     const data = get(this.props.form, 'profile.values', {});
     data.phones = values(data.phones);
     data.groups = values(data.groups);
-    this.props.dispatch(contactActions.update(data));
+    this.props.dispatch(contactActions.update(data)).then(() => {
+      this.props.dispatch(chatActions.loadList());
+    });
 
     this.setState({
       editMode: false,
@@ -98,7 +100,9 @@ class ContactProfile extends Component {
               editMode: false,
             });
           }
-          this.props.dispatch(contactActions.delete(username));
+          this.props.dispatch(contactActions.delete(username)).then(() => {
+            this.props.dispatch(chatActions.loadList());
+          });
           this.goBack();
         }},
       ],

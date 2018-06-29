@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import {TouchableOpacity, View, Image, Text} from 'react-native';
 import PropTypes from 'prop-types';
+import {isEmpty} from 'lodash';
 import moment from 'moment';
 
 import {Checkbox, AvatarIcon} from '../index';
 import {themeEnum} from '../../../enums';
+import {helpers} from '../../../utils';
 import styles from './styles';
 
 export default class ChatListItem extends Component {
@@ -39,10 +41,11 @@ export default class ChatListItem extends Component {
   };
 
   renderTextMessage = (message, _styles) => {
+    const name = message.contact ? helpers.getFullName(message.contact) : message.username;
     return (
       <View>
         {!message.isOwn
-        && <Text style={_styles.username} numberOfLines={1} ellipsizeMode="tail">{message.username}</Text>}
+        && <Text style={_styles.username} numberOfLines={1} ellipsizeMode="tail">{name}</Text>}
         <Text style={_styles.limitText} numberOfLines={2} ellipsizeMode="tail">{message.text}</Text>
       </View>
     );
@@ -77,7 +80,7 @@ export default class ChatListItem extends Component {
     const _styles = styles(theme);
     const isToday = moment(item.dateUpdate).format('DD.MM.YY') === moment().format('DD.MM.YY');
     const chosen = selectedItems[item.id];
-    const avatarSource = item.contacts && item.contacts.length ? item.contacts[0].avatar : item.avatar;
+    const avatarSource = item.avatar ? item.avatar : !isEmpty(item.contacts) && item.contacts[0].avatar;
 
     return (
       <TouchableOpacity onPress={this.onPress} onLongPress={this.onLongPress}>
@@ -89,7 +92,7 @@ export default class ChatListItem extends Component {
           </View>
           }
           <View style={_styles.image}>
-            <AvatarIcon theme={theme} source={avatarSource} label={item.shortName}/>
+            <AvatarIcon theme={theme} source={avatarSource} label={item.name}/>
           </View>
           <View style={_styles.body}>
             <Text style={_styles.name}>

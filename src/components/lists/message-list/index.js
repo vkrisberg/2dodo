@@ -52,12 +52,8 @@ export default class MessagesList extends Component {
       this.setState({items: this.props.items});
     }
 
-    if (prevState.items.length !== this.state.items.length) {
-      this.flatList && this.flatList.scrollToEnd();
-    }
-
-    if (prevState.contentSize !== this.state.contentSize) {
-      this.flatList && this.flatList.scrollToEnd();
+    if (prevState.items !== this.state.items) {
+      this.flatList && this.flatList.scrollToEnd({animated: false});
     }
   }
 
@@ -84,12 +80,28 @@ export default class MessagesList extends Component {
     this.flatList && this.flatList.scrollToEnd();
   };
 
+  scrollToBottom({contentSize = this.state.contentSize, layoutHeight = this.state.layoutHeight, animated = false}) {
+    this.flatList.scrollToOffset({
+      offset: (layoutHeight < contentSize) ? contentSize - layoutHeight : 0,
+      animated,
+    });
+  }
+
   updateLayoutHeight(e) {
-    this.setState({layoutHeight: e.nativeEvent.layout.height});
+    const height = e.nativeEvent.layout.height;
+    this.setState({layoutHeight: height});
+    if (this.state.layoutHeight === 0) {
+      this.flatList && this.scrollToBottom({layoutHeight: height});
+    }
   }
 
   updateContentSize(w, h) {
     this.setState({contentSize: h});
+    if (this.state.isKeyboardActive) {
+      this.flatList && this.flatList.scrollToEnd();
+    } else {
+      this.flatList && this.scrollToBottom({contentSize: h});
+    }
   }
 
   _keyExtractor = (item) => item.id;
@@ -97,7 +109,7 @@ export default class MessagesList extends Component {
   render() {
     const {items} = this.state;
     const {renderItem, verticalOffset, theme, context, style} = this.props;
-    const _styles = styles(verticalOffset);
+    const _styles = styles({theme, verticalOffset});
 
     if (!items.length) {
       return (

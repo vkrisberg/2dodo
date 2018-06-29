@@ -80,7 +80,7 @@ export default {
         }
 
         const account = realm.objectForPrimaryKey(dbEnum.Account, username);
-        // console.log('account', account.keys);
+        // console.log('account', account.keys.publicKey);
 
         // TODO - remove after test
         // const pubKey = '';
@@ -138,7 +138,7 @@ export default {
         }
         // try reconnect when disconnected
         if (!connected && !account.connecting) {
-          if (account.connectionAttempts < 3) {
+          if (account.connectionAttempts < CONFIG.maxConnectionAttempts) {
             console.log('reconnect...', account.connectionAttempts);
             const {deviceId, hostname, password, user, keys} = account;
             services.websocketConnect({

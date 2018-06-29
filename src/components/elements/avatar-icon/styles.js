@@ -1,15 +1,15 @@
 import {StyleSheet} from 'react-native';
 import {colors} from '../../../styles';
 
-export default ({theme}) => {
+export default ({theme, width, height}) => {
   return StyleSheet.create({
     container: {
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: colors[theme].blue,
-      borderRadius: 25,
-      height: 50,
-      width: 50,
+      borderRadius: height / 2,
+      height: height,
+      width: width,
       overflow: 'hidden',
     },
 
@@ -22,16 +22,16 @@ export default ({theme}) => {
     },
 
     avatar: {
-      width: 50,
-      height: 50,
+      width: width,
+      height: height,
     },
 
     avatarBg: {
       position: 'absolute',
       top: 0,
       left: 0,
-      width: 50,
-      height: 50,
+      width: width,
+      height: height,
     },
   });
 }

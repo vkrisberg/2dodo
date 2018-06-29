@@ -9,7 +9,9 @@ export default function ({event, store, navigation}) {
     const {code, reason} = event;
     console.log('websocket closed failed');
     console.log('code: ' + code + ' reason: ' + reason);
-    if (code === 1001) {
+
+    const {account} = store.getState();
+    if (account.logout) {
       store.dispatch(accountActions.logoutResult({clean: true, error: null}));
     } else if (code && reason) {
       store.dispatch(accountActions.connectResult({connected: false, error: {code, reason}}));
