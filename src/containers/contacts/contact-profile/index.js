@@ -69,7 +69,17 @@ class ContactProfile extends Component {
 
   onShowQrCode = () => alert('click on show QR-code');
 
-  onWriteBtn = (chat) => this.props.navigation.replace(routeEnum.ChatMessage, {chat});
+  createChat = (contacts) => {
+    return this.props.dispatch(
+      chatActions.create(contacts)
+    );
+  };
+
+  onWriteBtn = () => {
+    this.createChat([this.props.contact.current]).then((chat) => {
+      this.props.navigation.replace(routeEnum.ChatMessage, {chat});
+    });
+  };
 
   onCallBtn = () => alert('click on call btn');
 
@@ -153,7 +163,7 @@ class ContactProfile extends Component {
                   context={context}
                   user={contact.current}
                   onShowQrCode={this.onShowQrCode}
-                  onWriteBtn={() => this.onWriteBtn(this.props.chat.list[0])}
+                  onWriteBtn={this.onWriteBtn}
                   onCallBtn={this.onCallBtn}
                   onKeysBtn={this.onKeysBtn}
                   onFilesBtn={this.onFilesBtn}
