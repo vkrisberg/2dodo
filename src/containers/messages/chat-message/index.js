@@ -80,6 +80,10 @@ class ChatMessage extends PureComponent {
     this.props.navigation.navigate(routeEnum.ContactProfile, {data: contact.current});
   };
 
+  onMessageTyping = () => {
+    this.props.dispatch(chatMessageActions.sendMessageTyping(this.chat));
+  };
+
   onMessagePress = (message) => {
     this.setState({
       quote: message,
@@ -151,7 +155,8 @@ class ChatMessage extends PureComponent {
               quote={this.state.quote}
               onPressQuote={this.onQuotePress}
               disabled={!account.net.connected || !account.connected}
-              onSubmit={this.onSubmitText}/>
+              onSubmit={this.onSubmitText}
+              onTyping={this.onMessageTyping}/>
           </KeyboardAvoidingView>
         </BackgroundLayout>
       </MainLayout>

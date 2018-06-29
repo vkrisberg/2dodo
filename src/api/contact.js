@@ -34,7 +34,7 @@ export default {
     };
     const clientMessage = await wsMessage.getClientMessage({
       action: actionEnum.requestProfile,
-      data: {meta, data: null},
+      data: {meta, payload: null},
       to: usernames,
     });
 
