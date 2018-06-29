@@ -285,9 +285,6 @@ export default {
         for (let i = 0; i < message.data.length; i++) {
           const item = message.data[i];
 
-          // TODO - remove after fixing on server
-          item.name += '@api.2do.do';
-
           const contact = realm.objectForPrimaryKey(dbEnum.Contact, item.name);
           if (contact) {
             await realm.write(() => {
@@ -295,7 +292,10 @@ export default {
               contact.publicKey = item.open_key;
             });
             // console.log('contact publicKey updated', contact.username);
-            contacts.push({...contact});
+            contacts.push({
+              ...contact,
+              fullName: contact.fullName,
+            });
           }
         }
         dispatch({type: types.RECEIVE_PUBKEY_SUCCESS, payload: contacts});
