@@ -54,14 +54,17 @@ export default class ChatListItem extends Component {
 
   onPressDeleteBtn = () => {
     this.props.onPressDeleteBtn();
+    this.swipeContainer._close();
   };
 
   onPressPinBtn = () => {
     this.props.onPressPinBtn();
+    this.swipeContainer._close();
   };
 
   onPressSoundBtn = () => {
     this.props.onPressPinBtn();
+    this.swipeContainer._close();
   };
 
   onPress = () => {
@@ -126,7 +129,7 @@ export default class ChatListItem extends Component {
     ];
 
     return (
-      <Swipeout right={swipeoutBtns} buttonWidth={145} autoClose={true} style={_styles.swipeOut}>
+      <Swipeout right={swipeoutBtns} buttonWidth={145} autoClose={true} style={_styles.swipeOut} ref={ref => this.swipeContainer = ref}>
         <TouchableOpacity onPress={this.onPress} onLongPress={this.onLongPress}>
           <View style={_styles.container}>
             {editMode && <View style={_styles.checkboxBlock}>
