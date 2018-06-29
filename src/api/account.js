@@ -9,7 +9,6 @@ export default {
   registration: ({name, password, email, open_key, hash_key, device_id, device_name, platform, settings}) => {
     const http = services.getHttp();
     const data = {name, password, email, open_key, hash_key, device_id, device_name, platform, settings};
-    console.log('DATA', data);
     return http.post('/registration/', data);
   },
 
