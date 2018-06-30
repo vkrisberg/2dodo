@@ -23,7 +23,7 @@ const initState = {
     dateCreate: null,
     dateUpdate: null,
   },
-  typing: null,
+  typing: {name: '', date: null}, // who and when is typing
   loading: false,
   clearing: false,
   error: null,
@@ -249,7 +249,7 @@ export default reducer(initState, {
       ...state,
       chat: action.payload,
       list: action.clearMessages ? [] : state.list,
-      typing: null,
+      typing: {},
     };
   },
 });

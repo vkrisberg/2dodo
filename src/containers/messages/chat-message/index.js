@@ -32,7 +32,7 @@ class ChatMessage extends PureComponent {
 
     this.state = {
       quote: null,
-      typing: null,
+      showTyping: false,
     };
 
     this.chat = {};
@@ -51,10 +51,11 @@ class ChatMessage extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.chatMessage.typing && prevProps.chatMessage.typing !== this.props.chatMessage.typing) {
-      this.setState({typing: true});
+    const {chatMessage} = this.props;
+    if (chatMessage.typing.date && prevProps.chatMessage.typing.date !== chatMessage.typing.date) {
+      this.setState({showTyping: true});
       setTimeout(() => {
-        this.setState({typing: false});
+        this.setState({showTyping: false});
       }, TYPING_SHOW_TIMEOUT);
     }
   }
@@ -163,7 +164,8 @@ class ChatMessage extends PureComponent {
               items={chatMessage.list}
               renderItem={this.renderMessage}
               theme={account.user.theme}
-              typing={this.state.typing}
+              showTyping={this.state.showTyping}
+              typing={this.props.chatMessage.typing}
               context={this.context}/>
             <MessageInput
               theme={theme}

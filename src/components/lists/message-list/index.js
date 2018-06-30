@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {View, FlatList, Image, Keyboard} from 'react-native';
 import PropTypes from 'prop-types';
 
-import {TextLabel} from '../../elements';
+import {TextLabel, MessageTyping} from '../../elements';
 import {themeEnum} from '../../../enums';
 import {colors} from '../../../styles';
 import styles from './styles';
@@ -15,7 +15,8 @@ export default class MessagesList extends Component {
     items: PropTypes.array,
     renderItem: PropTypes.func,
     verticalOffset: PropTypes.number,
-    typing: PropTypes.bool,
+    showTyping: PropTypes.bool,
+    typing: PropTypes.object,
     theme: PropTypes.string,
     context: PropTypes.object,
     style: PropTypes.any,
@@ -25,7 +26,8 @@ export default class MessagesList extends Component {
     items: [],
     renderItem: () => null,
     verticalOffset: 0,
-    typing: false,
+    showTyping: false,
+    typing: {name: ''},
     theme: themeEnum.light,
   };
 
@@ -56,10 +58,6 @@ export default class MessagesList extends Component {
 
     if (prevState.items !== this.state.items) {
       this.flatList && this.flatList.scrollToEnd({animated: false});
-    }
-
-    if (this.props.typing && prevProps.typing !== this.props.typing) {
-      this.flatList && this.flatList.scrollToEnd();
     }
   }
 
@@ -114,7 +112,7 @@ export default class MessagesList extends Component {
 
   render() {
     const {items} = this.state;
-    const {renderItem, verticalOffset, theme, context, style, typing} = this.props;
+    const {renderItem, verticalOffset, theme, context, style, showTyping, typing} = this.props;
     const _styles = styles({theme, verticalOffset});
 
     if (!items.length) {
@@ -137,9 +135,7 @@ export default class MessagesList extends Component {
           onLayout={e => this.updateLayoutHeight(e)}
           onContentSizeChange={(w, h) => this.updateContentSize(w, h)}
           keyExtractor={this._keyExtractor}/>
-        <View style={{height: 30}}>
-          {typing && <TextLabel>{context.t('typing')}</TextLabel>}
-        </View>
+        <MessageTyping typing={typing} showTyping={showTyping} theme={theme} context={context}/>
       </View>
     );
   }
