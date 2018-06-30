@@ -1,7 +1,7 @@
 import {get, map, filter, uniqBy, isEmpty} from 'lodash';
 
 import {apiChat, apiServer} from '../../api';
-import {services, wsMessage} from '../../utils';
+import {services, wsMessage, helpers} from '../../utils';
 import {actionEnum, dbEnum, messageEnum} from '../../enums';
 import CONFIG from '../../config';
 
@@ -448,7 +448,10 @@ export default {
 
         // typing
         if (action === actionEnum.chatMessageTyping && currentChatId === meta.chatId) {
-          dispatch({type: types.RECEIVE_TYPING, payload: dateNow});
+          const username = wsMessage.getUsername(from);
+          const contact = realm.objectForPrimaryKey(dbEnum.Contact, username);
+          const name = contact ? helpers.getFullName(contact) : helpers.getNickname(username);
+          dispatch({type: types.RECEIVE_TYPING, payload: {name, date: dateNow}});
           return true;
         }
 
