@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {View, FlatList, Image, Keyboard} from 'react-native';
 import PropTypes from 'prop-types';
 
-import {TextLabel} from '../../elements';
+import {TextLabel, MessageTyping} from '../../elements';
 import {themeEnum} from '../../../enums';
 import {colors} from '../../../styles';
 import styles from './styles';
@@ -15,6 +15,8 @@ export default class MessagesList extends Component {
     items: PropTypes.array,
     renderItem: PropTypes.func,
     verticalOffset: PropTypes.number,
+    showTyping: PropTypes.bool,
+    typing: PropTypes.object,
     theme: PropTypes.string,
     context: PropTypes.object,
     style: PropTypes.any,
@@ -24,6 +26,8 @@ export default class MessagesList extends Component {
     items: [],
     renderItem: () => null,
     verticalOffset: 0,
+    showTyping: false,
+    typing: {name: ''},
     theme: themeEnum.light,
   };
 
@@ -108,7 +112,7 @@ export default class MessagesList extends Component {
 
   render() {
     const {items} = this.state;
-    const {renderItem, verticalOffset, theme, context, style} = this.props;
+    const {renderItem, verticalOffset, theme, context, style, showTyping, typing} = this.props;
     const _styles = styles({theme, verticalOffset});
 
     if (!items.length) {
@@ -131,6 +135,7 @@ export default class MessagesList extends Component {
           onLayout={e => this.updateLayoutHeight(e)}
           onContentSizeChange={(w, h) => this.updateContentSize(w, h)}
           keyExtractor={this._keyExtractor}/>
+        <MessageTyping typing={typing} showTyping={showTyping} theme={theme} context={context}/>
       </View>
     );
   }

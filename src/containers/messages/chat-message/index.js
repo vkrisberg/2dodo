@@ -10,6 +10,8 @@ import {MessageList} from '../../../components/lists';
 import styles from './styles';
 import {routeEnum} from '../../../enums';
 
+const TYPING_SHOW_TIMEOUT = 3000;
+
 class ChatMessage extends PureComponent {
 
   static propTypes = {
@@ -30,6 +32,7 @@ class ChatMessage extends PureComponent {
 
     this.state = {
       quote: null,
+      showTyping: false,
     };
 
     this.chat = {};
@@ -40,8 +43,21 @@ class ChatMessage extends PureComponent {
     this.props.dispatch(chatMessageActions.clearMessages()).then(() => {
       this.props.dispatch(chatActions.setCurrentChat(this.chat));
       this.props.dispatch(contactActions.getOnlineUsers());
-      this.loadChatMessages(this.chat.id);
+      this.loadChatMessages(this.chat.id).then(() => {
+        // send read status
+        this.props.dispatch(chatMessageActions.sendMessagesRead(this.chat));
+      });
     });
+  }
+
+  componentDidUpdate(prevProps) {
+    const {chatMessage} = this.props;
+    if (chatMessage.typing.date && prevProps.chatMessage.typing.date !== chatMessage.typing.date) {
+      this.setState({showTyping: true});
+      setTimeout(() => {
+        this.setState({showTyping: false});
+      }, TYPING_SHOW_TIMEOUT);
+    }
   }
 
   loadContactList = (filter, sort, descending) => {
@@ -78,6 +94,10 @@ class ChatMessage extends PureComponent {
   onNavbarAvatarPress = () => {
     const {contact} = this.props;
     this.props.navigation.navigate(routeEnum.ContactProfile, {data: contact.current});
+  };
+
+  onMessageTyping = () => {
+    this.props.dispatch(chatMessageActions.sendMessageTyping(this.chat));
   };
 
   onMessagePress = (message) => {
@@ -144,6 +164,8 @@ class ChatMessage extends PureComponent {
               items={chatMessage.list}
               renderItem={this.renderMessage}
               theme={account.user.theme}
+              showTyping={this.state.showTyping}
+              typing={this.props.chatMessage.typing}
               context={this.context}/>
             <MessageInput
               theme={theme}
@@ -151,7 +173,8 @@ class ChatMessage extends PureComponent {
               quote={this.state.quote}
               onPressQuote={this.onQuotePress}
               disabled={!account.net.connected || !account.connected}
-              onSubmit={this.onSubmitText}/>
+              onSubmit={this.onSubmitText}
+              onTyping={this.onMessageTyping}/>
           </KeyboardAvoidingView>
         </BackgroundLayout>
       </MainLayout>

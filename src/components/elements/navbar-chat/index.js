@@ -41,6 +41,9 @@ export default class NavbarChat extends Component {
   };
 
   onMenuPress = () => {
+    this.setState({
+      showPanel: !this.state.showPanel,
+    });
     this.props.onMenuPress && this.props.onMenuPress();
   };
 
@@ -68,7 +71,7 @@ export default class NavbarChat extends Component {
                      size={13}>{description}</TextLabel>
         </View>
         <TouchableOpacity style={_styles.menuContainer} onPress={this.onMenuPress}>
-          <Image style={_styles.menuDots} source={IMG_MENU_DOTS} tintColor={this.state.showPanel && colors[theme].blue}/>
+          <Image style={_styles.menuDots} source={IMG_MENU_DOTS} tintColor={this.state.showPanel ? colors[theme].blue : null}/>
         </TouchableOpacity>
       </View>
     );

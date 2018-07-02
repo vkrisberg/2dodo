@@ -14,14 +14,17 @@ import IMG_EMOJI from './img/emoji.png';
 import IMG_MICROPHONE from './img/microphone.png';
 import IMG_CHECK_BLUE from './img/check_blue.png';
 
+const TYPING_TIMEOUT = 15000; // send typing status every 15 sec.
+
 export default class MessageInput extends PureComponent {
 
   static propTypes = {
     theme: PropTypes.string,
     context: PropTypes.object,
     disabled: PropTypes.bool,
-    onSubmit: PropTypes.func,
     quote: PropTypes.object,
+    onSubmit: PropTypes.func,
+    onTyping: PropTypes.func,
     onPressQuote: PropTypes.func,
   };
 
@@ -35,6 +38,8 @@ export default class MessageInput extends PureComponent {
   constructor(props) {
     super(props);
 
+    this.typingTimeoutId = null;
+
     this.state = {
       text: '',
       recording: false,
@@ -43,6 +48,13 @@ export default class MessageInput extends PureComponent {
 
   onChangeText = (text) => {
     this.setState({text});
+    // send typing status
+    if (!this.typingTimeoutId) {
+      this.props.onTyping && this.props.onTyping();
+      this.typingTimeoutId = setTimeout(() => {
+        this.typingTimeoutId = null;
+      }, TYPING_TIMEOUT);
+    }
   };
 
   onSubmit = () => {

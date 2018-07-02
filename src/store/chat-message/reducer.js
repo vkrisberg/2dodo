@@ -23,6 +23,7 @@ const initState = {
     dateCreate: null,
     dateUpdate: null,
   },
+  typing: {name: '', date: null}, // who and when is typing
   loading: false,
   clearing: false,
   error: null,
@@ -189,10 +190,33 @@ export default reducer(initState, {
     };
   },
 
-  [types.RECEIVE_STATUS_SUCCESS]: (state, action) => {
+  [types.SEND_TYPING]: (state, action) => {
+    return state;
+  },
+
+  [types.RECEIVE_TYPING]: (state, action) => {
     return {
       ...state,
-      receiveError: null,
+      typing: action.payload,
+    };
+  },
+
+  [types.SEND_STATUS]: (state, action) => {
+    return state;
+  },
+
+  [types.RECEIVE_STATUS_SUCCESS]: (state, action) => {
+    const {messageIds, status} = action.payload;
+    const list = state.list.map((item) => {
+      if (messageIds.indexOf(item.id) >= 0) {
+        item.status = status;
+      }
+      return item;
+    });
+
+    return {
+      ...state,
+      list,
     };
   },
 
@@ -225,6 +249,7 @@ export default reducer(initState, {
       ...state,
       chat: action.payload,
       list: action.clearMessages ? [] : state.list,
+      typing: {},
     };
   },
 });
