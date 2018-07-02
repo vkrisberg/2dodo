@@ -1,5 +1,5 @@
 import {services, wsMessage} from '../utils';
-import {actionEnum} from '../enums';
+import {actionEnum, messageEnum} from '../enums';
 import CONFIG from '../config';
 
 export default {
@@ -43,5 +43,35 @@ export default {
     websocket.send(JSON.stringify(chatMessage.message));
 
     return chatMessage;
+  },
+
+  sendChatMessageStatus: async ({data, members, status}) => {
+    const websocket = services.getWebsocket();
+    const meta = {
+      ...CONFIG.message,
+      ids: data.ids || [],
+      chatId: data.chatId,
+    };
+
+    let action;
+    switch (status) {
+      case messageEnum.received:
+        action = actionEnum.chatMessageReceived;
+        break;
+      case messageEnum.read:
+        action = actionEnum.chatMessageRead;
+        break;
+      default:
+        action = actionEnum.chatMessageTyping;
+    }
+
+    const clientMessage = await wsMessage.getClientMessage({
+      action,
+      data: {meta, payload: null},
+      to: members,
+    });
+    websocket.send(JSON.stringify(clientMessage.message));
+
+    return clientMessage;
   },
 };

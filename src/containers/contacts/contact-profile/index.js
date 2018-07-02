@@ -10,6 +10,7 @@ import {Profile, Navbar, ButtonBack, ButtonNavbar} from '../../../components/ele
 import {ProfileForm} from '../../../components/forms';
 import {chatActions, contactActions} from '../../../store/actions';
 import styles from './styles';
+import {routeEnum} from '../../../enums';
 
 class ContactProfile extends Component {
   static propTypes = {
@@ -68,7 +69,17 @@ class ContactProfile extends Component {
 
   onShowQrCode = () => alert('click on show QR-code');
 
-  onWriteBtn = () => alert('click on write btn');
+  createChat = (contacts) => {
+    return this.props.dispatch(
+      chatActions.create(contacts)
+    );
+  };
+
+  onWriteBtn = () => {
+    this.createChat([this.props.contact.current]).then((chat) => {
+      this.props.navigation.replace(routeEnum.ChatMessage, {chat});
+    });
+  };
 
   onCallBtn = () => alert('click on call btn');
 
@@ -174,4 +185,5 @@ export default connect(state => ({
   account: state.account,
   contact: state.contact,
   form: state.form,
+  chat: state.chat,
 }))(ContactProfile);

@@ -3,7 +3,7 @@ import {TouchableOpacity, Text, View, Image} from 'react-native';
 import Swipeout from 'react-native-swipeout';
 import PropTypes from 'prop-types';
 
-import {Checkbox, AvatarIcon, TextLabel} from '../index';
+import {Checkbox, AvatarIcon, TextLabel, ButtonsSwipe} from '../index';
 import {themeEnum} from '../../../enums';
 import styles from './styles';
 
@@ -48,14 +48,30 @@ export default class ContactListItem extends Component {
 
   onPressDeleteBtn = (username) => {
     this.props.onPressDeleteBtn(username);
+    this.swipeContainer._close();
   };
 
   onPressChatBtn = () => {
     this.props.onPressChatBtn && this.props.onPressChatBtn(this.props.item);
+    this.swipeContainer._close();
   };
 
   onPressCallBtn = () => {
     alert('press call btn');
+    this.swipeContainer._close();
+  };
+
+  renderSwipeBtns = () => {
+    return (
+      <ButtonsSwipe
+        firstBtnImage={deleteBtn}
+        secondBtnImage={writeBtn}
+        thirdBtnImage={callBtn}
+        firstBtnHandler={() => this.onPressDeleteBtn(this.props.item.username)}
+        secondBtnHandler={this.onPressChatBtn}
+        thirdBtnHandler={this.onPressCallBtn}
+      />
+    );
   };
 
   render() {
@@ -66,23 +82,12 @@ export default class ContactListItem extends Component {
     const swipeoutBtns = [
       {
         backgroundColor: 'transparent',
-        onPress: () => this.onPressDeleteBtn(item.username),
-        component: <View style={_styles.btnContainer}><Image source={deleteBtn}/></View>,
-      },
-      {
-        backgroundColor: 'transparent',
-        onPress: this.onPressChatBtn,
-        component: <View style={_styles.btnContainer}><Image source={writeBtn}/></View>,
-      },
-      {
-        backgroundColor: 'transparent',
-        onPress: this.onPressCallBtn,
-        component: <View style={_styles.btnContainer}><Image source={callBtn}/></View>,
+        component: this.renderSwipeBtns(),
       },
     ];
 
     return (
-      <Swipeout right={swipeoutBtns} buttonWidth={50} autoClose={true} style={_styles.swipeOut}>
+      <Swipeout right={swipeoutBtns} buttonWidth={140} autoClose={true} style={_styles.swipeOut} ref={ref => this.swipeContainer = ref}>
         <TouchableOpacity onPress={this.onPress} onLongPress={this.onLongPress} style={{width: '100%'}}>
           <View style={_styles.wrapper}>
             {checkboxVisibility && <Checkbox

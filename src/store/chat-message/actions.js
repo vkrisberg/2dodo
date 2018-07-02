@@ -1,8 +1,8 @@
-import {get, map, filter, uniqBy} from 'lodash';
+import {get, map, filter, uniqBy, isEmpty} from 'lodash';
 
 import {apiChat, apiServer} from '../../api';
-import {services, wsMessage} from '../../utils';
-import {dbEnum, messageEnum} from '../../enums';
+import {services, wsMessage, helpers} from '../../utils';
+import {actionEnum, dbEnum, messageEnum} from '../../enums';
 import CONFIG from '../../config';
 
 export const types = {
@@ -29,6 +29,10 @@ export const types = {
   RECEIVE_MESSAGE_SUCCESS: Symbol('RECEIVE_MESSAGE_SUCCESS'),
   RECEIVE_MESSAGE_FAILURE: Symbol('RECEIVE_MESSAGE_FAILURE'),
 
+  SEND_TYPING: Symbol('SEND_TYPING'),
+  RECEIVE_TYPING: Symbol('RECEIVE_TYPING'),
+
+  SEND_STATUS: Symbol('SEND_STATUS'),
   RECEIVE_STATUS_SUCCESS: Symbol('RECEIVE_STATUS_SUCCESS'),
   RECEIVE_STATUS_FAILURE: Symbol('RECEIVE_STATUS_FAILURE'),
 
@@ -53,6 +57,11 @@ const hashKeyAdd = async (data) => {
       realm.delete(hashKeys[0]);
     });
   }
+};
+
+const sendMessageStatus = async ({ids, chatId, members, status}) => {
+  const data = {ids, chatId};
+  apiChat.sendChatMessageStatus({data, members, status});
 };
 
 export default {
@@ -114,6 +123,7 @@ export default {
         };
         const messageData = {
           ...sendData,
+          status: messageEnum.sent,
           isOwn: true,
           dateCreate: dateNow,
           dateUpdate: dateNow,
@@ -182,7 +192,7 @@ export default {
         const chat = realm.objectForPrimaryKey(dbEnum.Chat, chatMessage.chatId);
         const members = filter(chat.members, (username) => username !== account.user.username);
         await realm.write(() => {
-          chatMessage.status = messageEnum.sending;
+          chatMessage.status = messageEnum.sent;
         });
         const payload = JSON.parse(JSON.stringify(chatMessage));
         // console.log('chat message resend', payload);
@@ -257,7 +267,7 @@ export default {
         const msgEncryptTime =  get(message, 'encrypt_time', null);
         await apiServer.deliveryReport(msgEncryptTime);
 
-        const {chat} = getState();
+        const {account, chat} = getState();
         const currentChatId = chat.current.id;
         const dateNow = new Date();
         const from = get(message, 'from', null);
@@ -301,7 +311,7 @@ export default {
           ...decryptedData,
           from,
           contact: realmContact,
-          status: messageEnum.received,
+          status: currentChatId !== meta.chatId ? messageEnum.received : messageEnum.read,
           isOwn: false,
           dateSend: wsMessage.rfcToDate(decryptedData.dateSend),
           dateCreate: dateNow,
@@ -328,7 +338,16 @@ export default {
         }
         const chatPayload = JSON.parse(JSON.stringify(realmChat));
 
-        // TODO - send delivery report to client
+        // send message status report to clients
+        const members = filter(realmChat.members, (username) => username !== account.user.username);
+        if (members.length) {
+          sendMessageStatus({
+            ids: [meta.id],
+            chatId: meta.chatId,
+            status: chatMessage.status,
+            members,
+          });
+        }
 
         // create and add hashKey
         const hashKeyData = {
@@ -354,8 +373,114 @@ export default {
     };
   },
 
+  sendMessageTyping: (chat) => {
+    return async (dispatch, getState) => {
+      const {account} = getState();
+      const members = filter(chat.members, (username) => username !== account.user.username);
+      if (members.length) {
+        sendMessageStatus({
+          ids: [],
+          chatId: chat.id,
+          status: messageEnum.typing,
+          members,
+        });
+      }
+      dispatch({type: types.SEND_TYPING});
+    };
+  },
+
+  sendMessagesRead: (chat) => {
+    return async (dispatch, getState) => {
+      const realm = services.getRealm();
+      const {account} = getState();
+      const dateNow = new Date();
+      const chatMessages = realm.objects(dbEnum.ChatMessage)
+        .filtered(`chatId = '${chat.id}' AND status = '${messageEnum.received}' AND isOwn = false`)
+        .snapshot();
+      const members = filter(chat.members, (username) => username !== account.user.username);
+      if (members.length && !isEmpty(chatMessages)) {
+        const len = chatMessages.length;
+        realm.write(() => {
+          for (let i = 0; i < len; i++) {
+            chatMessages[i].status = messageEnum.read;
+            chatMessages[i].dateUpdate = dateNow;
+          }
+        });
+        const messageIds = chatMessages.map((item) => item.id);
+        sendMessageStatus({
+          ids: messageIds,
+          chatId: chat.id,
+          status: messageEnum.read,
+          members,
+        });
+      }
+      dispatch({type: types.SEND_STATUS});
+    };
+  },
+
   receiveMessageStatus: (message) => {
-    return async dispatch => {
+    return async (dispatch, getState) => {
+      const realm = services.getRealm();
+      try {
+        // send delivery report
+        const msgEncryptTime =  get(message, 'encrypt_time', null);
+        await apiServer.deliveryReport(msgEncryptTime);
+
+        const {chat} = getState();
+        const currentChatId = chat.current.id;
+        const dateNow = new Date();
+        const error = get(message, 'error', null);
+        if (error) {
+          throw new Error(error);
+        }
+        const from = get(message, 'from', null);
+        if (!from) {
+          throw new Error('from is empty');
+        }
+        const action = get(message, 'action', null);
+        if (!action) {
+          throw new Error('action is empty');
+        }
+        const meta = get(message, 'data.meta', null);
+        if (!meta) {
+          throw new Error('data.meta is empty');
+        }
+
+        // typing
+        if (action === actionEnum.chatMessageTyping && currentChatId === meta.chatId) {
+          const username = wsMessage.getUsername(from);
+          const contact = realm.objectForPrimaryKey(dbEnum.Contact, username);
+          const name = contact ? helpers.getFullName(contact) : helpers.getNickname(username);
+          dispatch({type: types.RECEIVE_TYPING, payload: {name, date: dateNow}});
+          return true;
+        }
+
+        // status: received or read
+        if (!meta.ids || !meta.ids.length || !meta.chatId) {
+          return false;
+        }
+        const status = action === actionEnum.chatMessageRead ? messageEnum.read : messageEnum.received;
+        const chatMessages = realm.objects(dbEnum.ChatMessage)
+          .filtered(`chatId = '${meta.chatId}' AND isOwn = true`)
+          .snapshot();
+        const len = chatMessages.length;
+        realm.write(() => {
+          for (let i = 0; i < len; i++) {
+            if (meta.ids.indexOf(chatMessages[i].id) >= 0) {
+              chatMessages[i].status = status;
+              chatMessages[i].dateUpdate = dateNow;
+            }
+          }
+        });
+        const messageIds = chatMessages.map((item) => item.id);
+        const payload = {messageIds, status};
+        // console.log('message status received', payload);
+        dispatch({type: types.RECEIVE_STATUS_SUCCESS, payload});
+        return payload;
+      } catch (e) {
+        dispatch({type: types.RECEIVE_STATUS_FAILURE, error: e});
+        // throw e;
+      }
     };
   },
 

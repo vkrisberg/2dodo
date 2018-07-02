@@ -3,6 +3,10 @@ import {colors, fonts, weights, sizes} from "../../../styles";
 
 export default (theme) => {
   return StyleSheet.create({
+    swipeOut: {
+      backgroundColor: 'transparent',
+    },
+
     container: {
       flexDirection: 'row',
       height: 50,
