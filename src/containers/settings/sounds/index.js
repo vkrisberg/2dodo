@@ -200,18 +200,15 @@ class SoundSettings extends Component {
             </View>
             <SettingsList
               items={settingsData[0]}
-              renderItem={this.renderSettingsItem}
-            />
+              renderItem={this.renderSettingsItem}/>
             <View style={_styles.divider}/>
             <SettingsList
               items={settingsData[1]}
-              renderItem={this.renderSettingsItem}
-            />
+              renderItem={this.renderSettingsItem}/>
             <View style={[_styles.divider, {marginBottom: 10}]}/>
             <SettingsList
               items={settingsData[2]}
-              renderItem={this.renderSettingsItem}
-            />
+              renderItem={this.renderSettingsItem}/>
           </ScrollView>
         </BackgroundLayout>
       </MainLayout>

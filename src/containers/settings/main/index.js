@@ -1,22 +1,17 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {View, Text, TouchableOpacity, Image, TouchableHighlight, ScrollView} from 'react-native';
+import {View, Text, TouchableOpacity, Image, ScrollView} from 'react-native';
 
 import {accountActions} from '../../../store/actions';
-import {colors} from '../../../styles';
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
-import {Navbar, NavbarDots, Avatar, Button, ButtonNavbar} from '../../../components/elements';
+import {Navbar, NavbarDots, Avatar, Button, ButtonNavbar, SettingsListItem} from '../../../components/elements';
+import {SettingsList} from '../../../components/lists';
 import styles from './styles';
 
 import arrowIcon from '../../../images/icons/arrow-right/arrow_right.png';
 import shareIcon from '../../../images/icons/share/share.png';
 import {routeEnum} from '../../../enums';
-
-const settingsData = [
-  ['SoundsAndNotifications', 'Appearance', 'Language', 'Security'],
-  ['ExtendedSettings', 'Help', 'Questions'],
-];
 
 const user = {
   name: 'Lisa Simpson',
@@ -56,49 +51,87 @@ class Settings extends Component {
 
   onQrCode = () => alert('click on qr');
 
-  onSettingsRow = (row) => {
-    switch (row) {
-      case 'SoundsAndNotifications':
-        this.onSounds();
-        break;
-      default:
-        alert(row);
-    }
+  renderSettingsItem = ({item}) => {
+    return (
+      <SettingsListItem
+        theme={this.props.account.user.theme}
+        context={this.context}
+        text={item.text}
+        onPress={item.onPress}
+        checkbox={item.checkbox}
+        checkboxValue={item.checkboxValue}
+        navigate={item.navigate}
+        navigateText={item.navigateText}
+        border={item.border}
+      />
+    );
   };
 
-  onSounds = () => {
+  onSoundsAndNotifications = () => {
     this.props.navigation.navigate(routeEnum.SoundSettings);
   };
 
-  renderSettingsRow = (item, index, noLastBorder) => {
-    const {theme} = this.props.account.user;
-    const _styles = styles(theme);
+  onAppearance = () => alert('click on appearance');
 
-    return (
-      <TouchableHighlight
-        key={index}
-        onPress={() => this.onSettingsRow(item)}
-        underlayColor={colors[theme].blueKrayolaDim}
-        style={_styles.settingsRowContainer}>
-        <View style={[_styles.settingsRow, noLastBorder === index && {borderBottomWidth: 0}]}>
-          <Text style={[_styles.defaultText, _styles.blackText]}>{this.context.t(item)}</Text>
-          <View style={_styles.settingsRowRight}>
-            {item === 'Language' && <Text style={[_styles.defaultText, _styles.settingsText]}>{user.properties.language}</Text>}
-            {item === 'Security' && <Text style={[_styles.defaultText, _styles.settingsText]}>{this.context.t('UseCode')}</Text>}
-            <Image source={arrowIcon}/>
-          </View>
-        </View>
-      </TouchableHighlight>
-    );
-  };
+  onLanguage = () => alert('click on language');
+
+  onSecurity = () => alert('click on security');
+
+  onExtendedSettings = () => alert('click on extended settings');
+
+  onHelp = () => alert('click on help');
+
+  onQuestions = () => alert('click on questions');
 
   render() {
     const {context} = this;
     const {account} = this.props;
-
     const {theme} = account.user;
     const _styles = styles(theme);
-
+    const settingsData = [
+      [
+        {
+          text: 'SoundsAndNotifications',
+          onPress: this.onSoundsAndNotifications,
+          navigate: true,
+        },
+        {
+          text: 'Appearance',
+          onPress: this.onAppearance,
+          navigate: true,
+        },
+        {
+          text: 'Language',
+          onPress: this.onLanguage,
+          navigate: true,
+          navigateText: 'English',
+        },
+        {
+          text: 'Security',
+          onPress: this.onSecurity,
+          navigate: true,
+          navigateText: 'Use code',
+          border: false,
+        },
+      ],
+      [
+        {
+          text: 'ExtendedSettings',
+          onPress: this.onExtendedSettings,
+          navigate: true,
+        },
+        {
+          text: 'Help',
+          onPress: this.onHelp,
+          navigate: true,
+        },
+        {
+          text: 'Questions',
+          onPress: this.onQuestions,
+          navigate: true,
+        },
+      ],
+    ];
 
     return (
       <MainLayout netOffline={!account.net.connected} wsConnected={account.connected}>
@@ -133,11 +166,15 @@ class Settings extends Component {
             </View>
             <View style={_styles.divider}/>
             <View style={_styles.content}>
-              {settingsData[0].map((item, index) => this.renderSettingsRow(item, index, settingsData[0].length - 1))}
+              <SettingsList
+                items={settingsData[0]}
+                renderItem={this.renderSettingsItem}/>
             </View>
             <View style={_styles.divider}/>
             <View style={[_styles.content, {marginBottom: 60}]}>
-              {settingsData[1].map((item, index) => this.renderSettingsRow(item, index))}
+              <SettingsList
+                items={settingsData[1]}
+                renderItem={this.renderSettingsItem}/>
             </View>
           </ScrollView>
         </BackgroundLayout>
