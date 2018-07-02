@@ -20,6 +20,7 @@ export {default as Navbar} from './navbar';
 export {default as NavbarChat} from './navbar-chat';
 export {default as NavbarFavorites} from './navbar-favorites';
 export {default as NavbarDots} from './navbar-dots';
+export {default as SettingsListItem} from './settings-list-item';
 export {default as ContactListItem} from './contact-list-item';
 export {default as ContactSearchItem} from './contact-search-item';
 export {default as ChatListItem} from './chat-list-item';

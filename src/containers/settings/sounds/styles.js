@@ -1,25 +1,33 @@
 import {StyleSheet} from 'react-native';
+import {fonts, weights, colors, sizes} from "../../../styles";
 
 export default (theme) => {
   return StyleSheet.create({
-    emptyContainer: {
-      flex: 1,
-      width: '100%',
-      alignItems: 'center',
-      justifyContent: 'center',
-      paddingBottom: 50,
+    container: {
+      width: sizes.windowWidth,
+      paddingBottom: 30,
     },
 
-    emptyWrapper: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: 15,
-      width: 260,
+    subcaption: {
+      width: '100%',
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      marginTop: 10,
+      marginBottom: 5,
+      marginHorizontal: 20,
     },
 
     text: {
-      marginTop: 15,
-      textAlign: 'center',
+      fontFamily: fonts.main,
+      fontSize: 15,
+      fontWeight: weights.medium,
+      color: colors[theme].grayInput,
+    },
+
+    divider: {
+      width: sizes.windowWidth,
+      height: 15,
+      backgroundColor: colors[theme].blueKrayolaDim,
     },
   });
 };

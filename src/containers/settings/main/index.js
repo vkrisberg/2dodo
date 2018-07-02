@@ -13,17 +13,9 @@ import arrowIcon from '../../../images/icons/arrow-right/arrow_right.png';
 import shareIcon from '../../../images/icons/share/share.png';
 import {routeEnum} from '../../../enums';
 
-const settingsItems = [
-  'SoundsAndNotifications',
-  'Appearance',
-  'Language',
-  'Security',
-];
-
-const settingsItemsAdditional = [
-  'ExtendedSettings',
-  'Help',
-  'Questions',
+const settingsData = [
+  ['SoundsAndNotifications', 'Appearance', 'Language', 'Security'],
+  ['ExtendedSettings', 'Help', 'Questions'],
 ];
 
 const user = {
@@ -64,10 +56,6 @@ class Settings extends Component {
 
   onQrCode = () => alert('click on qr');
 
-  onSounds = () => {
-    this.props.navigation.navigate(routeEnum.SoundSettings);
-  };
-
   onSettingsRow = (row) => {
     switch (row) {
       case 'SoundsAndNotifications':
@@ -76,6 +64,10 @@ class Settings extends Component {
       default:
         alert(row);
     }
+  };
+
+  onSounds = () => {
+    this.props.navigation.navigate(routeEnum.SoundSettings);
   };
 
   renderSettingsRow = (item, index, noLastBorder) => {
@@ -141,11 +133,11 @@ class Settings extends Component {
             </View>
             <View style={_styles.divider}/>
             <View style={_styles.content}>
-              {settingsItems.map((item, index) => this.renderSettingsRow(item, index, settingsItems.length - 1))}
+              {settingsData[0].map((item, index) => this.renderSettingsRow(item, index, settingsData[0].length - 1))}
             </View>
             <View style={_styles.divider}/>
             <View style={[_styles.content, {marginBottom: 60}]}>
-              {settingsItemsAdditional.map((item, index) => this.renderSettingsRow(item, index))}
+              {settingsData[1].map((item, index) => this.renderSettingsRow(item, index))}
             </View>
           </ScrollView>
         </BackgroundLayout>
