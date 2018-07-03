@@ -75,7 +75,7 @@ class Settings extends Component {
 
   onSecurity = () => alert('click on security');
 
-  onExtendedSettings = () => alert('click on extended settings');
+  onExtendedSettings = () => this.props.navigation.navigate(routeEnum.AdvancedSettings);
 
   onHelp = () => alert('click on help');
 

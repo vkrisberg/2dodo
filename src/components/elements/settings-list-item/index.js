@@ -21,12 +21,14 @@ export default class SettingsListItem extends PureComponent {
     checkboxValue: PropTypes.bool,
     navigate: PropTypes.bool,
     navigateText: PropTypes.string,
+    rowStyles: PropTypes.any,
   };
 
   static defaultProps = {
     theme: themeEnum.light,
     onPress: () => {},
     border: true,
+    rowStyles: {},
   };
 
   onPress = () => {
@@ -34,7 +36,7 @@ export default class SettingsListItem extends PureComponent {
   };
 
   render() {
-    const {theme, context, text, border, checkbox, checkboxValue, navigate, navigateText} = this.props;
+    const {theme, context, text, border, checkbox, checkboxValue, navigate, navigateText, rowStyles} = this.props;
     const _styles = styles(theme);
 
     return (
@@ -42,7 +44,7 @@ export default class SettingsListItem extends PureComponent {
         onPress={this.onPress}
         underlayColor={colors[theme].blueKrayolaDim}
         style={_styles.settingsRowContainer}>
-        <View style={[_styles.settingsRow, !border && {borderBottomWidth: 0}]}>
+        <View style={[_styles.settingsRow, !border && {borderBottomWidth: 0}, rowStyles]}>
           <Text style={[_styles.defaultText, _styles.blackText]}>{context.t(text)}</Text>
           <View style={_styles.settingsRowRight}>
             {checkbox && <Checkbox input={{value: checkboxValue, onChange: this.onPress}}/>}

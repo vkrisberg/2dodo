@@ -23,7 +23,7 @@ export default (theme) => {
     },
 
     settingsRow: {
-      paddingVertical: 15,
+      paddingVertical: 18,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',

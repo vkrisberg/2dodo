@@ -15,6 +15,7 @@ export default {
   Settings: 'Settings',
   SoundSettings: 'SoundSettings',
   AppearanceSettings: 'AppearanceSettings',
+  AdvancedSettings: 'AdvancedSettings',
   // modals
   RequestProfileModal: 'RequestProfileModal',
 };
