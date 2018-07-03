@@ -13,7 +13,6 @@ export default (theme) => {
       flexDirection: 'row',
       alignItems: 'flex-start',
       marginVertical: 5,
-      marginHorizontal: 20,
     },
 
     text: {
@@ -23,10 +22,38 @@ export default (theme) => {
       color: colors[theme].grayInput,
     },
 
-    divider: {
-      width: sizes.windowWidth,
-      height: 15,
-      backgroundColor: colors[theme].blueKrayolaDim,
+    btnsThemeContainer: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingTop: 10,
+      paddingBottom: 20,
+    },
+
+    btnLightTheme: {
+      marginRight: 12,
+    },
+
+    btnsFontContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingTop: 15,
+      paddingBottom: 25,
+      paddingHorizontal: 5,
+      borderBottomWidth: 1,
+      borderBottomColor: colors[theme].grayLight,
+    },
+
+    btnSize: {
+      width: 'auto',
+      borderWidth: 0,
+      paddingHorizontal: 20,
+    },
+
+    btnSizeActive: {
+      backgroundColor: colors[theme].blue,
+      flexShrink: 0,
     },
   });
 };

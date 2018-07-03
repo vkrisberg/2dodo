@@ -2,8 +2,12 @@ import React, {Component} from 'react';
 import {View, ScrollView, Text} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+
+import {accountActions} from '../../../store/actions';
+import {themeEnum} from '../../../enums';
+import {colors} from '../../../styles';
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
-import {Navbar, ButtonBack, SettingsListItem} from '../../../components/elements';
+import {Navbar, ButtonBack, SettingsListItem, ButtonTheme, Button} from '../../../components/elements';
 import {SettingsList} from '../../../components/lists';
 import styles from './styles';
 
@@ -19,12 +23,42 @@ class AppearanceSettings extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      currentFontSize: 15,
       checkedSendOnEnter: false,
       checkedNotShowPrint: false,
       checkedHideReadNotification: false,
       checkedSaveContent: true,
     };
   }
+
+  onThemeChange(theme) {
+    this.props.dispatch(accountActions.updateTheme(theme));
+  }
+
+  renderBtnsSize = (_styles, theme, btnsCount, startSize) => {
+    let btnsArray = [];
+    const {currentFontSize} = this.state;
+
+    for (let i = 0; i < btnsCount; i++) {
+      btnsArray.push(
+        <Button
+          style={[
+            startSize + i === currentFontSize && _styles.btnSizeActive,
+            _styles.btnSize
+          ]}
+          textStyle={{fontSize: startSize + i, color: startSize + i === currentFontSize ? colors[theme].white : colors[theme].black}}
+          onPress={() => this.onBtnSize(startSize + i)}>
+          Aa</Button>);
+    }
+
+    return btnsArray;
+  };
+
+  onBtnSize = (currentFontSize) => {
+    this.setState({
+      currentFontSize: currentFontSize,
+    });
+  };
 
   renderSettingsItem = ({item}) => {
     return (
@@ -117,8 +151,29 @@ class AppearanceSettings extends Component {
         <BackgroundLayout theme={account.user.theme} paddingHorizontal={10}>
           <Navbar renderTitle={context.t('Appearance')} renderLeft={<ButtonBack/>}/>
           <ScrollView style={_styles.container}>
-            <View style={_styles.subcaption}>
-              <Text style={_styles.text}>{context.t('ColorScheme')}</Text>
+            <View paddingHorizontal={20}>
+              <View style={_styles.subcaption}>
+                <Text style={_styles.text}>{context.t('ColorScheme')}</Text>
+              </View>
+              <View style={_styles.btnsThemeContainer}>
+                <ButtonTheme
+                  context={context}
+                  theme={theme}
+                  style={_styles.btnLightTheme}
+                  type={themeEnum.light}
+                  onPress={() => this.onThemeChange(themeEnum.light)}/>
+                <ButtonTheme
+                  context={context}
+                  theme={theme}
+                  type={themeEnum.night}
+                  onPress={() => this.onThemeChange(themeEnum.night)}/>
+              </View>
+              <View style={_styles.subcaption}>
+                <Text style={_styles.text}>{context.t('FontSize')}</Text>
+              </View>
+              <View style={_styles.btnsFontContainer}>
+                {this.renderBtnsSize(_styles, theme, 5, 13)}
+              </View>
             </View>
             <SettingsList
               items={settingsData}

@@ -116,7 +116,7 @@ class SoundSettings extends Component {
       checkedShowGroupMessages,
       checkedSoundInApplication,
       checkedVibration,
-      checkedGlobalMessagePreview,
+      checkedGlobalMessagePreview
     } = this.state;
     const {account} = this.props;
     const {theme} = this.props.account.user;
