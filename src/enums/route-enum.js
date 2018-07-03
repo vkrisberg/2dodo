@@ -14,6 +14,7 @@ export default {
   Registration: 'Registration',
   Settings: 'Settings',
   SoundSettings: 'SoundSettings',
+  AppearanceSettings: 'AppearanceSettings',
   // modals
   RequestProfileModal: 'RequestProfileModal',
 };

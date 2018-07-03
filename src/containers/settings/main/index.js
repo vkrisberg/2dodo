@@ -67,11 +67,9 @@ class Settings extends Component {
     );
   };
 
-  onSoundsAndNotifications = () => {
-    this.props.navigation.navigate(routeEnum.SoundSettings);
-  };
+  onSoundsAndNotifications = () => this.props.navigation.navigate(routeEnum.SoundSettings);
 
-  onAppearance = () => alert('click on appearance');
+  onAppearance = () => this.props.navigation.navigate(routeEnum.AppearanceSettings);
 
   onLanguage = () => alert('click on language');
 
