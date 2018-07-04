@@ -29,6 +29,13 @@ class Contacts extends Component {
 
   componentDidMount() {
     this.loadContactList();
+    this.timer = setInterval(()=>{
+      this.props.dispatch(contactActions.getOnlineUsers());
+    }, 10000);
+  }
+
+  componentWillUnmount(){
+    clearInterval(this.timer);
   }
 
   loadContact = (username) => {

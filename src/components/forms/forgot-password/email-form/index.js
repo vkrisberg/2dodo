@@ -19,6 +19,7 @@ class ForgotPassEmailForm extends Component {
 
   static defaultProps = {
     theme: themeEnum.light,
+    onSubmit: () => {},
   };
 
   render() {

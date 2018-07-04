@@ -201,6 +201,15 @@ export default reducer(initState, {
     };
   },
 
+  [types.UNSET_CURRENT_CHAT]: (state, action) => {
+    return {
+      ...state,
+      current: {...initState.current},
+      loading: true,
+      error: null
+    };
+  },
+
   // Chat Message types
   [chatMessageTypes.SEND_SUCCESS]: (state, action) => {
     const list = state.list.map((item) => {
