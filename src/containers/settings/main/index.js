@@ -67,15 +67,9 @@ class Settings extends Component {
     );
   };
 
-  onSoundsAndNotifications = () => this.props.navigation.navigate(routeEnum.SoundSettings);
-
-  onAppearance = () => this.props.navigation.navigate(routeEnum.AppearanceSettings);
+  onNavigate = (route) => this.props.navigation.navigate(route);
 
   onLanguage = () => alert('click on language');
-
-  onSecurity = () => alert('click on security');
-
-  onExtendedSettings = () => this.props.navigation.navigate(routeEnum.AdvancedSettings);
 
   onHelp = () => alert('click on help');
 
@@ -90,12 +84,12 @@ class Settings extends Component {
       [
         {
           text: 'SoundsAndNotifications',
-          onPress: this.onSoundsAndNotifications,
+          onPress: () => this.onNavigate(routeEnum.SoundSettings),
           navigate: true,
         },
         {
           text: 'Appearance',
-          onPress: this.onAppearance,
+          onPress: () => this.onNavigate(routeEnum.AppearanceSettings),
           navigate: true,
         },
         {
@@ -106,7 +100,7 @@ class Settings extends Component {
         },
         {
           text: 'Security',
-          onPress: this.onSecurity,
+          onPress: () => this.onNavigate(routeEnum.SafetySettings),
           navigate: true,
           navigateText: 'Use code',
           border: false,
@@ -115,7 +109,7 @@ class Settings extends Component {
       [
         {
           text: 'ExtendedSettings',
-          onPress: this.onExtendedSettings,
+          onPress: () => this.onNavigate(routeEnum.AdvancedSettings),
           navigate: true,
         },
         {

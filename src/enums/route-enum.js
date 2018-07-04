@@ -16,6 +16,7 @@ export default {
   SoundSettings: 'SoundSettings',
   AppearanceSettings: 'AppearanceSettings',
   AdvancedSettings: 'AdvancedSettings',
+  SafetySettings: 'SafetySettings',
   // modals
   RequestProfileModal: 'RequestProfileModal',
 };
