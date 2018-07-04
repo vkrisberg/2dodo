@@ -347,7 +347,7 @@ export default reducer(initState, {
       return item;
     });
     // set current - to show in the chat-message screen on navbar
-    let current = state.current || initState.current;
+    let current = state.current || {...initState.current};
     current.isOnline = onlineUsers.indexOf(current.username) >= 0;
 
     return {
@@ -383,7 +383,7 @@ export default reducer(initState, {
 
     return {
       ...state,
-      current: contact || initState.current,
+      current: contact || {...initState.current},
     };
   },
 });

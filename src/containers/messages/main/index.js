@@ -31,6 +31,7 @@ class Messages extends Component {
 
   constructor(props) {
     super(props);
+    this.timer = null;
   }
 
   componentDidMount() {
@@ -57,6 +58,13 @@ class Messages extends Component {
     //     });
     //   });
     // });
+    this.timer = setInterval(()=>{
+      this.props.dispatch(contactActions.getOnlineUsers());
+    }, 10000);
+  }
+
+  componentWillUnmount(){
+    clearInterval(this.timer);
   }
 
   loadContactList = (filter, sort, descending) => {

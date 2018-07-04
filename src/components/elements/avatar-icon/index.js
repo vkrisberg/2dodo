@@ -35,9 +35,9 @@ export default class AvatarIcon extends PureComponent {
     const {theme, source, width} = this.props;
     const fontSize = (width / DEFAULT_WH) * DEFAULT_FONT_SIZE;
     const label = this.props.label.replace(/[^\w\s]+/, ''); // remove spec symbols like '@'
-    const labelArr = label.split(' ');
+    const labelArr = label.toUpperCase().split(' ');
     const text = labelArr.length > 1
-      ? `${labelArr[0][0].toUpperCase()}${labelArr[1][0].toUpperCase()}`
+      ? `${labelArr[0].substr(0,1)}${labelArr[1].substr(0,1)}`
       : `${(label[0] || '').toUpperCase()}${(label[1] || '').toUpperCase()}`;
 
     if (source && typeof source === 'object') {

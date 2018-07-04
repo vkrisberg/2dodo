@@ -30,7 +30,7 @@ class ForgotPassword extends Component {
       <MainLayout netOffline={!account.net.connected}>
         <BackgroundLayout background="registration" barStyle="light-content">
           <DismissKeyboardLayout>
-            <ForgotPasswordForm context={this.context} account={account}/>
+            <ForgotPasswordForm context={this.context} account={account} onSubmit={()=>{}}/>
             {/*<SuccessMessage*/}
               {/*context={this.context}*/}
               {/*email={account.user.email || 'example@yandex.ru'}*/}

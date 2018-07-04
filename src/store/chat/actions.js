@@ -31,6 +31,7 @@ export const types = {
   RECEIVE_CHAT_FAILURE: Symbol('RECEIVE_CHAT_FAILURE'),
 
   SET_CURRENT_CHAT: Symbol('SET_CURRENT_CHAT'),
+  UNSET_CURRENT_CHAT: Symbol('UNSET_CURRENT_CHAT'),
 };
 
 const hashKeyAdd = async (data) => {
@@ -354,6 +355,17 @@ export default {
         }
         dispatch({type: types.SET_CURRENT_CHAT, payload: chat, clearMessages});
         return chat;
+      } catch (e) {
+        throw e;
+      }
+    };
+  },
+
+  unsetCurrentChat: (clearMessages = false) => {
+    return async dispatch => {
+      try {
+        dispatch({type: types.UNSET_CURRENT_CHAT, payload: {}, clearMessages});
+        return true;
       } catch (e) {
         throw e;
       }

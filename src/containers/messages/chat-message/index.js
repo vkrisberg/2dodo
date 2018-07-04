@@ -36,6 +36,7 @@ class ChatMessage extends PureComponent {
     };
 
     this.chat = {};
+    this.timer = null;
   }
 
   componentDidMount() {
@@ -48,6 +49,10 @@ class ChatMessage extends PureComponent {
         this.props.dispatch(chatMessageActions.sendMessagesRead(this.chat));
       });
     });
+  }
+
+  componentWillUnmount(){
+    this.props.dispatch(chatActions.unsetCurrentChat());
   }
 
   componentDidUpdate(prevProps) {
