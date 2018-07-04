@@ -4,3 +4,4 @@ export {default as SoundSettings} from './sounds';
 export {default as AppearanceSettings} from './appearance';
 export {default as AdvancedSettings} from './advanced';
 export {default as SafetySettings} from './safety';
+export {default as ConnectionSettings} from './connection';

@@ -81,7 +81,7 @@ class AdvancedSettings extends Component {
       [
         {
           text: 'ConnectionStatus',
-          onPress: () => this.onNavigate(routeEnum.SoundSettings),
+          onPress: () => this.onNavigate(routeEnum.ConnectionSettings),
           navigate: true,
         },
         {

@@ -17,6 +17,7 @@ export default {
   AppearanceSettings: 'AppearanceSettings',
   AdvancedSettings: 'AdvancedSettings',
   SafetySettings: 'SafetySettings',
+  ConnectionSettings: 'ConnectionSettings',
   // modals
   RequestProfileModal: 'RequestProfileModal',
 };

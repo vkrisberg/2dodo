@@ -11,7 +11,7 @@ import {
 import {ContactAdd, ContactProfile} from './containers/contacts';
 import {ChatCreate, ChatMessage} from './containers/messages';
 import {GroupAdd} from './containers/groups';
-import {SettingsProfile, SoundSettings, AppearanceSettings, AdvancedSettings, SafetySettings} from './containers/settings';
+import {SettingsProfile, SoundSettings, AppearanceSettings, AdvancedSettings, SafetySettings, ConnectionSettings} from './containers/settings';
 import {RequestProfileModal} from './containers/modals';
 
 export const MainStack = createStackNavigator({
@@ -59,6 +59,9 @@ export const MainStack = createStackNavigator({
   },
   SafetySettings: {
     screen: SafetySettings,
+  },
+  ConnectionSettings: {
+    screen: ConnectionSettings,
   },
   GroupAdd: {
     screen: GroupAdd,
