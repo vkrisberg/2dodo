@@ -4,8 +4,8 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
-import {MainLayout, BackgroundLayout} from '../../../components/layouts';
-import {Navbar, ButtonBack, Button} from '../../../components/elements';
+import {MainLayout, BackgroundLayout} from '../../../../components/layouts/index';
+import {Navbar, ButtonBack, Button} from '../../../../components/elements/index';
 import styles from './styles';
 
 import connectionIcon from './img/connection.png';

@@ -7,11 +7,13 @@ export default class SettingsList extends Component {
   static propTypes = {
     items: PropTypes.array,
     renderItem: PropTypes.func,
+    styles: PropTypes.any,
   };
 
   static defaultProps = {
     items: [],
     renderItem: () => {},
+    styles: {},
   };
 
   constructor(props) {
@@ -44,13 +46,14 @@ export default class SettingsList extends Component {
 
   render() {
     const {items} = this.state;
-    const {renderItem} = this.props;
+    const {renderItem, styles} = this.props;
 
     return (
       <FlatList
         ref={ref => this.flatList = ref}
         data={items}
         renderItem={renderItem}
+        style={styles}
         onLayout={e => this.updateLayoutHeight(e)}
         onContentSizeChange={(w, h) => this.updateContentSize(w, h)}
         keyExtractor={this._keyExtractor}
