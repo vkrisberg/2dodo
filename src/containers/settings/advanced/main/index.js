@@ -4,7 +4,6 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import {routeEnum} from '../../../../enums/index';
-import {colors} from '../../../../styles';
 import {MainLayout, BackgroundLayout} from '../../../../components/layouts/index';
 import {Navbar, ButtonBack, SettingsListItem} from '../../../../components/elements/index';
 import {SettingsList} from '../../../../components/lists/index';
@@ -92,7 +91,7 @@ class AdvancedSettings extends Component {
         },
         {
           text: 'BackupCopy',
-          onPress: () => this.onNavigate(routeEnum.SoundSettings),
+          onPress: () => this.onNavigate(routeEnum.BackupCopy),
           navigate: true,
         },
         {

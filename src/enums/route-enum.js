@@ -19,6 +19,7 @@ export default {
   SafetySettings: 'SafetySettings',
   Connection: 'Connection',
   Cryptography: 'Cryptography',
+  BackupCopy: 'BackupCopy',
   // modals
   RequestProfileModal: 'RequestProfileModal',
 };

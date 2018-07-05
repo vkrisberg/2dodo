@@ -129,6 +129,11 @@ const translations = {
     'ImportKeys': 'Импортировать ключи',
     'KeysInfo': 'Информация о ключах',
     'SecurityKeys': 'Для обеспечения безопасности Ваших данных, рекомендуем менять ключи не реже одного раза в 3 месяца',
+    'Manual': 'Руководство',
+    'ScheduledBackup': 'Запланированное резервное копирование',
+    'ArchivePassword': 'Создать пароль для архива',
+    'LocationBackup': 'Расположение резервной копии',
+    'BackupCopyInfo': 'Копии файлов, хранящихся в репозитории, позволяют восстанавливать все данные на новом устройстве',
     // Buttons
     'Delete': 'Удалить',
     'DeleteContact': 'Удалить контакт',
@@ -325,6 +330,11 @@ const translations = {
     'ImportKeys': 'Import keys',
     'KeysInfo': 'Information about keys',
     'SecurityKeys': 'Security section recommends keep keys at least once every 3 months to ensure the security of your data',
+    'Manual': 'Manual',
+    'ScheduledBackup': 'Scheduled backup',
+    'ArchivePassword': 'Create password for archive',
+    'LocationBackup': 'Location backup',
+    'BackupCopyInfo': 'Copies of files stored in the repository and allow you to restore all data on the new device',
     // Buttons
     'Delete': 'Delete',
     'DeleteContact': 'Delete contact',
