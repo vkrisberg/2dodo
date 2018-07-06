@@ -12,7 +12,7 @@ import {ContactAdd, ContactProfile} from './containers/contacts';
 import {ChatCreate, ChatMessage} from './containers/messages';
 import {GroupAdd} from './containers/groups';
 import {SettingsProfile, SoundSettings, AppearanceSettings, AdvancedSettings, SafetySettings} from './containers/settings';
-import {Connection, Cryptography, BackupCopy} from './containers/settings/advanced';
+import {Connection, Cryptography, BackupCopy, Proxy} from './containers/settings/advanced';
 import {RequestProfileModal} from './containers/modals';
 
 export const MainStack = createStackNavigator({
@@ -69,6 +69,9 @@ export const MainStack = createStackNavigator({
   },
   BackupCopy: {
     screen: BackupCopy,
+  },
+  Proxy: {
+    screen: Proxy,
   },
   GroupAdd: {
     screen: GroupAdd,

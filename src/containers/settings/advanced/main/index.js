@@ -96,7 +96,7 @@ class AdvancedSettings extends Component {
         },
         {
           text: 'ProxyConnection',
-          onPress: () => this.onNavigate(routeEnum.SoundSettings),
+          onPress: () => this.onNavigate(routeEnum.Proxy),
           navigate: true,
         },
         {

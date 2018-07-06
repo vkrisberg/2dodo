@@ -14,6 +14,8 @@ const phoneRegex = /^[0-9]{10}$/;
 
 const nameRegex = /^[A-ZА-Я0-9\-\.]+$/i;
 
+const proxyRegex = /[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}:[0-9]{1,5}/;
+
 const base64PrefixRegex = /^data/;
 
 export default {
@@ -25,5 +27,6 @@ export default {
   emailRegex,
   phoneRegex,
   nameRegex,
+  proxyRegex,
   base64PrefixRegex,
 };

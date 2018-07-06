@@ -20,6 +20,7 @@ export default {
   Connection: 'Connection',
   Cryptography: 'Cryptography',
   BackupCopy: 'BackupCopy',
+  Proxy: 'Proxy',
   // modals
   RequestProfileModal: 'RequestProfileModal',
 };
