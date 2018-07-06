@@ -7,6 +7,7 @@ import {
   ForgotPassword,
   Preload,
   Events,
+  About,
 } from './containers';
 import {ContactAdd, ContactProfile} from './containers/contacts';
 import {ChatCreate, ChatMessage} from './containers/messages';
@@ -72,6 +73,9 @@ export const MainStack = createStackNavigator({
   },
   Proxy: {
     screen: Proxy,
+  },
+  About: {
+    screen: About,
   },
   GroupAdd: {
     screen: GroupAdd,

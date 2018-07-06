@@ -136,7 +136,7 @@ class AdvancedSettings extends Component {
         },
         {
           text: 'AboutApp',
-          onPress: this.onAboutApp,
+          onPress: () => this.onNavigate(routeEnum.About),
           border: false,
           rowStyle: {paddingVertical: 11},
         },

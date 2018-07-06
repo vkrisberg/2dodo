@@ -21,6 +21,7 @@ export default {
   Cryptography: 'Cryptography',
   BackupCopy: 'BackupCopy',
   Proxy: 'Proxy',
+  About: 'About',
   // modals
   RequestProfileModal: 'RequestProfileModal',
 };
