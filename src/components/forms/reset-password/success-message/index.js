@@ -79,7 +79,7 @@ class SuccessMessage extends Component {
             textAlign={'center'}
             style={_styles.successTitle}
           >
-            {context.t('SuccessForgotPass')}
+            {context.t('SuccessResetPassword')}
           </TextLabel>
           <TextLabel
             theme={theme}
@@ -87,7 +87,7 @@ class SuccessMessage extends Component {
             textAlign={'center'}
             style={_styles.successDescription}
           >
-            {context.t('SuccessForgotPassDescription')}
+            {context.t('SuccessResetPasswordDescription')}
             {email}
           </TextLabel>
           <View style={[_styles.buttonContainer, {marginTop: 22}]}>
@@ -100,7 +100,7 @@ class SuccessMessage extends Component {
               textAlign={'center'}
               style={_styles.subDescription}
             >
-              {context.t('SuccessForgotPassSubDescription')}
+              {context.t('SuccessResetPasswordSubDescription')}
               {minutes < 10 ? `0${minutes}` : minutes}:
               {seconds < 10 ? `0${seconds}` : seconds}
               &nbsp;

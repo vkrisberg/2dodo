@@ -89,7 +89,7 @@ export const MainStack = createStackNavigator({
   },
 }, {
   headerMode: 'none',
-  initialRouteName: 'ResetPassword',
+  initialRouteName: 'Preload',
   gesturesEnabled: false,
   navigationOptions: {
     header: null,
