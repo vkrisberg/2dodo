@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
-import {colors, fonts, weights, sizes} from '../../../styles';
+import {fontMaker} from '../../../utils/fonts';
+import {colors, sizes} from '../../../styles';
 
 export default ({theme}) => {
   return StyleSheet.create({
@@ -19,10 +20,9 @@ export default ({theme}) => {
 
     title: {
       color: colors[theme].navbarTitle,
-      fontFamily: fonts.main,
       fontSize: 28,
-      fontWeight: weights.bold,
       marginLeft: 5,
+      ...fontMaker({weight: 'Bold'}),
     },
   });
-}
+};
