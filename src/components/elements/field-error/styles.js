@@ -17,4 +17,4 @@ export default (theme, type) => {
       marginBottom: type === 'main' ? 5 : 0,
     },
   });
-}
+};

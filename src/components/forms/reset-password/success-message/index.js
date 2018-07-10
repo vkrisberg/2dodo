@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
-import {Svg} from 'react-native-svg';
-import {View, KeyboardAvoidingView, Text} from 'react-native';
+import {View, KeyboardAvoidingView} from 'react-native';
 import PropTypes from 'prop-types';
 
 import {TextLabel, Button} from '../../../elements';
 import MarkIcon from '../../../icons/mark-icon';
 import {themeEnum} from '../../../../enums';
 import {colors, weights} from '../../../../styles';
-import styles from './styles';
+import styles from '../styles';
 
 class SuccessMessage extends Component {
 
@@ -78,7 +77,7 @@ class SuccessMessage extends Component {
             size={28}
             weight={weights.bold}
             textAlign={'center'}
-            style={_styles.title}
+            style={_styles.successTitle}
           >
             {context.t('SuccessForgotPass')}
           </TextLabel>
@@ -86,13 +85,13 @@ class SuccessMessage extends Component {
             theme={theme}
             color={colors[theme].blackText}
             textAlign={'center'}
-            style={_styles.description}
+            style={_styles.successDescription}
           >
             {context.t('SuccessForgotPassDescription')}
             {email}
           </TextLabel>
-          <View style={_styles.buttonContainer}>
-            <Button onPress={this.handleToLogin}>{context.t('EnterKey')}</Button>
+          <View style={[_styles.buttonContainer, {marginTop: 22}]}>
+            <Button onPress={this.handleToLogin}>{context.t('Login')}</Button>
           </View>
           <View style={_styles.bottomBlock}>
             <TextLabel

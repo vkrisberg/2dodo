@@ -47,6 +47,8 @@ const initState = {
   updating: false,
   logout: false,
   error: null,
+  resetPassword: false,
+  setNewPassword: false,
 };
 
 export default reducer(initState, {
@@ -233,6 +235,68 @@ export default reducer(initState, {
       ..._state,
       loading: false,
       error: action.error.toString(),
+    };
+  },
+
+  [types.RESET_PASSWORD]: (state) => {
+    return {
+      ...state,
+      loading: true,
+      error: null,
+    };
+  },
+
+  [types.RESET_PASSWORD_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      loading: false,
+      resetPassword: action.payload.success,
+    };
+  },
+
+  [types.RESET_PASSWORD_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      loading: false,
+      error: action.error.toString(),
+    };
+  },
+
+  [types.SET_DEFAULT_RESET_PASSWORD]: (state) => {
+    return {
+      ...state,
+      resetPassword: false,
+    };
+  },
+
+  [types.SET_NEW_PASSWORD]: (state) => {
+    return {
+      ...state,
+      loading: true,
+      error: null,
+    };
+  },
+
+  [types.SET_NEW_PASSWORD_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      loading: false,
+      setNewPassword: action.payload.success,
+    };
+  },
+
+  [types.SET_NEW_PASSWORD_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      loading: false,
+      error: action.error.toString(),
+    };
+  },
+
+  [types.SET_DEFAULT_NEW_PASSWORD]: (state) => {
+    return {
+      ...state,
+      setNewPassword: false,
     };
   },
 

@@ -18,6 +18,8 @@ const proxyRegex = /[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}:[0-9]{1,5}/;
 
 const base64PrefixRegex = /^data/;
 
+const tokenRegex = /[0-9a-f]{16}/;
+
 export default {
   hostnameRegex,
   httpRegex,
@@ -29,4 +31,5 @@ export default {
   nameRegex,
   proxyRegex,
   base64PrefixRegex,
+  tokenRegex
 };

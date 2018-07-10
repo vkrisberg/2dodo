@@ -4,13 +4,14 @@ import TabNavigator from './tab-navigator';
 import {
   Login,
   Registration,
-  ForgotPassword,
+  ResetPassword,
   Preload,
   Events,
   About,
 } from './containers';
 import {ContactAdd, ContactProfile} from './containers/contacts';
 import {ChatCreate, ChatMessage} from './containers/messages';
+import {ResetPasswordEnterKey, ResetPasswordPassSuccess} from './containers/reset-password';
 import {GroupAdd} from './containers/groups';
 import {SettingsProfile, SoundSettings, AppearanceSettings, AdvancedSettings, SafetySettings} from './containers/settings';
 import {Connection, Cryptography, BackupCopy, Proxy} from './containers/settings/advanced';
@@ -23,8 +24,14 @@ export const MainStack = createStackNavigator({
   Registration: {
     screen: Registration,
   },
-  ForgotPassword: {
-    screen: ForgotPassword,
+  ResetPassword: {
+    screen: ResetPassword,
+  },
+  ResetPasswordEnterKey: {
+    screen: ResetPasswordEnterKey,
+  },
+  ResetPasswordPassSuccess: {
+    screen: ResetPasswordPassSuccess,
   },
   Messages: {
     screen: TabNavigator,
@@ -82,7 +89,7 @@ export const MainStack = createStackNavigator({
   },
 }, {
   headerMode: 'none',
-  initialRouteName: 'Preload',
+  initialRouteName: 'ResetPassword',
   gesturesEnabled: false,
   navigationOptions: {
     header: null,
