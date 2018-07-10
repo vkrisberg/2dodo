@@ -13,6 +13,15 @@ export default {
   Preload: 'Preload',
   Registration: 'Registration',
   Settings: 'Settings',
+  SoundSettings: 'SoundSettings',
+  AppearanceSettings: 'AppearanceSettings',
+  AdvancedSettings: 'AdvancedSettings',
+  SafetySettings: 'SafetySettings',
+  Connection: 'Connection',
+  Cryptography: 'Cryptography',
+  BackupCopy: 'BackupCopy',
+  Proxy: 'Proxy',
+  About: 'About',
   // modals
   RequestProfileModal: 'RequestProfileModal',
 };

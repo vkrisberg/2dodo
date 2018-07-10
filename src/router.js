@@ -7,11 +7,13 @@ import {
   ForgotPassword,
   Preload,
   Events,
+  About,
 } from './containers';
 import {ContactAdd, ContactProfile} from './containers/contacts';
 import {ChatCreate, ChatMessage} from './containers/messages';
 import {GroupAdd} from './containers/groups';
-import {SettingsProfile} from './containers/settings';
+import {SettingsProfile, SoundSettings, AppearanceSettings, AdvancedSettings, SafetySettings} from './containers/settings';
+import {Connection, Cryptography, BackupCopy, Proxy} from './containers/settings/advanced';
 import {RequestProfileModal} from './containers/modals';
 
 export const MainStack = createStackNavigator({
@@ -47,6 +49,33 @@ export const MainStack = createStackNavigator({
   },
   SettingsProfile: {
     screen: SettingsProfile,
+  },
+  SoundSettings: {
+    screen: SoundSettings,
+  },
+  AppearanceSettings: {
+    screen: AppearanceSettings,
+  },
+  AdvancedSettings: {
+    screen: AdvancedSettings,
+  },
+  SafetySettings: {
+    screen: SafetySettings,
+  },
+  Connection: {
+    screen: Connection,
+  },
+  Cryptography: {
+    screen: Cryptography,
+  },
+  BackupCopy: {
+    screen: BackupCopy,
+  },
+  Proxy: {
+    screen: Proxy,
+  },
+  About: {
+    screen: About,
   },
   GroupAdd: {
     screen: GroupAdd,

@@ -8,3 +8,4 @@ export {Messages} from './messages';
 export {default as Preload} from './preload';
 export {default as Registration} from './registration';
 export {Settings} from './settings';
+export {default as About} from './about';

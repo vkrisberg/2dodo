@@ -1,29 +1,17 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {View, Text, TouchableOpacity, Image, TouchableHighlight, ScrollView} from 'react-native';
+import {View, Text, TouchableOpacity, Image, ScrollView} from 'react-native';
 
 import {accountActions} from '../../../store/actions';
-import {colors} from '../../../styles';
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
-import {Navbar, NavbarDots, Avatar, Button, ButtonNavbar} from '../../../components/elements';
+import {Navbar, NavbarDots, Avatar, Button, ButtonNavbar, SettingsListItem} from '../../../components/elements';
+import {SettingsList} from '../../../components/lists';
 import styles from './styles';
 
 import arrowIcon from '../../../images/icons/arrow-right/arrow_right.png';
 import shareIcon from '../../../images/icons/share/share.png';
-
-const settingsItems = [
-  'SoundsAndNotifications',
-  'Appearance',
-  'Language',
-  'Security',
-];
-
-const settingsItemsAdditional = [
-  'ExtendedSettings',
-  'Help',
-  'Questions',
-];
+import {routeEnum} from '../../../enums';
 
 const user = {
   name: 'Lisa Simpson',
@@ -63,37 +51,79 @@ class Settings extends Component {
 
   onQrCode = () => alert('click on qr');
 
-  onSettingsRow = () => alert('click on settings row');
-
-  renderSettingsRow = (item, index, noLastBorder) => {
-    const {theme} = this.props.account.user;
-    const _styles = styles(theme);
-
+  renderSettingsItem = ({item}) => {
     return (
-      <TouchableHighlight
-        key={index}
-        onPress={this.onSettingsRow}
-        underlayColor={colors[theme].blueKrayolaDim}
-        style={_styles.settingsRowContainer}>
-        <View style={[_styles.settingsRow, noLastBorder === index && {borderBottomWidth: 0}]}>
-          <Text style={[_styles.defaultText, _styles.blackText]}>{this.context.t(item)}</Text>
-          <View style={_styles.settingsRowRight}>
-            {item === 'Language' && <Text style={[_styles.defaultText, _styles.settingsText]}>{user.properties.language}</Text>}
-            {item === 'Security' && <Text style={[_styles.defaultText, _styles.settingsText]}>{this.context.t('UseCode')}</Text>}
-            <Image source={arrowIcon}/>
-          </View>
-        </View>
-      </TouchableHighlight>
+      <SettingsListItem
+        theme={this.props.account.user.theme}
+        context={this.context}
+        text={item.text}
+        onPress={item.onPress}
+        checkbox={item.checkbox}
+        checkboxValue={item.checkboxValue}
+        navigate={item.navigate}
+        navigateText={item.navigateText}
+        border={item.border}
+      />
     );
   };
+
+  onNavigate = (route) => this.props.navigation.navigate(route);
+
+  onLanguage = () => alert('click on language');
+
+  onHelp = () => alert('click on help');
+
+  onQuestions = () => alert('click on questions');
 
   render() {
     const {context} = this;
     const {account} = this.props;
-
     const {theme} = account.user;
     const _styles = styles(theme);
-
+    const settingsData = [
+      [
+        {
+          text: 'SoundsAndNotifications',
+          onPress: () => this.onNavigate(routeEnum.SoundSettings),
+          navigate: true,
+        },
+        {
+          text: 'Appearance',
+          onPress: () => this.onNavigate(routeEnum.AppearanceSettings),
+          navigate: true,
+        },
+        {
+          text: 'Language',
+          onPress: this.onLanguage,
+          navigate: true,
+          navigateText: 'English',
+        },
+        {
+          text: 'Security',
+          onPress: () => this.onNavigate(routeEnum.SafetySettings),
+          navigate: true,
+          navigateText: 'Use code',
+          border: false,
+        },
+      ],
+      [
+        {
+          text: 'ExtendedSettings',
+          onPress: () => this.onNavigate(routeEnum.AdvancedSettings),
+          navigate: true,
+        },
+        {
+          text: 'Help',
+          onPress: this.onHelp,
+          navigate: true,
+        },
+        {
+          text: 'Questions',
+          onPress: this.onQuestions,
+          navigate: true,
+        },
+      ],
+    ];
 
     return (
       <MainLayout netOffline={!account.net.connected} wsConnected={account.connected}>
@@ -128,11 +158,15 @@ class Settings extends Component {
             </View>
             <View style={_styles.divider}/>
             <View style={_styles.content}>
-              {settingsItems.map((item, index) => this.renderSettingsRow(item, index, settingsItems.length - 1))}
+              <SettingsList
+                items={settingsData[0]}
+                renderItem={this.renderSettingsItem}/>
             </View>
             <View style={_styles.divider}/>
             <View style={[_styles.content, {marginBottom: 60}]}>
-              {settingsItemsAdditional.map((item, index) => this.renderSettingsRow(item, index))}
+              <SettingsList
+                items={settingsData[1]}
+                renderItem={this.renderSettingsItem}/>
             </View>
           </ScrollView>
         </BackgroundLayout>
