@@ -40,6 +40,27 @@ const fontStyle = {
   italic: 'italic',
 };
 
+const androidFonts = {
+  'Exo 2': 'Exo2',
+};
+
+const androidWeights = {
+  '100': 'Thin',
+  '200': 'ExtraLight',
+  '300': 'Light',
+  '400': 'Regular',
+  '500': 'Medium',
+  '600': 'SemiBold',
+  '700': 'Bold',
+  '800': 'ExtraBold',
+  '900': 'Black',
+};
+
+const androidFontStyle = {
+  'normal': '',
+  'italic': 'Italic',
+};
+
 const colors = {
   light: {
     white: '#ffffff',
@@ -161,10 +182,31 @@ const colors = {
   },
 };
 
+const getFont = ({weight = weights.medium, style = fontStyle.normal, family = fonts.main}) => {
+  const fontFamily = OS === 'ios' ? family : androidFonts[family];
+
+  if (OS === 'android') {
+    const _weight = androidWeights[weight] || '';
+    const _style = androidFontStyle[style] || '';
+    const suffix = _weight || _style ? `-${_weight}${_style}` : '';
+
+    return {
+      fontFamily: family + suffix,
+    };
+  }
+
+  return {
+    fontFamily,
+    fontWeight: weight,
+    fontStyle: style,
+  };
+};
+
 export {
   sizes,
   fonts,
   weights,
   fontStyle,
   colors,
+  getFont,
 };
