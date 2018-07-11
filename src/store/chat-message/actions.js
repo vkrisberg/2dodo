@@ -472,8 +472,7 @@ export default {
             }
           }
         });
-        const messageIds = chatMessages.map((item) => item.id);
-        const payload = {messageIds, status};
+        const payload = {messageIds: meta.ids, status};
         // console.log('message status received', payload);
         dispatch({type: types.RECEIVE_STATUS_SUCCESS, payload});
         return payload;

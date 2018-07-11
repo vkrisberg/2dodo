@@ -24,7 +24,8 @@ export default (theme) => {
 
     closeIcon: {
       position: 'absolute',
-      right: 10,
+      padding: 10,
+      right: 0,
       zIndex: 9,
     },
 

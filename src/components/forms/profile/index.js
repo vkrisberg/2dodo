@@ -139,34 +139,36 @@ class ProfileForm extends Component {
             </View>
             <View style={_styles.phones}>
               {
-                !!Object.keys(user.phones).length && Object.keys(user.phones).map((phone, i) =>
-                  <View key={i} style={_styles.phoneItem}>
-                    <TouchableOpacity onPress={onRemoveBtn}>
-                      <Image source={removeIcon}/>
-                    </TouchableOpacity>
-                    <Text style={_styles.phoneText}>{context.t('Phone')}</Text>
-                    <Field
-                      name={`phones[${i}]`}
-                      component={this.renderInput}
-                      placeholder={context.t('Phone')}
-                      keyboardType={'numeric'}
-                      autoCapitalize={'none'}
-                      autoCorrect={false}/>
-                  </View>
-                )
+                // !!Object.keys(user.phones).length && Object.keys(user.phones).map((phone, i) =>
+                //   <View key={i} style={_styles.phoneItem}>
+                //     <TouchableOpacity onPress={onRemoveBtn}>
+                //       <Image source={removeIcon}/>
+                //     </TouchableOpacity>
+                //     <Text style={_styles.phoneText}>{context.t('Phone')}</Text>
+                //     <Field
+                //       name={`phones[${i}]`}
+                //       component={this.renderInput}
+                //       placeholder={context.t('Phone')}
+                //       keyboardType={'numeric'}
+                //       autoCapitalize={'none'}
+                //       autoCorrect={false}/>
+                //   </View>
+                // )
               }
               <View style={_styles.phoneItem}>
-                <TouchableOpacity onPress={onAddBtn}>
+                <TouchableOpacity style={_styles.phoneButton} onPress={onAddBtn}>
                   <Image source={addIcon}/>
                 </TouchableOpacity>
                 <Text style={_styles.phoneText}>{context.t('Phone')}</Text>
-                <Field
-                  name={'phones[1]'}
-                  component={this.renderInput}
-                  placeholder={context.t('Phone')}
-                  keyboardType={'numeric'}
-                  autoCapitalize={'none'}
-                  autoCorrect={false}/>
+                <View style={_styles.phoneRight}>
+                  <Field
+                    name={'phones[0]'}
+                    component={this.renderInput}
+                    placeholder={context.t('Phone')}
+                    keyboardType={'numeric'}
+                    autoCapitalize={'none'}
+                    autoCorrect={false}/>
+                </View>
               </View>
             </View>
           </KeyboardAvoidingView>
