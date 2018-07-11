@@ -152,7 +152,7 @@ class Login extends Component {
                          onSubmit={this.login}/>
             </KeyboardAvoidingView>
             <Link style={LoginStyles.forgot}
-                  to={routeEnum.ForgotPassword}
+                  to={routeEnum.ResetPassword}
                   color={forgotLinkColor}>{t('ForgotPassword')}</Link>
             <StyledRegistration>
               <RegistrationLabel>{t('FirstTimeInApp')}</RegistrationLabel>

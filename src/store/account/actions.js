@@ -42,6 +42,16 @@ export const types = {
   AVATAR_UPDATE_FAILURE: Symbol('AVATAR_UPDATE_FAILURE'),
 
   NET_UPDATE: Symbol('NET_UPDATE'),
+
+  RESET_PASSWORD: Symbol('RESET_PASSWORD'),
+  RESET_PASSWORD_SUCCESS: Symbol('RESET_PASSWORD_SUCCESS'),
+  RESET_PASSWORD_FAILURE: Symbol('RESET_PASSWORD_FAILURE'),
+  SET_DEFAULT_RESET_PASSWORD: Symbol('SET_DEFAULT_RESET_PASSWORD'),
+
+  SET_NEW_PASSWORD: Symbol('SET_NEW_PASSWORD'),
+  SET_NEW_PASSWORD_SUCCESS: Symbol('SET_NEW_PASSWORD_SUCCESS'),
+  SET_NEW_PASSWORD_FAILURE: Symbol('SET_NEW_PASSWORD_FAILURE'),
+  SET_DEFAULT_NEW_PASSWORD: Symbol('SET_DEFAULT_NEW_PASSWORD'),
 };
 
 const goToMessagesAction = StackActions.reset({
@@ -235,6 +245,46 @@ export default {
         }
         throw e;
       }
+    };
+  },
+
+  resetPassword: (email) => {
+    return async (dispatch) => {
+      dispatch({type: types.RESET_PASSWORD});
+      try {
+        const res = await apiAccount.resetPassword(email);
+        dispatch({type: types.RESET_PASSWORD_SUCCESS, payload: res.data});
+        return email;
+      } catch (e) {
+        dispatch({type: types.RESET_PASSWORD_FAILURE, error: e.response.data});
+        throw e;
+      }
+    };
+  },
+
+  setDefaultResetPassword: () => {
+    return async (dispatch) => {
+      dispatch({type: types.SET_DEFAULT_RESET_PASSWORD});
+    };
+  },
+
+  setNewPassword: (data) => {
+    return async (dispatch) => {
+      dispatch({type: types.SET_NEW_PASSWORD});
+      try {
+        const res = await apiAccount.setNewPassword(data);
+        dispatch({type: types.SET_NEW_PASSWORD_SUCCESS, payload: res.data});
+        return data;
+      } catch (e) {
+        dispatch({type: types.SET_NEW_PASSWORD_FAILURE, error: e.response.data});
+        throw e;
+      }
+    };
+  },
+
+  setDefaultNewPassword: () => {
+    return async (dispatch) => {
+      dispatch({type: types.SET_DEFAULT_NEW_PASSWORD});
     };
   },
 

@@ -16,7 +16,7 @@ class Registration extends Component {
   static propTypes = {
     account: PropTypes.object,
     dispatch: PropTypes.func,
-    navigation: PropTypes.shape({navigate: PropTypes.func})
+    navigation: PropTypes.shape({navigate: PropTypes.func}),
   };
 
   static contextTypes = {
