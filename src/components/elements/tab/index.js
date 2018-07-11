@@ -20,13 +20,13 @@ class Tab extends PureComponent {
     pressOpacity: PropTypes.number,
     navigation: PropTypes.shape({}),
     activeIcon: PropTypes.node
-  }
+  };
 
   _handleTabPress = () => {
     const { text, navigation } = this.props;
 
     navigation.navigate(text);
-  }
+  };
 
   _getColor = () => {
     const {
@@ -39,7 +39,7 @@ class Tab extends PureComponent {
     }
 
     return "#a4a7ae";
-  }
+  };
 
   render() {
     const {
