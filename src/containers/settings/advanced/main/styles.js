@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {fonts, weights, colors, sizes} from "../../../../styles";
+import {colors, sizes, getFont} from "../../../../styles";
 
 export default (theme) => {
   return StyleSheet.create({
@@ -18,19 +18,17 @@ export default (theme) => {
     },
 
     text: {
-      fontFamily: fonts.main,
       fontSize: 15,
-      fontWeight: weights.medium,
       color: colors[theme].grayInput,
+      ...getFont({}),
     },
 
     textSmall: {
-      fontFamily: fonts.main,
       fontSize: 13,
-      fontWeight: weights.medium,
       color: colors[theme].messageTextSecond,
       paddingVertical: 15,
       paddingHorizontal: 20,
+      ...getFont({}),
     },
 
     divider: {

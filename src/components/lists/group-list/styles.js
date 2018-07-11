@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {colors, fonts, weights, sizes} from '../../../styles';
+import {colors, sizes, getFont} from '../../../styles';
 
 export default (theme) => {
   return StyleSheet.create({
@@ -27,8 +27,7 @@ export default (theme) => {
     text: {
       color: colors[theme].messageTextMain,
       fontSize: 15,
-      fontWeight: weights.medium,
-      fontFamily: fonts.main,
+      ...getFont({}),
     }
   });
 };

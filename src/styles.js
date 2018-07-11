@@ -191,7 +191,7 @@ const getFont = ({weight = weights.medium, style = fontStyle.normal, family = fo
     const suffix = _weight || _style ? `-${_weight}${_style}` : '';
 
     return {
-      fontFamily: family + suffix,
+      fontFamily: fontFamily + suffix,
     };
   }
 

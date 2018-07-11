@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {colors, fonts, weights} from '../../../styles';
+import {colors, getFont, weights} from '../../../styles';
 
 export default ({theme, color, bgColor}) => {
   return StyleSheet.create({
@@ -15,9 +15,8 @@ export default ({theme, color, bgColor}) => {
 
     text: {
       color: color || colors[theme].white,
-      fontFamily: fonts.main,
       fontSize: 16,
-      fontWeight: weights.semiBold,
+      ...getFont({weight: weights.semiBold}),
     },
 
     avatar: {
@@ -25,4 +24,4 @@ export default ({theme, color, bgColor}) => {
       height: 65,
     },
   });
-}
+};

@@ -1,13 +1,11 @@
 import {StyleSheet} from 'react-native';
-import {fonts, weights} from '../../../styles';
+import {getFont} from '../../../styles';
 
 export default ({theme, color, borderColor, borderWidth}) => {
   return StyleSheet.create({
     input: {
       color: color,
-      fontFamily: fonts.main,
       fontSize: 15,
-      fontWeight: weights.medium,
       borderWidth: borderWidth,
       borderRadius: 20,
       borderColor: borderColor,
@@ -15,6 +13,7 @@ export default ({theme, color, borderColor, borderWidth}) => {
       paddingHorizontal: 20,
       height: 40,
       width: '100%',
+      ...getFont({}),
     },
   });
 };

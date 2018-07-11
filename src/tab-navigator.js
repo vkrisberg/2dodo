@@ -1,6 +1,6 @@
 import React from 'react';
 import {createBottomTabNavigator} from 'react-navigation';
-import {colors, weights, fonts} from './styles';
+import {colors, getFont} from './styles';
 
 import {
   Contacts,
@@ -68,10 +68,9 @@ export default createBottomTabNavigator({
       height: 55,
     },
     labelStyle: {
-      fontFamily: fonts.main,
       fontSize: 12,
-      fontWeight: weights.medium,
       marginBottom: 5,
+      ...getFont({}),
     },
     tabStyle: {
       alignItems: 'center',

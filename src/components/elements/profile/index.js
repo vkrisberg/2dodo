@@ -57,7 +57,7 @@ export default class Profile extends PureComponent {
     return (
       <View style={_styles.userInfoItem}>
         <Text style={[_styles.userInfoText, {color: colors[theme].grayInput}]}>{caption}</Text>
-        {text && <View>
+        {!!text && <View>
           {typeof text === 'object' ?
             Object.keys(text).map((item, index) =>
               <View key={index}>

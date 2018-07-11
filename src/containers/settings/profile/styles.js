@@ -1,4 +1,4 @@
-import {colors, sizes, weights} from '../../../styles';
+import {colors, getFont, sizes, weights} from '../../../styles';
 import {StyleSheet} from 'react-native';
 
 export default (theme) => {
@@ -9,10 +9,10 @@ export default (theme) => {
     },
 
     styledTitle: {
-      fontWeight: weights.bold,
       fontSize: 28,
       marginLeft: 20,
       color: colors[theme].navbarTitle,
+      ...getFont({weight: weights.bold}),
     },
 
     titleContainer: {

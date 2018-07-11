@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {colors, fonts, sizes, weights} from '../../../styles';
+import {colors, getFont, sizes, weights} from '../../../styles';
 
 export default StyleSheet.create({
   container: {
@@ -22,9 +22,8 @@ export default StyleSheet.create({
 
   netinfoText: {
     color: colors.light.white,
-    fontFamily: fonts.main,
     fontSize: 16,
-    fontWeight: weights.semiBold,
+    ...getFont({weight: weights.semiBold}),
   },
 
   wsinfo: {
@@ -42,8 +41,7 @@ export default StyleSheet.create({
 
   wsinfoText: {
     color: colors.light.white,
-    fontFamily: fonts.main,
     fontSize: 13,
-    fontWeight: weights.medium,
+    ...getFont({}),
   },
 });

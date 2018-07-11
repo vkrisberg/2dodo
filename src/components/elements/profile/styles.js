@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {colors, fonts, weights, sizes} from '../../../styles';
+import {colors, weights, sizes, getFont} from '../../../styles';
 
 export default (theme) => {
   return StyleSheet.create({
@@ -39,17 +39,15 @@ export default (theme) => {
     name: {
       color: colors[theme].grayBlue,
       fontSize: 16,
-      fontWeight: weights.semiBold,
-      fontFamily: fonts.main,
       marginBottom: 10,
+      ...getFont({weight: weights.semiBold}),
     },
 
     lastVisit: {
       color: colors[theme].grayText,
       fontSize: 15,
-      fontWeight: weights.medium,
-      fontFamily: fonts.main,
       marginBottom: 5,
+      ...getFont({}),
     },
 
     actionBtn: {
@@ -83,10 +81,9 @@ export default (theme) => {
     },
 
     userInfoText: {
-      fontFamily: fonts.main,
       fontSize: 14,
-      fontWeight: weights.medium,
       marginBottom: 10,
+      ...getFont({}),
     },
 
     divider: {
@@ -120,8 +117,7 @@ export default (theme) => {
     operationText: {
       color: colors[theme].blackText,
       fontSize: 15,
-      fontWeight: weights.medium,
-      fontFamily: fonts.main,
+      ...getFont({}),
     },
 
     grayText: {
