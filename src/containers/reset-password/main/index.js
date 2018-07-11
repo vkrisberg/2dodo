@@ -26,7 +26,7 @@ class ResetPassword extends Component {
     return await dispatch(accountActions.resetPassword(email))
       .then((email) => {
         if (this.props.account.resetPassword) {
-          this.props.navigation.navigate(routeEnum.ResetPasswordEnterKey);
+          this.props.navigation.navigate(routeEnum.ResetPasswordEnterKey, {email: email});
           dispatch(accountActions.setDefaultResetPassword());
         } else {
           alert(this.context.t('OperationNotPerformed'));

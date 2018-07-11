@@ -22,7 +22,7 @@ class ResetPasswordPassSuccess extends Component {
   );
 
   render() {
-    const {account} = this.props;
+    const {account, navigation} = this.props;
 
     return (
       <MainLayout netOffline={!account.net.connected}>
@@ -30,7 +30,7 @@ class ResetPasswordPassSuccess extends Component {
           <DismissKeyboardLayout>
             <SuccessMessage
               context={this.context}
-              email={account.user.email || 'example@yandex.ru'}
+              email={navigation.getParam('email') || 'example@yandex.ru'}
               handleToLogin={this.returnToLogin}
               lng={RNLanguages.language.substr(0, 2)}/>
           </DismissKeyboardLayout>
