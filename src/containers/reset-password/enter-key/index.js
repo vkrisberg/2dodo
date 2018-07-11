@@ -6,6 +6,7 @@ import routeEnum from '../../../enums/route-enum';
 import {accountActions} from '../../../store/actions';
 import {MainLayout, BackgroundLayout, DismissKeyboardLayout} from '../../../components/layouts';
 import {ResetPasswordEnterKeyForm} from '../../../components/forms';
+import {Loader} from '../../../components/elements';
 
 class ResetPasswordEnterKey extends Component {
   static propTypes = {
@@ -34,12 +35,12 @@ class ResetPasswordEnterKey extends Component {
           this.props.navigation.navigate(routeEnum.ResetPasswordPassSuccess);
           dispatch(accountActions.setDefaultNewPassword());
         } else {
-          alert('failed');
+          alert(this.context.t('OperationNotPerformed'));
         }
         return true;
       })
       .catch((error) => {
-        alert(`failed with error- ${error}`);
+        alert(this.context.t('NoTokenOrUser'));
         return false;
       });
   };
@@ -54,9 +55,10 @@ class ResetPasswordEnterKey extends Component {
             <ResetPasswordEnterKeyForm
               context={this.context}
               account={account}
-              disabled={!account.net.connected}
+              disabled={!account.net.connected || account.loading}
               onSubmit={() => this.onSubmit(this.props.form.resetPasswordEnterKeyForm.values)}/>
           </DismissKeyboardLayout>
+          {account.loading && <Loader/>}
         </BackgroundLayout>
       </MainLayout>
     );

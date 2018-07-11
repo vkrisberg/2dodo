@@ -32,3 +32,4 @@ export {default as MessageTyping} from './message-typing';
 export {default as Profile} from './profile';
 export {default as Icon} from './icon';
 export {default as ButtonsSwipe} from './buttons-swipe';
+export {default as Loader} from './loader';

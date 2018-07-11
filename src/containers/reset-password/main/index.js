@@ -6,6 +6,7 @@ import routeEnum from '../../../enums/route-enum';
 import {accountActions} from '../../../store/actions';
 import {MainLayout, BackgroundLayout, DismissKeyboardLayout} from '../../../components/layouts';
 import {ResetPasswordEmailForm} from '../../../components/forms';
+import {Loader} from '../../../components/elements';
 
 class ResetPassword extends Component {
   static propTypes = {
@@ -28,12 +29,12 @@ class ResetPassword extends Component {
           this.props.navigation.navigate(routeEnum.ResetPasswordEnterKey);
           dispatch(accountActions.setDefaultResetPassword());
         } else {
-          alert('failed');
+          alert(this.context.t('OperationNotPerformed'));
         }
         return true;
       })
       .catch((error) => {
-        alert(`fail reset password, error - ${error}`);
+        alert(this.context.t('NoEmailExist'));
         return false;
       });
   };
@@ -49,8 +50,9 @@ class ResetPassword extends Component {
               context={this.context}
               account={account}
               onSubmit={() => this.onSubmit(this.props.form.resetPasswordEmailForm.values.email)}
-              disabled={!account.net.connected}/>
+              disabled={!account.net.connected || account.loading}/>
           </DismissKeyboardLayout>
+          {account.loading && <Loader/>}
         </BackgroundLayout>
       </MainLayout>
     );

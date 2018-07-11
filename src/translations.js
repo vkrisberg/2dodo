@@ -164,6 +164,9 @@ const translations = {
     'ContactProfile': 'Профиль',
     'Search': 'Поиск',
     'SearchResults': 'Результаты поиска',
+    'NoEmailExist': 'Пользователя с таким email не существует',
+    'OperationNotPerformed': 'Операция не выполнена, попробуйте еще раз',
+    'NoTokenOrUser': 'Токен или пользователь не найден',
     // Chat
     'NoChats': 'У Вас еще нет чатов',
     'NoMessages': 'Нет сообщений',
@@ -379,6 +382,9 @@ const translations = {
     'ContactProfile': 'Profile',
     'Search': 'Search',
     'SearchResults': 'Search results',
+    'NoEmailExist': 'A user with this email doesn\'t exist',
+    'OperationNotPerformed': 'Operation not performed, please try again',
+    'NoTokenOrUser': 'Token or user not found',
     // Chat
     'NoChats': 'Your have no chats yet',
     'NoMessages': 'No messages',
