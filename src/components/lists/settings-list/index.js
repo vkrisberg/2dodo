@@ -42,7 +42,7 @@ export default class SettingsList extends Component {
     this.setState({contentSize: h});
   }
 
-  _keyExtractor = (item) => item.username;
+  _keyExtractor = (item) => item.text;
 
   render() {
     const {items} = this.state;
