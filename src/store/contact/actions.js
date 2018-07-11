@@ -1,9 +1,8 @@
-import {get} from 'lodash';
+import {get, values, isArray} from 'lodash';
 
 import {apiContact, apiServer} from '../../api';
-import {services, wsMessage} from '../../utils';
-import {dbEnum, messageEnum, routeEnum} from '../../enums';
-import CONFIG from '../../config';
+import {helpers, services, wsMessage} from '../../utils';
+import {dbEnum, routeEnum} from '../../enums';
 
 export const types = {
   LOAD: Symbol('LOAD'),
@@ -71,8 +70,12 @@ const linkContact = async (username) => {
       if (isMember) {
         const exist = chats[i].contacts && chats[i].contacts.find((item) => item.username === contact.username);
         if (!exist) {
+          if (!chats[i].contacts) {
+            chats[i].contacts = [];
+          }
           chats[i].contacts.push(contact);
           if (chats[i].members.length === 2) {
+            chats[i].name = helpers.getFullName(contact);
             chats[i].avatar = contact.avatar;
           }
         }
@@ -88,6 +91,29 @@ const linkContact = async (username) => {
     for (let i = 0; i < count; i++) {
       if (!chatMessages[i].contact) {
         chatMessages[i].contact = contact;
+      }
+    }
+  });
+};
+
+const updateChats = async (username) => {
+  const realm = services.getRealm();
+  const contact = realm.objectForPrimaryKey(dbEnum.Contact, username);
+  if (!contact) {
+    return;
+  }
+  // update chat name and avatar
+  const chats = realm.objects(dbEnum.Chat)
+    .snapshot();
+  let count = chats.length;
+  await realm.write(() => {
+    for (let i = 0; i < count; i++) {
+      if (chats[i].members.length === 2) {
+        const isMember = chats[i].members.indexOf(contact.username) >= 0;
+        if (isMember) {
+          chats[i].name = helpers.getFullName(contact);
+          chats[i].avatar = contact.avatar;
+        }
       }
     }
   });
@@ -203,6 +229,8 @@ export default {
           ...contact,
           fullName: contact.fullName,
         };
+        // update chats
+        updateChats(contact.username);
         // console.log('contact updated', payload);
         dispatch({type: types.UPDATE_SUCCESS, payload});
         return payload;
@@ -392,13 +420,12 @@ export default {
       dispatch({type: types.SEND_PROFILE, payload: contacts});
       try {
         const {account} = getState();
-        // TODO - send avatar when backend fixed
-        const {phones, firstName, secondName, bio} = account.user;
+        const {phones, firstName, secondName, bio, avatar} = account.user;
         if (!contacts || !contacts.length) {
           return false;
         }
         return await apiContact.sendProfile({
-          data: {phones, firstName, secondName, bio},
+          data: {phones, firstName, secondName, bio, avatar},
           contacts,
         });
       } catch (e) {
@@ -452,7 +479,10 @@ export default {
           };
         }
 
-        const {phones, firstName, secondName, bio, avatar} = decryptedData;
+        let {phones, firstName, secondName, bio, avatar} = decryptedData;
+        if (phones && !isArray(phones)) {
+          phones = values(phones);
+        }
         contactData = {...contactData, phones, firstName, secondName, bio, avatar};
 
         await realm.write(() => {
@@ -463,6 +493,8 @@ export default {
           ...contact,
           fullName: contact.fullName,
         };
+        // update chats
+        updateChats(contact.username);
         // console.log('contact profile updated', payload);
         dispatch({type: types.RECEIVE_PROFILE_SUCCESS, payload});
         return payload;

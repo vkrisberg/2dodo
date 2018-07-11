@@ -127,6 +127,7 @@ Chat.schema = {
     owner: 'string', // login@hostname
     members: 'string[]', // [login@hostname, ...]
     membersHash: 'string?', // sha256 hash from members
+    type: 'string?', // [private, group]
     shortName: 'string?',
     avatar: 'string?',
     lastMessage: 'ChatMessage?',

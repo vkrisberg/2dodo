@@ -8,7 +8,7 @@ export default ({theme, color, bgColor, position}) => {
       alignItems: position === 'left' ? 'flex-start' : 'flex-end',
       justifyContent: 'center',
       paddingTop: 4,
-      paddingHorizontal: 10,
+      paddingHorizontal: 20,
       height: sizes.appbarHeight,
     },
 

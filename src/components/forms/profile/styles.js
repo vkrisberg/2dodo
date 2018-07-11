@@ -48,12 +48,20 @@ export default (theme) => {
     },
 
     phones: {
-      marginBottom: 23,
+      paddingBottom: 25,
     },
 
     phoneItem: {
+      flex: 1,
+      width: '100%',
       flexDirection: 'row',
-      alignItems: 'center',
+      alignItems: 'flex-start',
+    },
+
+    phoneRight: {
+      flex: 1,
+      width: '100%',
+      alignItems: 'flex-start',
     },
 
     phoneText: {
@@ -63,6 +71,12 @@ export default (theme) => {
       fontFamily: fonts.main,
       fontWeight: weights.medium,
       fontSize: 14,
+      lineHeight: 40,
+    },
+
+    phoneButton: {
+      height: 40,
+      justifyContent: 'center',
     },
 
     divider: {

@@ -8,9 +8,9 @@ export default ({theme}) => {
       alignItems: 'flex-start',
       justifyContent: 'center',
       paddingTop: 4,
-      paddingLeft: 10,
+      paddingLeft: 20,
       height: sizes.appbarHeight,
-      width: 32,
+      width: 42,
     },
   });
 }

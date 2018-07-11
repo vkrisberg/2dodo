@@ -11,12 +11,11 @@ export default (values) => {
     errors.secondName = 'NameRegexpError';
   }
 
-  if (values.bio && values.bio.length < 10) {
-    errors.bio = 'BioRegexpError';
+  if (values.bio && !validation.textRegex.test(values.bio)) {
+    errors.bio = 'TextRegexpError';
   }
-
-  if (values.phones && !validation.phoneRegex.test(values.phones)) {
-    errors.phones = 'PhoneRegexpError';
+  if (values.phones && values.phones[0] && !validation.phoneRegex.test(values.phones[0])) {
+    errors.phones = {0: 'PhoneRegexpError'};
   }
 
   return errors;

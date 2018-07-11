@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {View, Alert} from 'react-native';
 import {connect} from 'react-redux';
+import {submit} from 'redux-form'
 import {get, values} from 'lodash';
 import PropTypes from 'prop-types';
 
@@ -11,6 +12,7 @@ import {ProfileForm} from '../../../components/forms';
 import {chatActions, contactActions} from '../../../store/actions';
 import styles from './styles';
 import {routeEnum} from '../../../enums';
+import {chatMessage} from '../../../store/reducers';
 
 class ContactProfile extends Component {
   static propTypes = {
@@ -25,6 +27,7 @@ class ContactProfile extends Component {
 
   state = {
     editMode: false,
+    errors: false,
   };
 
   constructor(props) {
@@ -34,14 +37,16 @@ class ContactProfile extends Component {
     props.dispatch(contactActions.setCurrent(contact));
   }
 
-  renderNavbarButton = (_styles, theme, context) => {
-    const {editMode} = this.state;
+  renderNavbarButton = (_styles, theme) => {
+    const {editMode, errors} = this.state;
+
     return (
       <ButtonNavbar
         position="right"
         color={colors[theme].blueCornFlower}
+        disabled={!!errors}
         onPress={editMode ? this.onDone : this.onEdit}>
-        {editMode ? context.t('Done') : context.t('Edit')}
+        {editMode ? this.context.t('Done') : this.context.t('Edit')}
       </ButtonNavbar>
     );
   };
@@ -50,10 +55,19 @@ class ContactProfile extends Component {
 
   onDone = () => {
     const data = get(this.props.form, 'profile.values', {});
+    const errors = get(this.props.form, 'profile.syncErrors', false);
+
+    if (errors) {
+      // submit form to show errors
+      this.props.dispatch(submit('profile'));
+      return false;
+    }
+
     data.phones = values(data.phones);
     data.groups = values(data.groups);
     this.props.dispatch(contactActions.update(data)).then(() => {
       this.props.dispatch(chatActions.loadList());
+      this.props.dispatch(chatActions.updateCurrentChat());
     });
 
     this.setState({
@@ -105,17 +119,19 @@ class ContactProfile extends Component {
       context.t('DeleteContactConfirm'),
       [
         {text: context.t('Cancel')},
-        {text: context.t('Delete'), onPress: () => {
-          if (this.state.editMode) {
-            this.setState({
-              editMode: false,
+        {
+          text: context.t('Delete'), onPress: () => {
+            if (this.state.editMode) {
+              this.setState({
+                editMode: false,
+              });
+            }
+            this.props.dispatch(contactActions.delete(username)).then(() => {
+              this.props.dispatch(chatActions.loadList());
             });
+            this.goBack();
           }
-          this.props.dispatch(contactActions.delete(username)).then(() => {
-            this.props.dispatch(chatActions.loadList());
-          });
-          this.goBack();
-        }},
+        },
       ],
       {cancelable: false},
     );
@@ -129,9 +145,52 @@ class ContactProfile extends Component {
 
   onSound = () => alert('click on sounds files btn');
 
+  renderForm = () => {
+    const {account, contact} = this.props;
+    const {theme} = account.user;
+
+    if (!contact.current.username) {
+      return null;
+    }
+
+    if (this.state.editMode) {
+      return (
+        <ProfileForm
+          theme={theme}
+          context={this.context}
+          initialValues={contact.current}
+          onSubmit={() => {}}
+          onRemoveBtn={this.onRemoveBtn}
+          onAddBtn={this.onAddBtn}
+          onGroups={this.onGroups}
+          onNotifications={this.onNotifications}
+          onSound={this.onSound}
+          onDelete={this.onDelete}/>
+      );
+    }
+
+    return (
+      <Profile
+        theme={theme}
+        context={this.context}
+        user={contact.current}
+        onShowQrCode={this.onShowQrCode}
+        onWriteBtn={this.onWriteBtn}
+        onCallBtn={this.onCallBtn}
+        onKeysBtn={this.onKeysBtn}
+        onFilesBtn={this.onFilesBtn}
+        onSettings={this.onSettings}
+        onShareBtn={this.onShareBtn}
+        onNotifications={this.onNotifications}
+        onBlockUser={this.onBlockUser}
+        onClearHistory={this.onClearHistory}
+        onDelete={this.onDelete}/>
+    );
+  };
+
   render() {
     const {context} = this;
-    const {account, contact} = this.props;
+    const {account} = this.props;
     const {theme} = account.user;
     const {editMode} = this.state;
     const _styles = styles(theme);
@@ -146,34 +205,7 @@ class ContactProfile extends Component {
             renderRight={() => this.renderNavbarButton(_styles, theme, context)}/>
 
           <View style={[_styles.body, _styles.bodyProfile]}>
-            {
-              editMode ?
-                contact.current.username ? <ProfileForm
-                  theme={theme}
-                  context={context}
-                  initialValues={contact.current}
-                  onRemoveBtn={this.onRemoveBtn}
-                  onAddBtn={this.onAddBtn}
-                  onGroups={this.onGroups}
-                  onNotifications={this.onNotifications}
-                  onSound={this.onSound}
-                  onDelete={this.onDelete}/> : null :
-                contact.current.username ? <Profile
-                  theme={theme}
-                  context={context}
-                  user={contact.current}
-                  onShowQrCode={this.onShowQrCode}
-                  onWriteBtn={this.onWriteBtn}
-                  onCallBtn={this.onCallBtn}
-                  onKeysBtn={this.onKeysBtn}
-                  onFilesBtn={this.onFilesBtn}
-                  onSettings={this.onSettings}
-                  onShareBtn={this.onShareBtn}
-                  onNotifications={this.onNotifications}
-                  onBlockUser={this.onBlockUser}
-                  onClearHistory={this.onClearHistory}
-                  onDelete={this.onDelete}/> : null
-            }
+            {this.renderForm()}
           </View>
         </BackgroundLayout>
       </MainLayout>

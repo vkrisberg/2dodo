@@ -3,7 +3,7 @@ import {get, map, filter, keyBy, isEmpty, size} from 'lodash';
 import {apiChat, apiServer} from '../../api';
 import {helpers, services, wsMessage} from '../../utils';
 import {hashlib} from '../../utils/encrypt';
-import {dbEnum} from '../../enums';
+import {dbEnum, chatEnum} from '../../enums';
 import CONFIG from '../../config';
 
 export const types = {
@@ -122,6 +122,13 @@ export default {
         // put yourself to members
         members.push(account.user.username);
         const membersHash = hashlib.hexSha256(members.sort().toString());
+        const type = members.length === 2 ? chatEnum.private : chatEnum.group;
+        let name = type === chatEnum.private
+          ? `@${contacts[0].nickname}`
+          : map(contacts, (item) => `@${item.nickname}`).join(', ');
+        if (realmContacts.length && type === chatEnum.private) {
+          name = realmContacts[0].fullName || `@${realmContacts[0].nickname}`;
+        }
 
         const sendData = {
           id: wsMessage.generateUuid(),
@@ -133,7 +140,8 @@ export default {
         };
         const chatData = {
           ...sendData,
-          name: map(contacts, (item) => `@${item.nickname}`).join(', '),
+          name,
+          type,
           shortName: wsMessage.getShortName(contacts),
           avatar: contacts[0].avatar,
           contacts: realmContacts,
@@ -295,21 +303,29 @@ export default {
           password: account.password,
         });
         const membersHash = hashlib.hexSha256(decryptedData.members.sort().toString());
-        const members = filter(decryptedData.members, (username) => username !== account.user.username);
-        const contacts = map(members, (username) => {
+        const filteredMembers = filter(decryptedData.members, (username) => username !== account.user.username);
+        const contacts = map(filteredMembers, (username) => {
           return {
             username: username,
             nickname: wsMessage.getNickname(username),
           };
         });
+        const type = decryptedData.members.length === 2 ? chatEnum.private : chatEnum.group;
+        let name = type === chatEnum.private
+          ? `@${contacts[0].nickname}`
+          : map(contacts, (item) => `@${item.nickname}`).join(', ');
         // find contacts in db
-        const query = members.join("' OR username = '");
+        const query = filteredMembers.join("' OR username = '");
         const realmContacts = realm.objects(dbEnum.Contact).filtered(`username = '${query}'`);
+        if (realmContacts.length && type === chatEnum.private) {
+          name = realmContacts[0].fullName || `@${realmContacts[0].nickname}`;
+        }
 
         const chatData = {
           ...decryptedData,
           membersHash,
-          name: map(contacts, 'nickname').join(', '),
+          name,
+          type,
           shortName: wsMessage.getShortName(contacts),
           avatar: realmContacts.length ? realmContacts[0].avatar : '',
           contacts: realmContacts,
@@ -366,6 +382,22 @@ export default {
       try {
         dispatch({type: types.UNSET_CURRENT_CHAT, payload: {}, clearMessages});
         return true;
+      } catch (e) {
+        throw e;
+      }
+    };
+  },
+
+
+  updateCurrentChat: () => {
+    return async (dispatch, getState) => {
+      try {
+        const realm = services.getRealm();
+        const {chat} = getState();
+        const realmChat = realm.objectForPrimaryKey(dbEnum.Chat, chat.current.id);
+        const payload = JSON.parse(JSON.stringify(realmChat));
+        dispatch({type: types.SET_CURRENT_CHAT, payload, clearMessages: false});
+        return chat;
       } catch (e) {
         throw e;
       }

@@ -9,7 +9,7 @@ export default ({theme}) => {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'flex-start',
-      width: '100%',
+      width: sizes.windowWidth,
       height: sizes.navbarHeight,
       paddingTop: sizes.statusbarHeight,
     },
