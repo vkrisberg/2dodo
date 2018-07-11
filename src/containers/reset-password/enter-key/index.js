@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {Alert} from 'react-native';
 
 import routeEnum from '../../../enums/route-enum';
 import {accountActions} from '../../../store/actions';
@@ -31,16 +32,15 @@ class ResetPasswordEnterKey extends Component {
     return await dispatch(accountActions.setNewPassword(sendData))
       .then((sendData) => {
         if (this.props.account.setNewPassword) {
-          alert(`success`);
           navigation.navigate(routeEnum.ResetPasswordPassSuccess, {email: navigation.getParam('email')});
           dispatch(accountActions.setDefaultNewPassword());
         } else {
-          alert(this.context.t('OperationNotPerformed'));
+          Alert.alert(this.context.t('OperationNotPerformed'));
         }
         return true;
       })
       .catch((error) => {
-        alert(this.context.t('NoTokenOrUser'));
+        Alert.alert(this.context.t('NoTokenOrUser'));
         return false;
       });
   };
