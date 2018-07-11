@@ -114,12 +114,12 @@ class Registration extends Component {
     const password = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
 
 
-    this.props.dispatch(accountActions.updateProfile({firstName, secondName})).then(() => {
+    this.props.dispatch(accountActions.updateProfile({firstName, secondName})).then((user) => {
       this.props.dispatch(accountActions.connect({
         deviceId: account.deviceId,
         hostname: account.hostname,
-        user: account.user,
         keys: account.keys,
+        user,
         password,
       })).catch((error) => {
         console.log('login error', error);

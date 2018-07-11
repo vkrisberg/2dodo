@@ -312,7 +312,7 @@ export default {
         // console.log('profile updated', payload);
         // TODO - send settings to server
         dispatch({type: types.PROFILE_UPDATE_SUCCESS, payload});
-        return realmAccount;
+        return payload;
       } catch (e) {
         dispatch({type: types.PROFILE_UPDATE_FAILURE, error: e});
         throw e;
