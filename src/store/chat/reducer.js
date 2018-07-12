@@ -210,7 +210,7 @@ export default reducer(initState, {
     return {
       ...state,
       current: {...initState.current},
-      loading: true,
+      loading: false,
       error: null
     };
   },

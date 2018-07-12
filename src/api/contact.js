@@ -43,7 +43,7 @@ export default {
     return clientMessage;
   },
 
-  sendProfile: async ({data, contacts}) => {
+  sendProfile: async ({data, files, contacts}) => {
     const websocket = services.getWebsocket();
     const meta = {
       ...CONFIG.message,
@@ -53,6 +53,7 @@ export default {
       members: contacts,
       data,
       meta,
+      files,
     });
 
     for (let i = 0; i < clientMessage.messages.length; i++) {

@@ -51,10 +51,6 @@ class ChatMessage extends PureComponent {
     });
   }
 
-  componentWillUnmount(){
-    this.props.dispatch(chatActions.unsetCurrentChat());
-  }
-
   componentDidUpdate(prevProps) {
     const {chatMessage} = this.props;
     if (chatMessage.typing.date && prevProps.chatMessage.typing.date !== chatMessage.typing.date) {
@@ -89,7 +85,10 @@ class ChatMessage extends PureComponent {
     return this.props.dispatch(chatMessageActions.delete(id));
   };
 
-  goBack = () => this.props.navigation.goBack();
+  onBack = () => {
+    this.props.dispatch(chatActions.unsetCurrentChat());
+    this.props.navigation.goBack();
+  };
 
   onSearchChange = (text) => {
     const filter = `text CONTAINS[c] '${text}' OR username CONTAINS[c] '${text}'`;
@@ -162,7 +161,8 @@ class ChatMessage extends PureComponent {
                       title={chat.current.name}
                       description={navbarDescription}
                       avatar={chat.current.avatar}
-                      onAvatarPress={this.onNavbarAvatarPress}/>
+                      onAvatarPress={this.onNavbarAvatarPress}
+                      onBackPress={this.onBack}/>
           <SearchInput placeholder="Search in messages" onChange={this.onSearchChange}/>
           <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
             <MessageList
