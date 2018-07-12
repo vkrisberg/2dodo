@@ -7,7 +7,7 @@ const translations = {
     'Groups': 'Группы',
     'Settings': 'Настройки',
     // Events
-    'SkipAllFeatures': 'Skip all features',
+    'SkipAllFeatures': 'Пропустить',
     // Login
     'LoginWelcome': 'Введите ваш логин и пароль',
     'Login': 'Login',

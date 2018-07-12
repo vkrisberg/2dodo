@@ -2,19 +2,17 @@ import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {View, Text} from 'react-native';
 
 import {Input, Button, Checkbox} from '../../elements';
-import {
-  Container,
-  SecurityContainer,
-  SecurityText,
-  SecurityLabel,
-} from './styles';
+import {themeEnum} from '../../../enums';
 import {colors} from '../../../styles';
+import styles from './styles';
 
 class LoginForm extends Component {
 
   static propTypes = {
+    theme: PropTypes.string,
     context: PropTypes.object,
     errors: PropTypes.object,
     disabled: PropTypes.bool,
@@ -22,15 +20,20 @@ class LoginForm extends Component {
     handleSubmit: PropTypes.func.isRequired,
   };
 
+  static defaultProps = {
+    theme: themeEnum.light,
+  };
+
   constructor(props) {
     super(props);
   }
 
   render() {
-    const {handleSubmit, context, errors, disabled} = this.props;
+    const {handleSubmit, context, errors, disabled, theme} = this.props;
+    const _styles = styles(theme);
 
     return (
-      <Container>
+      <View style={_styles.container}>
         <Field
           component={Input}
           name="login"
@@ -60,21 +63,21 @@ class LoginForm extends Component {
           autoCorrect={false}
           multiline={false}
         />
-        <SecurityContainer>
-          <SecurityText>{context.t('ForBestSecurity')}</SecurityText>
-          <SecurityLabel>{context.t('CreateNewKey')}</SecurityLabel>
+        <View style={_styles.securityContainer}>
+          <Text style={[_styles.text, _styles.securityText]}>{context.t('ForBestSecurity')}</Text>
+          <Text style={_styles.text}>{context.t('CreateNewKey')}</Text>
           <Field
             component={Checkbox}
             name="createNewKey"
             color={colors.light.white}
           />
-        </SecurityContainer>
+        </View>
         <Button color={colors.light.loginButtonText}
                 borderColor={colors.light.white}
                 bgColor={colors.light.white}
                 disabled={disabled}
                 onPress={handleSubmit}>{context.t('Enter')}</Button>
-      </Container>
+      </View>
     );
   }
 }

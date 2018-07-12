@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {KeyboardAvoidingView, View, Alert, ActionSheetIOS, AsyncStorage} from 'react-native';
+import {Platform, KeyboardAvoidingView, View, Alert, ActionSheetIOS, AsyncStorage, Text} from 'react-native';
 import {withNavigation} from 'react-navigation';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
@@ -10,14 +10,9 @@ import {Logo, Button, Link} from '../../components/elements';
 import {routeEnum, dbEnum} from '../../enums';
 import {services} from '../../utils';
 import {accountActions} from '../../store/actions';
-import {
-  StyledText,
-  StyledRegistration,
-  RegistrationLabel,
-  LoginStyles,
-} from './styles';
 import {colors, sizes} from '../../styles';
 import {validation} from '../../utils';
+import styles from './styles';
 
 class Login extends Component {
 
@@ -137,30 +132,31 @@ class Login extends Component {
   render() {
     const {account} = this.props;
     const {t} = this.context;
-    const forgotLinkColor = sizes.isIphone5 ? colors.light.blueDarker : colors.light.white;
+    const forgotLinkColor = (sizes.isIphone5 && Platform.OS === 'ios') ? colors.light.blueDarker : colors.light.white;
+    const _styles = styles(account.user.theme);
 
     return (
       <MainLayout netOffline={!account.net.connected}>
         <BackgroundLayout background="login" barStyle="light-content">
           <DismissKeyboardLayout>
-            <KeyboardAvoidingView style={LoginStyles.container} behavior="position" enabled>
-              <Logo style={LoginStyles.logo}/>
-              <StyledText>{t('LoginWelcome')}</StyledText>
+            <KeyboardAvoidingView style={_styles.container} behavior="position" enabled>
+              <Logo style={_styles.logo}/>
+              <Text style={_styles.text}>{t('LoginWelcome')}</Text>
               <LoginForm context={this.context}
                          errors={this.state.errors}
                          disabled={!account.net.connected || account.connecting}
                          onSubmit={this.login}/>
             </KeyboardAvoidingView>
-            <Link style={LoginStyles.forgot}
+            <Link style={_styles.forgot}
                   to={routeEnum.ResetPassword}
                   color={forgotLinkColor}>{t('ForgotPassword')}</Link>
-            <StyledRegistration>
-              <RegistrationLabel>{t('FirstTimeInApp')}</RegistrationLabel>
+            <View style={_styles.registration}>
+              <Text style={_styles.registrationLabel}>{t('FirstTimeInApp')}</Text>
               <Link to={routeEnum.Registration}
                     color={colors.light.blueDarker}>{t('Registration')}</Link>
-            </StyledRegistration>
-            <View style={LoginStyles.keysImportContainer}>
-              <Button style={LoginStyles.keysImportButton}
+            </View>
+            <View style={_styles.keysImportContainer}>
+              <Button style={_styles.keysImportButton}
                       color={colors.light.grayDarker}
                       borderColor="transparent"
                       onPress={this.keysImport}>
