@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {colors, fonts, weights} from '../../../styles';
+import {colors, getFont, weights} from '../../../styles';
 
 export default (theme) => {
   return StyleSheet.create({
@@ -41,9 +41,8 @@ export default (theme) => {
 
     avatarInitials: {
       color: colors[theme].white,
-      fontFamily: fonts.main,
       fontSize: 16,
-      fontWeight: weights.semiBold,
+      ...getFont({weight: weights.semiBold}),
     },
 
     body: {
@@ -52,17 +51,15 @@ export default (theme) => {
     },
 
     defaultText: {
-      fontFamily: fonts.main,
       fontSize: 13,
-      fontWeight: weights.medium,
+      ...getFont({}),
     },
 
     caption: {
       color: colors[theme].grayBlue,
-      fontFamily: fonts.main,
       fontSize: 16,
-      fontWeight: weights.semiBold,
       marginBottom: 2,
+      ...getFont({weight: weights.semiBold}),
     },
 
     subCaption: {
@@ -76,9 +73,8 @@ export default (theme) => {
 
     text: {
       color: colors[theme].grayInput,
-      fontFamily: fonts.main,
       fontSize: 13,
-      fontWeight: weights.medium,
+      ...getFont({}),
     },
 
     notReadenMessage: {
@@ -93,9 +89,8 @@ export default (theme) => {
 
     notReadenMessageText: {
       color: colors[theme].white,
-      fontFamily: fonts.main,
       fontSize: 13,
-      fontWeight: weights.medium,
+      ...getFont({}),
     },
 
     information: {
@@ -108,11 +103,10 @@ export default (theme) => {
 
     limitText: {
       color: colors[theme].grayText,
-      fontFamily: fonts.main,
       fontSize: 13,
-      fontWeight: weights.medium,
       height: 30,
       overflow: 'hidden',
+      ...getFont({}),
     },
   });
 };

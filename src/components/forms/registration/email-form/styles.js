@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {colors, fonts, sizes, weights} from '../../../../styles';
+import {getFont, sizes, weights} from '../../../../styles';
 
 export default (theme) => {
   return StyleSheet.create({
@@ -66,7 +66,7 @@ export default (theme) => {
     phonePrefixPipe: {
       marginLeft: 8,
       fontSize: 24,
-      fontWeight: weights.light,
+      ...getFont({weight: weights.light}),
     },
   });
-}
+};

@@ -1,13 +1,15 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {View} from 'react-native';
 
 import {Tab} from '../index';
-import {favoritesNavEnum} from '../../../enums';
-import {Tabs} from './styles';
+import {favoritesNavEnum, themeEnum} from '../../../enums';
+import styles from './styles';
 
 export default class NavbarFavorites extends Component {
 
   static propTypes = {
+    theme: PropTypes.string,
     selected: PropTypes.number,
     activeColor: PropTypes.string,
     unActiveColor: PropTypes.string,
@@ -29,6 +31,7 @@ export default class NavbarFavorites extends Component {
   };
 
   static defaultProps = {
+    theme: themeEnum.light,
     onTabChange: () => {},
     activeColor: 'black',
     unActiveColor: 'gray',
@@ -43,6 +46,7 @@ export default class NavbarFavorites extends Component {
 
   render() {
     const {
+      theme,
       selected,
       activeColor,
       unActiveColor,
@@ -51,9 +55,10 @@ export default class NavbarFavorites extends Component {
       pressOpacity,
       fontSize
     } = this.props;
+    const _styles = styles(theme);
 
     return (
-      <Tabs>
+      <View style={_styles.container}>
         {favoritesNavEnum.map((child, tabIndex) => {
           return <Tab
             key={child.text}
@@ -71,7 +76,7 @@ export default class NavbarFavorites extends Component {
           />;
         })
         }
-      </Tabs>
+      </View>
     );
   }
 }

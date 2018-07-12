@@ -1,5 +1,5 @@
 import {StyleSheet} from "react-native";
-import {colors, fonts, weights} from '../../../styles';
+import {colors, getFont, weights} from '../../../styles';
 
 export default (theme) => {
   return StyleSheet.create({
@@ -39,11 +39,10 @@ export default (theme) => {
 
     input: {
       color: colors[theme].grayBlue,
-      fontFamily: fonts.main,
       fontSize: 13,
-      fontWeight: weights.regular,
       height: 30,
       width: '100%',
+      ...getFont({weight: weights.regular}),
     },
   });
 };

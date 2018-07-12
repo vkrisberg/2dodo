@@ -1,15 +1,21 @@
-import styled from 'styled-components';
+import {StyleSheet} from 'react-native';
+import {colors, getFont} from '../../../styles';
 
-export const Container = styled.TouchableOpacity`
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  padding-bottom: 25;
-`;
+export default (theme) => {
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingBottom: 25,
+    },
 
-export const StyledText = styled.Text`
-  font-size: 11;
-  color: ${props => props.color};
-  position: absolute;
-  bottom: 10;
-`;
+    text: {
+      fontSize: 11,
+      color: colors[theme].red,
+      position: 'absolute',
+      bottom: 10,
+      ...getFont({}),
+    },
+  });
+};

@@ -1,5 +1,5 @@
 import {StyleSheet} from "react-native";
-import {colors, fonts, weights} from "../../../styles";
+import {colors, weights, getFont} from "../../../styles";
 
 export default (theme) => {
   return StyleSheet.create({
@@ -45,10 +45,9 @@ export default (theme) => {
 
     sectionLeft: {
       marginRight: 7,
-      fontFamily: fonts.main,
       fontSize: 13,
-      fontWeight: weights.bold,
       color: colors[theme].grayQuartz,
+      ...getFont({weight: weights.bold}),
     },
 
     alphabet: {
@@ -57,12 +56,11 @@ export default (theme) => {
     },
 
     alphabetLetter: {
-      fontFamily: fonts.main,
-      fontWeight: weights.medium,
       fontSize: 10,
       color: colors[theme].grayLightQuartz,
       marginBottom: 11,
       textAlign: 'right',
+      ...getFont({}),
     },
 
     divider: {

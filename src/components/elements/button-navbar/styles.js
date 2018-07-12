@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {colors, fonts, sizes, weights} from '../../../styles';
+import {colors, getFont, sizes} from '../../../styles';
 
 export default ({theme, color, bgColor, position}) => {
   return StyleSheet.create({
@@ -14,9 +14,8 @@ export default ({theme, color, bgColor, position}) => {
 
     text: {
       color: color || colors[theme].orange,
-      fontFamily: fonts.main,
       fontSize: 16,
-      fontWeight: weights.medium,
+      ...getFont({}),
     },
   });
-}
+};

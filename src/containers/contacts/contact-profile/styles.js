@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {colors, fonts, sizes, weights} from '../../../styles';
+import {colors, getFont, sizes} from '../../../styles';
 
 export default (theme) => {
   return StyleSheet.create({
@@ -39,8 +39,7 @@ export default (theme) => {
       textAlign: 'center',
       color: colors[theme].grayDarker,
       fontSize: 15,
-      fontWeight: weights.medium,
-      fontFamily: fonts.main,
+      ...getFont({}),
     },
   });
 };

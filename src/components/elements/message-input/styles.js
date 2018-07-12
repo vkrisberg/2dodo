@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {colors, fonts, sizes, weights} from '../../../styles';
+import {colors, getFont, sizes} from '../../../styles';
 
 const HEIGHT = 44;
 
@@ -30,9 +30,7 @@ export default ({theme}) => {
       flex: 1,
       color: colors[theme].messageTextMain,
       backgroundColor: colors[theme].white,
-      fontFamily: fonts.main,
       fontSize: 15,
-      fontWeight: weights.medium,
       borderWidth: 0.5,
       borderRadius: 20,
       borderColor: colors[theme].messageBorder,
@@ -40,6 +38,7 @@ export default ({theme}) => {
       paddingHorizontal: 20,
       height: 32,
       width: '100%',
+      ...getFont({}),
     },
 
     clipButton: {

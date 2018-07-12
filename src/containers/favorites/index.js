@@ -1,70 +1,72 @@
 import React, {Component} from 'react';
-import {TouchableWithoutFeedback} from 'react-native';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {View, Text} from 'react-native';
 
-import {Wrapper} from '../../components/layouts';
-import {FavoritsDotsIcon, EmptyFavoritsIcon} from '../../components/icons';
-import {NavbarFavorites} from '../../components/elements';
-import {
-  Header,
-  StyledTitle,
-  TitleContainer,
-  AddContact,
-  SearchText,
-  StyledIcon,
-  EmptyFavoritsView,
-  BoldText
-} from './styles';
+import {MainLayout, BackgroundLayout} from '../../components/layouts';
+import {Navbar, NavbarDots, ButtonNavbar, NavbarFavorites} from '../../components/elements';
+import {EmptyFavoritsIcon} from '../../components/icons';
+import styles from './styles';
+import {colors} from '../../styles';
 
-export default class Favorites extends Component {
+class Favorites extends Component {
+  static propTypes = {
+    account: PropTypes.object,
+  };
+
+  static contextTypes = {
+    t: PropTypes.func.isRequired,
+  };
+
   constructor(props) {
     super(props);
 
     this.state = {
-      category: "Chats",
-      title: "messages"
+      category: 'Chats',
+      title: 'NoMessagesInFavorites',
     };
   }
 
-  searchFavorite = () => {
+  renderNavbarButton = (theme) => {
+    return (
+      <ButtonNavbar position="right" onPress={this.onSearchFavorite} color={colors[theme].blueCornFlower}>{this.context.t('Search')}</ButtonNavbar>
+    );
+  };
 
-  }
+  onSearchFavorite = () => alert('click on search');
 
-  getFavorits = () => {
-    const { category, title } = this.state;
+  getFavorits = (_styles) => {
+    const {title} = this.state;
 
-    if (category === 'Chats') {
-      return (
-        <EmptyFavoritsView>
-          <EmptyFavoritsIcon />
-          <BoldText>No {title.toLowerCase()} in favorites</BoldText>
-        </EmptyFavoritsView>
-      );
-    }
-
-    return null;
-  }
+    return (
+      <View style={_styles.emptyFavoritesView}>
+        <EmptyFavoritsIcon />
+        <Text style={_styles.boldText}>{this.context.t(title)}</Text>
+      </View>
+    );
+  };
 
   render() {
+    const {context} = this;
+    const {account} = this.props;
+    const {theme} = account.user;
+    const _styles = styles(theme);
+
     return (
-      <Wrapper scrolled>
-        <Header>
-          <TitleContainer>
-            <StyledIcon>
-              <FavoritsDotsIcon />
-            </StyledIcon>
-            <StyledTitle>
-              Favorites
-            </StyledTitle>
-          </TitleContainer>
-          <AddContact>
-            <TouchableWithoutFeedback onPress={this.searchFavorite}>
-              <SearchText>Search</SearchText>
-            </TouchableWithoutFeedback>
-          </AddContact>
-        </Header>
-        <NavbarFavorites />
-        {this.getFavorits()}
-      </Wrapper>
+      <MainLayout netOffline={!account.net.connected} wsConnected={account.connected}>
+        <BackgroundLayout theme={theme} paddingHorizontal={10}>
+          <Navbar renderTitle={context.t('Favorites')}
+            renderLeft={<NavbarDots/>}
+            renderRight={this.renderNavbarButton(theme)}/>
+          <NavbarFavorites />
+          {this.getFavorits(_styles)}
+        </BackgroundLayout>
+      </MainLayout>
     );
   }
 }
+
+export default connect(state => ({
+  account: state.account,
+}))(Favorites);
+

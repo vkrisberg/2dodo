@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {colors, fonts, sizes, weights} from '../../../styles';
+import {colors, getFont, sizes, weights} from '../../../styles';
 
 export default (theme) => {
   return StyleSheet.create({
@@ -10,10 +10,10 @@ export default (theme) => {
     },
 
     styledTitle: {
-      fontWeight: weights.bold,
       fontSize: 28,
       marginLeft: 20,
       color: colors[theme].navbarTitle,
+      ...getFont({weight: weights.bold}),
     },
 
     titleContainer: {
@@ -53,8 +53,7 @@ export default (theme) => {
     text: {
       color: colors[theme].blackText,
       fontSize: 15,
-      fontWeight: weights.medium,
-      fontFamily: fonts.main,
+      ...getFont({}),
     },
 
     checkbox: {
@@ -66,10 +65,9 @@ export default (theme) => {
       width: '100%',
       color: colors[theme].grayInput,
       fontSize: 14,
-      fontWeight: weights.medium,
-      fontFamily: fonts.main,
       paddingLeft: 10,
       textAlign: 'left',
+      ...getFont({}),
     },
 
     btnContainer: {
@@ -86,8 +84,7 @@ export default (theme) => {
     btnText: {
       color: colors[theme].black,
       fontSize: 16,
-      fontWeight: weights.medium,
-      fontFamily: fonts.main,
+      ...getFont({}),
     },
 
     searchBlock: {

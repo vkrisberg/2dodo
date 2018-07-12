@@ -1,5 +1,5 @@
 import {StyleSheet} from "react-native";
-import {colors, fonts, weights, sizes} from "../../../styles";
+import {colors, weights, sizes, getFont} from "../../../styles";
 
 export default (theme) => {
   return StyleSheet.create({
@@ -46,9 +46,8 @@ export default (theme) => {
 
     avatarInitials: {
       color: colors[theme].white,
-      fontFamily: fonts.main,
       fontSize: 16,
-      fontWeight: weights.semiBold,
+      ...getFont({weight: weights.semiBold}),
     },
 
     body: {
@@ -58,16 +57,14 @@ export default (theme) => {
 
     name: {
       color: colors[theme].grayBlue,
-      fontFamily: fonts.main,
       fontSize: 16,
-      fontWeight: weights.semiBold,
+      ...getFont({weight: weights.semiBold}),
     },
 
     text: {
       color: colors[theme].grayText,
-      fontFamily: fonts.main,
       fontSize: 13,
-      fontWeight: weights.medium,
+      ...getFont({}),
     },
 
     notReadenMessage: {
@@ -82,9 +79,8 @@ export default (theme) => {
 
     notReadenMessageText: {
       color: colors[theme].white,
-      fontFamily: fonts.main,
       fontSize: 13,
-      fontWeight: weights.medium,
+      ...getFont({}),
     },
 
     information: {
@@ -97,19 +93,17 @@ export default (theme) => {
 
     username: {
       color: colors[theme].grayBlue,
-      fontFamily: fonts.main,
       fontSize: 13,
-      fontWeight: weights.medium,
       overflow: 'hidden',
+      ...getFont({}),
     },
 
     limitText: {
       color: colors[theme].grayText,
-      fontFamily: fonts.main,
       fontSize: 13,
-      fontWeight: weights.medium,
       height: 30,
       overflow: 'hidden',
+      ...getFont({}),
     },
 
     chosen: {

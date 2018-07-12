@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {fonts, weights} from '../../../styles';
+import {getFont} from '../../../styles';
 
 export default StyleSheet.create({
   container: {
@@ -8,8 +8,7 @@ export default StyleSheet.create({
   },
 
   link: {
-    fontFamily: fonts.main,
     fontSize: 15,
-    fontWeight: weights.medium,
+    ...getFont({}),
   },
 });
