@@ -1,31 +1,30 @@
-import styled from 'styled-components';
-import {fonts, weights, colors} from '../../../styles';
+import {StyleSheet} from 'react-native';
+import {colors, getFont} from '../../../styles';
 
-export const Container = styled.View`
-  align-items: center;
-  width: 280;
-`;
+export default (theme) => {
+  return StyleSheet.create({
+    container: {
+      alignItems: 'center',
+      width: 280,
+    },
 
-export const SecurityContainer = styled.View`
-  width: 100%;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 0;
-  margin-bottom: 25;
-`;
+    securityContainer: {
+      width: '100%',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginTop: 0,
+      marginBottom: 25,
+    },
 
-export const SecurityText = styled.Text`
-  font-family: '${fonts.main}';
-  font-size: 15;
-  font-weight: ${weights.medium};
-  color: ${colors.light.white};
-  opacity: .6;
-`;
+    text: {
+      fontSize: 15,
+      color: colors[theme].white,
+      ...getFont({}),
+    },
 
-export const SecurityLabel = styled.Text`
-  font-family: '${fonts.main}';
-  font-size: 15;
-  font-weight: ${weights.medium};
-  color: ${colors.light.white};
-`;
+    securityText: {
+      opacity: .6,
+    },
+  });
+};

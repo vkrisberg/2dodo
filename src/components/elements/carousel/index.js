@@ -4,21 +4,14 @@ import {
   View,
   Animated,
   Dimensions,
-  ScrollView
+  ScrollView,
+  Text,
+  Image
 } from 'react-native';
 
 import {ButtonSkip} from '../index';
-import {
-  TitleText,
-  Track,
-  BarContainer,
-  ItemImage,
-  ItemText,
-  ItemTitle,
-  ItemWrap,
-  Bar,
-  Container,
-} from './styles';
+import {themeEnum} from '../../../enums';
+import styles from './styles';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
@@ -27,11 +20,17 @@ const barSpace = 7;
 
 export default class Carousel extends Component {
   static propTypes = {
+    theme: PropTypes.string,
+    context: PropTypes.object,
     items: PropTypes.array,
     onSkip: PropTypes.func,
     navigation: PropTypes.shape({
-      navigate: PropTypes.func
-    })
+      navigate: PropTypes.func,
+    }),
+  };
+
+  static defaultProps = {
+    theme: themeEnum.light,
   };
 
   state = {
@@ -50,48 +49,51 @@ export default class Carousel extends Component {
     return this.state.page === index;
   };
 
-  renderImages = () => {
+  renderImages = (_styles) => {
     return this.props.items.map((item, i) => {
       return (
-        <ItemWrap key={i} width={deviceWidth}>
-          <ItemImage source={item.image} isSmall={isSmallScreen}/>
-          <TitleText>{item.title}</TitleText>
-          <ItemText>{item.text}</ItemText>
-        </ItemWrap>
+        <View style={_styles.itemWrap} key={i}>
+          <Image style={{marginTop: isSmallScreen ? 100 : 160}} source={item.image}/>
+          <Text style={_styles.titleText}>{item.title}</Text>
+          <Text style={_styles.itemText}>{item.text}</Text>
+        </View>
       );
     });
   };
 
-  renderDots = () => {
+  renderDots = (_styles) => {
     return this.props.items.map((item, i) => {
       return (
-        <Track
+        <View
           key={i}
-          marginLeft={i === 0 ? 0 : barSpace}>
-          <Bar isActive={this.isActive(i)}/>
-        </Track>
+          style={[_styles.track, {marginLeft: i === 0 ? 0 : barSpace}]}>
+          <Animated.View style={[_styles.bar, {opacity: this.isActive(i) ? 1 : 0.3}]}/>
+        </View>
       );
     });
   };
 
   render() {
+    const {theme, context} = this.props;
+    const _styles = styles(theme);
+
     return (
-      <Container>
+      <View style={_styles.container}>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           scrollEventThrottle={1}
           pagingEnabled
           onMomentumScrollEnd={this.onScrollEnd}>
-          {this.renderImages()}
+          {this.renderImages(_styles)}
         </ScrollView>
-        <BarContainer isSmall={isSmallScreen}>
-          {this.renderDots()}
-        </BarContainer>
+        <View style={[_styles.barContainer, {bottom: isSmallScreen ? 110 : 140}]} isSmall={isSmallScreen}>
+          {this.renderDots(_styles)}
+        </View>
         <ButtonSkip onSkip={this.props.onSkip} marginBottom={50}>
-          Skip all features
+          {context.t('SkipAllFeatures')}
         </ButtonSkip>
-      </Container>
+      </View>
     );
   }
 }
