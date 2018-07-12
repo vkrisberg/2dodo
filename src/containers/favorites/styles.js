@@ -1,17 +1,22 @@
 import {StyleSheet} from 'react-native';
-import {getFont, weights} from '../../styles';
 
 export default (theme) => {
   return StyleSheet.create({
-    emptyFavoritesView: {
+    emptyContainer: {
+      flex: 1,
+      width: '100%',
       alignItems: 'center',
       justifyContent: 'center',
-      flex: 1,
+      paddingBottom: 50,
     },
 
-    boldText: {
-      marginTop: 20,
-      ...getFont({weight: weights.bold}),
+    emptyWrapper: {
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+
+    text: {
+      marginTop: 15,
     },
   });
 };
