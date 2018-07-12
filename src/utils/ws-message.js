@@ -77,9 +77,10 @@ const getClientAesMessage = async ({action, data, members, timeDead, encryptTime
  * @param data
  * @param members - [{username: 'login@hostname', publicKey: 'string'}, {...}, ...]
  * @param meta
+ * @param files
  * @returns {Promise<{}>}
  */
-const getClientPgpMessage = async ({type = 'client_message', action, data, members, meta}) => {
+const getClientPgpMessage = async ({type = 'client_message', action, data, members, meta, files = {}}) => {
   if (isNil(data) || !isObject(data)) {
     throw new Error('\'data\' is not an object or empty');
   }
@@ -103,7 +104,7 @@ const getClientPgpMessage = async ({type = 'client_message', action, data, membe
       type,
       action,
       to: [member.username],
-      data: {meta, payload: encryptedData},
+      data: {meta, files, payload: encryptedData},
       encrypt_time: data.dateSend,
     };
     messages.push(message);

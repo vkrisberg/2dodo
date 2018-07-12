@@ -123,6 +123,13 @@ class Settings extends Component {
           navigate: true,
         },
       ],
+      [
+        {
+          text: this.props.account.deviceId,
+          onPress: () => {},
+          navigate: false,
+        },
+      ],
     ];
 
     return (
@@ -163,9 +170,15 @@ class Settings extends Component {
                 renderItem={this.renderSettingsItem}/>
             </View>
             <View style={_styles.divider}/>
-            <View style={[_styles.content, {marginBottom: 60}]}>
+            <View style={[_styles.content]}>
               <SettingsList
                 items={settingsData[1]}
+                renderItem={this.renderSettingsItem}/>
+            </View>
+            <View style={_styles.divider}/>
+            <View style={[_styles.content, {marginBottom: 60}]}>
+              <SettingsList
+                items={settingsData[2]}
                 renderItem={this.renderSettingsItem}/>
             </View>
           </ScrollView>

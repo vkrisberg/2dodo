@@ -20,6 +20,7 @@ export default class NavbarChat extends Component {
     context: PropTypes.object,
     onAvatarPress: PropTypes.func,
     onMenuPress: PropTypes.func,
+    onBackPress: PropTypes.func,
   };
 
   static defaultProps = {
@@ -101,7 +102,7 @@ export default class NavbarChat extends Component {
   };
 
   render() {
-    let {theme} = this.props;
+    let {theme, onBackPress} = this.props;
     const {showPanel} = this.state;
     const _styles = styles({theme});
 
@@ -109,7 +110,7 @@ export default class NavbarChat extends Component {
       <View>
         <Navbar theme={theme}
           renderTitle={this.renderTitle(_styles)}
-          renderLeft={<ButtonBack/>}
+          renderLeft={<ButtonBack onPress={onBackPress}/>}
           renderRight={this.renderAvatar()}/>
         {showPanel && this.renderPanel(_styles, theme)}
       </View>

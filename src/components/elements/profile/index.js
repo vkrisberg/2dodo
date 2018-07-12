@@ -61,7 +61,7 @@ export default class Profile extends PureComponent {
           {typeof text === 'object' ?
             Object.keys(text).map((item, index) =>
               <View key={index}>
-                <Text style={[_styles.userInfoText, {color: colors[theme].grayBlue, marginBottom: index !== text.length ? 4 : 10,}]}>{text[item]}</Text>
+                <Text style={[_styles.userInfoText, {color: colors[theme].grayBlue, marginBottom: index !== text.length ? 4 : 10}]}>{text[item]}</Text>
               </View>
             ) :
             <Text style={[_styles.userInfoText, {color: colors[theme].grayBlue, fontSize: 15,}]}>{text}</Text>

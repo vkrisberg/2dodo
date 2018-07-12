@@ -425,7 +425,8 @@ export default {
           return false;
         }
         return await apiContact.sendProfile({
-          data: {phones, firstName, secondName, bio, avatar},
+          data: {phones, firstName, secondName, bio},
+          files: {avatar},
           contacts,
         });
       } catch (e) {
@@ -466,6 +467,8 @@ export default {
           throw new Error('receive profile error: username is empty');
         }
 
+        const avatar = get(message, 'data.files.avatar', null);
+
         let contact = realm.objectForPrimaryKey(dbEnum.Contact, username);
         let contactData = {};
         if (contact) {
@@ -479,11 +482,18 @@ export default {
           };
         }
 
-        let {phones, firstName, secondName, bio, avatar} = decryptedData;
+        let {phones, firstName, secondName, bio} = decryptedData;
         if (phones && !isArray(phones)) {
           phones = values(phones);
         }
-        contactData = {...contactData, phones, firstName, secondName, bio, avatar};
+        contactData = {
+          ...contactData,
+          phones: phones || [],
+          firstName: firstName || '',
+          secondName: secondName || '',
+          bio: bio || '',
+          avatar,
+        };
 
         await realm.write(() => {
           contact = realm.create(dbEnum.Contact, contactData, true);
