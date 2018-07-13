@@ -298,13 +298,6 @@ export default reducer(initState, {
     };
   },
 
-  [types.SUBSCRIBE_COMPLETE]: (state) => {
-    return {
-      ...state,
-      loading: false,
-    };
-  },
-
   [types.UNSUBSCRIBE]: (state, action) => {
     return {
       ...state,
