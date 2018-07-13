@@ -40,6 +40,7 @@ export const types = {
   SUBSCRIBE: Symbol('SUBSCRIBE'),
   SUBSCRIBE_SUCCESS: Symbol('SUBSCRIBE_SUCCESS'),
   SUBSCRIBE_FAILURE: Symbol('SUBSCRIBE_FAILURE'),
+  SUBSCRIBE_COMPLETE: Symbol('SUBSCRIBE_COMPLETE'),
 
   UNSUBSCRIBE: Symbol('UNSUBSCRIBE'),
   UNSUBSCRIBE_SUCCESS: Symbol('UNSUBSCRIBE_SUCCESS'),
@@ -376,7 +377,7 @@ export default {
             owner: data.owner,
             avatar: data.avatar || '',
             shortName: data.name.substr(0, 1).toUpperCase(),
-            dateCreate: wsMessage.rfcToDate(data.dt_create),
+            dateCreate: data.dt_create ? wsMessage.rfcToDate(data.dt_create) : new Date(),
             dateUpdate: new Date(),
           };
           let _group = {};
@@ -484,7 +485,13 @@ export default {
   },
 
   subscribeToGroup: (link) => {
-    return async dispatch => {
+    return async (dispatch, getState) => {
+      const {group} = getState();
+      const _group = group.list.find((item) => item.link === link);
+      if (_group) {
+        throw new Error('AlreadyInGroup');
+      }
+
       dispatch({type: types.SUBSCRIBE, payload: link});
       try {
         if (!link) {
@@ -502,6 +509,8 @@ export default {
   subscribeToGroupResult: (message) => {
     if (message.error || !message.data.success) {
       return {type: types.SUBSCRIBE_FAILURE, error: message.error};
+    } else {
+      return {type: types.SUBSCRIBE_COMPLETE};
     }
   },
 

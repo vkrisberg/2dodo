@@ -277,9 +277,13 @@ export default reducer(initState, {
   },
 
   [types.SUBSCRIBE_SUCCESS]: (state, action) => {
+    const list = state.list.filter((item) => {
+      return item.link !== action.payload.link;
+    });
+
     return {
       ...state,
-      list: [action.payload, ...state.list],
+      list: [action.payload, ...list],
       current: {},
       subscribeLink: null,
       loading: false,
@@ -291,6 +295,13 @@ export default reducer(initState, {
       ...state,
       loading: false,
       error: action.error.toString(),
+    };
+  },
+
+  [types.SUBSCRIBE_COMPLETE]: (state) => {
+    return {
+      ...state,
+      loading: false,
     };
   },
 

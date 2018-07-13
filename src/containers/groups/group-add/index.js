@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {Text, View, TouchableOpacity, ScrollView} from 'react-native';
+import {Text, View, TouchableOpacity, ScrollView, Alert} from 'react-native';
 
 import {MainLayout, BackgroundLayout, DismissKeyboardLayout} from '../../../components/layouts';
 import {ContactList, GroupList} from '../../../components/lists';
-import {Button, Checkbox, ContactListItem, SearchInput, GroupListItem} from '../../../components/elements';
+import {Button, Checkbox, ContactListItem, SearchInput, GroupPublicListItem, Loader} from '../../../components/elements';
 import {CreateChannel} from '../../../components/forms';
 import {ArrowIcon} from '../../../components/icons';
+import {groupActions} from '../../../store/actions';
 import {colors} from "../../../styles";
 import styles from './styles';
 
@@ -26,51 +27,6 @@ const Contactslist = [
   },
   {
     username: 'Professor',
-  },
-];
-
-const list = [
-  {
-    name: 'Simpson\'s Family',
-    properties: {
-      avatar: 'https://upload.wikimedia.org/wikipedia/en/thumb/0/0d/Simpsons_FamilyPicture.png/220px-Simpsons_FamilyPicture.png',
-      quote: 'Mom, we need a new father!',
-      user: 'Lisa Simpson',
-      dateUpdate: '2018-06-21 21:30',
-      unreadCount: 24
-    },
-  },
-  {
-    name: 'AIGO Big Group',
-    properties: {
-      quote: 'Mom, we need a new father!',
-      user: 'Lisa Simpson',
-      dateUpdate: '2018-04-10 21:30',
-    },
-  },
-  {
-    name: 'AIGO Big Group',
-    properties: {
-      quote: 'Mom, we need a new father!',
-      user: 'Lisa Simpson',
-      dateUpdate: '2018-04-10 21:30',
-    },
-  },
-  {
-    name: 'AIGO Big Group',
-    properties: {
-      quote: 'Mom, we need a new father!',
-      user: 'Lisa Simpson',
-      dateUpdate: '2018-04-10 21:30',
-    },
-  },
-  {
-    name: 'AIGO Big Group',
-    properties: {
-      quote: 'Mom, we need a new father!',
-      user: 'Lisa Simpson',
-      dateUpdate: '2018-04-10 21:30',
-    },
   },
 ];
 
@@ -94,6 +50,10 @@ class Groups extends Component {
     };
   }
 
+  componentDidMount() {
+    this.props.dispatch(groupActions.getPublicGroupList());
+  }
+
   onNext = () => {};
 
   onCheckboxPress = (checkbox) => {
@@ -112,7 +72,17 @@ class Groups extends Component {
 
   onEmptyBlock = () => {};
 
-  onGroupPress = () => {};
+  onGroupPress = (link) => {
+    this.props.dispatch(groupActions.subscribeToGroup(link))
+      .then(() => this.props.navigation.goBack())
+      .catch((e) => {
+        if(e.message === 'AlreadyInGroup') {
+          Alert.alert(this.context.t('AlreadyInGroup'));
+        } else {
+          Alert.alert(this.context.t('UnexpectedError'));
+        }
+      });
+  };
 
   onGroupLongPress = () => {};
 
@@ -132,11 +102,11 @@ class Groups extends Component {
     const {account} = this.props;
 
     return (
-      <GroupListItem item={item}
+      <GroupPublicListItem item={item}
         theme={account.user.theme}
         context={this.context}
         showRightBlock={false}
-        onPress={this.onGroupPress}
+        onPress={() => this.onGroupPress(item.link)}
         onLongPress={this.onGroupLongPress}/>
     );
   };
@@ -151,6 +121,7 @@ class Groups extends Component {
     return (
       <MainLayout netOffline={!account.net.connected} wsConnected={account.connected}>
         <BackgroundLayout theme={theme} paddingHorizontal={10}>
+          {group.loading && <Loader/>}
           <DismissKeyboardLayout style={{width: '100%', flex: 1}}>
             <View style={_styles.header}>
               <View style={_styles.titleContainer}>
@@ -220,7 +191,7 @@ class Groups extends Component {
                 <GroupList
                   theme={theme}
                   context={this.context}
-                  items={list}
+                  items={group.publicList}
                   renderItem={this.renderGroupItem}
                   onEmptyBlock={this.onEmptyBlock}/>
               </View>
@@ -234,4 +205,5 @@ class Groups extends Component {
 
 export default connect(state => ({
   account: state.account,
+  group: state.group,
 }))(Groups);

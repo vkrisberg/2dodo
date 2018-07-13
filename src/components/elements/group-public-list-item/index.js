@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {TouchableOpacity, View, Image, Text} from 'react-native';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 
 import {Checkbox} from '../index';
 import {AvatarIcon} from '../../icons';
@@ -10,7 +9,7 @@ import styles from './styles';
 
 import avatarBgIcon from '../../../images/icons/circle/circle.png';
 
-export default class GroupListItem extends Component {
+export default class GroupPublicListItem extends Component {
 
   static propTypes = {
     item: PropTypes.object.isRequired,
@@ -55,9 +54,8 @@ export default class GroupListItem extends Component {
 
 
   render() {
-    const {item, theme, editMode, selectedItems, showRightBlock} = this.props;
+    const {item, theme, context, editMode, selectedItems} = this.props;
     const _styles = styles(theme);
-    const isToday = moment(item.dateUpdate).format('DD.MM.YY') === moment().format('DD.MM.YY');
     const chosen = selectedItems[item.id];
 
     return (
@@ -76,27 +74,8 @@ export default class GroupListItem extends Component {
           </View>
           <View style={_styles.body}>
             <Text style={_styles.caption}>{item.name}</Text>
-            {
-              item.members && item.members.length > 0 &&
-              <Text style={[_styles.defaultText, _styles.subCaption]} numberOfLines={1}>
-                {item.members.map( (member) => `${member}  `)}
-              </Text>
-            }
-            <Text numberOfLines={1} style={[_styles.defaultText, _styles.descriptions]}>{item.description}</Text>
+            <Text style={[_styles.defaultText, _styles.subCaption]}>{`${context.t('Members')}: ${item.members}`}</Text>
           </View>
-          {showRightBlock && <View style={_styles.information}>
-            <Text style={_styles.text}>
-              {isToday && moment(item.dateUpdate).format('HH:mm')}
-              {!isToday && moment(item.dateUpdate).format('DD.MM.YY')}
-            </Text>
-            {item.unreadCount > 0 &&
-            <View style={_styles.notReadenMessage}>
-              <Text style={_styles.notReadenMessageText}>
-                {item.unreadCount}
-              </Text>
-            </View>
-            }
-          </View>}
         </View>
       </TouchableOpacity>
     );

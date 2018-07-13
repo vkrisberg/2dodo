@@ -12,6 +12,7 @@ export default (theme) => {
       backgroundColor: colors[theme].whiteOpacity,
       alignItems: 'center',
       justifyContent: 'center',
+      zIndex: 10,
     },
   });
 };
