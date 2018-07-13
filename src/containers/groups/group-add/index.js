@@ -5,11 +5,10 @@ import {Text, View, TouchableOpacity, ScrollView, Alert} from 'react-native';
 
 import {MainLayout, BackgroundLayout, DismissKeyboardLayout} from '../../../components/layouts';
 import {ContactList, GroupList} from '../../../components/lists';
-import {Button, Checkbox, ContactListItem, SearchInput, GroupPublicListItem, Loader} from '../../../components/elements';
+import {Button, Checkbox, ContactListItem, SearchInput, GroupPublicListItem, Loader, ButtonBack, ButtonNavbar, Navbar} from '../../../components/elements';
 import {CreateChannel} from '../../../components/forms';
-import {ArrowIcon} from '../../../components/icons';
 import {groupActions} from '../../../store/actions';
-import {colors} from "../../../styles";
+import {colors} from '../../../styles';
 import styles from './styles';
 
 const Contactslist = [
@@ -56,6 +55,12 @@ class Groups extends Component {
 
   onNext = () => {};
 
+  renderNavbarButton = (theme) => {
+    return (
+      <ButtonNavbar position="right" onPress={this.onNext} color={colors[theme].blue}>{this.context.t('Next')}</ButtonNavbar>
+    );
+  };
+
   onCheckboxPress = (checkbox) => {
     this.setState({
       checked: checkbox,
@@ -70,7 +75,6 @@ class Groups extends Component {
 
   onSearchChange = () => {};
 
-  onEmptyBlock = () => {};
 
   onGroupPress = (link) => {
     this.props.dispatch(groupActions.subscribeToGroup(link))
@@ -122,39 +126,35 @@ class Groups extends Component {
       <MainLayout netOffline={!account.net.connected} wsConnected={account.connected}>
         <BackgroundLayout theme={theme} paddingHorizontal={10}>
           {group.loading && <Loader/>}
+          <Navbar
+            renderTitle={context.t('GroupCreate')}
+            renderLeft={<ButtonBack/>}
+            renderRight={this.renderNavbarButton(theme)}/>
           <DismissKeyboardLayout style={{width: '100%', flex: 1}}>
-            <View style={_styles.header}>
-              <View style={_styles.titleContainer}>
-                <TouchableOpacity onPress={this.goBack}>
-                  <ArrowIcon />
-                </TouchableOpacity>
-                <Text style={_styles.styledTitle}>{context.t('GroupCreate')}</Text>
-                <Button
-                  style={_styles.editBtn}
-                  color={colors[theme].blue}
-                  onPress={this.onNext}>
-                  {context.t('Next')}
-                </Button>
-              </View>
-            </View>
             <View style={_styles.top}>
-              <View style={_styles.actionItem}>
-                <Text style={_styles.text}>{context.t('CroupChat')}</Text>
-                <Checkbox
-                  input={{value: checked === 'groupChat', onChange: () => this.onCheckboxPress('groupChat')}}
-                  style={_styles.checkbox}/>
+              <View style={_styles.actionItemWrap}>
+                <TouchableOpacity style={_styles.actionItem} onPress={() => this.onCheckboxPress('groupChat')}>
+                  <Text style={_styles.text}>{context.t('CroupChat')}</Text>
+                  <Checkbox
+                    input={{value: checked === 'groupChat', onChange: () => this.onCheckboxPress('groupChat')}}
+                    style={_styles.checkbox}/>
+                </TouchableOpacity>
               </View>
-              <View style={_styles.actionItem}>
-                <Text style={_styles.text}>{context.t('CreateChannel')}</Text>
-                <Checkbox
-                  input={{value: checked === 'createChannel', onChange: () => this.onCheckboxPress('createChannel')}}
-                  style={_styles.checkbox}/>
+              <View style={_styles.actionItemWrap}>
+                <TouchableOpacity style={_styles.actionItem} onPress={() => this.onCheckboxPress('createChannel')}>
+                  <Text style={_styles.text}>{context.t('CreateChannel')}</Text>
+                  <Checkbox
+                    input={{value: checked === 'createChannel', onChange: () => this.onCheckboxPress('createChannel')}}
+                    style={_styles.checkbox}/>
+                </TouchableOpacity>
               </View>
-              <View style={_styles.actionItem}>
-                <Text style={_styles.text}>{context.t('FindGroup')}</Text>
-                <Checkbox
-                  input={{value: checked === 'findGroup', onChange: () => this.onCheckboxPress('findGroup')}}
-                  style={_styles.checkbox}/>
+              <View style={_styles.actionItemWrap}>
+                <TouchableOpacity style={_styles.actionItem} onPress={() => this.onCheckboxPress('findGroup')}>
+                  <Text style={_styles.text}>{context.t('FindGroup')}</Text>
+                  <Checkbox
+                    input={{value: checked === 'findGroup', onChange: () => this.onCheckboxPress('findGroup')}}
+                    style={_styles.checkbox}/>
+                </TouchableOpacity>
               </View>
             </View>
             <Text style={_styles.caption}>
@@ -192,8 +192,7 @@ class Groups extends Component {
                   theme={theme}
                   context={this.context}
                   items={group.publicList}
-                  renderItem={this.renderGroupItem}
-                  onEmptyBlock={this.onEmptyBlock}/>
+                  renderItem={this.renderGroupItem}/>
               </View>
             }
           </DismissKeyboardLayout>
