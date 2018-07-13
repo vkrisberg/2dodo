@@ -1,20 +1,20 @@
 import {StyleSheet} from 'react-native';
-import styled from 'styled-components';
-import {colors, fonts, weights} from '../../../styles';
+import {getFont} from '../../../styles';
 
-export const SkipWrapper = styled.View`
-  margin-bottom: ${({marginBottom}) => marginBottom || 0};
-  flexDirection: row;
-  padding: 15px;
-`;
+export default (theme) => {
+  return StyleSheet.create({
+    skipWrapper: {
+      flexDirection: 'row',
+      padding: 15,
+    },
 
-export const StyledSkip = styled.Text`
-  font-family: '${fonts.main}';
-  font-weight: ${weights.medium};
-  margin-right: 8;
-  color: ${({color}) => color || colors.light.white};
-`;
+    text: {
+      marginRight: 8,
+      ...getFont({}),
+    },
 
-export const SvgWrapper = styled.View`
-  margin-top: 6;
-`;
+    svg: {
+      marginTop: 5,
+    },
+  });
+};

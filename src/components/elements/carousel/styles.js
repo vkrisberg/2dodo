@@ -1,63 +1,57 @@
-import {Animated, StyleSheet} from 'react-native';
-import styled from 'styled-components';
-import {fonts, weights} from '../../../styles';
+import {StyleSheet} from 'react-native';
+import {colors, getFont, weights, sizes} from '../../../styles';
 
-export const Container = styled.View`
-  flex: 1;
-  align-items: center;
-`;
+export default (theme) => {
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      alignItems: 'center',
+    },
 
-export const ItemImage = styled.Image`
-  margin-top: ${props => props.isSmall ? '100' : '160'};
-`;
+    titleText: {
+      fontSize: 18,
+      textAlign: 'center',
+      color: colors[theme].white,
+      marginTop: 30,
+      ...getFont({weight: weights.bold}),
+    },
 
-export const TitleText = styled.Text`
-  font-family: '${fonts.main}';
-  font-size: 18;
-  font-weight: ${weights.bold};
-  margin-top: 30;
-  text-align: center;
-  color: white;
-`;
+    itemText: {
+      fontSize: 15,
+      lineHeight: 18,
+      marginTop: 12,
+      textAlign: 'center',
+      color: colors[theme].white,
+      paddingHorizontal: 50,
+      ...getFont({}),
+    },
 
-export const ItemText = styled.Text`
-  font-family: '${fonts.main}';
-  font-size: 15;
-  font-weight: ${weights.medium};
-  margin-top: 12;
-  text-align: center;
-  color: white;
-  padding-horizontal: 50;
-  line-height: 18;
-`;
+    itemWrap: {
+      width: sizes.windowWidth,
+      alignItems: 'center',
+    },
 
-export const ItemWrap = styled.View`
-  align-items: center;
-  width: ${props => props.width};
-`;
+    barContainer: {
+      position: 'absolute',
+      zIndex: 2,
+      flexDirection: 'row',
+    },
 
-export const BarContainer = styled.View`
-  position: absolute;
-  zIndex: 2;
-  bottom: ${props => props.isSmall ? '110' : '140'};
-  flex-direction: row;
-`;
+    track: {
+      backgroundColor: colors[theme].whiteMoreOpacity,
+      overflow: 'hidden',
+      width: 7,
+      height: 7,
+      borderRadius: 14,
+    },
 
-export const Track = styled.View`
-  background-color: rgba(255, 255, 255, 0.3);
-  overflow: hidden;
-  width: 7;
-  height: 7;
-  border-radius: 14;
-  margin-left: ${props => props.marginLeft}
-`;
-
-export const Bar = Animated.createAnimatedComponent(styled.View`
-  background-color: white;
-  opacity: ${props => props.isActive ? '1' : '0.3'};
-  width: 7;
-  height: 7;
-  position: absolute;
-  left: 0;
-  top: 0;
-`);
+    bar: {
+      backgroundColor: colors[theme].white,
+      width: 7,
+      height: 7,
+      position: 'absolute',
+      left: 0,
+      top: 0,
+    },
+  });
+};

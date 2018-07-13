@@ -1,59 +1,57 @@
 import {StyleSheet} from 'react-native';
-import styled from 'styled-components';
+import {colors, getFont, sizes} from '../../styles';
 
-import {colors, fonts, sizes, weights} from '../../styles';
+export default (theme) => {
+  return StyleSheet.create({
+    container: {
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
 
-export const StyledText = styled.Text`
-  color: ${colors.light.white};
-  font-family: '${fonts.main}';
-  font-size: 15;
-  font-weight: ${weights.medium};
-  text-align: center;
-  margin-top: 18;
-  margin-bottom: 30;
-`;
+    logo: {
+      marginTop: 60,
+    },
 
-export const StyledRegistration = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  margin-top: ${sizes.isIphone5 ? '0' : '65'};
-`;
+    forgot: {
+      marginTop: 15,
+    },
 
-export const RegistrationLabel = styled.Text`
-  color: ${colors.light.grayDarker};
-  font-family: '${fonts.main}';
-  font-size: 15;
-  font-weight: ${weights.medium};
-`;
+    keysImportContainer: {
+      width: 315,
+      borderTopWidth: 1,
+      borderColor: colors.light.loginBorder,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginTop: 15,
+    },
 
-export const LoginStyles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+    keysImportButton: {
+      borderWidth: 0,
+      height: 'auto',
+      padding: 10,
+      marginTop: sizes.isIphone5 ? 0 : 5,
+    },
 
-  logo: {
-    marginTop: 60,
-  },
+    text: {
+      color: colors[theme].white,
+      fontSize: 15,
+      textAlign: 'center',
+      marginTop: 18,
+      marginBottom: 30,
+      ...getFont({}),
+    },
 
-  forgot: {
-    marginTop: 15,
-  },
+    registration: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginTop: sizes.isIphone5 ? 0 : 65,
+    },
 
-  keysImportContainer: {
-    width: 315,
-    borderTopWidth: 1,
-    borderColor: colors.light.loginBorder,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 15,
-  },
-
-  keysImportButton: {
-    borderWidth: 0,
-    height: 'auto',
-    padding: 10,
-    marginTop: sizes.isIphone5 ? 0 : 5,
-  },
-});
+    registrationLabel: {
+      color: colors[theme].grayDarker,
+      fontSize: 15,
+      ...getFont({}),
+    },
+  });
+};
