@@ -204,6 +204,10 @@ const translations = {
     'Create': 'Создать',
     'PrivateChannel': 'Private channel',
     'typing': 'typing',
+    //Groups
+    'Members': 'Участники',
+    'AlreadyInGroup': 'Вы уже состоите в этой группе',
+    'UnexpectedError': 'Возникла непредвиденная ошибка, повторите запрос опять',
     // Contact
     'online': 'в сети',
     'offline': 'не в сети',
@@ -424,6 +428,10 @@ const translations = {
     'Create': 'Create and invite',
     'PrivateChannel': 'Private channel',
     'typing': 'typing',
+    //Group
+    'Members': 'Members',
+    'AlreadyInGroup': 'You are already in this group',
+    'UnexpectedError': 'Unexpected error occurred, please try again',
     // Contact
     'online': 'online',
     'offline': 'offline',

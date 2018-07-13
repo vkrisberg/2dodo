@@ -5,33 +5,9 @@ import {Alert} from 'react-native';
 
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
 import {GroupList} from '../../../components/lists';
-import {SearchInput, Navbar, NavbarDots, ButtonAdd, GroupListItem, ButtonNavbar} from '../../../components/elements';
-import {groupActions, groupMessageActions, contactActions} from '../../../store/actions';
-import {messageEnum} from '../../../enums';
-
-
-const list = [
-  {
-    username: 'simpson',
-    name: 'Simpson\'s Family',
-    properties: {
-      avatar: 'https://upload.wikimedia.org/wikipedia/en/thumb/0/0d/Simpsons_FamilyPicture.png/220px-Simpsons_FamilyPicture.png',
-      quote: 'Mom, we need a new father!',
-      user: 'Lisa Simpson',
-      dateUpdate: '2018-06-21 21:30',
-      unreadCount: 24
-    },
-  },
-  {
-    username: 'aigo',
-    name: 'AIGO Big Group',
-    properties: {
-      quote: 'Mom, we need a new father!',
-      user: 'Lisa Simpson',
-      dateUpdate: '2018-04-10 21:30',
-    },
-  }
-];
+import {SearchInput, Navbar, NavbarDots, ButtonAdd, GroupListItem, ButtonNavbar, Loader} from '../../../components/elements';
+import {groupActions, groupMessageActions} from '../../../store/actions';
+import {routeEnum} from '../../../enums';
 
 class Groups extends Component {
 
@@ -55,6 +31,7 @@ class Groups extends Component {
   }
 
   componentDidMount() {
+    this.props.dispatch(groupActions.loadList());
     // this.createGroup({
     //   link: 'ramil_test_group',
     //   type: messageEnum.groupChat,
@@ -73,7 +50,7 @@ class Groups extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.group.error !== this.props.group.error && this.props.group.error) {
-      Alert.alert(this.props.group.error);
+      Alert.alert(this.context.t('UnexpectedError'));
     }
   }
 
@@ -84,6 +61,8 @@ class Groups extends Component {
   sendGroupMessage = (data) => {
     this.props.dispatch(groupMessageActions.send(data));
   };
+
+  onAddGroup = () => this.props.navigation.navigate(routeEnum.GroupAdd);
 
   searchGroups = () => {};
 
@@ -119,7 +98,7 @@ class Groups extends Component {
       );
     }
 
-    return <ButtonAdd onPress={this.onCreate}/>;
+    return <ButtonAdd onPress={this.onAddGroup}/>;
   };
 
   onEmptyBlock = () => alert('on click empty block');
@@ -132,6 +111,7 @@ class Groups extends Component {
     return (
       <MainLayout netOffline={!account.net.connected} wsConnected={account.connected}>
         <BackgroundLayout theme={theme} paddingHorizontal={10}>
+          {group.loading && <Loader/>}
           <Navbar renderTitle={context.t('Groups')}
             renderLeft={<NavbarDots/>}
             renderRight={this.renderNavbarButton()}/>
@@ -139,7 +119,7 @@ class Groups extends Component {
           <GroupList
             theme={theme}
             context={this.context}
-            items={list}
+            items={group.list}
             renderItem={this.renderGroupItem}
             onEmptyBlock={this.onEmptyBlock}/>
         </BackgroundLayout>
