@@ -1,53 +1,24 @@
 import {StyleSheet} from 'react-native';
-import {colors, getFont, sizes, weights} from '../../../styles';
+import {colors, getFont, sizes} from '../../../styles';
 
 export default (theme) => {
   return StyleSheet.create({
-    header: {
-      width: sizes.windowWidth,
-      flexDirection: 'row',
-      paddingHorizontal: 10,
-    },
-
-    styledTitle: {
-      fontSize: 28,
-      marginLeft: 20,
-      color: colors[theme].navbarTitle,
-      ...getFont({weight: weights.bold}),
-    },
-
-    titleContainer: {
-      width: '100%',
-      marginTop: 35,
-      marginBottom: 13,
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-
-    editBtn: {
-      width: 'auto',
-      height: 'auto',
-      paddingHorizontal: 10,
-      borderWidth: 0,
-      justifyContent: 'flex-end',
-      position: 'absolute',
-      right: 10,
-    },
-
     top: {
       width: '100%',
       paddingHorizontal: 10,
       marginBottom: 20,
     },
 
+    actionItemWrap: {
+      borderBottomWidth: 2,
+      borderBottomColor: colors[theme].grayLight,
+    },
+
     actionItem: {
-      // width: '100%',
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
       paddingVertical: 13,
-      borderBottomWidth: 2,
-      borderBottomColor: colors[theme].grayLight,
     },
 
     text: {
@@ -73,8 +44,8 @@ export default (theme) => {
     btnContainer: {
       width: '100%',
       paddingVertical: 25,
-      justifyContent: 'center',
       alignItems: 'center',
+      backgroundColor: colors[theme].bgMain,
     },
 
     btn: {

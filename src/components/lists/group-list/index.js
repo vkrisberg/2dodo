@@ -12,7 +12,6 @@ export default class GroupList extends Component {
   static propTypes = {
     items: PropTypes.array,
     renderItem: PropTypes.func,
-    onEmptyBlock: PropTypes.func,
     theme: PropTypes.string,
     context: PropTypes.object,
   };
@@ -20,7 +19,6 @@ export default class GroupList extends Component {
   static defaultProps = {
     items: [],
     renderItem: () => {},
-    onEmptyBlock: () => {},
     theme: themeEnum.light,
     sections: false,
   };
@@ -55,7 +53,7 @@ export default class GroupList extends Component {
 
   render() {
     const {items} = this.state;
-    const {theme, context, renderItem, onEmptyBlock} = this.props;
+    const {theme, context, renderItem} = this.props;
     const _styles = styles(theme);
 
     if (items.length) {
@@ -75,15 +73,14 @@ export default class GroupList extends Component {
 
     return (
       <View style={_styles.emptyBlockWrap}>
-        <TouchableOpacity
-          style={_styles.emptyBlock}
-          onPress={onEmptyBlock}>
+        <View
+          style={_styles.emptyBlock}>
           <Image source={emptyIcon}/>
           <View marginTop={20}>
             <Text style={_styles.text}>{context.t('NoGroupsInvited')}</Text>
           </View>
           <Text style={_styles.text}>{context.t('SearchGroups')}</Text>
-        </TouchableOpacity>
+        </View>
       </View>
     );
   }

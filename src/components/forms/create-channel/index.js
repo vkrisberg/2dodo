@@ -81,14 +81,12 @@ class CreateChannel extends Component {
             name="channelName"
             component={this.renderInput}
             placeholder={context.t('ChannelName')}
-            keyboardType={'text'}
             autoCapitalize={'none'}
             autoCorrect={false}/>
           <Field
             name="description"
             component={this.renderInput}
             placeholder={context.t('Description')}
-            keyboardType={'text'}
             autoCapitalize={'none'}
             autoCorrect={false}/>
           <View style={_styles.privateBlock}>
