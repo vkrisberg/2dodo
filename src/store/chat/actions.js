@@ -388,16 +388,18 @@ export default {
     };
   },
 
-
   updateCurrentChat: () => {
     return async (dispatch, getState) => {
       try {
         const realm = services.getRealm();
         const {chat} = getState();
-        const realmChat = realm.objectForPrimaryKey(dbEnum.Chat, chat.current.id);
-        const payload = JSON.parse(JSON.stringify(realmChat));
-        dispatch({type: types.SET_CURRENT_CHAT, payload, clearMessages: false});
-        return chat;
+        let payload = {};
+        if (chat.current && chat.current.id) {
+          const realmChat = realm.objectForPrimaryKey(dbEnum.Chat, chat.current.id);
+          payload = JSON.parse(JSON.stringify(realmChat));
+          dispatch({type: types.SET_CURRENT_CHAT, payload, clearMessages: false});
+        }
+        return payload;
       } catch (e) {
         throw e;
       }

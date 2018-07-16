@@ -12,6 +12,10 @@ import translations from './translations';
 import {services} from './utils';
 import {RootStack} from './router';
 
+/**
+ * The Push Notification events are set in the Messages/main container.
+ */
+
 export default class App extends Component {
 
   constructor(props) {
