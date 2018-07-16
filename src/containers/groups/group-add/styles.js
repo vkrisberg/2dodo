@@ -37,6 +37,7 @@ export default (theme) => {
       color: colors[theme].grayInput,
       fontSize: 14,
       paddingLeft: 10,
+      paddingBottom: 10,
       textAlign: 'left',
       ...getFont({}),
     },

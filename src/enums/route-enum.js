@@ -9,6 +9,7 @@ export default {
   ResetPasswordPassSuccess: 'ResetPasswordPassSuccess',
   Groups: 'Groups',
   GroupAdd: 'GroupAdd',
+  GroupCreate: 'GroupCreate',
   Login: 'Login',
   Messages: 'Messages',
   ChatCreate: 'ChatCreate',
