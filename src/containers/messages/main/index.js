@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import {PushNotificationIOS, AppState, Alert, DeviceInfo, Platform} from 'react-native';
+import PushNotification from 'react-native-push-notification';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {isEmpty, map} from 'lodash';
@@ -8,6 +10,8 @@ import {ChatList} from '../../../components/lists';
 import {SearchInput, Navbar, NavbarDots, ButtonAdd, ChatListItem, ButtonNavbar} from '../../../components/elements';
 import {chatActions, chatMessageActions, contactActions} from '../../../store/actions';
 import {routeEnum} from '../../../enums';
+
+const GET_ONLINE_UPDATE_TIME = 10000; // in ms
 
 class Messages extends Component {
 
@@ -35,37 +39,155 @@ class Messages extends Component {
   }
 
   componentDidMount() {
-    this.loadChatList();
-    this.loadContactList();
-    // TODO - remove after tests
-    // const {account} = this.props;
-    // this.loadChatMessages();
-    // this.loadContactList().then((contactList) => {
-    //   const contacts = [contactList[0]];
-    //   this.createChat(contacts).then((chat) => {
-    //     // chat.name = 'New Chat';
-    //     // this.updateChat(chat);
-    //     // this.deleteChatById(chat.id);
-    //     const messageData = {
-    //       username: account.user.username,
-    //       text: 'Hello World!',
-    //     };
-    //     this.sendChatMessage({data: messageData, chatId: chat.id}).then((message) => {
-    //       // this.resendChatMessage(message.id);
-    //       // message.text = 'Text Modified!!!';
-    //       // this.editChatMessage(message);
-    //       // this.deleteChatMessage(message.id);
-    //     });
-    //   });
-    // });
-    this.timer = setInterval(()=>{
-      this.props.dispatch(contactActions.getOnlineUsers());
-    }, 10000);
+    this.init();
   }
 
-  componentWillUnmount(){
-    clearInterval(this.timer);
+  componentWillUnmount() {
+    this.unmount();
   }
+
+  init = () => {
+    AppState.addEventListener('change', this.handleAppStateChange);
+    this.pushNotificationConfigure();
+    this.loadChatList();
+    this.loadContactList();
+    this.timer = setInterval(() => {
+      this.props.dispatch(contactActions.getOnlineUsers());
+    }, GET_ONLINE_UPDATE_TIME);
+    // TODO - remove after tests
+    // setTimeout(this.sendTestLocalNotification, 1000);
+  };
+
+  unmount = () => {
+    clearInterval(this.timer);
+    PushNotification.unregister();
+    AppState.removeEventListener('change', this.handleAppStateChange);
+  };
+
+  handleAppStateChange = (state) => {
+    console.log('APP STATE:', state);
+
+    PushNotification.setApplicationIconBadgeNumber(0);
+
+    if (state === 'active') {
+    }
+  };
+
+  pushNotificationConfigure = () => {
+    PushNotification.configure({
+      // (optional) Called when Token is generated (iOS and Android)
+      onRegister: this.onPushRegister,
+
+      onError: this.onPushRegistrationError,
+
+      // (required) Called when a remote or local notification is opened or received
+      onNotification: (notification) => {
+        this.onPushNotification(notification);
+        // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
+        notification.finish(PushNotificationIOS.FetchResult.NoData);
+      },
+
+      // ANDROID ONLY: GCM Sender ID (optional - not required for local notifications, but is need to receive remote push notifications)
+      senderID: 'YOUR GCM SENDER ID',
+
+      // IOS ONLY (optional): default: all - Permissions to register.
+      permissions: {
+        alert: true,
+        badge: true,
+        sound: true
+      },
+
+      popInitialNotification: true,
+
+      requestPermissions: true,
+    });
+  };
+
+  onPushRegister = (token) => {
+    console.log('TOKEN:', token);
+
+    if (!token) {
+      return;
+    }
+
+    let device = {
+      uuid: DeviceInfo.getUniqueID(),
+      type: Platform.OS,
+      name: DeviceInfo.getModel(),
+      token,
+    };
+
+    console.log('DEVICE:', device);
+  };
+
+  onPushRegistrationError = (error) => {
+    console.log('NOTIFICATION ERROR:', error);
+
+    if (!error) {
+      return;
+    }
+
+    Alert.alert(
+      'Failed To Register For Remote Push',
+      `Error (${error.code}): ${error.message}`,
+      [{
+        text: 'Dismiss',
+        onPress: null,
+      }]
+    );
+  };
+
+  onPushNotification = (notification) => {
+    console.log('NOTIFICATION:', notification);
+
+    if (!notification) {
+      return;
+    }
+
+    const {message, data, badge} = notification;
+    let onAlertPress = null;
+
+    switch (notification.data.type) {
+      default:
+        break;
+    }
+
+    // TODO - remove after tests
+    // Alert.alert('Local Push Notification', message);
+  };
+
+  sendTestLocalNotification = () => {
+    PushNotification.localNotification({
+      /* Android Only Properties */
+      id: '0', // (optional) Valid unique 32 bit integer specified as string. default: Autogenerated Unique ID
+      ticker: 'My Notification Ticker', // (optional)
+      autoCancel: true, // (optional) default: true
+      largeIcon: 'ic_launcher', // (optional) default: "ic_launcher"
+      smallIcon: 'ic_notification', // (optional) default: "ic_notification" with fallback for "ic_launcher"
+      bigText: 'My big text that will be shown when notification is expanded', // (optional) default: "message" prop
+      subText: 'This is a subText', // (optional) default: none
+      color: 'red', // (optional) default: system default
+      vibrate: true, // (optional) default: true
+      vibration: 300, // vibration length in milliseconds, ignored if vibrate=false, default: 1000
+      tag: 'some_tag', // (optional) add tag to message
+      group: 'group', // (optional) add group to message
+      ongoing: false, // (optional) set whether this is an "ongoing" notification
+
+      /* iOS only properties */
+      // alertAction: // (optional) default: view
+      // category: // (optional) default: null
+      // userInfo: // (optional) default: null (object containing additional notification data)
+
+      /* iOS and Android properties */
+      title: 'My Notification Title', // (optional)
+      message: 'My Notification Message', // (required)
+      playSound: true, // (optional) default: true
+      soundName: 'default', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
+      number: 1, // (optional) Valid 32 bit integer specified as string. default: none (Cannot be zero)
+      // repeatType: 'day', // (optional) Repeating interval. Check 'Repeating Notifications' section for more info.
+      // actions: '["Yes", "No"]',  // (Android only) See the doc for notification actions to know more
+    });
+  };
 
   loadContactList = (filter, sort, descending) => {
     return this.props.dispatch(contactActions.loadList(filter, sort, descending));

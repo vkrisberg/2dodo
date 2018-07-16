@@ -148,6 +148,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-push-notification')
     compile project(':realm')
     compile project(':react-native-openpgp')
     compile project(':react-native-svg')
