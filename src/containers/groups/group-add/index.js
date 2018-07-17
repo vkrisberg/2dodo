@@ -84,7 +84,9 @@ class GroupAdd extends Component {
     });
   };
 
-  onSearchChange = () => {};
+  onSearchChange = (text) => {
+    this.props.dispatch(groupActions.filterPublicGroup(text));
+  };
 
   isContactChosen = (contact) => {
     return this.state.chosenContacts.find(item => item === contact);
@@ -216,7 +218,7 @@ class GroupAdd extends Component {
                 <GroupList
                   theme={theme}
                   context={this.context}
-                  items={group.publicList}
+                  items={group.filteredPublicList}
                   renderItem={this.renderGroupItem}/>
               </View>
             }
