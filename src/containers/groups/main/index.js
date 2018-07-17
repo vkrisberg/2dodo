@@ -62,9 +62,20 @@ class Groups extends Component {
     this.props.dispatch(groupMessageActions.send(data));
   };
 
-  onAddGroup = () => this.props.navigation.navigate(routeEnum.GroupAdd);
+  loadGroupList = (filter, sort, descending) => {
+    return this.props.dispatch(groupActions.loadList(filter, sort, descending));
+  };
 
-  searchGroups = () => {};
+  searchGroups = (text) => {
+    const filter = `name CONTAINS[c] '${text}'`;
+    return this.loadGroupList(filter);
+  };
+
+  onSearchChange = (text) => {
+    this.searchGroups(text);
+  };
+
+  onAddGroup = () => this.props.navigation.navigate(routeEnum.GroupAdd);
 
   onGroupPress = () => {};
 
@@ -115,7 +126,7 @@ class Groups extends Component {
           <Navbar renderTitle={context.t('Groups')}
             renderLeft={<NavbarDots/>}
             renderRight={this.renderNavbarButton()}/>
-          <SearchInput placeholder={context.t('SearchInGroups')} onChange={this.searchGroups}/>
+          <SearchInput placeholder={context.t('SearchInGroups')} onChange={this.onSearchChange}/>
           <GroupList
             theme={theme}
             context={this.context}

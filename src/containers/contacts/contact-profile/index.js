@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View, Alert} from 'react-native';
 import {connect} from 'react-redux';
-import {submit} from 'redux-form'
+import {submit} from 'redux-form';
 import {get, values} from 'lodash';
 import PropTypes from 'prop-types';
 

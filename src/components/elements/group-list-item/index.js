@@ -1,14 +1,11 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, View, Image, Text} from 'react-native';
+import {TouchableOpacity, View, Text} from 'react-native';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
-import {Checkbox} from '../index';
-import {AvatarIcon} from '../../icons';
+import {Checkbox, AvatarIcon} from '../index';
 import {themeEnum} from '../../../enums';
 import styles from './styles';
-
-import avatarBgIcon from '../../../images/icons/circle/circle.png';
 
 export default class GroupListItem extends Component {
 
@@ -30,15 +27,6 @@ export default class GroupListItem extends Component {
     selectedItems: {},
     onCheckboxPress: {},
     showRightBlock: true,
-  };
-
-  getInitials = (name) => {
-    const nameArr = name.split(' ');
-    let initials = [];
-    nameArr.map((item, index) => {
-      if (index < 2) initials.push(item[0].toUpperCase());
-    });
-    return initials.join('');
   };
 
   onPress = () => {
@@ -68,11 +56,7 @@ export default class GroupListItem extends Component {
           </View>
           }
           <View style={_styles.image}>
-            <Image source={avatarBgIcon} style={_styles.avatarBg}/>
-            {!!item.avatar && <Image source={{uri: item.avatar}} style={_styles.avatar}/>}
-            {!item.avatar && item.name &&
-            <Text style={_styles.avatarInitials}>{this.getInitials(item.name)}</Text>}
-            {!item.name && !item.avatar && <AvatarIcon/>}
+            <AvatarIcon theme={theme} source={item.avatar} label={item.name}/>
           </View>
           <View style={_styles.body}>
             <Text style={_styles.caption}>{item.name}</Text>
