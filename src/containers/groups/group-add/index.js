@@ -152,7 +152,6 @@ class GroupAdd extends Component {
     return (
       <MainLayout netOffline={!account.net.connected} wsConnected={account.connected}>
         <BackgroundLayout theme={theme} paddingHorizontal={10}>
-          {group.loading && <Loader/>}
           <Navbar
             renderTitle={context.t('GroupCreate')}
             renderLeft={<ButtonBack/>}
@@ -184,30 +183,33 @@ class GroupAdd extends Component {
                 </TouchableOpacity>
               </View>
             </View>
-            <Text style={_styles.caption}>
-              {checked === 'groupChat' && context.t('InviteUsers')}
-              {checked === 'createChannel' && context.t('InviteUsers')}
-              {checked === 'findGroup' && context.t('SearchGroupsOnly')}
-            </Text>
-            {checked === 'groupChat' && <ContactList context={context} items={contact.list} renderItem={this.renderContactList} showTop={false} showSearchResult={false}/>}
-            {checked === 'groupChat' &&
-            <View style={_styles.btnContainer}>
-              <Button
-                style={_styles.btn}
-                backgroundColor={colors[theme].white}
-                onPress={() => this.onNext(this.state.checked)}>
-                <Text style={_styles.btnText}>{context.t('NextStep')}</Text>
-              </Button>
-            </View>
-            }
-            {checked === 'createChannel' &&
+            <View style={_styles.fullWrap}>
+              <Text style={_styles.caption}>
+                {checked === 'groupChat' && context.t('InviteUsers')}
+                {checked === 'createChannel' && context.t('InviteUsers')}
+                {checked === 'findGroup' && context.t('SearchGroupsOnly')}
+              </Text>
+              {checked === 'groupChat' &&
+                <View style={{flex: 1}}>
+                  {group.loading && <Loader inheritSizes/>}
+                  <ContactList context={context} items={contact.list} renderItem={this.renderContactList} showTop={false} showSearchResult={false}/>
+                </View>}
+              {checked === 'groupChat' &&
+              <View style={_styles.btnContainer}>
+                <Button
+                  style={_styles.btn}
+                  backgroundColor={colors[theme].white}
+                  onPress={() => this.onNext(this.state.checked)}>
+                  <Text style={_styles.btnText}>{context.t('NextStep')}</Text>
+                </Button>
+              </View>}
+              {checked === 'createChannel' &&
               <ScrollView>
                 <CreateChannel
                   theme={theme}
                   context={context}/>
-              </ScrollView>
-            }
-            {checked === 'findGroup' &&
+              </ScrollView>}
+              {checked === 'findGroup' &&
               <View style={_styles.searchBlock}>
                 <SearchInput
                   styledInput={_styles.styledInput}
@@ -215,13 +217,16 @@ class GroupAdd extends Component {
                   styledPlaceholder={_styles.searchPlaceholder}
                   placeholder={context.t('SearchGlobalGroups')}
                   onChange={this.onSearchChange}/>
-                <GroupList
-                  theme={theme}
-                  context={this.context}
-                  items={group.filteredPublicList}
-                  renderItem={this.renderGroupItem}/>
-              </View>
-            }
+                <View style={_styles.fullWrap}>
+                  {group.getPublicListLoading && <Loader inheritSizes/>}
+                  <GroupList
+                    theme={theme}
+                    context={this.context}
+                    items={group.filteredPublicList}
+                    renderItem={this.renderGroupItem}/>
+                </View>
+              </View>}
+            </View>
           </DismissKeyboardLayout>
         </BackgroundLayout>
       </MainLayout>

@@ -10,15 +10,17 @@ export default class Loader extends PureComponent {
 
   static propTypes = {
     theme: PropTypes.string,
+    inheritSizes: PropTypes.bool,
   };
 
   static defaultProps = {
     theme: themeEnum.light,
+    inheritSizes: false,
   };
 
   render() {
-    const {theme} = this.props;
-    const _styles = styles(theme);
+    const {theme, inheritSizes} = this.props;
+    const _styles = styles(theme, inheritSizes);
 
     return (
       <View style={_styles.container}>

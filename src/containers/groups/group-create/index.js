@@ -85,12 +85,12 @@ class GroupCreate extends Component {
     return (
       <MainLayout netOffline={!account.net.connected} wsConnected={account.connected}>
         <BackgroundLayout theme={theme} paddingHorizontal={10}>
-          {group.loading && <Loader/>}
           <Navbar
             renderTitle={context.t('CreateChat')}
             renderLeft={<ButtonBack/>}
             renderRight={this.renderNavbarButton(theme)}/>
           <DismissKeyboardLayout style={{width: '100%', flex: 1}}>
+            {group.loading && <Loader/>}
             <CreateGroup theme={theme} context={context} users={users} onSubmit={() => this.onSubmit(users)}/>
           </DismissKeyboardLayout>
         </BackgroundLayout>

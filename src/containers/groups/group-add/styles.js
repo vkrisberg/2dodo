@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {colors, getFont, sizes} from '../../../styles';
+import {colors, getFont} from '../../../styles';
 
 export default (theme) => {
   return StyleSheet.create({
@@ -81,6 +81,10 @@ export default (theme) => {
 
     searchPlaceholder: {
       left: 23,
+    },
+
+    fullWrap: {
+      flex: 1,
     },
   });
 };

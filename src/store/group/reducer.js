@@ -37,6 +37,7 @@ const initState = {
   unsubscribeLink: null, // string
   member: null, // object
   loading: false,
+  getPublicListLoading: false,
   error: null,
   receiveError: null,
 };
@@ -207,7 +208,7 @@ export default reducer(initState, {
   [types.GET_PUBLIC_LIST]: (state, action) => {
     return {
       ...state,
-      loading: true,
+      getPublicListLoading: true,
       error: null
     };
   },
@@ -217,14 +218,14 @@ export default reducer(initState, {
       ...state,
       publicList: action.payload,
       filteredPublicList: action.payload,
-      loading: false,
+      getPublicListLoading: false,
     };
   },
 
   [types.GET_PUBLIC_LIST_FAILURE]: (state, action) => {
     return {
       ...state,
-      loading: false,
+      getPublicListLoading: false,
       error: action.error.toString(),
     };
   },
