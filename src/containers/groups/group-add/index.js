@@ -8,31 +8,15 @@ import {ContactList, GroupList} from '../../../components/lists';
 import {Button, Checkbox, ContactListItem, SearchInput, GroupPublicListItem, Loader, ButtonBack, ButtonNavbar, Navbar} from '../../../components/elements';
 import {CreateChannel} from '../../../components/forms';
 import {groupActions} from '../../../store/actions';
+import {routeEnum} from '../../../enums';
 import {colors} from '../../../styles';
 import styles from './styles';
 
-const Contactslist = [
-  {
-    username: 'Abbysal Blade',
-  },
-  {
-    username: 'Lisa Simpson',
-  },
-  {
-    username: 'Margharet Simpson',
-  },
-  {
-    username: 'Gomer Simpson',
-  },
-  {
-    username: 'Professor',
-  },
-];
-
-class Groups extends Component {
+class GroupAdd extends Component {
 
   static propTypes = {
     account: PropTypes.object,
+    contact: PropTypes.object,
     group: PropTypes.object,
     dispatch: PropTypes.func.isRequired,
     navigation: PropTypes.shape({navigate: PropTypes.func}),
@@ -46,6 +30,7 @@ class Groups extends Component {
     super(props);
     this.state = {
       checked: 'groupChat',
+      chosenContacts: [],
     };
   }
 
@@ -53,11 +38,43 @@ class Groups extends Component {
     this.props.dispatch(groupActions.getPublicGroupList());
   }
 
-  onNext = () => {};
+  getAccountUserData = () => {
+    let accountUserData = Object.assign({}, this.props.account.user);
+
+    if (accountUserData.fullName) {
+      accountUserData.fullName = `${this.context.t('Me')}: ${accountUserData.fullName}`;
+    } else {
+      accountUserData.username = `${this.context.t('Me')}: ${accountUserData.username}`;
+    }
+
+    return accountUserData;
+  };
+
+  onNext = (checked) => {
+    switch (checked) {
+      case 'groupChat':
+        if(this.state.chosenContacts.length > 0) {
+          this.props.navigation.navigate(routeEnum.GroupCreate, {users: [this.getAccountUserData(), ...this.state.chosenContacts]});
+        } else {
+          Alert.alert(this.context.t('NoUserAddInGroup'));
+        }
+        break;
+      case 'createChannel':
+        alert('createChannel');
+        break;
+      default:
+        alert(this.context.t('UnexpectedError'));
+    }
+  };
 
   renderNavbarButton = (theme) => {
     return (
-      <ButtonNavbar position="right" onPress={this.onNext} color={colors[theme].blue}>{this.context.t('Next')}</ButtonNavbar>
+      <ButtonNavbar
+        position="right"
+        onPress={() => this.onNext(this.state.checked)}
+        color={colors[theme].blue}>
+        {this.context.t('Next')}
+      </ButtonNavbar>
     );
   };
 
@@ -67,14 +84,22 @@ class Groups extends Component {
     });
   };
 
-  isContactChosen = (contact) => {};
-
-  onContactPress = (contact) => {};
-
-  onContactCheckboxPress = (contact) => {};
-
   onSearchChange = () => {};
 
+  isContactChosen = (contact) => {
+    return this.state.chosenContacts.find(item => item === contact);
+  };
+
+  onContactCheckboxPress = (contact) => {
+    const {chosenContacts} = this.state;
+    const contactCheck = chosenContacts.find(item => item === contact);
+
+    if (contactCheck) {
+      this.setState({chosenContacts: chosenContacts.filter(item => item !== contact)});
+    } else {
+      this.setState({chosenContacts: [...chosenContacts, contact]});
+    }
+  };
 
   onGroupPress = (link) => {
     this.props.dispatch(groupActions.subscribeToGroup(link))
@@ -96,7 +121,7 @@ class Groups extends Component {
         item={item}
         context={this.context}
         checked={this.isContactChosen(item)}
-        onPress={this.onContactPress(item)}
+        onPress={() => this.onContactCheckboxPress(item)}
         onCheckboxPress={() => this.onContactCheckboxPress(item)}
         checkboxVisibility/>
     );
@@ -117,7 +142,7 @@ class Groups extends Component {
 
   render() {
     const {context} = this;
-    const {account, group} = this.props;
+    const {account, group, contact} = this.props;
     const {checked} = this.state;
     const {theme} = account.user;
     const _styles = styles(theme);
@@ -129,7 +154,7 @@ class Groups extends Component {
           <Navbar
             renderTitle={context.t('GroupCreate')}
             renderLeft={<ButtonBack/>}
-            renderRight={this.renderNavbarButton(theme)}/>
+            renderRight={checked !== 'findGroup' && this.renderNavbarButton(theme)}/>
           <DismissKeyboardLayout style={{width: '100%', flex: 1}}>
             <View style={_styles.top}>
               <View style={_styles.actionItemWrap}>
@@ -162,13 +187,13 @@ class Groups extends Component {
               {checked === 'createChannel' && context.t('InviteUsers')}
               {checked === 'findGroup' && context.t('SearchGroupsOnly')}
             </Text>
-            {checked === 'groupChat' && <ContactList context={context} items={Contactslist} renderItem={this.renderContactList} showTop={false}/>}
+            {checked === 'groupChat' && <ContactList context={context} items={contact.list} renderItem={this.renderContactList} showTop={false} showSearchResult={false}/>}
             {checked === 'groupChat' &&
             <View style={_styles.btnContainer}>
               <Button
                 style={_styles.btn}
                 backgroundColor={colors[theme].white}
-                onPress={this.onNext}>
+                onPress={() => this.onNext(this.state.checked)}>
                 <Text style={_styles.btnText}>{context.t('NextStep')}</Text>
               </Button>
             </View>
@@ -204,5 +229,6 @@ class Groups extends Component {
 
 export default connect(state => ({
   account: state.account,
+  contact: state.contact,
   group: state.group,
-}))(Groups);
+}))(GroupAdd);

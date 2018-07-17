@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {View, Text, FlatList, TouchableOpacity, Image} from 'react-native';
+import {View, Text, FlatList, Image} from 'react-native';
 
 import {themeEnum} from '../../../enums';
 import styles from './styles';
@@ -49,7 +49,7 @@ export default class GroupList extends Component {
     this.setState({contentSize: h});
   }
 
-  _keyExtractor = (item) => item.username;
+  _keyExtractor = (item) => item.id;
 
   render() {
     const {items} = this.state;

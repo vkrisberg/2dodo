@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, Text, View, Image} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import Swipeout from 'react-native-swipeout';
 import PropTypes from 'prop-types';
 
@@ -25,6 +25,7 @@ export default class ContactListItem extends Component {
     onPressChatBtn: PropTypes.func,
     theme: PropTypes.string,
     checkboxVisibility: PropTypes.bool,
+    swipeout: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -32,6 +33,7 @@ export default class ContactListItem extends Component {
     theme: themeEnum.light,
     checkboxVisibility: false,
     onPressDeleteBtn: () => {},
+    swipeout: true,
   };
 
   onPress = () => {
@@ -74,10 +76,36 @@ export default class ContactListItem extends Component {
     );
   };
 
-  render() {
+  renderContent = () => {
     const {item, context, checked, theme, checkboxVisibility} = this.props;
     const _styles = styles(theme);
     const name = item.fullName || item.username;
+
+    return (
+      <TouchableOpacity onPress={this.onPress} onLongPress={this.onLongPress} style={{width: '100%'}}>
+        <View style={_styles.wrapper}>
+          {checkboxVisibility && <Checkbox
+            style={_styles.chosen}
+            input={{value: checked, onChange: this.onCheckboxPress}}/>}
+          <View style={_styles.image}>
+            <AvatarIcon theme={theme} source={item.avatar} label={name}/>
+          </View>
+          <View style={_styles.body}>
+            <TextLabel style={_styles.name} size={16} weight={weights.semiBold} color={colors[theme].grayBlue}>
+              {name}
+            </TextLabel>
+            <TextLabel style={_styles.status} size={13} weight={weights.medium} color={colors[theme].grayInput}>
+              {item.isOnline ? context.t('online') : context.t('offline')}
+            </TextLabel>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  render() {
+    const {theme, swipeout} = this.props;
+    const _styles = styles(theme);
 
     const swipeoutBtns = [
       {
@@ -87,26 +115,11 @@ export default class ContactListItem extends Component {
     ];
 
     return (
-      <Swipeout right={swipeoutBtns} buttonWidth={140} autoClose={true} style={_styles.swipeOut} ref={ref => this.swipeContainer = ref}>
-        <TouchableOpacity onPress={this.onPress} onLongPress={this.onLongPress} style={{width: '100%'}}>
-          <View style={_styles.wrapper}>
-            {checkboxVisibility && <Checkbox
-              style={_styles.chosen}
-              input={{value: checked, onChange: this.onCheckboxPress}}/>}
-            <View style={_styles.image}>
-              <AvatarIcon theme={theme} source={item.avatar} label={name}/>
-            </View>
-            <View style={_styles.body}>
-              <TextLabel style={_styles.name} size={16} weight={weights.semiBold} color={colors[theme].grayBlue}>
-                {name}
-              </TextLabel>
-              <TextLabel style={_styles.status} size={13} weight={weights.medium} color={colors[theme].grayInput}>
-                {item.isOnline ? context.t('online') : context.t('offline')}
-              </TextLabel>
-            </View>
-          </View>
-        </TouchableOpacity>
-      </Swipeout>
+      swipeout ?
+        <Swipeout right={swipeoutBtns} buttonWidth={140} autoClose={true} style={_styles.swipeOut} ref={ref => this.swipeContainer = ref}>
+          {this.renderContent()}
+        </Swipeout> :
+        <View>{this.renderContent()}</View>
     );
   }
 }

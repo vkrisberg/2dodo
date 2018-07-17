@@ -167,6 +167,7 @@ const translations = {
     'NoEmailExist': 'Пользователя с таким email не существует',
     'OperationNotPerformed': 'Операция не выполнена, попробуйте еще раз',
     'NoTokenOrUser': 'Токен или пользователь не найден',
+    'NoUserAddInGroup': 'Вы должны добавить хотя бы одного пользователя для создания группы',
     // Chat
     'NoChats': 'У Вас еще нет чатов',
     'NoMessages': 'Нет сообщений',
@@ -204,10 +205,15 @@ const translations = {
     'Create': 'Создать',
     'PrivateChannel': 'Private channel',
     'typing': 'typing',
-    //Groups
+    //Group
     'Members': 'Участники',
     'AlreadyInGroup': 'Вы уже состоите в этой группе',
     'UnexpectedError': 'Возникла непредвиденная ошибка, повторите запрос опять',
+    'GroupName': 'Название группы',
+    'ChangePhoto': 'Изменить фотографию',
+    'GroupUsers': 'Пользователи в группе',
+    'CreateGroupChat': 'Создать группу',
+    'Start': 'Вперед',
     // Contact
     'online': 'в сети',
     'offline': 'не в сети',
@@ -215,6 +221,7 @@ const translations = {
     'ProfileRequest': 'Profile request',
     'ProfileRequestDescription': 'User <{username}> has added you to their contact list. Send your profile data?',
     'Accept': 'Accept',
+    'Me': 'Я',
     //About
     'AppVersion': 'Версия приложения',
     'AboutAppFirstParagraph': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
@@ -391,6 +398,7 @@ const translations = {
     'NoEmailExist': 'A user with this email doesn\'t exist',
     'OperationNotPerformed': 'Operation not performed, please try again',
     'NoTokenOrUser': 'Token or user not found',
+    'NoUserAddInGroup': 'You must add at least one user to create a group',
     // Chat
     'NoChats': 'Your have no chats yet',
     'NoMessages': 'No messages',
@@ -432,6 +440,11 @@ const translations = {
     'Members': 'Members',
     'AlreadyInGroup': 'You are already in this group',
     'UnexpectedError': 'Unexpected error occurred, please try again',
+    'GroupName': 'Group name',
+    'ChangePhoto': 'Change photo',
+    'GroupUsers': 'Users in group',
+    'CreateGroupChat': 'Create group chat',
+    'Start': 'Start',
     // Contact
     'online': 'online',
     'offline': 'offline',
@@ -439,6 +452,7 @@ const translations = {
     'ProfileRequest': 'Profile request',
     'ProfileRequestDescription': 'User <{username}> has added you to their contact list. Send your profile data?',
     'Accept': 'Accept',
+    'Me': 'Me',
     //About
     'AppVersion': 'Application version',
     'AboutAppFirstParagraph': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
