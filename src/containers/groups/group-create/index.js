@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Alert} from 'react-native';
 import {connect} from 'react-redux';
 import {submit} from 'redux-form';
 import PropTypes from 'prop-types';
@@ -36,6 +37,20 @@ class GroupCreate extends Component {
     this.props.dispatch(groupActions.getPublicGroupList());
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.group.error !== this.props.group.error && this.props.group.error) {
+      if(this.props.group.error.indexOf('link already exists') !== -1) {
+        Alert.alert(this.context.t('GroupNameAlreadyExists'));
+      } else {
+        Alert.alert(this.context.t('UnexpectedError'));
+      }
+    }
+
+    if (prevProps.group.current.link !== this.props.group.current.link && !this.props.group.current.link) {
+      this.props.navigation.navigate(routeEnum.Groups);
+    }
+  }
+
   renderNavbarButton = (theme) => {
     const users = this.props.navigation.getParam('users');
     return (
@@ -51,7 +66,6 @@ class GroupCreate extends Component {
 
   createGroup = (data) => {
     this.props.dispatch(groupActions.create(data));
-    this.props.navigation.navigate(routeEnum.Groups);
   };
 
   onSubmit = (users) => {

@@ -48,11 +48,11 @@ class Groups extends Component {
     // });
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.group.error !== this.props.group.error && this.props.group.error) {
-      Alert.alert(this.context.t('UnexpectedError'));
-    }
-  }
+  // componentDidUpdate(prevProps) {
+  //   if (prevProps.group.error !== this.props.group.error && this.props.group.error) {
+  //     Alert.alert(this.context.t('UnexpectedError'));
+  //   }
+  // }
 
   createGroup = (data) => {
     this.props.dispatch(groupActions.create(data));
