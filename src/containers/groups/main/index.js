@@ -67,7 +67,7 @@ class Groups extends Component {
   };
 
   searchGroups = (text) => {
-    const filter = `name CONTAINS[c] '${text}'`;
+    const filter = `name CONTAINS[c] '${text}' OR description CONTAINS[c] '${text}'`;
     return this.loadGroupList(filter);
   };
 
