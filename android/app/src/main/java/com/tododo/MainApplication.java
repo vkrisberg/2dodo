@@ -3,7 +3,7 @@ package com.tododo;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.evollu.react.fcm.FIRMessagingPackage;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import io.realm.react.RealmReactPackage;
 import com.horcrux.svg.SvgPackage;
 import com.github.orhan.openpgp.RNOpenPGPPackage;
@@ -33,7 +33,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new FIRMessagingPackage(),
+            new ReactNativePushNotificationPackage(),
             new RealmReactPackage(),
             new SvgPackage(),
             new RNOpenPGPPackage(),
