@@ -48,11 +48,13 @@ class Messages extends Component {
 
   init = () => {
     AppState.addEventListener('change', this.handleAppStateChange);
-    PushNotificationIOS.addEventListener('register', this.onPushRegistered);
-    PushNotificationIOS.addEventListener('registrationError', this.onPushRegistrationError);
-    PushNotificationIOS.addEventListener('notification', this.onRemoteNotification);
-    PushNotificationIOS.addEventListener('localNotification', this.onLocalNotification);
-    PushNotificationIOS.requestPermissions();
+    if (Platform.OS === 'ios') {
+      PushNotificationIOS.addEventListener('register', this.onPushRegistered);
+      PushNotificationIOS.addEventListener('registrationError', this.onPushRegistrationError);
+      PushNotificationIOS.addEventListener('notification', this.onRemoteNotification);
+      PushNotificationIOS.addEventListener('localNotification', this.onLocalNotification);
+      PushNotificationIOS.requestPermissions();
+    }
     this.loadChatList();
     this.loadContactList();
     this.timer = setInterval(() => {
@@ -64,10 +66,12 @@ class Messages extends Component {
 
   unmount = () => {
     clearInterval(this.timer);
-    PushNotificationIOS.removeEventListener('register', this.onPushRegistered);
-    PushNotificationIOS.removeEventListener('registrationError', this.onPushRegistrationError);
-    PushNotificationIOS.removeEventListener('notification', this.onRemoteNotification);
-    PushNotificationIOS.removeEventListener('localNotification', this.onLocalNotification);
+    if (Platform.OS === 'ios') {
+      PushNotificationIOS.removeEventListener('register', this.onPushRegistered);
+      PushNotificationIOS.removeEventListener('registrationError', this.onPushRegistrationError);
+      PushNotificationIOS.removeEventListener('notification', this.onRemoteNotification);
+      PushNotificationIOS.removeEventListener('localNotification', this.onLocalNotification);
+    }
     AppState.removeEventListener('change', this.handleAppStateChange);
   };
 
