@@ -168,6 +168,8 @@ const translations = {
     'OperationNotPerformed': 'Операция не выполнена, попробуйте еще раз',
     'NoTokenOrUser': 'Токен или пользователь не найден',
     'NoUserAddInGroup': 'Вы должны добавить хотя бы одного пользователя для создания группы',
+    'UnexpectedError': 'Возникла непредвиденная ошибка, повторите запрос опять',
+    'GroupNameAlreadyExists': 'Группа с таким названием уже существует, введите другое',
     // Chat
     'NoChats': 'У Вас еще нет чатов',
     'NoMessages': 'Нет сообщений',
@@ -208,7 +210,6 @@ const translations = {
     //Group
     'Members': 'Участники',
     'AlreadyInGroup': 'Вы уже состоите в этой группе',
-    'UnexpectedError': 'Возникла непредвиденная ошибка, повторите запрос опять',
     'GroupName': 'Название группы',
     'ChangePhoto': 'Изменить фотографию',
     'GroupUsers': 'Пользователи в группе',
@@ -399,6 +400,8 @@ const translations = {
     'OperationNotPerformed': 'Operation not performed, please try again',
     'NoTokenOrUser': 'Token or user not found',
     'NoUserAddInGroup': 'You must add at least one user to create a group',
+    'UnexpectedError': 'Unexpected error occurred, please try again',
+    'GroupNameAlreadyExists': 'Group name already exists, enter another name',
     // Chat
     'NoChats': 'Your have no chats yet',
     'NoMessages': 'No messages',
@@ -439,7 +442,6 @@ const translations = {
     //Group
     'Members': 'Members',
     'AlreadyInGroup': 'You are already in this group',
-    'UnexpectedError': 'Unexpected error occurred, please try again',
     'GroupName': 'Group name',
     'ChangePhoto': 'Change photo',
     'GroupUsers': 'Users in group',
