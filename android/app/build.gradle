@@ -148,7 +148,7 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-push-notification')
+    compile project(':react-native-fcm')
     compile project(':realm')
     compile project(':react-native-openpgp')
     compile project(':react-native-svg')
@@ -167,3 +167,5 @@ task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
+
+apply plugin: 'com.google.gms.google-services'
