@@ -29,6 +29,7 @@ const initState = {
     dateUpdate: null,
   },
   publicList: [], // public group list
+  filteredPublicList: [], // filtered public group list
   deleted: [], // array of group ids
   invite: null, // object
   receiveInvite: null, // object
@@ -215,6 +216,7 @@ export default reducer(initState, {
     return {
       ...state,
       publicList: action.payload,
+      filteredPublicList: action.payload,
       loading: false,
     };
   },
@@ -225,6 +227,24 @@ export default reducer(initState, {
       loading: false,
       error: action.error.toString(),
     };
+  },
+
+  [types.FILTER_PUBLIC_GROUP]: (state, action) => {
+    if (action.payload) {
+      const list = state.publicList.filter(item => item.name.toLowerCase().indexOf(action.payload.toLowerCase()) !== -1);
+
+      return {
+        ...state,
+        filteredPublicList: list,
+        loading: false,
+      };
+    } else {
+      return {
+        ...state,
+        filteredPublicList: [...state.publicList],
+        loading: false,
+      };
+    }
   },
 
   [types.INVITE]: (state, action) => {

@@ -57,6 +57,8 @@ export const types = {
   RECEIVE_INVITE_FAILURE: Symbol('RECEIVE_INVITE_FAILURE'),
 
   SET_CURRENT_GROUP: Symbol('SET_CURRENT_GROUP'),
+
+  FILTER_PUBLIC_GROUP: Symbol('FILTER_PUBLIC_GROUP'),
 };
 
 export default {
@@ -638,5 +640,9 @@ export default {
 
   setCurrentGroup: (data) => {
     return {type: types.SET_CURRENT_GROUP, payload: data};
+  },
+
+  filterPublicGroup: (filter = '') => {
+    return {type: types.FILTER_PUBLIC_GROUP, payload: filter};
   },
 };
