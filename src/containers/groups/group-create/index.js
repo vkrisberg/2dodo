@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {submit} from 'redux-form';
 import PropTypes from 'prop-types';
+import {get} from 'lodash';
 
 import {MainLayout, BackgroundLayout, DismissKeyboardLayout} from '../../../components/layouts';
 import {Loader, ButtonBack, ButtonNavbar, Navbar} from '../../../components/elements';
@@ -53,16 +55,23 @@ class GroupCreate extends Component {
   };
 
   onSubmit = (users) => {
-    const formData = this.props.form.createGroup.values;
+    const data = get(this.props.form, 'createGroup.values', {});
+    const errors = get(this.props.form, 'createGroup.syncErrors', false);
+
+    if (errors) {
+      this.props.dispatch(submit('createGroup'));
+      return false;
+    }
+
     const members = [];
     users.map( user => members.push(user.fullName || user.username));
 
     this.createGroup({
-      link: formData.groupName,
+      link: data.groupName,
       type: messageEnum.groupChat,
-      name: formData.groupName,
+      name: data.groupName,
       description: '',
-      avatar: formData.avatar,
+      avatar: data.avatar,
       members: members,
     });
   };
