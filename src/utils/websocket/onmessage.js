@@ -6,6 +6,7 @@ import {
 import {actionEnum} from '../../enums';
 
 export default function ({event, store, navigation}) {
+  console.log('websocket message', event.data);
   const data = JSON.parse(event.data);
 
   switch (data.action) {
