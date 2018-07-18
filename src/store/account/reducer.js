@@ -30,6 +30,7 @@ const initState = {
 
   deviceId: '',
   deviceName: '',
+  deviceModel: '',
   platform: '',
   hostname: CONFIG.hostname,
   isSecure: CONFIG.isSecure,

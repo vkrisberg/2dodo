@@ -36,6 +36,7 @@ export default class App extends Component {
     const device = {
       deviceId: RNDeviceInfo.getUniqueID(),
       deviceName: RNDeviceInfo.getDeviceName(),
+      deviceModel: RNDeviceInfo.getModel(),
       platform: Platform.OS,
     };
     // TODO - get language from system

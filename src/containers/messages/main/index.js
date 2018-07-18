@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {PushNotificationIOS, AppState, Alert, DeviceInfo, Platform} from 'react-native';
+import {PushNotificationIOS, AppState, Alert, Platform} from 'react-native';
+import RNDeviceInfo from 'react-native-device-info';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {isEmpty, map} from 'lodash';
@@ -94,9 +95,10 @@ class Messages extends Component {
     }
 
     let device = {
-      uuid: DeviceInfo.getUniqueID(),
+      uuid: RNDeviceInfo.getUniqueID(),
       type: Platform.OS,
-      name: DeviceInfo.getModel(),
+      name: RNDeviceInfo.getDeviceName(),
+      model: RNDeviceInfo.getModel(),
       token,
     };
 
