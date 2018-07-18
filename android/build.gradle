@@ -19,7 +19,6 @@ buildscript {
 
 allprojects {
     repositories {
-        //start here
         configurations.all {
             resolutionStrategy.eachDependency { DependencyResolveDetails details ->
                 def requested = details.requested
@@ -31,7 +30,6 @@ allprojects {
                 }
             }
         }
-        //end
         mavenLocal()
         jcenter()
         maven {
