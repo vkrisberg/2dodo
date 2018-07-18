@@ -1,19 +1,19 @@
-rootProject.name = 'tododo' 
-include ':react-native-push-notification'
-project(':react-native-push-notification').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-push-notification/android')
-include ':realm' 
-project(':realm').projectDir = new File(rootProject.projectDir, '../node_modules/realm/android') 
-include ':react-native-svg' 
-project(':react-native-svg').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-svg/android') 
-include ':react-native-openpgp' 
-project(':react-native-openpgp').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-openpgp/android/app') 
-include ':react-native-randombytes' 
-project(':react-native-randombytes').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-randombytes/android') 
-include ':react-native-image-picker' 
-project(':react-native-image-picker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-image-picker/android') 
-include ':react-native-device-info' 
-project(':react-native-device-info').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-device-info/android') 
-include ':react-native-languages' 
-project(':react-native-languages').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-languages/android') 
+rootProject.name = 'tododo'
+include ':react-native-fcm'
+project(':react-native-fcm').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-fcm/android')
+include ':realm'
+project(':realm').projectDir = new File(rootProject.projectDir, '../node_modules/realm/android')
+include ':react-native-svg'
+project(':react-native-svg').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-svg/android')
+include ':react-native-openpgp'
+project(':react-native-openpgp').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-openpgp/android/app')
+include ':react-native-randombytes'
+project(':react-native-randombytes').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-randombytes/android')
+include ':react-native-image-picker'
+project(':react-native-image-picker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-image-picker/android')
+include ':react-native-device-info'
+project(':react-native-device-info').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-device-info/android')
+include ':react-native-languages'
+project(':react-native-languages').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-languages/android')
 
-include ':app' 
+include ':app'
