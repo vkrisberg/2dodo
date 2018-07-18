@@ -98,6 +98,7 @@ android {
     buildToolsVersion '27.0.3'
 
     defaultConfig {
+        multiDexEnabled true
         applicationId "com.tododo"
         minSdkVersion 16
         targetSdkVersion 27
