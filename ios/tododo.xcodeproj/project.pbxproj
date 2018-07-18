@@ -24,6 +24,7 @@
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		188A52EC5C32489CBDCE2AA1 /* libRNSVG-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B50F79AF05644800980BFE56 /* libRNSVG-tvOS.a */; };
 		1C3258E0ED5D490CA593801F /* libRealmReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46047C76A7B14D9B8A046F50 /* libRealmReact.a */; };
+		22E345904E604FC59008E766 /* libRNLanguages.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D28F97EA244E4AA5A38EDBE3 /* libRNLanguages.a */; };
 		25CD3AC0B4954DBFA118216E /* libRNRandomBytes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AA97DE8D63464F38B594FDDF /* libRNRandomBytes.a */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -43,6 +44,7 @@
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		5ED021B8D00A43E8A50385BD /* libReactNativeLanguages-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CF3943F967AB467485348A87 /* libReactNativeLanguages-tvOS.a */; };
 		747FFBC6F50543B480C9528F /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E457B06C0694B79B8AE44BF /* libRNImagePicker.a */; };
+		7FE5085B97894C7B8DAEE917 /* libRNLanguages-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2337E2EBB4CC46D4A405BADC /* libRNLanguages-tvOS.a */; };
 		80027D5C25B24FF7A084A879 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E901F45997C4FDEB2F35A8A /* libz.tbd */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		8D5CDCC90AA04B9DA507E1D4 /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C4FB690958E841BE991EF291 /* libRNDeviceInfo.a */; };
@@ -66,7 +68,6 @@
 		950772F720CAC4F600590458 /* Exo2-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 950772E520CAC4F500590458 /* Exo2-Italic.ttf */; };
 		950772F820CAC4F600590458 /* Exo2-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 950772E620CAC4F500590458 /* Exo2-Light.ttf */; };
 		95F0E7B320FCE24C00AFB16A /* libRCTPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 95F0E7B020FCE1DA00AFB16A /* libRCTPushNotification.a */; };
-		A365590E49034F259560F9CC /* libReactNativeLanguages.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A32C0EC31584705A3E2F5FE /* libReactNativeLanguages.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		B9669EC091A54C47916F09CB /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 383DA46FE0FE4B9CA50DFC6F /* libRNSVG.a */; };
 		C84E7180071344E8A73D589D /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B6F9A51587E4FBB98E7A366 /* libc++.tbd */; };
@@ -339,20 +340,6 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
-		9572412220A58F3E00F87749 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A1E8E3A684824DDC96371264 /* ReactNativeLanguages.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = ReactNativeLanguages;
-		};
-		9572412420A58F3E00F87749 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A1E8E3A684824DDC96371264 /* ReactNativeLanguages.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 2D2A28471D9B043800D4039D;
-			remoteInfo = "ReactNativeLanguages-tvOS";
-		};
 		9572412820A58F3E00F87749 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4858CCD20B544DCA994E6867 /* RNDeviceInfo.xcodeproj */;
@@ -394,6 +381,20 @@
 			proxyType = 2;
 			remoteGlobalIDString = 163CDE4E2087CAD3001065FB;
 			remoteInfo = "RNRandomBytes-tvOS";
+		};
+		958E772320FF526D00FBC4FF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7FDD1EC32BF74D33866A01A4 /* RNLanguages.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNLanguages;
+		};
+		958E772520FF526D00FBC4FF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7FDD1EC32BF74D33866A01A4 /* RNLanguages.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2D2A28471D9B043800D4039D;
+			remoteInfo = "RNLanguages-tvOS";
 		};
 		95A75D8120B09D7D008BA4C3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -449,6 +450,7 @@
 		00E356EE1AD99517003FC87E /* tododoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = tododoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* tododoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = tododoTests.m; sourceTree = "<group>"; };
+		0E4F223E37C240F79A88A910 /* libRNFIRMessaging.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFIRMessaging.a; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* tododo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tododo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -460,6 +462,7 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = tododo/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		20C474BDCD0046A491FFB43B /* libRNRandomBytes-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNRandomBytes-tvOS.a"; sourceTree = "<group>"; };
+		2337E2EBB4CC46D4A405BADC /* libRNLanguages-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNLanguages-tvOS.a"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* tododo-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "tododo-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* tododo-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tododo-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -471,6 +474,7 @@
 		4E457B06C0694B79B8AE44BF /* libRNImagePicker.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNImagePicker.a; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
+		7FDD1EC32BF74D33866A01A4 /* RNLanguages.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNLanguages.xcodeproj; path = "../node_modules/react-native-languages/ios/RNLanguages.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		8AC2B3B0754B456A929E39F4 /* libRNOpenPGP.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNOpenPGP.a; sourceTree = "<group>"; };
 		8C7C98B8A4CA4EF5B3A701BC /* RNImagePicker.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNImagePicker.xcodeproj; path = "../node_modules/react-native-image-picker/ios/RNImagePicker.xcodeproj"; sourceTree = "<group>"; };
@@ -496,7 +500,6 @@
 		950772E620CAC4F500590458 /* Exo2-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Exo2-Light.ttf"; sourceTree = "<group>"; };
 		95F0E79720FCDB4000AFB16A /* tododo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = tododo.entitlements; path = tododo/tododo.entitlements; sourceTree = "<group>"; };
 		95F0E7AA20FCE1D900AFB16A /* RCTPushNotification.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTPushNotification.xcodeproj; path = "../node_modules/react-native/Libraries/PushNotificationIOS/RCTPushNotification.xcodeproj"; sourceTree = "<group>"; };
-		A1E8E3A684824DDC96371264 /* ReactNativeLanguages.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = ReactNativeLanguages.xcodeproj; path = "../node_modules/react-native-languages/ios/ReactNativeLanguages.xcodeproj"; sourceTree = "<group>"; };
 		A755871D4DC14EE08398E6E2 /* RealmReact.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RealmReact.xcodeproj; path = "../node_modules/realm/react-native/ios/RealmReact.xcodeproj"; sourceTree = "<group>"; };
 		AA97DE8D63464F38B594FDDF /* libRNRandomBytes.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNRandomBytes.a; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
@@ -504,6 +507,7 @@
 		C4FB690958E841BE991EF291 /* libRNDeviceInfo.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNDeviceInfo.a; sourceTree = "<group>"; };
 		CF3943F967AB467485348A87 /* libReactNativeLanguages-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libReactNativeLanguages-tvOS.a"; sourceTree = "<group>"; };
 		CFEA2E48C7BD4ED8BD02664A /* libRNDeviceInfo-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNDeviceInfo-tvOS.a"; sourceTree = "<group>"; };
+		D28F97EA244E4AA5A38EDBE3 /* libRNLanguages.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNLanguages.a; sourceTree = "<group>"; };
 		E1267C5256C342D0A0ACCD96 /* RNSVG.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
 		FD99036E83434667A2FC66FE /* RNRandomBytes.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNRandomBytes.xcodeproj; path = "../node_modules/react-native-randombytes/RNRandomBytes.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -535,7 +539,6 @@
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
-				A365590E49034F259560F9CC /* libReactNativeLanguages.a in Frameworks */,
 				8D5CDCC90AA04B9DA507E1D4 /* libRNDeviceInfo.a in Frameworks */,
 				747FFBC6F50543B480C9528F /* libRNImagePicker.a in Frameworks */,
 				25CD3AC0B4954DBFA118216E /* libRNRandomBytes.a in Frameworks */,
@@ -544,6 +547,7 @@
 				1C3258E0ED5D490CA593801F /* libRealmReact.a in Frameworks */,
 				C84E7180071344E8A73D589D /* libc++.tbd in Frameworks */,
 				80027D5C25B24FF7A084A879 /* libz.tbd in Frameworks */,
+				22E345904E604FC59008E766 /* libRNLanguages.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -563,6 +567,7 @@
 				94CC4DDF51794EEA8A2C4247 /* libRNDeviceInfo-tvOS.a in Frameworks */,
 				448B93861B5641139AADE13F /* libRNRandomBytes-tvOS.a in Frameworks */,
 				188A52EC5C32489CBDCE2AA1 /* libRNSVG-tvOS.a in Frameworks */,
+				7FE5085B97894C7B8DAEE917 /* libRNLanguages-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -746,13 +751,13 @@
 				832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */,
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
-				A1E8E3A684824DDC96371264 /* ReactNativeLanguages.xcodeproj */,
 				4858CCD20B544DCA994E6867 /* RNDeviceInfo.xcodeproj */,
 				8C7C98B8A4CA4EF5B3A701BC /* RNImagePicker.xcodeproj */,
 				FD99036E83434667A2FC66FE /* RNRandomBytes.xcodeproj */,
 				90D37891624A4440B78A8413 /* RNOpenPGP.xcodeproj */,
 				E1267C5256C342D0A0ACCD96 /* RNSVG.xcodeproj */,
 				A755871D4DC14EE08398E6E2 /* RealmReact.xcodeproj */,
+				7FDD1EC32BF74D33866A01A4 /* RNLanguages.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -832,17 +837,11 @@
 				383DA46FE0FE4B9CA50DFC6F /* libRNSVG.a */,
 				46047C76A7B14D9B8A046F50 /* libRealmReact.a */,
 				B50F79AF05644800980BFE56 /* libRNSVG-tvOS.a */,
+				0E4F223E37C240F79A88A910 /* libRNFIRMessaging.a */,
+				D28F97EA244E4AA5A38EDBE3 /* libRNLanguages.a */,
+				2337E2EBB4CC46D4A405BADC /* libRNLanguages-tvOS.a */,
 			);
 			name = "Recovered References";
-			sourceTree = "<group>";
-		};
-		9572411620A58F3D00F87749 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				9572412320A58F3E00F87749 /* libReactNativeLanguages.a */,
-				9572412520A58F3E00F87749 /* libReactNativeLanguages-tvOS.a */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		9572411820A58F3D00F87749 /* Products */ = {
@@ -875,6 +874,15 @@
 			isa = PBXGroup;
 			children = (
 				9572413120A58F3E00F87749 /* libRNOpenPGP.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		958E771C20FF526D00FBC4FF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				958E772420FF526D00FBC4FF /* libRNLanguages.a */,
+				958E772620FF526D00FBC4FF /* libRNLanguages-tvOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1086,10 +1094,6 @@
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
 				},
 				{
-					ProductGroup = 9572411620A58F3D00F87749 /* Products */;
-					ProjectRef = A1E8E3A684824DDC96371264 /* ReactNativeLanguages.xcodeproj */;
-				},
-				{
 					ProductGroup = 95A75D7E20B09D7D008BA4C3 /* Products */;
 					ProjectRef = A755871D4DC14EE08398E6E2 /* RealmReact.xcodeproj */;
 				},
@@ -1100,6 +1104,10 @@
 				{
 					ProductGroup = 9572411A20A58F3D00F87749 /* Products */;
 					ProjectRef = 8C7C98B8A4CA4EF5B3A701BC /* RNImagePicker.xcodeproj */;
+				},
+				{
+					ProductGroup = 958E771C20FF526D00FBC4FF /* Products */;
+					ProjectRef = 7FDD1EC32BF74D33866A01A4 /* RNLanguages.xcodeproj */;
 				},
 				{
 					ProductGroup = 9572411E20A58F3D00F87749 /* Products */;
@@ -1377,20 +1385,6 @@
 			remoteRef = 832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		9572412320A58F3E00F87749 /* libReactNativeLanguages.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libReactNativeLanguages.a;
-			remoteRef = 9572412220A58F3E00F87749 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		9572412520A58F3E00F87749 /* libReactNativeLanguages-tvOS.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libReactNativeLanguages-tvOS.a";
-			remoteRef = 9572412420A58F3E00F87749 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		9572412920A58F3E00F87749 /* libRNDeviceInfo.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1431,6 +1425,20 @@
 			fileType = archive.ar;
 			path = "libRNRandomBytes-tvOS.a";
 			remoteRef = 9572413620A58F3E00F87749 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		958E772420FF526D00FBC4FF /* libRNLanguages.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNLanguages.a;
+			remoteRef = 958E772320FF526D00FBC4FF /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		958E772620FF526D00FBC4FF /* libRNLanguages-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libRNLanguages-tvOS.a";
+			remoteRef = 958E772520FF526D00FBC4FF /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		95A75D8220B09D7D008BA4C3 /* libRealmReact.a */ = {
@@ -1640,12 +1648,17 @@
 					"$(SRCROOT)/../node_modules/react-native-openpgp/iOS",
 					"$(SRCROOT)..\node_modules\neact-native-svgios/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
+					"$(SRCROOT)/../node_modules/react-native-fcm/ios",
+					"$(SRCROOT)/../node_modules/react-native-languages/ios",
 				);
 				INFOPLIST_FILE = tododoTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
@@ -1671,12 +1684,17 @@
 					"$(SRCROOT)/../node_modules/react-native-openpgp/iOS",
 					"$(SRCROOT)..\node_modules\neact-native-svgios/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
+					"$(SRCROOT)/../node_modules/react-native-fcm/ios",
+					"$(SRCROOT)/../node_modules/react-native-languages/ios",
 				);
 				INFOPLIST_FILE = tododoTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
@@ -1705,6 +1723,8 @@
 					"$(SRCROOT)/../node_modules/react-native-openpgp/iOS",
 					"$(SRCROOT)..\node_modules\neact-native-svgios/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
+					"$(SRCROOT)/../node_modules/react-native-fcm/ios",
+					"$(SRCROOT)/../node_modules/react-native-languages/ios",
 				);
 				INFOPLIST_FILE = tododo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1736,6 +1756,8 @@
 					"$(SRCROOT)/../node_modules/react-native-openpgp/iOS",
 					"$(SRCROOT)..\node_modules\neact-native-svgios/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
+					"$(SRCROOT)/../node_modules/react-native-fcm/ios",
+					"$(SRCROOT)/../node_modules/react-native-languages/ios",
 				);
 				INFOPLIST_FILE = tododo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1772,11 +1794,16 @@
 					"$(SRCROOT)/../node_modules/react-native-openpgp/iOS",
 					"$(SRCROOT)..\node_modules\neact-native-svgios/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
+					"$(SRCROOT)/../node_modules/react-native-fcm/ios",
+					"$(SRCROOT)/../node_modules/react-native-languages/ios",
 				);
 				INFOPLIST_FILE = "tododo-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
@@ -1812,11 +1839,16 @@
 					"$(SRCROOT)/../node_modules/react-native-openpgp/iOS",
 					"$(SRCROOT)..\node_modules\neact-native-svgios/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
+					"$(SRCROOT)/../node_modules/react-native-fcm/ios",
+					"$(SRCROOT)/../node_modules/react-native-languages/ios",
 				);
 				INFOPLIST_FILE = "tododo-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
@@ -1851,11 +1883,16 @@
 					"$(SRCROOT)/../node_modules/react-native-openpgp/iOS",
 					"$(SRCROOT)..\node_modules\neact-native-svgios/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
+					"$(SRCROOT)/../node_modules/react-native-fcm/ios",
+					"$(SRCROOT)/../node_modules/react-native-languages/ios",
 				);
 				INFOPLIST_FILE = "tododo-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
@@ -1890,11 +1927,16 @@
 					"$(SRCROOT)/../node_modules/react-native-openpgp/iOS",
 					"$(SRCROOT)..\node_modules\neact-native-svgios/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
+					"$(SRCROOT)/../node_modules/react-native-fcm/ios",
+					"$(SRCROOT)/../node_modules/react-native-languages/ios",
 				);
 				INFOPLIST_FILE = "tododo-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (

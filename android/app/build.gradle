@@ -148,14 +148,14 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-fcm')
     implementation project(':realm')
-    implementation project(':react-native-openpgp')
     implementation project(':react-native-svg')
     implementation project(':react-native-randombytes')
-    implementation project(':react-native-image-picker')
-    implementation project(':react-native-device-info')
+    implementation project(':react-native-openpgp')
     implementation project(':react-native-languages')
+    implementation project(':react-native-image-picker')
+    implementation project(':react-native-fcm')
+    implementation project(':react-native-device-info')
     implementation fileTree(dir: "libs", include: ["*.jar"])
 //    implementation "com.android.support:appcompat-v7:23.0.1"
     implementation "com.facebook.react:react-native:+"  // From node_modules
