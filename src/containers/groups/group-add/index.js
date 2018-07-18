@@ -53,11 +53,7 @@ class GroupAdd extends Component {
   onNext = (checked) => {
     switch (checked) {
       case 'groupChat':
-        if(this.state.chosenContacts.length > 0) {
-          this.props.navigation.navigate(routeEnum.GroupCreate, {users: [this.getAccountUserData(), ...this.state.chosenContacts]});
-        } else {
-          Alert.alert(this.context.t('NoUserAddInGroup'));
-        }
+        this.props.navigation.navigate(routeEnum.GroupCreate, {users: [this.getAccountUserData(), ...this.state.chosenContacts]});
         break;
       case 'createChannel':
         alert('createChannel');
@@ -89,7 +85,7 @@ class GroupAdd extends Component {
   };
 
   isContactChosen = (contact) => {
-    return this.state.chosenContacts.find(item => item === contact);
+    return this.state.chosenContacts.filter(item => item === contact).length > 0;
   };
 
   onContactCheckboxPress = (contact) => {
@@ -133,7 +129,8 @@ class GroupAdd extends Component {
     const {account} = this.props;
 
     return (
-      <GroupPublicListItem item={item}
+      <GroupPublicListItem
+        item={item}
         theme={account.user.theme}
         context={this.context}
         showRightBlock={false}

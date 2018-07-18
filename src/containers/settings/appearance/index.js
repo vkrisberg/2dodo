@@ -42,6 +42,7 @@ class AppearanceSettings extends Component {
     for (let i = 0; i < btnsCount; i++) {
       btnsArray.push(
         <Button
+          key={i}
           style={[
             startSize + i === currentFontSize && _styles.btnSizeActive,
             _styles.btnSize
