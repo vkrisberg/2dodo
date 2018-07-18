@@ -78,7 +78,9 @@ class Messages extends Component {
   handleAppStateChange = (state) => {
     console.log('APP STATE:', state);
 
-    PushNotificationIOS.setApplicationIconBadgeNumber(0);
+    if (Platform.OS === 'ios') {
+      PushNotificationIOS.setApplicationIconBadgeNumber(0);
+    }
 
     if (state === 'active') {
     }
@@ -141,12 +143,14 @@ class Messages extends Component {
   };
 
   sendTestLocalNotification = () => {
-    PushNotificationIOS.scheduleLocalNotification({
-      fireDate: moment().add(5, 'seconds').format("YYYY-MM-DDTHH:mm:ss.sssZ"),
-      alertTitle: 'Chat Message',
-      alertBody: 'You have a new message from @vova',
-      applicationIconBadgeNumber: 1,
-    });
+    if (Platform.OS === 'ios') {
+      PushNotificationIOS.scheduleLocalNotification({
+        fireDate: moment().add(5, 'seconds').format("YYYY-MM-DDTHH:mm:ss.sssZ"),
+        alertTitle: 'Chat Message',
+        alertBody: 'You have a new message from @vova',
+        applicationIconBadgeNumber: 1,
+      });
+    }
   };
 
   loadContactList = (filter, sort, descending) => {
