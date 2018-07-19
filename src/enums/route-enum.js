@@ -10,6 +10,7 @@ export default {
   Groups: 'Groups',
   GroupAdd: 'GroupAdd',
   GroupCreate: 'GroupCreate',
+  GroupMessage: 'GroupMessage',
   Login: 'Login',
   Messages: 'Messages',
   ChatCreate: 'ChatCreate',
