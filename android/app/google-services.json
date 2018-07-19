@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "206696891394",
-    "firebase_url": "https://dodo-f1d84.firebaseio.com",
-    "project_id": "dodo-f1d84",
-    "storage_bucket": "dodo-f1d84.appspot.com"
+    "project_number": "326361419894",
+    "firebase_url": "https://dodo-a7e6c.firebaseio.com",
+    "project_id": "dodo-a7e6c",
+    "storage_bucket": "dodo-a7e6c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:206696891394:android:a5fd3e0b5e2d9810",
+        "mobilesdk_app_id": "1:326361419894:android:a5fd3e0b5e2d9810",
         "android_client_info": {
           "package_name": "com.tododo"
         }
       },
       "oauth_client": [
         {
-          "client_id": "206696891394-0372ihbdeeja701qkuufta54r2ncmvf7.apps.googleusercontent.com",
+          "client_id": "326361419894-jngsq7kl5m68p0olf884libaf4b2rqgm.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCld-3ostfFAqyeuOhugePsE__ZgYO2Bmw"
+          "current_key": "AIzaSyAuC9fwP9ixTQgVZ9WuVJYb7WpbyRPA53o"
         }
       ],
       "services": {
