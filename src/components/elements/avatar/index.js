@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import AvatarIcon from '../../icons/avatar-icon';
 import {themeEnum} from '../../../enums';
 import styles from './styles';
+import {validation} from '../../../utils';
 
 export default class Avatar extends PureComponent {
 
@@ -38,8 +39,11 @@ export default class Avatar extends PureComponent {
     }
 
     if (source && typeof source === 'string') {
+      const prefix = !validation.httpPrefixRegex.test(source) && !validation.base64PrefixRegex.test(source)
+        ? 'data:image/jpeg;base64,'
+        : '';
       return (
-        <Image style={_styles.avatar} source={{uri: `data:image/jpeg;base64,${source}`}}/>
+        <Image style={_styles.avatar} source={{uri: prefix + source}}/>
       );
     }
 

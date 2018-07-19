@@ -24,7 +24,7 @@ export default class GroupPublicListItem extends Component {
     theme: themeEnum.light,
     editMode: false,
     selectedItems: {},
-    onCheckboxPress: {},
+    onCheckboxPress: () => {},
     showRightBlock: true,
   };
 

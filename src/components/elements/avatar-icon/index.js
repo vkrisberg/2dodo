@@ -47,7 +47,9 @@ export default class AvatarIcon extends PureComponent {
     }
 
     if (source && typeof source === 'string') {
-      const prefix = !validation.base64PrefixRegex.test(source) ? 'data:image/jpeg;base64,' : '';
+      const prefix = !validation.httpPrefixRegex.test(source) && !validation.base64PrefixRegex.test(source)
+        ? 'data:image/jpeg;base64,'
+        : '';
       return (
         <Image style={_styles.avatar} source={{uri: prefix + source}}/>
       );

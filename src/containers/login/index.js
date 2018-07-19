@@ -36,6 +36,7 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.realm = services.getRealm();
+    this.styles = styles(props.account.user.theme);
   }
 
   componentDidUpdate(prevProps) {
@@ -119,44 +120,45 @@ class Login extends Component {
     const cancelButtonIndex = -1;
     const destructiveButtonIndex = 3;
 
-    ActionSheetIOS.showActionSheetWithOptions({
-        options,
-        cancelButtonIndex,
-        destructiveButtonIndex,
-      },
-      (buttonIndex) => {
-        console.log('ActionSheetIOS', buttonIndex);
-      });
+    if (Platform.OS === 'ios') {
+      ActionSheetIOS.showActionSheetWithOptions({
+          options,
+          cancelButtonIndex,
+          destructiveButtonIndex,
+        },
+        (buttonIndex) => {
+          console.log('ActionSheetIOS', buttonIndex);
+        });
+    }
   };
 
   render() {
     const {account} = this.props;
     const {t} = this.context;
     const forgotLinkColor = (sizes.isIphone5 && Platform.OS === 'ios') ? colors.light.blueDarker : colors.light.white;
-    const _styles = styles(account.user.theme);
 
     return (
       <MainLayout netOffline={!account.net.connected}>
         <BackgroundLayout background="login" barStyle="light-content">
           <DismissKeyboardLayout>
-            <KeyboardAvoidingView style={_styles.container} behavior="position" enabled>
-              <Logo style={_styles.logo}/>
-              <Text style={_styles.text}>{t('LoginWelcome')}</Text>
+            <KeyboardAvoidingView style={this.styles.container} behavior="position" enabled>
+              <Logo style={this.styles.logo}/>
+              <Text style={this.styles.text}>{t('LoginWelcome')}</Text>
               <LoginForm context={this.context}
                          errors={this.state.errors}
                          disabled={!account.net.connected || account.connecting}
                          onSubmit={this.login}/>
             </KeyboardAvoidingView>
-            <Link style={_styles.forgot}
+            <Link style={this.styles.forgot}
                   to={routeEnum.ResetPassword}
                   color={forgotLinkColor}>{t('ForgotPassword')}</Link>
-            <View style={_styles.registration}>
-              <Text style={_styles.registrationLabel}>{t('FirstTimeInApp')}</Text>
+            <View style={this.styles.registration}>
+              <Text style={this.styles.registrationLabel}>{t('FirstTimeInApp')}</Text>
               <Link to={routeEnum.Registration}
                     color={colors.light.blueDarker}>{t('Registration')}</Link>
             </View>
-            <View style={_styles.keysImportContainer}>
-              <Button style={_styles.keysImportButton}
+            <View style={this.styles.keysImportContainer}>
+              <Button style={this.styles.keysImportButton}
                       color={colors.light.grayDarker}
                       borderColor="transparent"
                       onPress={this.keysImport}>

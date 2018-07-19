@@ -71,10 +71,13 @@ export default class Checkbox extends PureComponent {
     return (
       <TouchableWithoutFeedback hitSlop={hitSlop} onPress={this.onPress}>
         <View style={[styles.container, style]}>
-          <Image
+          {(!color || (color && this.state.checked)) && <Image
             style={imageStyles}
-            tintColor={!this.state.checked && color}
-            source={this.state.checked ? IMG_CHECKBOX_ON : IMG_CHECKBOX_OFF}/>
+            source={this.state.checked ? IMG_CHECKBOX_ON : IMG_CHECKBOX_OFF}/>}
+          {color && !this.state.checked && <Image
+            style={imageStyles}
+            tintColor={color}
+            source={this.state.checked ? IMG_CHECKBOX_ON : IMG_CHECKBOX_OFF}/>}
         </View>
       </TouchableWithoutFeedback>
     );

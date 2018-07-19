@@ -13,7 +13,7 @@ import connectionIconGray from './img/connection_gray.png';
 
 const connectionInfo = {
   location: 'Russia, Novosibirsk',
-  ip: '168.190.120.69: 74771',
+  ip: '168.190.120.69: 74770',
   device: 'iPhone 8 Gray 64 Gb',
   date: '2018-07-04T20:24:27.732Z',
   lastVisit: '48 minutes online',
@@ -27,7 +27,7 @@ const authorizationDevices = [
     lastVisit: '4 days ago',
   },
   {
-    ip: '168.190.120.69: 74771',
+    ip: '168.190.120.69: 74772',
     device: 'Macbook Pro 2016',
     date: '2018-07-01T20:24:27.732Z',
     lastVisit: '2 days ago',
@@ -51,7 +51,7 @@ class Connection extends Component {
     const isToday = date.format('DD.MM.YY') === moment().format('DD.MM.YY');
 
     return (
-      <View style={_styles.connectionBlock}>
+      <View style={_styles.connectionBlock} key={data.ip}>
         <Image source={grayIcon ? connectionIconGray : connectionIcon} style={_styles.connectionIcon}/>
         <View style={[_styles.connectionInfo, !borderBottom && {borderBottomWidth: 0}]}>
           {data.location && <Text style={[_styles.defaultText, _styles.semiBoldText]}>{data.location}</Text>}

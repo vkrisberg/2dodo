@@ -3,16 +3,14 @@ package com.tododo;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.evollu.react.fcm.FIRMessagingPackage;
 import io.realm.react.RealmReactPackage;
 import com.horcrux.svg.SvgPackage;
-import com.github.orhan.openpgp.RNOpenPGPPackage;
 import com.bitgo.randombytes.RandomBytesPackage;
+import com.github.orhan.openpgp.RNOpenPGPPackage;
+import com.reactcommunity.rnlanguages.RNLanguagesPackage;
 import com.imagepicker.ImagePickerPackage;
+import com.evollu.react.fcm.FIRMessagingPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
-
-import com.imagepicker.ImagePickerPackage;
-import com.reactcommunity.reactnativelanguages.ReactNativeLanguagesPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -33,14 +31,14 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new FIRMessagingPackage(),
             new RealmReactPackage(),
             new SvgPackage(),
-            new RNOpenPGPPackage(),
             new RandomBytesPackage(),
+            new RNOpenPGPPackage(),
+            new RNLanguagesPackage(),
             new ImagePickerPackage(),
-            new RNDeviceInfo(),
-            new ReactNativeLanguagesPackage()
+            new FIRMessagingPackage(),
+            new RNDeviceInfo()
       );
     }
 

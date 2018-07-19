@@ -63,7 +63,7 @@ export default class Input extends PureComponent {
       errorColor,
       style,
       onSubmit,
-      ...inputProps,
+      ...inputProps
     } = this.props;
     const borderWidth = this.state.focused || error ? 2 : 1;
     if (this.state.focused) {

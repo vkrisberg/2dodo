@@ -49,7 +49,7 @@ export default class GroupList extends Component {
     this.setState({contentSize: h});
   }
 
-  _keyExtractor = (item) => item.id;
+  _keyExtractor = (item) => item.link;
 
   render() {
     const {items} = this.state;
