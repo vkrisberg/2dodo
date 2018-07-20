@@ -248,13 +248,13 @@ export default {
     };
   },
 
-  resetPassword: (email) => {
+  resetPassword: (email, username) => {
     return async (dispatch) => {
       dispatch({type: types.RESET_PASSWORD});
       try {
-        const res = await apiAccount.resetPassword(email);
+        const res = await apiAccount.resetPassword({email, username});
         dispatch({type: types.RESET_PASSWORD_SUCCESS, payload: res.data});
-        return email;
+        return {email, username};
       } catch (e) {
         dispatch({type: types.RESET_PASSWORD_FAILURE, error: e.response.data});
         throw e;

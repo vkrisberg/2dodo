@@ -22,14 +22,14 @@ class ResetPassword extends Component {
   };
 
   onSubmit = async (formValues) => {
-    const email = formValues.email;
-    const username = formValues.login;
+    const email = (formValues.email || '').trim().toLowerCase();
+    const username = (formValues.login || '').trim().toLowerCase();
     const {dispatch} = this.props;
 
-    return await dispatch(accountActions.resetPassword(email))
-      .then((email) => {
+    return await dispatch(accountActions.resetPassword(email, username))
+      .then(() => {
         if (this.props.account.resetPassword) {
-          this.props.navigation.navigate(routeEnum.ResetPasswordEnterKey, {data: {username: username, email: email}});
+          this.props.navigation.navigate(routeEnum.ResetPasswordEnterKey, {data: {email, username}});
           dispatch(accountActions.setDefaultResetPassword());
         } else {
           Alert.alert(this.context.t('OperationNotPerformed'));

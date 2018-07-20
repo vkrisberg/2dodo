@@ -25,14 +25,14 @@ export default {
     return http.get('/tokens/', {params});
   },
 
-  resetPassword: (email) => {
+  resetPassword: ({email, username}) => {
     const http = services.getHttp();
-    return http.get(`/password_reset/?email=${encodeURIComponent(email)}`);
+    return http.get(`/password_reset/?email=${encodeURIComponent(email)}&username=${encodeURIComponent(username)}`);
   },
 
-  setNewPassword: ({username, token, password}) => {
+  setNewPassword: ({token, password}) => {
     const http = services.getHttp();
-    const data = {username, token, password};
+    const data = {token, password};
     return http.post('/new_password/', data);
   },
 };
