@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {PushNotificationIOS, AppState, Alert, Platform} from 'react-native';
 import RNDeviceInfo from 'react-native-device-info';
+import FCM from 'react-native-fcm';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {isEmpty, map} from 'lodash';
@@ -11,6 +12,7 @@ import {ChatList} from '../../../components/lists';
 import {SearchInput, Navbar, NavbarDots, ButtonAdd, ChatListItem, ButtonNavbar} from '../../../components/elements';
 import {chatActions, chatMessageActions, contactActions} from '../../../store/actions';
 import {routeEnum} from '../../../enums';
+import androidPushListeners from './android-push-listeners';
 
 const GET_ONLINE_UPDATE_TIME = 10000; // in ms
 
@@ -32,23 +34,55 @@ class Messages extends Component {
   state = {
     editMode: false,
     selected: {},
+    initNotify: null,
   };
 
   constructor(props) {
     super(props);
     this.timer = null;
+    if (Platform.OS === 'android') {
+      androidPushListeners.registerKilledListener();
+    }
   }
 
-  componentDidMount() {
-    this.init();
+  async componentDidMount() {
+    await this.init();
   }
 
   componentWillUnmount() {
     this.unmount();
   }
 
-  init = () => {
+  init = async () => {
     AppState.addEventListener('change', this.handleAppStateChange);
+
+    // Push notifications for Android
+    if (Platform.OS === 'android') {
+      androidPushListeners.registerKilledListener();
+      androidPushListeners.registerAppListener(this.props.navigation);
+      FCM.getInitialNotification().then((notify) => {
+        this.setState({
+          initNotify: notify
+        });
+        if (notify && notify.targetScreen === "detail") {
+          setTimeout(() => {
+            this.props.navigation.navigate("Detail");
+          }, 500);
+        }
+      });
+      try {
+        let result = await FCM.requestPermissions({
+          badge: true,
+          sound: true,
+          alert: true
+        });
+        console.log('FCM.requestPermissions result', result);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    // Push notifications for iOS
     if (Platform.OS === 'ios') {
       PushNotificationIOS.addEventListener('register', this.onPushRegistered);
       PushNotificationIOS.addEventListener('registrationError', this.onPushRegistrationError);
@@ -56,11 +90,13 @@ class Messages extends Component {
       PushNotificationIOS.addEventListener('localNotification', this.onLocalNotification);
       PushNotificationIOS.requestPermissions();
     }
+
     this.loadChatList();
     this.loadContactList();
     this.timer = setInterval(() => {
       this.props.dispatch(contactActions.getOnlineUsers());
     }, GET_ONLINE_UPDATE_TIME);
+
     // TODO - remove after tests
     // this.sendTestLocalNotification();
   };
