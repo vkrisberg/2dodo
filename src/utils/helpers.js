@@ -22,6 +22,14 @@ const getNickname = (username) => {
   return usernameArr[0] ? `@${usernameArr[0]}` : '';
 };
 
+const getLogin = (login) => {
+  if (!login) {
+    return '';
+  }
+  const loginArr = login.split('@');
+  return loginArr[0] ? `${loginArr[0]}` : '';
+};
+
 const getDeviceId = (from) => {
   const fromArr = from.split('@');
   return fromArr[2] || '';
@@ -31,5 +39,6 @@ export default {
   getFullName,
   getUsername,
   getNickname,
+  getLogin,
   getDeviceId,
 };

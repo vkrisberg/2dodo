@@ -15,7 +15,7 @@ const initState = {
     from: '',
     text: '',
     fileUrl: '',
-    contacts: [],
+    contact: [],
     user: {},
     quote: {},
     status: 'sending', // [sending, send, received, read, error]

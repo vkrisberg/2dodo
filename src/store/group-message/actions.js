@@ -1,7 +1,7 @@
 import {get, map, filter, uniqBy} from 'lodash';
 
 import {apiGroup, apiServer} from '../../api';
-import {services, wsMessage} from '../../utils';
+import {services, wsMessage, helpers} from '../../utils';
 import {dbEnum, messageEnum} from '../../enums';
 
 export const types = {
@@ -237,6 +237,7 @@ export default {
           throw new Error(`more than one group with link '${data.link}' found`);
         }
 
+        const realmContact = realm.objectForPrimaryKey(dbEnum.Contact, helpers.getUsername(message.from));
         const group = groups[0];
         const messageData = {
           id: wsMessage.generateUuid(),
@@ -247,6 +248,7 @@ export default {
           username: wsMessage.getUsername(message.from),
           from: message.from,
           text: dataMessage.data,
+          contact: realmContact,
           status:messageEnum.received,
           isOwn: false,
           dateSend: wsMessage.rfcToDate(dataMessage.dateSend),
