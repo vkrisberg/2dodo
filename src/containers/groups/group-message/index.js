@@ -68,13 +68,13 @@ class GroupMessage extends PureComponent {
   };
 
   onUserAvatarPress = (username) => {
-    const contact = this.props.group.current.members.filter(item => item.username === username); //?
-
-    if (contact.length > 0) {
-      this.props.navigation.navigate(routeEnum.ContactProfile, {data: contact});
-    } else {
-      Alert.alert(this.context.t('UnexpectedError'));
-    }
+    // const contact = this.props.group.current.members.filter(item => item.username === username); //?
+    //
+    // if (contact.length > 0) {
+    //   this.props.navigation.navigate(routeEnum.ContactProfile, {data: contact});
+    // } else {
+    //   Alert.alert(this.context.t('UnexpectedError'));
+    // }
   };
 
   sendGroupMessage = ({groupId, link, data}) => {
