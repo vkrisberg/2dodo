@@ -40,15 +40,14 @@ class GroupMessage extends PureComponent {
   componentDidMount() {
     this.group = this.props.navigation.getParam('group');
     this.props.dispatch(groupActions.setCurrentGroup(this.group));
+    this.props.dispatch(groupMessageActions.loadList(this.group.id));
   }
 
   onBack = () => {
     this.props.navigation.goBack();
   };
 
-  onNavbarAvatarPress = () => {
-    alert('click on avatar');
-  };
+  onNavbarAvatarPress = () => {};
 
   onMessagePress = (message) => {
     this.setState({

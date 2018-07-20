@@ -23,8 +23,10 @@ class ResetPasswordEnterKey extends Component {
 
   onSubmit = async (data) => {
     const {dispatch, navigation} = this.props;
+    const emailFormValues = navigation.getParam('data');
+
     const sendData = {
-      username: data.login.trim().toLowerCase(),
+      username: emailFormValues.username.trim().toLowerCase(),
       token: data.token,
       password: data.password,
     };
@@ -32,7 +34,7 @@ class ResetPasswordEnterKey extends Component {
     return await dispatch(accountActions.setNewPassword(sendData))
       .then((sendData) => {
         if (this.props.account.setNewPassword) {
-          navigation.navigate(routeEnum.ResetPasswordPassSuccess, {email: navigation.getParam('email')});
+          navigation.navigate(routeEnum.ResetPasswordPassSuccess, {email: emailFormValues.email});
           dispatch(accountActions.setDefaultNewPassword());
         } else {
           Alert.alert(this.context.t('OperationNotPerformed'));
