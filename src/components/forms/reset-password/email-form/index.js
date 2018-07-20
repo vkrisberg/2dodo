@@ -82,6 +82,12 @@ class ResetPasswordEmailForm extends Component {
               keyboardType={'email-address'}
               autoCapitalize={'none'}
               autoCorrect={false}/>
+            <Field
+              name="login"
+              component={this.renderField}
+              placeholder={context.t('UserName')}
+              autoCapitalize={'none'}
+              autoCorrect={false}/>
           </View>
           <View style={_styles.buttonContainer}>
             <Button disabled={disabled} onPress={this.props.handleSubmit}>{context.t('Recover')}</Button>

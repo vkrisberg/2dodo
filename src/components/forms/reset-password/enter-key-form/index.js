@@ -83,12 +83,6 @@ class ResetPasswordEnterKeyForm extends Component {
               autoCapitalize={'none'}
               autoCorrect={false}/>
             <Field
-              name="login"
-              component={this.renderField}
-              placeholder={context.t('UserName')}
-              autoCapitalize={'none'}
-              autoCorrect={false}/>
-            <Field
               name="password"
               component={this.renderField}
               placeholder={context.t('NewPassword')}

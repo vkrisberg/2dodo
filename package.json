@@ -58,7 +58,6 @@
     "jest": "23.4.1",
     "lesshint": "^5.1.0",
     "react-test-renderer": "16.4.1",
-    "reactotron-react-native": "^2.0.0",
     "rn-nodeify": "^10.0.0"
   },
   "jest": {

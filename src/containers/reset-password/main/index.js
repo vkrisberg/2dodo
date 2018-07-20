@@ -21,13 +21,15 @@ class ResetPassword extends Component {
     t: PropTypes.func.isRequired,
   };
 
-  onSubmit = async (email) => {
+  onSubmit = async (formValues) => {
+    const email = formValues.email;
+    const username = formValues.login;
     const {dispatch} = this.props;
 
     return await dispatch(accountActions.resetPassword(email))
       .then((email) => {
         if (this.props.account.resetPassword) {
-          this.props.navigation.navigate(routeEnum.ResetPasswordEnterKey, {email: email});
+          this.props.navigation.navigate(routeEnum.ResetPasswordEnterKey, {data: {username: username, email: email}});
           dispatch(accountActions.setDefaultResetPassword());
         } else {
           Alert.alert(this.context.t('OperationNotPerformed'));
@@ -50,7 +52,7 @@ class ResetPassword extends Component {
             <ResetPasswordEmailForm
               context={this.context}
               account={account}
-              onSubmit={() => this.onSubmit(this.props.form.resetPasswordEmailForm.values.email)}
+              onSubmit={() => this.onSubmit(this.props.form.resetPasswordEmailForm.values)}
               disabled={!account.net.connected || account.loading}/>
           </DismissKeyboardLayout>
           {account.loading && <Loader/>}
