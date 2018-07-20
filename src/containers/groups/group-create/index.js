@@ -78,7 +78,7 @@ class GroupCreate extends Component {
     }
 
     const members = [];
-    users.map( user => members.push(user.fullName || user.username));
+    users.map( user => members.push(user.username));
 
     this.createGroup({
       link: data.groupName,
