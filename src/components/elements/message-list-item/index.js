@@ -70,12 +70,13 @@ export default class MessageListItem extends PureComponent {
     const textColor = item.isOwn ? colors[theme].white : colors[theme].messageTextMain;
     const dateColor = colors[theme].messageTextSecond;
     const bubbleImg = item.isOwn ? IMG_BUBBLE_RIGHT : IMG_BUBBLE_LEFT;
+    const name = item.contact ? item.contact.fullName || item.contact.nickname : item.username;
 
     return (
       <TouchableOpacity style={[groupChat ? containerGroupStyle : containerStyle, _styles.container]} onPress={this.onPress(item)} onLongPress={this.onLongPress}>
         {groupChat && !item.isOwn &&
           <TouchableOpacity onPress={() => this.onAvatarPress(item.contact ? item.contact : item.username)} style={_styles.avatarContainer}>
-            <AvatarIcon theme={theme} source={item.contact ? item.contact.avatar : ''} label={item.fullname || item.username} width={32} height={32}/>
+            <AvatarIcon theme={theme} source={item.contact ? item.contact.avatar : ''} label={name} width={32} height={32}/>
           </TouchableOpacity>}
         <View style={{flex: 1}}>
           <Image

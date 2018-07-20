@@ -26,13 +26,12 @@ class ResetPasswordEnterKey extends Component {
     const emailFormValues = navigation.getParam('data');
 
     const sendData = {
-      username: emailFormValues.username.trim().toLowerCase(),
       token: data.token,
       password: data.password,
     };
 
     return await dispatch(accountActions.setNewPassword(sendData))
-      .then((sendData) => {
+      .then(() => {
         if (this.props.account.setNewPassword) {
           navigation.navigate(routeEnum.ResetPasswordPassSuccess, {email: emailFormValues.email});
           dispatch(accountActions.setDefaultNewPassword());
