@@ -114,7 +114,7 @@ class GroupMessage extends PureComponent {
     const currentGroup = group.current;
     const {theme} = account.user;
     const _styles = styles(theme);
-    const membersCount = Object.keys(currentGroup.members);
+    const membersCount = (currentGroup.members && Object.keys(currentGroup.members)) || 0;
     const navbarDescription = `${context.t('Users')}: ${membersCount > 0 ? membersCount : 0}`;
 
     return (
