@@ -71,7 +71,9 @@ class Groups extends Component {
 
   onAddGroup = () => this.props.navigation.navigate(routeEnum.GroupAdd);
 
-  onGroupPress = () => {};
+  onGroupPress = (group) => {
+    this.props.navigation.navigate(routeEnum.GroupMessage, {group});
+  };
 
   onGroupLongPress = () => {};
 

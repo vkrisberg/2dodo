@@ -3,6 +3,11 @@ import {colors, fonts, weights, sizes} from "../../../styles";
 
 export default ({theme}) => {
   return StyleSheet.create({
+    container: {
+      flexDirection: 'row',
+      alignItems: 'flex-end',
+    },
+
     containerRight: {
       position: 'relative',
       marginVertical: 5,
@@ -15,6 +20,10 @@ export default ({theme}) => {
       marginVertical: 5,
       marginRight: 40,
       marginLeft: 10,
+    },
+
+    avatarContainer: {
+      marginRight: 10,
     },
 
     background: {

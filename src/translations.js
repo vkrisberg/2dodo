@@ -209,6 +209,7 @@ const translations = {
     'typing': 'typing',
     //Group
     'Members': 'Участники',
+    'Users': 'Участники',
     'AlreadyInGroup': 'Вы уже состоите в этой группе',
     'GroupName': 'Название группы',
     'ChangePhoto': 'Изменить фотографию',
@@ -441,6 +442,7 @@ const translations = {
     'typing': 'typing',
     //Group
     'Members': 'Members',
+    'Users': 'Users',
     'AlreadyInGroup': 'You are already in this group',
     'GroupName': 'Group name',
     'ChangePhoto': 'Change photo',
