@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {Alert} from 'react-native';
 
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
 import {GroupList} from '../../../components/lists';
 import {SearchInput, Navbar, NavbarDots, ButtonAdd, GroupListItem, ButtonNavbar, Loader} from '../../../components/elements';
-import {groupActions, groupMessageActions} from '../../../store/actions';
+import {groupActions} from '../../../store/actions';
 import {routeEnum} from '../../../enums';
 
 class Groups extends Component {
@@ -32,28 +31,10 @@ class Groups extends Component {
 
   componentDidMount() {
     this.props.dispatch(groupActions.loadList());
-    // this.createGroup({
-    //   link: 'ramil_test_group',
-    //   type: messageEnum.groupChat,
-    //   name: 'Test Group',
-    //   description: 'Test group for tests',
-    //   avatar: '',
-    //   members: [],
-    // });
-    //
-    // this.sendGroupMessage({
-    //   groupId: 'd2071caea70c42b69a0da77fee2a83ab',
-    //   link: 'ramil_test_group',
-    //   data: 'Hello! This is test message!',
-    // });
   }
 
   createGroup = (data) => {
     this.props.dispatch(groupActions.create(data));
-  };
-
-  sendGroupMessage = (data) => {
-    this.props.dispatch(groupMessageActions.send(data));
   };
 
   loadGroupList = (filter, sort, descending) => {
