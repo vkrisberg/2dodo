@@ -81,7 +81,7 @@ export default {
 
         console.log('group list loaded', groupList.length);
         const payload = groupList.map((item) => {
-          return {...item};
+          return JSON.parse(JSON.stringify(item));
         });
         dispatch({type: types.LOAD_SUCCESS, payload});
         return payload;
@@ -102,7 +102,27 @@ export default {
           throw new Error('group is not found in database');
         }
         // console.log('group loaded', group);
-        const payload = {...group};
+        const payload = JSON.parse(JSON.stringify(group));
+        dispatch({type: types.LOAD_ONE_SUCCESS, payload});
+        return payload;
+      } catch (e) {
+        dispatch({type: types.LOAD_ONE_FAILURE, error: e});
+        throw e;
+      }
+    };
+  },
+
+  loadOneByLink: (link) => {
+    return async dispatch => {
+      dispatch({type: types.LOAD_ONE});
+      try {
+        const realm = services.getRealm();
+        const group = realm.objects(dbEnum.Group).filtered(`link = '${link}'`);
+        if (!group || !group[0]) {
+          throw new Error('group is not found in database');
+        }
+        // console.log('group loaded', group[0]);
+        const payload = JSON.parse(JSON.stringify(group[0]));
         dispatch({type: types.LOAD_ONE_SUCCESS, payload});
         return payload;
       } catch (e) {

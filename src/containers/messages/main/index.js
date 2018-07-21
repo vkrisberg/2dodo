@@ -4,17 +4,18 @@ import RNDeviceInfo from 'react-native-device-info';
 import FCM from 'react-native-fcm';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {isEmpty, map} from 'lodash';
+import {isEmpty, map, get} from 'lodash';
 import moment from 'moment';
 
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
 import {ChatList} from '../../../components/lists';
 import {SearchInput, Navbar, NavbarDots, ButtonAdd, ChatListItem, ButtonNavbar} from '../../../components/elements';
-import {chatActions, chatMessageActions, contactActions} from '../../../store/actions';
-import {routeEnum} from '../../../enums';
-import androidPushListeners from './android-push-listeners';
+import {chatActions, chatMessageActions, contactActions, groupActions} from '../../../store/actions';
+import {actionEnum, routeEnum} from '../../../enums';
+// import androidPushListeners from './android-push-listeners';
 
 const GET_ONLINE_UPDATE_TIME = 10000; // in ms
+const NAVIGATE_TIMEOUT = 200; // in ms
 
 class Messages extends Component {
 
@@ -34,15 +35,11 @@ class Messages extends Component {
   state = {
     editMode: false,
     selected: {},
-    initNotify: null,
   };
 
   constructor(props) {
     super(props);
     this.timer = null;
-    if (Platform.OS === 'android') {
-      androidPushListeners.registerKilledListener();
-    }
   }
 
   async componentDidMount() {
@@ -55,31 +52,28 @@ class Messages extends Component {
 
   init = async () => {
     AppState.addEventListener('change', this.handleAppStateChange);
-
     // Push notifications for Android
     if (Platform.OS === 'android') {
-      androidPushListeners.registerKilledListener();
-      androidPushListeners.registerAppListener(this.props.navigation);
-      FCM.getInitialNotification().then((notify) => {
-        this.setState({
-          initNotify: notify
-        });
-        if (notify && notify.targetScreen === "detail") {
-          setTimeout(() => {
-            this.props.navigation.navigate("Detail");
-          }, 500);
-        }
+      // androidPushListeners.registerKilledListener();
+      // androidPushListeners.registerAppListener(this.props.navigation);
+      const notify = await FCM.getInitialNotification().then((notify) => {
+        console.log('INITIAL NOTIFY', notify);
+        return notify;
       });
+      if (notify) {
+        const action = get(notify, 'action', '');
+        const meta = JSON.parse(get(notify, 'meta', '{}'));
+        await this.notificationActions({action, meta});
+      }
       try {
-        let result = await FCM.requestPermissions({
-          badge: true,
-          sound: true,
-          alert: true
-        });
+        let result = await FCM.requestPermissions({badge: true, sound: true, alert: true});
         console.log('FCM.requestPermissions result', result);
       } catch (e) {
         console.error(e);
       }
+      // FCM.getFCMToken().then(token => {
+      //   console.log('FCM.getFCMToken', token);
+      // });
     }
 
     // Push notifications for iOS
@@ -123,6 +117,28 @@ class Messages extends Component {
     }
   };
 
+  notificationActions = async ({action, meta}) => {
+    switch (action) {
+      case actionEnum.chatMessage:
+        const chat = await this.props.dispatch(chatActions.loadOne(meta.chatId));
+        setTimeout(() => {
+          this.props.navigation.navigate(routeEnum.ChatMessage, {chat});
+        }, NAVIGATE_TIMEOUT);
+        break;
+      case actionEnum.sendGroupMessage:
+        const group = await this.props.dispatch(groupActions.loadOneByLink(meta.link));
+        setTimeout(() => {
+          this.props.navigation.navigate(routeEnum.GroupMessage, {group});
+        }, NAVIGATE_TIMEOUT);
+        break;
+      case actionEnum.requestProfile:
+        console.log('REQUEST PROFILE NOTIFICATION', action, meta);
+        break;
+      default:
+        break;
+    }
+  };
+
   onPushRegistered = (token) => {
     console.log('TOKEN:', token);
 
@@ -158,7 +174,7 @@ class Messages extends Component {
     // );
   };
 
-  onRemoteNotification = (notification) => {
+  onRemoteNotification = async (notification) => {
     console.log('NOTIFICATION:', notification);
 
     if (!notification) {
@@ -166,18 +182,15 @@ class Messages extends Component {
     }
 
     const {message, data, badge} = notification;
-    let onAlertPress = null;
 
-    switch (notification.data.type) {
-      default:
-        break;
-    }
+    await this.notificationActions(data);
 
     // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
     notification.finish(PushNotificationIOS.FetchResult.NoData);
   };
 
-  onLocalNotification = () => {
+  onLocalNotification = (notification) => {
+    console.log('LOCAL NOTIFICATION:', notification);
   };
 
   sendTestLocalNotification = () => {
