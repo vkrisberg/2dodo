@@ -7,6 +7,7 @@ import {MainLayout, BackgroundLayout} from '../../../components/layouts';
 import {ContactList} from '../../../components/lists';
 import {SearchInput, Navbar, ContactSearchItem, ButtonBack, TextLabel} from '../../../components/elements';
 import {chatActions, contactActions} from '../../../store/actions';
+import {helpers} from '../../../utils';
 import {colors} from '../../../styles';
 import styles from './styles';
 
@@ -15,6 +16,8 @@ import IMG_QR_ICON from './img/qr.png';
 class ContactAdd extends Component {
   static propTypes = {
     account: PropTypes.object,
+    contact: PropTypes.object,
+    navigation: PropTypes.shape({navigate: PropTypes.func}),
   };
 
   static contextTypes = {
@@ -28,6 +31,13 @@ class ContactAdd extends Component {
   constructor(props) {
     super(props);
     this.searchTimerId = null;
+  }
+
+  componentDidMount() {
+    const searchUser = this.props.navigation.getParam('username');
+    if (searchUser) {
+      this.props.dispatch(contactActions.search(helpers.getLogin(searchUser)));
+    }
   }
 
   componentWillUnmount() {
@@ -103,13 +113,14 @@ class ContactAdd extends Component {
     const {account} = this.props;
     const {theme} = this.props.account.user;
     const _styles = styles(theme);
+    const searchInputValue = this.props.navigation.getParam('username');
 
     return (
       <MainLayout netOffline={!account.net.connected} wsConnected={account.connected}>
         <BackgroundLayout theme={account.user.theme} paddingHorizontal={10}>
           <Navbar renderTitle={this.context.t('AddContact')}
                   renderLeft={<ButtonBack/>}/>
-          <SearchInput placeholder={this.context.t('AddContactPlaceholder')} onChange={this.onSearchChange}/>
+          <SearchInput value={searchInputValue ? helpers.getLogin(searchInputValue) : ''} placeholder={this.context.t('AddContactPlaceholder')} onChange={this.onSearchChange}/>
           {this.renderContacts(_styles)}
         </BackgroundLayout>
       </MainLayout>

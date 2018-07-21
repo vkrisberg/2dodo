@@ -14,10 +14,10 @@ const initState = {
     username: '',
     from: '',
     text: '',
+    filename: '',
     fileUrl: '',
-    contacts: [],
-    user: {},
-    quote: {},
+    contact: {},
+    quote: '',
     status: 'sending', // [sending, send, received, read, error]
     isOwn: false,
     isFavorite: false,
