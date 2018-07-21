@@ -94,6 +94,9 @@ export default {
       try {
         const realm = services.getRealm();
         const chat = realm.objectForPrimaryKey(dbEnum.Chat, id);
+        if (!chat) {
+          throw new Error('chat is not found in database');
+        }
         // console.log('chat loaded', chat);
         const payload = JSON.parse(JSON.stringify(chat));
         dispatch({type: types.LOAD_ONE_SUCCESS, payload});
