@@ -71,9 +71,9 @@ class Messages extends Component {
       } catch (e) {
         console.error(e);
       }
-      // FCM.getFCMToken().then(token => {
-      //   console.log('FCM.getFCMToken', token);
-      // });
+      FCM.getFCMToken().then(token => {
+        console.log('FCM.getFCMToken', token);
+      });
     }
 
     // Push notifications for iOS
@@ -120,16 +120,24 @@ class Messages extends Component {
   notificationActions = async ({action, meta}) => {
     switch (action) {
       case actionEnum.chatMessage:
-        const chat = await this.props.dispatch(chatActions.loadOne(meta.chatId));
-        setTimeout(() => {
-          this.props.navigation.navigate(routeEnum.ChatMessage, {chat});
-        }, NAVIGATE_TIMEOUT);
+        try {
+          const chat = await this.props.dispatch(chatActions.loadOne(meta.chatId));
+          setTimeout(() => {
+            this.props.navigation.navigate(routeEnum.ChatMessage, {chat});
+          }, NAVIGATE_TIMEOUT);
+        } catch (e) {
+          console.log(e);
+        }
         break;
       case actionEnum.sendGroupMessage:
-        const group = await this.props.dispatch(groupActions.loadOneByLink(meta.link));
-        setTimeout(() => {
-          this.props.navigation.navigate(routeEnum.GroupMessage, {group});
-        }, NAVIGATE_TIMEOUT);
+        try {
+          const group = await this.props.dispatch(groupActions.loadOneByLink(meta.link));
+          setTimeout(() => {
+            this.props.navigation.navigate(routeEnum.GroupMessage, {group});
+          }, NAVIGATE_TIMEOUT);
+        } catch (e) {
+          console.log(e);
+        }
         break;
       case actionEnum.requestProfile:
         console.log('REQUEST PROFILE NOTIFICATION', action, meta);
@@ -196,7 +204,7 @@ class Messages extends Component {
   sendTestLocalNotification = () => {
     if (Platform.OS === 'ios') {
       PushNotificationIOS.scheduleLocalNotification({
-        fireDate: moment().add(5, 'seconds').format("YYYY-MM-DDTHH:mm:ss.sssZ"),
+        fireDate: moment().add(5, 'seconds').format('YYYY-MM-DDTHH:mm:ss.sssZ'),
         alertTitle: 'Chat Message',
         alertBody: 'You have a new message from @vova',
         applicationIconBadgeNumber: 1,
