@@ -75,8 +75,8 @@ export default class MessageListItem extends PureComponent {
     return (
       <TouchableOpacity style={[groupChat ? containerGroupStyle : containerStyle, _styles.container]} onPress={this.onPress(item)} onLongPress={this.onLongPress}>
         {groupChat && !item.isOwn &&
-          <TouchableOpacity onPress={() => this.onAvatarPress(item.username)} style={_styles.avatarContainer}>
-            <AvatarIcon theme={theme} source={item.avatar} label={name} width={32} height={32}/>
+          <TouchableOpacity onPress={() => this.onAvatarPress(item.contact ? item.contact : item.username)} style={_styles.avatarContainer}>
+            <AvatarIcon theme={theme} source={item.contact ? item.contact.avatar : ''} label={name} width={32} height={32}/>
           </TouchableOpacity>}
         <View style={{flex: 1}}>
           <Image
@@ -92,11 +92,11 @@ export default class MessageListItem extends PureComponent {
                          weight={weights.medium}>{item.text}</TextLabel>
             </View>
             <View style={_styles.dateWrapper}>
-              {item.isOwn && (item.status === messageEnum.sending || item.status === messageEnum.sent) &&
+              {item.isOwn && (item.status === messageEnum.sending || item.status === messageEnum.sent) && !groupChat &&
               <Image source={IMG_STATUS_SEND} style={_styles.statusIcon}/>}
-              {item.isOwn && item.status === messageEnum.received &&
+              {item.isOwn && item.status === messageEnum.received && !groupChat &&
               <Image source={IMG_STATUS_RECEIVED} style={_styles.statusIcon}/>}
-              {item.isOwn && item.status === messageEnum.read &&
+              {item.isOwn && item.status === messageEnum.read && !groupChat &&
               <Image source={IMG_STATUS_READ} style={_styles.statusIcon}/>}
               <TextLabel color={dateColor}
                          size={11}
