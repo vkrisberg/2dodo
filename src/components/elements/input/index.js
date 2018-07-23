@@ -20,6 +20,7 @@ export default class Input extends PureComponent {
     errorColor: PropTypes.string,
     style: PropTypes.any,
     onSubmit: PropTypes.func,
+    onChange: PropTypes.func,
     inputProps: PropTypes.object,
   };
 
@@ -50,6 +51,11 @@ export default class Input extends PureComponent {
     input.onBlur && input.onBlur();
   };
 
+  onChange = (text) => {
+    this.setState({text});
+    this.props.onChange(text);
+  };
+
   render() {
     let {
       theme,
@@ -77,12 +83,12 @@ export default class Input extends PureComponent {
     return (
       <TextInput
         underlineColorAndroid="transparent"
-        value={input.value}
+        value={this.props.onChange ? this.state.text : input.value}
         placeholder={placeholder}
         placeholderTextColor={placeholderColor}
         selectionColor={focusedColor}
         style={[_styles.input, style]}
-        onChangeText={input.onChange}
+        onChangeText={this.props.onChange ? this.onChange : input.onChange}
         onSubmitEditing={onSubmit}
         onBlur={this.handleBlur}
         onFocus={this.handleFocus}

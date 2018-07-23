@@ -12,15 +12,7 @@ import styles from './styles';
 import arrowIcon from '../../../images/icons/arrow-right/arrow_right.png';
 import shareIcon from '../../../images/icons/share/share.png';
 import {routeEnum} from '../../../enums';
-
-const user = {
-  name: 'Lisa Simpson',
-  properties: {
-    username: '@sipsonlisa',
-    avatar: 'http://i.imgur.com/4LClmI1.png',
-    language: 'English',
-  },
-};
+import {helpers} from '../../../utils';
 
 class Settings extends Component {
 
@@ -47,7 +39,7 @@ class Settings extends Component {
 
   onAvatar = () => alert('click on avatar');
 
-  onUserName = () => alert('click on username');
+  onUserName = () => this.props.navigation.navigate(routeEnum.ProfileSettings);
 
   onQrCode = () => alert('click on qr');
 
@@ -78,7 +70,8 @@ class Settings extends Component {
   render() {
     const {context} = this;
     const {account} = this.props;
-    const {theme} = account.user;
+    const {user} = this.props.account;
+    const {theme} = user;
     const _styles = styles(theme);
     const settingsData = [
       [
@@ -141,11 +134,11 @@ class Settings extends Component {
             renderRight={this.renderNavbarButton()}/>
           <ScrollView style={_styles.container}>
             <View style={_styles.header}>
-              <Avatar source={user.properties.avatar} onPress={this.onAvatar}/>
+              <Avatar source={user.avatar} onPress={this.onAvatar}/>
               <View style={_styles.userData}>
-                <Text style={_styles.name}>{user.name}</Text>
+                <Text style={_styles.name}>{helpers.getFullName(user)}</Text>
                 <TouchableOpacity style={_styles.usernameBlock} onPress={this.onUserName}>
-                  <Text style={[_styles.defaultText, _styles.username]}>{user.properties.username}</Text>
+                  <Text style={[_styles.defaultText, _styles.username]}>{helpers.getNickname(user.username)}</Text>
                   <Image source={arrowIcon}/>
                 </TouchableOpacity>
                 <View style={_styles.buttonsBlock}>

@@ -3,28 +3,6 @@ import {StyleSheet} from 'react-native';
 
 export default (theme) => {
   return StyleSheet.create({
-    header: {
-      width: sizes.windowWidth,
-      flexDirection: 'row',
-    },
-
-    styledTitle: {
-      fontSize: 28,
-      marginLeft: 20,
-      color: colors[theme].navbarTitle,
-      ...getFont({weight: weights.bold}),
-    },
-
-    titleContainer: {
-      width: '100%',
-      paddingLeft: 20,
-      paddingRight: 10,
-      marginTop: 35,
-      marginBottom: 10,
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-
     body: {
       width: sizes.windowWidth,
       paddingRight: 10,
@@ -36,16 +14,6 @@ export default (theme) => {
     bodyProfile: {
       paddingLeft: 0,
       paddingRight: 0,
-    },
-
-    editBtn: {
-      width: 'auto',
-      height: 'auto',
-      paddingHorizontal: 10,
-      borderWidth: 0,
-      justifyContent: 'flex-end',
-      position: 'absolute',
-      right: 10,
     },
   });
 };
