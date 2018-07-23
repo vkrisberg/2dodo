@@ -18,6 +18,7 @@ export default {
   Preload: 'Preload',
   Registration: 'Registration',
   Settings: 'Settings',
+  ProfileSettings: 'ProfileSettings',
   SoundSettings: 'SoundSettings',
   AppearanceSettings: 'AppearanceSettings',
   AdvancedSettings: 'AdvancedSettings',
