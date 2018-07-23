@@ -33,7 +33,7 @@ class ProfileUserForm extends Component {
     },
     onGroups: () => {
     },
-     onSound: () => {
+    onSound: () => {
     },
     onExit: () => {
     },
@@ -104,13 +104,13 @@ class ProfileUserForm extends Component {
               style={[_styles.input, path === 'nickname' && _styles.fieldNickname, path === 'bio' && _styles.fieldBio]}
               theme={theme}
               maxLength={this.props.bioLength}
-              onChange={this.onChangeBio}
               error={touched && error}/> :
             <Input
               {...props}
               style={[_styles.input, path === 'nickname' && _styles.fieldNickname]}
               theme={theme}
-              error={touched && error}/>
+              error={touched && error}
+              editable={!(path === 'nickname')}/>
         }
         <FieldError theme={theme} errors={errors} path={props.input.name} type={'second'}/>
       </View>
@@ -187,7 +187,7 @@ class ProfileUserForm extends Component {
                   autoCorrect={false}/>
               </View>
               <View className={_styles.fieldContainer}>
-                <Text style={[_styles.defaultText, _styles.labelBio]}>{this.state.bioLength}</Text>
+                {/*<Text style={[_styles.defaultText, _styles.labelBio]}>{this.state.bioLength}</Text>*/}
                 <Field
                   name="bio"
                   component={this.renderInput}

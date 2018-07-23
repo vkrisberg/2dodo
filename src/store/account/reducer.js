@@ -315,7 +315,7 @@ export default reducer(initState, {
     return {
       ...state,
       updating: true,
-      error: null
+      error: null,
     };
   },
 

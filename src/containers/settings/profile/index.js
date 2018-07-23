@@ -29,8 +29,16 @@ class ProfileSettings extends Component {
   }
 
   renderNavbarButton = () => {
+    const {account} = this.props;
+
     return (
-      <ButtonNavbar position="right" onPress={this.onDone} color={colors[this.props.account.user.theme].blueCornFlower}>{this.context.t('Done')}</ButtonNavbar>
+      <ButtonNavbar
+        position="right"
+        onPress={this.onDone}
+        color={colors[this.props.account.user.theme].blueCornFlower}
+        disabled={!account.net.connected || account.loading || account.updating}>
+        {this.context.t('Done')}
+      </ButtonNavbar>
     );
   };
 
@@ -49,20 +57,18 @@ class ProfileSettings extends Component {
       phones: data.phones,
       nickname: data.nickname,
       bio: data.bio,
+      avatar: data.avatar,
     };
+
     this.props.dispatch(accountActions.updateProfile(sendData))
       .then(() => {
         this.props.navigation.goBack();
       });
   };
 
-  onAvatar = () => alert('click on avatar');
-
   onExit = () => alert('click on exit btn');
 
   onDelete = () => alert('click on delete btn');
-
-  onRemoveBtn = () => alert('click on remove btn');
 
   onAddBtn = () => alert('click on add btn');
 
@@ -79,7 +85,7 @@ class ProfileSettings extends Component {
     return (
       <MainLayout netOffline={!account.net.connected} wsConnected={account.connected}>
         <BackgroundLayout theme={theme}>
-          {account.loading && <Loader/>}
+          {(account.updating || account.loading) && <Loader/>}
           <Navbar
             renderTitle={context.t('MyProfile')}
             renderLeft={<ButtonBack/>}
@@ -90,8 +96,6 @@ class ProfileSettings extends Component {
               context={context}
               initialValues={Object.assign({}, account.user, {group: group.list})}
               onSubmit={() => {}}
-              onAvatar={this.onAvatar}
-              onRemoveBtn={this.onRemoveBtn}
               onAddBtn={this.onAddBtn}
               onGroups={this.onGroups}
               onSound={this.onSound}

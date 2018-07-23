@@ -5,7 +5,7 @@ import {View, Text, TouchableOpacity, Image, ScrollView} from 'react-native';
 
 import {accountActions} from '../../../store/actions';
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
-import {Navbar, NavbarDots, Avatar, Button, ButtonNavbar, SettingsListItem} from '../../../components/elements';
+import {Navbar, NavbarDots, Button, ButtonNavbar, SettingsListItem, AvatarIcon} from '../../../components/elements';
 import {SettingsList} from '../../../components/lists';
 import styles from './styles';
 
@@ -36,8 +36,6 @@ class Settings extends Component {
       <ButtonNavbar position="right" onPress={this.logout}>{this.context.t('Logout')}</ButtonNavbar>
     );
   };
-
-  onAvatar = () => alert('click on avatar');
 
   onUserName = () => this.props.navigation.navigate(routeEnum.ProfileSettings);
 
@@ -71,6 +69,7 @@ class Settings extends Component {
     const {context} = this;
     const {account} = this.props;
     const {user} = this.props.account;
+    const fullName = helpers.getFullName(user);
     const {theme} = user;
     const _styles = styles(theme);
     const settingsData = [
@@ -134,9 +133,9 @@ class Settings extends Component {
             renderRight={this.renderNavbarButton()}/>
           <ScrollView style={_styles.container}>
             <View style={_styles.header}>
-              <Avatar source={user.avatar} onPress={this.onAvatar}/>
+              <AvatarIcon theme={theme} source={user.avatar} label={fullName}/>
               <View style={_styles.userData}>
-                <Text style={_styles.name}>{helpers.getFullName(user)}</Text>
+                <Text style={_styles.name}>{fullName}</Text>
                 <TouchableOpacity style={_styles.usernameBlock} onPress={this.onUserName}>
                   <Text style={[_styles.defaultText, _styles.username]}>{helpers.getNickname(user.username)}</Text>
                   <Image source={arrowIcon}/>
@@ -144,12 +143,14 @@ class Settings extends Component {
                 <View style={_styles.buttonsBlock}>
                   <Button
                     style={_styles.actionBtn}
-                    onPress={this.onQrCode}>
+                    onPress={this.onQrCode}
+                    disabled>
                     <Text style={[_styles.defaultText, _styles.btnText]}>{context.t('ShowMyQrCode')}</Text>
                   </Button>
                   <Button
                     style={[_styles.actionBtn, _styles.shareBtn]}
-                    onPress={this.onQrCode}>
+                    onPress={this.onQrCode}
+                    disabled>
                     <Image source={shareIcon} style={_styles.shareIcon}/>
                     <Text style={[_styles.defaultText, _styles.btnText]}>{context.t('Share')}</Text>
                   </Button>
