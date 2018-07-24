@@ -30,9 +30,9 @@ export default {
     return http.get(`/password_reset/?email=${encodeURIComponent(email)}&username=${encodeURIComponent(username)}`);
   },
 
-  setNewPassword: ({token, password}) => {
+  setNewPassword: ({token, password, username}) => {
     const http = services.getHttp();
-    const data = {token, password};
+    const data = {token, password, username};
     return http.post('/new_password/', data);
   },
 };
