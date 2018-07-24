@@ -44,6 +44,7 @@ const initState = {
   connecting: false,
   connectionAttempts: 0,
   stopReconnect: false,
+  appState: 'active',
 
   loading: false,
   updating: false,
@@ -403,6 +404,13 @@ export default reducer(initState, {
       ...state,
       updating: false,
       error: action.error,
+    };
+  },
+
+  [types.SET_APP_STATE]: (state, action) => {
+    return {
+      ...state,
+      appState: action.payload,
     };
   },
 });
