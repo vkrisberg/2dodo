@@ -1,5 +1,7 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 import {colors, getFont, sizes} from '../../styles';
+
+const platformIos = Platform.OS === 'ios';
 
 export default (theme) => {
   return StyleSheet.create({
@@ -29,7 +31,7 @@ export default (theme) => {
       borderWidth: 0,
       height: 'auto',
       padding: 10,
-      marginTop: sizes.isIphone5 ? 0 : 5,
+      marginTop: sizes.isIphone5 && platformIos ? 0 : 5,
     },
 
     text: {
@@ -45,7 +47,7 @@ export default (theme) => {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      marginTop: sizes.isIphone5 ? 0 : 65,
+      marginTop: sizes.isIphone5 && platformIos ? 0 : 65,
     },
 
     registrationLabel: {
