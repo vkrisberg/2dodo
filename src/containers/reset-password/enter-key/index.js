@@ -28,6 +28,7 @@ class ResetPasswordEnterKey extends Component {
     const sendData = {
       token: data.token,
       password: data.password,
+      username: emailFormValues.username,
     };
 
     return await dispatch(accountActions.setNewPassword(sendData))
