@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import {MainLayout, BackgroundLayout} from '../../components/layouts';
 import {RegistrationForm} from '../../components/forms';
 import {accountActions} from '../../store/actions';
-import {dbEnum} from '../../enums';
+import {dbEnum, routeEnum} from '../../enums';
 import {services} from '../../utils';
 import storageEnum from '../../enums/storage-enum';
 import CONFIG from '../../config';
@@ -15,6 +15,7 @@ import CONFIG from '../../config';
 class Registration extends Component {
   static propTypes = {
     account: PropTypes.object,
+    form: PropTypes.object,
     dispatch: PropTypes.func,
     navigation: PropTypes.shape({navigate: PropTypes.func}),
   };
@@ -110,11 +111,10 @@ class Registration extends Component {
   updateSettings = async (data) => {
     const {context} = this;
     const {account} = this.props;
-    const {firstName, secondName} = data;
+    const {firstName, secondName, avatar} = data;
     const password = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
 
-
-    this.props.dispatch(accountActions.updateProfile({firstName, secondName})).then((user) => {
+    this.props.dispatch(accountActions.updateProfile({firstName, secondName, avatar})).then((user) => {
       this.props.dispatch(accountActions.connect({
         deviceId: account.deviceId,
         hostname: account.hostname,
@@ -128,6 +128,7 @@ class Registration extends Component {
     }, (error) => {
       Alert.alert(error.toString());
     });
+    this.props.navigation.navigate(routeEnum.Messages);
   };
 
   updateAvatar = () => {
@@ -148,7 +149,8 @@ class Registration extends Component {
   };
 
   render() {
-    const {account} = this.props;
+    const {account, form} = this.props;
+    const formSettings = form.settings;
 
     return (
       <MainLayout netOffline={!account.net.connected}>
@@ -156,7 +158,11 @@ class Registration extends Component {
           <RegistrationForm context={this.context}
                             account={account}
                             onRegister={this.registration}
-                            onSettings={this.updateSettings}
+                            onSettings={() => this.updateSettings({
+                              firstName: formSettings.values.firstName,
+                              secondName: formSettings.values.secondName,
+                              avatar: formSettings.values.avatar}
+                            )}
                             onAvatar={this.updateAvatar}
                             onTheme={this.updateTheme}/>
         </BackgroundLayout>
@@ -167,4 +173,5 @@ class Registration extends Component {
 
 export default connect(state => ({
   account: state.account,
+  form: state.form,
 }))(Registration);
