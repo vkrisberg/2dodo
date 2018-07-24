@@ -3,6 +3,7 @@ import {View, TouchableOpacity, Text, Image} from 'react-native';
 import PropTypes from 'prop-types';
 
 import {Navbar, ButtonBack, ButtonNavbar, TextLabel} from '../index';
+import {HideWrapper} from '../../../components/layouts';
 import {Icon, AvatarIcon} from '../../../components/elements';
 import {themeEnum} from '../../../enums';
 import {colors, weights} from '../../../styles';
@@ -71,9 +72,11 @@ export default class NavbarChat extends Component {
                      weight={weights.medium}
                      size={13}>{description}</TextLabel>
         </View>
-        <TouchableOpacity style={_styles.menuContainer} onPress={this.onMenuPress}>
-          <Image style={_styles.menuDots} source={IMG_MENU_DOTS} tintColor={this.state.showPanel ? colors[theme].blue : null}/>
-        </TouchableOpacity>
+        <HideWrapper style={{width: 'auto'}}>
+          <TouchableOpacity style={_styles.menuContainer} onPress={this.onMenuPress}>
+            <Image style={_styles.menuDots} source={IMG_MENU_DOTS} tintColor={this.state.showPanel ? colors[theme].blue : null}/>
+          </TouchableOpacity>
+        </HideWrapper>
       </View>
     );
   };

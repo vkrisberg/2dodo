@@ -3,7 +3,7 @@ import {Platform, View, KeyboardAvoidingView, Alert} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
-import {MainLayout, BackgroundLayout, DismissKeyboardLayout} from '../../../components/layouts';
+import {MainLayout, BackgroundLayout} from '../../../components/layouts';
 import {NavbarChat, MessageListItem, MessageInput, Loader} from '../../../components/elements';
 import {chatMessageActions, groupActions, groupMessageActions} from '../../../store/actions';
 import {MessageList} from '../../../components/lists';
@@ -152,17 +152,15 @@ class GroupMessage extends PureComponent {
               onAvatarPress={this.onNavbarAvatarPress}
               onBackPress={this.onBack}/>
           </View>
-          <DismissKeyboardLayout style={_styles.fullWrap}>
-            {
-              Platform.OS === 'ios' ?
-                <KeyboardAvoidingView style={_styles.container} behavior="padding" enabled>
-                  {this.renderMessageList(theme)}
-                </KeyboardAvoidingView> :
-                <KeyboardAvoidingView style={_styles.container} enabled>
-                  {this.renderMessageList(theme)}
-                </KeyboardAvoidingView>
-            }
-          </DismissKeyboardLayout>
+          {
+            Platform.OS === 'ios' ?
+              <KeyboardAvoidingView style={_styles.container} behavior="padding" enabled>
+                {this.renderMessageList(theme)}
+              </KeyboardAvoidingView> :
+              <KeyboardAvoidingView style={_styles.container} enabled>
+                {this.renderMessageList(theme)}
+              </KeyboardAvoidingView>
+          }
         </BackgroundLayout>
       </MainLayout>
     );

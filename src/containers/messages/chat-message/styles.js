@@ -15,6 +15,7 @@ export default StyleSheet.create({
   },
 
   searchInputContainer: {
+    width: '100%',
     paddingHorizontal: 10,
   },
 });
