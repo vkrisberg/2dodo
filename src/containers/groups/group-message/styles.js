@@ -11,8 +11,14 @@ export default (theme) => {
     },
 
     navbarContainer: {
+      paddingBottom: 5,
       borderBottomWidth: 1,
       borderBottomColor: colors[theme].grayLight,
     },
+
+    fullWrap: {
+      flex: 1,
+      width: '100%',
+    }
   });
 };

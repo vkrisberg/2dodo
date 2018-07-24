@@ -3,7 +3,7 @@ import {TouchableOpacity, Text, View, Image} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
-import {MainLayout, BackgroundLayout} from '../../../components/layouts';
+import {MainLayout, BackgroundLayout, HideWrapper} from '../../../components/layouts';
 import {ContactList} from '../../../components/lists';
 import {SearchInput, Navbar, ContactSearchItem, ButtonBack, TextLabel} from '../../../components/elements';
 import {chatActions, contactActions} from '../../../store/actions';
@@ -92,15 +92,17 @@ class ContactAdd extends Component {
 
     if (!contact.searchList || !contact.searchList.length) {
       return (
-        <View style={_styles.emptyContainer}>
-          <TouchableOpacity onPress={this.goQrScanner}>
-            <View style={_styles.emptyWrapper}>
-              <Image source={IMG_QR_ICON}/>
-              <TextLabel style={_styles.text}
-                         color={colors[theme].blackText}>{this.context.t('AddContactQrCode')}</TextLabel>
-            </View>
-          </TouchableOpacity>
-        </View>
+        <HideWrapper style={{flex: 1}}>
+          <View style={_styles.emptyContainer}>
+            <TouchableOpacity onPress={this.goQrScanner}>
+              <View style={_styles.emptyWrapper}>
+                <Image source={IMG_QR_ICON}/>
+                <TextLabel style={_styles.text}
+                           color={colors[theme].blackText}>{this.context.t('AddContactQrCode')}</TextLabel>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </HideWrapper>
       );
     }
 

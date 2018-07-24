@@ -3,7 +3,8 @@ import {TouchableOpacity, Text, Image, View, ScrollView} from 'react-native';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
-import {Avatar, Button} from '../../../components/elements';
+import {HideWrapper} from '../../../components/layouts';
+import {Button, AvatarIcon} from '../../../components/elements';
 import {themeEnum} from '../../../enums';
 import styles from './styles';
 import {colors} from '../../../styles';
@@ -79,7 +80,13 @@ export default class Profile extends PureComponent {
         <View style={_styles.container}>
           <View style={_styles.header}>
             <View style={_styles.userData}>
-              <Avatar source={user.avatar} style={_styles.avatar}/>
+              <AvatarIcon
+                theme={theme}
+                source={user.avatar}
+                label={user.fullName || user.username}
+                style={_styles.avatar}
+                width={65}
+                height={65}/>
               <View style={_styles.info}>
                 <Text style={_styles.name}>
                   {user.fullName ? user.fullName : user.username}
@@ -89,7 +96,8 @@ export default class Profile extends PureComponent {
                   style={[_styles.actionBtn, {paddingVertical: 5, alignItems: 'flex-start'}]}
                   color={colors[theme].blue}
                   textStyle={{fontSize: 15,}}
-                  onPress={onShowQrCode}>
+                  onPress={onShowQrCode}
+                  disabled>
                   {context.t('ShowQrCode')}
                 </Button>
               </View>
@@ -102,7 +110,8 @@ export default class Profile extends PureComponent {
               </Button>
               <Button
                 style={_styles.actionBtn}
-                onPress={onCallBtn}>
+                onPress={onCallBtn}
+                disabled>
                 <Image source={callIcon} style={_styles.callIcon}/>
               </Button>
             </View>
@@ -118,47 +127,56 @@ export default class Profile extends PureComponent {
             <View style={_styles.actionsBlock}>
               <Button
                 style={_styles.operationBtn}
-                onPress={onKeysBtn}>
+                onPress={onKeysBtn}
+                disabled>
                 <Text style={_styles.operationText}>{context.t('UserKeys')}</Text>
               </Button>
               <Button
                 style={_styles.operationBtn}
-                onPress={onFilesBtn}>
+                onPress={onFilesBtn}
+                disabled>
                 <Text style={_styles.operationText}>{context.t('MediaFiles')}</Text>
               </Button>
-              <TouchableOpacity
-                style={_styles.operationLink}
-                onPress={onSettings}>
-                <Text style={[_styles.operationText, _styles.textPaddings]}>
-                  {context.t('SettingsContact')}
-                </Text>
-                <Image source={arrowIcon}/>
-              </TouchableOpacity>
+              <HideWrapper>
+                <TouchableOpacity
+                  style={_styles.operationLink}
+                  onPress={onSettings}>
+                  <Text style={[_styles.operationText, _styles.textPaddings]}>
+                    {context.t('SettingsContact')}
+                  </Text>
+                  <Image source={arrowIcon}/>
+                </TouchableOpacity>
+              </HideWrapper>
               <Button
                 style={_styles.operationBtn}
-                onPress={onShareBtn}>
+                onPress={onShareBtn}
+                disabled>
                 <Text style={_styles.operationText}>{context.t('Share')}</Text>
               </Button>
-              <TouchableOpacity
-                style={_styles.operationLink}
-                onPress={onNotifications}>
-                <Text style={[_styles.operationText, _styles.textPaddings]}>
-                  {context.t('SettingsContact')}
-                </Text>
-                <View style={_styles.center}>
-                  <Text style={[_styles.operationText, _styles.grayText]}>{context.t('Enabled')}</Text>
-                  <Image source={arrowIcon}/>
-                </View>
-              </TouchableOpacity>
+              <HideWrapper>
+                <TouchableOpacity
+                  style={_styles.operationLink}
+                  onPress={onNotifications}>
+                  <Text style={[_styles.operationText, _styles.textPaddings]}>
+                    {context.t('SettingsContact')}
+                  </Text>
+                  <View style={_styles.center}>
+                    <Text style={[_styles.operationText, _styles.grayText]}>{context.t('Enabled')}</Text>
+                    <Image source={arrowIcon}/>
+                  </View>
+                </TouchableOpacity>
+              </HideWrapper>
               <View style={_styles.dividerThin}/>
               <Button
                 style={_styles.operationBtn}
-                onPress={onBlockUser}>
+                onPress={onBlockUser}
+                disabled>
                 <Text style={_styles.operationText}>{context.t('UserBlock')}</Text>
               </Button>
               <Button
                 style={_styles.operationBtn}
-                onPress={onClearHistory}>
+                onPress={onClearHistory}
+                disabled>
                 <Text style={_styles.operationText}>{context.t('ClearHistory')}</Text>
               </Button>
               <Button
