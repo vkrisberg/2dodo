@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Alert, AsyncStorage} from 'react-native';
+import {NavigationActions, StackActions} from 'react-navigation';
 import ImagePicker from 'react-native-image-picker';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
@@ -11,6 +12,11 @@ import {dbEnum, routeEnum} from '../../enums';
 import {services} from '../../utils';
 import storageEnum from '../../enums/storage-enum';
 import CONFIG from '../../config';
+
+const goToMessagesAction = StackActions.reset({
+  index: 0,
+  actions: [NavigationActions.navigate({routeName: routeEnum.Messages})],
+});
 
 class Registration extends Component {
   static propTypes = {
@@ -121,14 +127,15 @@ class Registration extends Component {
         keys: account.keys,
         user,
         password,
-      })).catch((error) => {
+      })).then(() => {
+        this.props.navigation.dispatch(goToMessagesAction);
+      }).catch((error) => {
         console.log('login error', error);
         Alert.alert(context.t('LoginAuthError'));
       });
     }, (error) => {
       Alert.alert(error.toString());
     });
-    this.props.navigation.navigate(routeEnum.Messages);
   };
 
   updateAvatar = () => {

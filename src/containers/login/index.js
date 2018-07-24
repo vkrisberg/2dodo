@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Platform, KeyboardAvoidingView, View, Alert, ActionSheetIOS, AsyncStorage, Text} from 'react-native';
-import {NavigationActions, StackActions, withNavigation} from 'react-navigation';
+import {NavigationActions, StackActions} from 'react-navigation';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -203,4 +203,4 @@ class Login extends Component {
 
 export default connect(state => ({
   account: state.account,
-}))(withNavigation(Login));
+}))(Login);
