@@ -33,6 +33,8 @@ class GroupMessage extends PureComponent {
       showTyping: false,
     };
 
+    const {theme} = props.account.user;
+    this.styles = styles(theme);
     this.group = {};
   }
 
@@ -131,15 +133,14 @@ class GroupMessage extends PureComponent {
     const {account, group} = this.props;
     const currentGroup = group.current;
     const {theme} = account.user;
-    const _styles = styles(theme);
-    const membersCount = (currentGroup.members && Object.keys(currentGroup.members)) || 0;
-    const navbarDescription = `${context.t('Users')}: ${membersCount > 0 ? membersCount : 0}`;
+    // const membersCount = (currentGroup.members && Object.keys(currentGroup.members)) || 0;
+    const navbarDescription = ''; // `${context.t('Users')}: ${membersCount > 0 ? membersCount : 0}`;
 
     return (
       <MainLayout netOffline={!account.net.connected} wsConnected={account.connected}>
         <BackgroundLayout theme={theme}>
           {group.loading && <Loader/>}
-          <View style={_styles.navbarContainer}>
+          <View style={this.styles.navbarContainer}>
             <NavbarChat
               context={context}
               title={currentGroup.name}
@@ -150,10 +151,10 @@ class GroupMessage extends PureComponent {
           </View>
           {
             Platform.OS === 'ios' ?
-              <KeyboardAvoidingView style={_styles.container} behavior="padding" enabled>
+              <KeyboardAvoidingView style={this.styles.container} behavior="padding" enabled>
                 {this.renderMessageList(theme)}
               </KeyboardAvoidingView> :
-              <KeyboardAvoidingView style={_styles.container} enabled>
+              <KeyboardAvoidingView style={this.styles.container} enabled>
                 {this.renderMessageList(theme)}
               </KeyboardAvoidingView>
           }
