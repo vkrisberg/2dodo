@@ -49,7 +49,7 @@ export default class App extends Component {
 
   componentDidMount() {
     NetInfo.getConnectionInfo().then((connectionInfo) => {
-      console.log('Initial, type: ' + connectionInfo.type + ', effectiveType: ' + connectionInfo.effectiveType);
+      console.log('initial connection, type: ' + connectionInfo.type + ', effectiveType: ' + connectionInfo.effectiveType);
       store.dispatch(accountActions.netUpdate(connectionInfo));
     });
     NetInfo.addEventListener('connectionChange', this.handleConnectivityChange);
@@ -60,7 +60,7 @@ export default class App extends Component {
   }
 
   handleConnectivityChange = (connectionInfo) => {
-    console.log('First change, type: ' + connectionInfo.type + ', effectiveType: ' + connectionInfo.effectiveType);
+    console.log('connection changed, type: ' + connectionInfo.type + ', effectiveType: ' + connectionInfo.effectiveType);
     store.dispatch(accountActions.netUpdate(connectionInfo));
   };
 
