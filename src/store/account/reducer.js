@@ -43,11 +43,13 @@ const initState = {
   connected: false,
   connecting: false,
   connectionAttempts: 0,
+  stopReconnect: false,
 
   loading: false,
   updating: false,
-  logout: false,
+  logout: null,
   error: null,
+  errorRemind: null,
   resetPassword: false,
   setNewPassword: false,
 };
@@ -65,8 +67,10 @@ export default reducer(initState, {
     return {
       ...state,
       ...action.payload,
+      connectionAttempts: 0,
       connecting: true,
       connected: false,
+      stopReconnect: false,
       error: null
     };
   },
@@ -78,6 +82,8 @@ export default reducer(initState, {
       // connectionAttempts: 0,
       connecting: false,
       connected: true,
+      // stopReconnect: false,
+      error: null,
     };
   },
 
@@ -88,6 +94,7 @@ export default reducer(initState, {
       connectionAttempts: 0,
       connecting: false,
       connected: false,
+      stopReconnect: false,
       error: action.error.toString(),
     };
   },
@@ -98,7 +105,17 @@ export default reducer(initState, {
       connectionAttempts: state.connectionAttempts + 1,
       connecting: false,
       connected: false,
-      error: null,
+      error: 'connection failed',
+    };
+  },
+
+  [types.STOP_RECONNECT]: (state, action) => {
+    return {
+      ...state,
+      connectionAttempts: action.payload,
+      connecting: false,
+      connected: false,
+      stopReconnect: true,
     };
   },
 
@@ -140,7 +157,7 @@ export default reducer(initState, {
     return {
       ...state,
       loading: true,
-      error: null
+      errorRemind: null
     };
   },
 
@@ -169,7 +186,7 @@ export default reducer(initState, {
         ...initState.keys,
       },
       loading: false,
-      error: action.error.toString(),
+      errorRemind: action.error.toString(),
     };
   },
 
