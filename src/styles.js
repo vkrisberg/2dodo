@@ -3,7 +3,7 @@ import {Dimensions, Platform} from 'react-native';
 const OS = Platform.OS;
 Dimensions.APPBAR_HEIGHT = OS === 'ios' ? 44 : 56;
 Dimensions.NAVBAR_HEIGHT = OS === 'ios' ? 64 : 56;
-Dimensions.STATUSBAR_HEIGHT = OS === 'ios' ? 20 : 0;
+Dimensions.STATUSBAR_HEIGHT = 20;
 Dimensions.IS_IPHONE_5 = Dimensions.get('window').width < 375;
 Dimensions.IS_IPHONE_6 = Dimensions.get('window').width === 375;
 Dimensions.IS_IPHONE_PLUS = Dimensions.get('window').width > 375;

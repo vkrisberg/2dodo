@@ -40,6 +40,7 @@ export default (theme) => {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
+      paddingVertical: 3,
     },
 
     username: {

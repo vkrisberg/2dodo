@@ -8,4 +8,13 @@ export default StyleSheet.create({
     flexDirection: 'column',
     paddingTop: 5,
   },
+
+  fullWrap: {
+    flex: 1,
+    width: '100%',
+  },
+
+  searchInputContainer: {
+    paddingHorizontal: 10,
+  },
 });

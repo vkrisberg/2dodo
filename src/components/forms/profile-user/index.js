@@ -4,6 +4,7 @@ import {Field, reduxForm, formValues} from 'redux-form';
 import ImagePicker from 'react-native-image-picker';
 import PropTypes from 'prop-types';
 
+import {HideWrapper} from '../../../components/layouts';
 import {Input, Avatar, Button, FieldError} from '../../elements';
 import {themeEnum} from '../../../enums';
 import {colors} from '../../../styles';
@@ -198,35 +199,39 @@ class ProfileUserForm extends Component {
           </KeyboardAvoidingView>
           <View style={_styles.divider}/>
           <View>
-            <TouchableOpacity style={_styles.actionItem} onPress={onGroups}>
-              <Text style={[_styles.defaultText, _styles.actionText]}>
-                {context.t('Groups')}
-              </Text>
-              <View style={_styles.actionItemRight}>
-                <Text
-                  style={[_styles.defaultText, _styles.actionSubtext]}>{(!!user.group[0] && user.group[0].name) || context.t('Groups')}</Text>
-                <Image source={arrowIcon}/>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={[_styles.actionItem, {borderBottomWidth: 0,}]} onPress={onSound}>
-              <Text style={[_styles.defaultText, _styles.actionText]}>
-                {context.t('SoundsApp')}
-              </Text>
-              <View style={_styles.actionItemRight}>
-                <Text style={[_styles.defaultText, _styles.actionSubtext]}>{context.t('Enabled')}</Text>
-                <Image source={arrowIcon}/>
-              </View>
-            </TouchableOpacity>
+            <HideWrapper>
+              <TouchableOpacity style={_styles.actionItem} onPress={onGroups}>
+                <Text style={[_styles.defaultText, _styles.actionText]}>
+                  {context.t('Groups')}
+                </Text>
+                <View style={_styles.actionItemRight}>
+                  <Text
+                    style={[_styles.defaultText, _styles.actionSubtext]}>{(!!user.group[0] && user.group[0].name) || context.t('Groups')}</Text>
+                  <Image source={arrowIcon}/>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity style={[_styles.actionItem, {borderBottomWidth: 0,}]} onPress={onSound}>
+                <Text style={[_styles.defaultText, _styles.actionText]}>
+                  {context.t('SoundsApp')}
+                </Text>
+                <View style={_styles.actionItemRight}>
+                  <Text style={[_styles.defaultText, _styles.actionSubtext]}>{context.t('Enabled')}</Text>
+                  <Image source={arrowIcon}/>
+                </View>
+              </TouchableOpacity>
+            </HideWrapper>
             <View style={_styles.divider}/>
             <View style={_styles.btnContainer}>
               <Button
                 style={_styles.actionBtn}
-                onPress={this.onExit}>
+                onPress={this.onExit}
+                disabled>
                 {context.t('ExitOrChange')}
               </Button>
               <Button
                 style={_styles.actionBtn}
-                onPress={() => this.onDelete(user.username)}>
+                onPress={() => this.onDelete(user.username)}
+                disabled>
                 <Text style={[_styles.defaultText, {color: colors[theme].redLight,}]}>{context.t('DeleteAccount')}</Text>
               </Button>
             </View>

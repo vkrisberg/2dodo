@@ -37,7 +37,7 @@ class Settings extends Component {
     );
   };
 
-  onUserName = () => this.props.navigation.navigate(routeEnum.ProfileSettings);
+  onEditProfile = () => this.props.navigation.navigate(routeEnum.ProfileSettings);
 
   onQrCode = () => alert('click on qr');
 
@@ -133,10 +133,14 @@ class Settings extends Component {
             renderRight={this.renderNavbarButton()}/>
           <ScrollView style={_styles.container}>
             <View style={_styles.header}>
-              <AvatarIcon theme={theme} source={user.avatar} label={fullName}/>
+              <TouchableOpacity onPress={this.onEditProfile}>
+                <AvatarIcon theme={theme} source={user.avatar} label={fullName}/>
+              </TouchableOpacity>
               <View style={_styles.userData}>
-                <Text style={_styles.name}>{fullName}</Text>
-                <TouchableOpacity style={_styles.usernameBlock} onPress={this.onUserName}>
+                <TouchableOpacity onPress={this.onEditProfile}>
+                  <Text style={_styles.name}>{fullName}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={_styles.usernameBlock} onPress={this.onEditProfile}>
                   <Text style={[_styles.defaultText, _styles.username]}>{helpers.getNickname(user.username)}</Text>
                   <Image source={arrowIcon}/>
                 </TouchableOpacity>
