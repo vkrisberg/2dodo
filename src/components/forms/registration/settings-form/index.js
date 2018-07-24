@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {View, KeyboardAvoidingView, TouchableOpacity} from 'react-native';
+import {View, KeyboardAvoidingView, TouchableOpacity, Alert} from 'react-native';
 import {Field, reduxForm} from 'redux-form';
 import PropTypes from 'prop-types';
+import ImagePicker from 'react-native-image-picker';
 
 import {HideWrapper} from '../../../layouts';
 import {Button, Input, TextLabel, Avatar, ButtonTheme, FieldError} from '../../../elements';
@@ -49,6 +50,19 @@ class RegistrationSettingsForm extends Component {
     };
   }
 
+  onAvatar = () => {
+    ImagePicker.showImagePicker(this.imagePickerOptions, (response) => {
+      if (response.didCancel) {
+      }
+      else if (response.error) {
+        Alert.alert('Error', response.error);
+      }
+      else {
+        this.props.change('avatar', response.data);
+      }
+    });
+  };
+
   renderField = (props) => {
     const {meta: {touched, error}} = props;
     const {theme, context} = this.props;
@@ -73,6 +87,12 @@ class RegistrationSettingsForm extends Component {
     );
   };
 
+  renderAvatar = (props) => {
+    return (
+      <Avatar source={props.input.value} {...props}/>
+    );
+  };
+
   render() {
     const {theme, context, user, disabled} = this.props;
     const _styles = styles(theme);
@@ -90,7 +110,10 @@ class RegistrationSettingsForm extends Component {
                      textAlign={'center'}
                      style={_styles.description}>{context.t('RegistrationSettingsDescription')}</TextLabel>
           <View style={_styles.avatarContainer}>
-            <Avatar source={user.avatar} onPress={this.props.onAvatar}/>
+            <Field
+              name="avatar"
+              component={this.renderAvatar}
+              onPress={this.onAvatar}/>
             <TextLabel style={_styles.avatarLabel}
                        color={colors[theme].blueDarker}>{context.t('SetYourPhoto')}</TextLabel>
           </View>
