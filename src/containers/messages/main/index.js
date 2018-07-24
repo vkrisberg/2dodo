@@ -92,7 +92,7 @@ class Messages extends Component {
     }, GET_ONLINE_UPDATE_TIME);
 
     // TODO - remove after tests
-    // this.sendTestLocalNotification();
+    this.sendTestLocalNotification();
   };
 
   unmount = () => {
@@ -189,9 +189,10 @@ class Messages extends Component {
       return;
     }
 
-    const {message, data, badge} = notification;
+    const action = get(notification, '_data.action', '');
+    const meta = get(notification, '_data.meta', {});
 
-    await this.notificationActions(data);
+    await this.notificationActions({action, meta});
 
     // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
     notification.finish(PushNotificationIOS.FetchResult.NoData);
