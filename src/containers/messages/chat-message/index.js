@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {View} from 'react-native';
+import {View, KeyboardAvoidingView} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -167,22 +167,24 @@ class ChatMessage extends PureComponent {
             <View style={styles.searchInputContainer}>
               <SearchInput placeholder="Search in messages" onChange={this.onSearchChange}/>
             </View>
-            <MessageList
-              items={chatMessage.list}
-              renderItem={this.renderMessage}
-              theme={account.user.theme}
-              showTyping={this.state.showTyping}
-              style={{paddingHorizontal: 0}}
-              typing={this.props.chatMessage.typing}
-              context={this.context}/>
-            <MessageInput
-              theme={theme}
-              context={this.context}
-              quote={this.state.quote}
-              onPressQuote={this.onQuotePress}
-              disabled={!account.net.connected || !account.connected}
-              onSubmit={this.onSubmitText}
-              onTyping={this.onMessageTyping}/>
+            <KeyboardAvoidingView style={styles.container} enabled>
+              <MessageList
+                items={chatMessage.list}
+                renderItem={this.renderMessage}
+                theme={account.user.theme}
+                showTyping={this.state.showTyping}
+                style={{paddingHorizontal: 0}}
+                typing={this.props.chatMessage.typing}
+                context={this.context}/>
+              <MessageInput
+                theme={theme}
+                context={this.context}
+                quote={this.state.quote}
+                onPressQuote={this.onQuotePress}
+                disabled={!account.net.connected || !account.connected}
+                onSubmit={this.onSubmitText}
+                onTyping={this.onMessageTyping}/>
+            </KeyboardAvoidingView>
           </DismissKeyboardLayout>
         </BackgroundLayout>
       </MainLayout>
