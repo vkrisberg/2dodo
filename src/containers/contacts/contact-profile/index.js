@@ -63,7 +63,7 @@ class ContactProfile extends Component {
       return false;
     }
 
-    data.phones = values(data.phones);
+    data.phones = [data.phones['0']];
     data.groups = values(data.groups);
     this.props.dispatch(contactActions.update(data)).then(() => {
       this.props.dispatch(chatActions.loadList());
