@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {Text, View, TouchableOpacity, ScrollView, Alert} from 'react-native';
 
-import {MainLayout, BackgroundLayout, DismissKeyboardLayout} from '../../../components/layouts';
+import {MainLayout, BackgroundLayout, DismissKeyboardLayout, HideWrapper} from '../../../components/layouts';
 import {ContactList, GroupList} from '../../../components/lists';
 import {Button, Checkbox, ContactListItem, SearchInput, GroupPublicListItem, Loader, ButtonBack, ButtonNavbar, Navbar} from '../../../components/elements';
 import {CreateChannel} from '../../../components/forms';
@@ -164,12 +164,14 @@ class GroupAdd extends Component {
                 </TouchableOpacity>
               </View>
               <View style={_styles.actionItemWrap}>
-                <TouchableOpacity style={_styles.actionItem} onPress={() => this.onCheckboxPress('createChannel')}>
-                  <Text style={_styles.text}>{context.t('CreateChannel')}</Text>
-                  <Checkbox
-                    input={{value: checked === 'createChannel', onChange: () => this.onCheckboxPress('createChannel')}}
-                    style={_styles.checkbox}/>
-                </TouchableOpacity>
+                <HideWrapper>
+                  <TouchableOpacity style={_styles.actionItem} onPress={() => this.onCheckboxPress('createChannel')}>
+                    <Text style={_styles.text}>{context.t('CreateChannel')}</Text>
+                    <Checkbox
+                      input={{value: checked === 'createChannel', onChange: () => this.onCheckboxPress('createChannel')}}
+                      style={_styles.checkbox}/>
+                  </TouchableOpacity>
+                </HideWrapper>
               </View>
               <View style={_styles.actionItemWrap}>
                 <TouchableOpacity style={_styles.actionItem} onPress={() => this.onCheckboxPress('findGroup')}>

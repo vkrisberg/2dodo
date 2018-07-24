@@ -2,33 +2,11 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
-import {MainLayout, BackgroundLayout} from '../../../components/layouts';
+import {MainLayout, BackgroundLayout, DismissKeyboardLayout} from '../../../components/layouts';
 import {ContactList} from '../../../components/lists';
 import {SearchInput, Navbar, ContactListItem, ButtonBack} from '../../../components/elements';
 import {chatActions, contactActions} from '../../../store/actions';
 import {routeEnum} from '../../../enums';
-
-const list = [
-  {
-    title: 'A',
-    data: [
-      {
-        username: 'Anna'
-      },
-      {
-        username: 'Alla'
-      },
-    ],
-  },
-  {
-    title: 'B',
-    data: [
-      {
-        username: 'Bady'
-      }
-    ],
-  },
-];
 
 class ChatCreate extends Component {
 
@@ -92,11 +70,13 @@ class ChatCreate extends Component {
         <BackgroundLayout theme={account.user.theme} paddingHorizontal={10}>
           <Navbar renderTitle={this.context.t('CreateChat')}
                   renderLeft={<ButtonBack/>}/>
-          <SearchInput placeholder="Search contacts" onChange={this.onSearchChange}/>
-          <ContactList context={this.context}
-                       items={contact.sectionList}
-                       sections
-                       renderItem={this.renderContactItem}/>
+          <DismissKeyboardLayout style={{flex: 1, width: '100%'}}>
+            <SearchInput placeholder="Search contacts" onChange={this.onSearchChange}/>
+            <ContactList context={this.context}
+                         items={contact.sectionList}
+                         sections
+                         renderItem={this.renderContactItem}/>
+          </DismissKeyboardLayout>
         </BackgroundLayout>
       </MainLayout>
     );

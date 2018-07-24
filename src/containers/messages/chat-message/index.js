@@ -1,9 +1,9 @@
 import React, {PureComponent} from 'react';
-import {View, ScrollView, Text, TouchableOpacity, KeyboardAvoidingView} from 'react-native';
+import {View} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
-import {MainLayout, BackgroundLayout} from '../../../components/layouts';
+import {MainLayout, BackgroundLayout, DismissKeyboardLayout} from '../../../components/layouts';
 import {NavbarChat, SearchInput, MessageListItem, MessageInput} from '../../../components/elements';
 import {chatActions, chatMessageActions, contactActions} from '../../../store/actions';
 import {MessageList} from '../../../components/lists';
@@ -156,20 +156,23 @@ class ChatMessage extends PureComponent {
 
     return (
       <MainLayout netOffline={!account.net.connected} wsConnected={account.connected}>
-        <BackgroundLayout theme={theme} paddingHorizontal={10}>
+        <BackgroundLayout theme={theme}>
           <NavbarChat context={this.context}
                       title={chat.current.name}
                       description={navbarDescription}
                       avatar={chat.current.avatar}
                       onAvatarPress={this.onNavbarAvatarPress}
                       onBackPress={this.onBack}/>
-          <SearchInput placeholder="Search in messages" onChange={this.onSearchChange}/>
-          <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+          <DismissKeyboardLayout style={styles.fullWrap}>
+            <View style={styles.searchInputContainer}>
+              <SearchInput placeholder="Search in messages" onChange={this.onSearchChange}/>
+            </View>
             <MessageList
               items={chatMessage.list}
               renderItem={this.renderMessage}
               theme={account.user.theme}
               showTyping={this.state.showTyping}
+              style={{paddingHorizontal: 0}}
               typing={this.props.chatMessage.typing}
               context={this.context}/>
             <MessageInput
@@ -180,7 +183,7 @@ class ChatMessage extends PureComponent {
               disabled={!account.net.connected || !account.connected}
               onSubmit={this.onSubmitText}
               onTyping={this.onMessageTyping}/>
-          </KeyboardAvoidingView>
+          </DismissKeyboardLayout>
         </BackgroundLayout>
       </MainLayout>
     );

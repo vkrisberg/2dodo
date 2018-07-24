@@ -25,13 +25,13 @@ export default createBottomTabNavigator({
       tabBarLabel: 'Contacts',
     }
   },
-  Favorites: {
-    screen: Favorites,
-    navigationOptions: {
-      tabBarIcon: ({focused}) => <FavoritsIcon active={focused}/>,
-      tabBarLabel: 'Favorites',
-    }
-  },
+  // Favorites: {
+  //   screen: Favorites,
+  //   navigationOptions: {
+  //     tabBarIcon: ({focused}) => <FavoritsIcon active={focused}/>,
+  //     tabBarLabel: 'Favorites',
+  //   }
+  // },
   Messages: {
     screen: Messages,
     navigationOptions: {

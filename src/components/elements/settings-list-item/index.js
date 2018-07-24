@@ -2,6 +2,7 @@ import React, {PureComponent} from 'react';
 import {Text, Image, View, TouchableHighlight} from 'react-native';
 import PropTypes from 'prop-types';
 
+import {HideWrapper} from '../../../components/layouts';
 import {Checkbox} from '../index';
 import {themeEnum} from '../../../enums';
 import {colors} from '../../../styles';
@@ -42,19 +43,21 @@ export default class SettingsListItem extends PureComponent {
     const _styles = styles(theme);
 
     return (
-      <TouchableHighlight
-        onPress={this.onPress}
-        underlayColor={colors[theme].blueKrayolaDim}
-        style={_styles.settingsRowContainer}>
-        <View style={[_styles.settingsRow, !border && {borderBottomWidth: 0}, rowStyle]}>
-          <Text style={[_styles.defaultText, _styles.blackText, textStyle]}>{context.t(text)}</Text>
-          <View style={_styles.settingsRowRight}>
-            {checkbox && <Checkbox input={{value: checkboxValue, onChange: this.onPress}}/>}
-            {navigate && navigateText && <Text style={[_styles.defaultText, _styles.grayText]}>{navigateText}</Text>}
-            {navigate && <Image source={arrowIcon} style={_styles.arrowIcon}/>}
+      <HideWrapper>
+        <TouchableHighlight
+          onPress={this.onPress}
+          underlayColor={colors[theme].blueKrayolaDim}
+          style={_styles.settingsRowContainer}>
+          <View style={[_styles.settingsRow, !border && {borderBottomWidth: 0}, rowStyle]}>
+            <Text style={[_styles.defaultText, _styles.blackText, textStyle]}>{context.t(text)}</Text>
+            <View style={_styles.settingsRowRight}>
+              {checkbox && <Checkbox input={{value: checkboxValue, onChange: this.onPress}}/>}
+              {navigate && navigateText && <Text style={[_styles.defaultText, _styles.grayText]}>{navigateText}</Text>}
+              {navigate && <Image source={arrowIcon} style={_styles.arrowIcon}/>}
+            </View>
           </View>
-        </View>
-      </TouchableHighlight>
+        </TouchableHighlight>
+      </HideWrapper>
     );
   }
 }

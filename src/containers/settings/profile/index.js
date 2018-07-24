@@ -70,7 +70,7 @@ class ProfileSettings extends Component {
 
   onDelete = () => alert('click on delete btn');
 
-  onAddBtn = () => alert('click on add btn');
+  onAddBtn = () => {};
 
   onGroups = () => this.props.navigation.goBack();
 
