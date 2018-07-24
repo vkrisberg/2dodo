@@ -1,9 +1,9 @@
-import React, {PureComponent} from 'react';
-import {View, KeyboardAvoidingView, Alert} from 'react-native';
+import React, {Fragment, PureComponent} from 'react';
+import {Platform, View, KeyboardAvoidingView, Alert} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
-import {MainLayout, BackgroundLayout} from '../../../components/layouts';
+import {MainLayout, BackgroundLayout, DismissKeyboardLayout} from '../../../components/layouts';
 import {NavbarChat, MessageListItem, MessageInput, Loader} from '../../../components/elements';
 import {chatMessageActions, groupActions, groupMessageActions} from '../../../store/actions';
 import {MessageList} from '../../../components/lists';
@@ -106,9 +106,33 @@ class GroupMessage extends PureComponent {
     );
   };
 
+  renderMessageList = (theme) => {
+    const {context} = this;
+    const {account, groupMessage} = this.props;
+
+    return (
+      <Fragment>
+        <MessageList
+          items={groupMessage.list}
+          renderItem={this.renderMessage}
+          theme={theme}
+          showTyping={this.state.showTyping}
+          typing={groupMessage.typing}
+          context={context}/>
+        <MessageInput
+          theme={theme}
+          context={context}
+          quote={this.state.quote}
+          onPressQuote={this.onQuotePress}
+          disabled={!account.net.connected || !account.connected}
+          onSubmit={this.onSubmitText}/>
+      </Fragment>
+    );
+  };
+
   render() {
     const {context} = this;
-    const {account, group, groupMessage} = this.props;
+    const {account, group} = this.props;
     const currentGroup = group.current;
     const {theme} = account.user;
     const _styles = styles(theme);
@@ -128,22 +152,17 @@ class GroupMessage extends PureComponent {
               onAvatarPress={this.onNavbarAvatarPress}
               onBackPress={this.onBack}/>
           </View>
-          <KeyboardAvoidingView style={_styles.container} behavior="padding" enabled>
-            <MessageList
-              items={groupMessage.list}
-              renderItem={this.renderMessage}
-              theme={account.user.theme}
-              showTyping={this.state.showTyping}
-              typing={this.props.groupMessage.typing}
-              context={this.context}/>
-            <MessageInput
-              theme={theme}
-              context={context}
-              quote={this.state.quote}
-              onPressQuote={this.onQuotePress}
-              disabled={!account.net.connected || !account.connected}
-              onSubmit={this.onSubmitText}/>
-          </KeyboardAvoidingView>
+          <DismissKeyboardLayout style={_styles.fullWrap}>
+            {
+              Platform.OS === 'ios' ?
+                <KeyboardAvoidingView style={_styles.container} behavior="padding" enabled>
+                  {this.renderMessageList(theme)}
+                </KeyboardAvoidingView> :
+                <KeyboardAvoidingView style={_styles.container} enabled>
+                  {this.renderMessageList(theme)}
+                </KeyboardAvoidingView>
+            }
+          </DismissKeyboardLayout>
         </BackgroundLayout>
       </MainLayout>
     );

@@ -36,7 +36,7 @@ export default (theme) => {
       color: colors[theme].grayBlue,
       borderRadius: 0,
       borderWidth: 0,
-      borderBottomWidth: 2,
+      borderBottomWidth: 1,
       paddingHorizontal: 0,
       marginBottom: 0,
     },

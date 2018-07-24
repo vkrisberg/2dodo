@@ -54,7 +54,7 @@ class ProfileSettings extends Component {
     const sendData = {
       firstName: data.firstName,
       secondName: data.secondName,
-      phones: data.phones,
+      phones: [data.phones['0']],
       nickname: data.nickname,
       bio: data.bio,
       avatar: data.avatar,

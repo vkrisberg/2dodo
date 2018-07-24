@@ -4,6 +4,7 @@ import {Field, reduxForm, formValues} from 'redux-form';
 import ImagePicker from 'react-native-image-picker';
 import PropTypes from 'prop-types';
 
+import {HideWrapper} from '../../layouts';
 import {Input, Avatar, Button, FieldError} from '../../elements';
 import {themeEnum} from '../../../enums';
 import {colors} from '../../../styles';
@@ -174,34 +175,40 @@ class ProfileForm extends Component {
           </KeyboardAvoidingView>
           <View style={_styles.divider}/>
           <View>
-            <TouchableOpacity style={_styles.actionItem} onPress={onGroups}>
-              <Text style={[_styles.defaultText, _styles.actionText]}>
-                {context.t('Groups')}
-              </Text>
-              <View style={_styles.actionItemRight}>
-                <Text
-                  style={[_styles.defaultText, _styles.actionSubtext]}>{user.groups[0] || context.t('Groups')}</Text>
-                <Image source={arrowIcon}/>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={_styles.actionItem} onPress={onNotifications}>
-              <Text style={[_styles.defaultText, _styles.actionText]}>
-                {context.t('Notifications')}
-              </Text>
-              <View style={_styles.actionItemRight}>
-                <Text style={[_styles.defaultText, _styles.actionSubtext]}>{context.t('Enabled')}</Text>
-                <Image source={arrowIcon}/>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={[_styles.actionItem, {borderBottomWidth: 0,}]} onPress={onSound}>
-              <Text style={[_styles.defaultText, _styles.actionText]}>
-                {context.t('Sound')}
-              </Text>
-              <View style={_styles.actionItemRight}>
-                <Text style={[_styles.defaultText, _styles.actionSubtext]}>{user.sound || context.t('Sound')}</Text>
-                <Image source={arrowIcon}/>
-              </View>
-            </TouchableOpacity>
+            <HideWrapper>
+              <TouchableOpacity style={_styles.actionItem} onPress={onGroups}>
+                <Text style={[_styles.defaultText, _styles.actionText]}>
+                  {context.t('Groups')}
+                </Text>
+                <View style={_styles.actionItemRight}>
+                  <Text
+                    style={[_styles.defaultText, _styles.actionSubtext]}>{user.groups[0] || context.t('Groups')}</Text>
+                  <Image source={arrowIcon}/>
+                </View>
+              </TouchableOpacity>
+            </HideWrapper>
+            <HideWrapper>
+              <TouchableOpacity style={_styles.actionItem} onPress={onNotifications}>
+                <Text style={[_styles.defaultText, _styles.actionText]}>
+                  {context.t('Notifications')}
+                </Text>
+                <View style={_styles.actionItemRight}>
+                  <Text style={[_styles.defaultText, _styles.actionSubtext]}>{context.t('Enabled')}</Text>
+                  <Image source={arrowIcon}/>
+                </View>
+              </TouchableOpacity>
+            </HideWrapper>
+            <HideWrapper>
+              <TouchableOpacity style={[_styles.actionItem, {borderBottomWidth: 0,}]} onPress={onSound}>
+                <Text style={[_styles.defaultText, _styles.actionText]}>
+                  {context.t('Sound')}
+                </Text>
+                <View style={_styles.actionItemRight}>
+                  <Text style={[_styles.defaultText, _styles.actionSubtext]}>{user.sound || context.t('Sound')}</Text>
+                  <Image source={arrowIcon}/>
+                </View>
+              </TouchableOpacity>
+            </HideWrapper>
             <View style={_styles.divider}/>
             <Button
               style={_styles.actionBtn}
