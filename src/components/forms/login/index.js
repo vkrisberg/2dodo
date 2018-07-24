@@ -70,6 +70,7 @@ class LoginForm extends Component {
             component={Checkbox}
             name="createNewKey"
             color={colors.light.white}
+            disabled
           />
         </View>
         <Button color={colors.light.loginButtonText}
