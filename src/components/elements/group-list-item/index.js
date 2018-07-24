@@ -6,6 +6,7 @@ import moment from 'moment';
 import {Checkbox, AvatarIcon} from '../index';
 import {themeEnum} from '../../../enums';
 import styles from './styles';
+import {helpers} from '../../../utils';
 
 export default class GroupListItem extends Component {
 
@@ -41,6 +42,40 @@ export default class GroupListItem extends Component {
     this.props.onCheckboxPress && this.props.onCheckboxPress(this.props.item);
   };
 
+  renderTextMessage = (message, _styles) => {
+    const name = message.contact ? helpers.getFullName(message.contact) : message.username;
+    return (
+      <View>
+        {!message.isOwn
+        && <Text style={_styles.username} numberOfLines={1} ellipsizeMode="tail">{name}</Text>}
+        <Text style={_styles.limitText} numberOfLines={2} ellipsizeMode="tail">{message.text}</Text>
+      </View>
+    );
+  };
+
+  renderLastMessage = (_styles) => {
+    const {item, context} = this.props;
+
+    if (item.lastMessage) {
+      if (item.lastMessage.type === 'text') {
+        return this.renderTextMessage(item.lastMessage, _styles);
+      }
+      return (
+        <Text style={_styles.limitText} numberOfLines={2} ellipsizeMode="tail">
+          {item.lastMessage.type === 'audio' && context.t('HaveVoiceMessage')}
+          {item.lastMessage.type === 'video' && context.t('HaveVideo')}
+          {item.lastMessage.type === 'image' && context.t('HaveImage')}
+          {item.lastMessage.type === 'call' && context.t('HaveCall')}
+        </Text>
+      );
+    }
+
+    return (
+      <Text style={_styles.limitText} numberOfLines={2} ellipsizeMode="tail">
+        {context.t('NoMessagesYet')}
+      </Text>
+    );
+  };
 
   render() {
     const {item, theme, editMode, selectedItems, showRightBlock} = this.props;
@@ -60,13 +95,7 @@ export default class GroupListItem extends Component {
           </View>
           <View style={_styles.body}>
             <Text style={_styles.caption}>{item.name}</Text>
-            {
-              item.members && item.members.length > 0 &&
-              <Text style={[_styles.defaultText, _styles.subCaption]} numberOfLines={1}>
-                {item.members.map( (member) => `${member}  `)}
-              </Text>
-            }
-            <Text numberOfLines={1} style={[_styles.defaultText, _styles.descriptions]}>{item.description}</Text>
+            {this.renderLastMessage(_styles)}
           </View>
           {showRightBlock && <View style={_styles.information}>
             <Text style={_styles.text}>

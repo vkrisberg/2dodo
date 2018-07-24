@@ -249,7 +249,7 @@ export default reducer(initState, {
     return {
       ...state,
       chat: action.payload,
-      list: action.clearMessages ? [] : state.list,
+      list: !action.clearMessages ? state.list : [],
       typing: {},
     };
   },

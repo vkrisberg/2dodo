@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
 import {NavbarChat, MessageListItem, MessageInput, Loader} from '../../../components/elements';
-import {chatMessageActions, groupActions, groupMessageActions} from '../../../store/actions';
+import {chatActions, chatMessageActions, groupActions, groupMessageActions} from '../../../store/actions';
 import {MessageList} from '../../../components/lists';
 import styles from './styles';
 import {messageEnum, routeEnum} from '../../../enums';
@@ -34,7 +34,6 @@ class GroupMessage extends PureComponent {
     };
 
     this.group = {};
-    this.timer = null;
   }
 
   componentDidMount() {
@@ -44,19 +43,16 @@ class GroupMessage extends PureComponent {
   }
 
   onBack = () => {
+    this.props.dispatch(groupActions.unsetCurrentGroup());
     this.props.navigation.goBack();
   };
 
   onNavbarAvatarPress = () => {};
 
   onMessagePress = (message) => {
-    this.setState({
-      quote: message,
-      // quote: {
-      //   name: message.username,
-      //   text: message.text,
-      // },
-    });
+    // this.setState({
+    //   quote: message,
+    // });
   };
 
   onMessageLongPress = (message) => {};

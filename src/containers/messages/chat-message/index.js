@@ -36,14 +36,12 @@ class ChatMessage extends PureComponent {
     };
 
     this.chat = {};
-    this.timer = null;
   }
 
   componentDidMount() {
     this.chat = this.props.navigation.getParam('chat');
     this.props.dispatch(chatMessageActions.clearMessages()).then(() => {
       this.props.dispatch(chatActions.setCurrentChat(this.chat));
-      this.props.dispatch(contactActions.getOnlineUsers());
       this.loadChatMessages(this.chat.id).then(() => {
         // send read status
         this.props.dispatch(chatMessageActions.sendMessagesRead(this.chat));
@@ -107,10 +105,6 @@ class ChatMessage extends PureComponent {
   onMessagePress = (message) => {
     this.setState({
       quote: message,
-      // quote: {
-      //   name: message.username,
-      //   text: message.text,
-      // },
     });
   };
 

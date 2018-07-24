@@ -115,6 +115,7 @@ class Login extends Component {
         });
         setTimeout(() => {
           if (this.props.account.error) {
+            Alert.alert(this.context.t('LoginEnterError'));
             this.props.dispatch(accountActions.stopReconnect());
             this.setState({
               connecting: false,
