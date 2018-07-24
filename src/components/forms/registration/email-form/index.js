@@ -105,10 +105,12 @@ class RegistrationEmailForm extends Component {
           </View>
         </KeyboardAvoidingView>
         <View style={_styles.skipContainer}>
-          <ButtonSkip disabled={disabled}
-                      onSkip={this.props.handleSubmit}
-                      color={colors[theme].grayDarker}
-                      marginBottom={15}>
+          <ButtonSkip
+            // disabled={disabled}
+            disabled={true}
+            onSkip={this.props.handleSubmit}
+            color={colors[theme].grayDarker}
+            marginBottom={15}>
             {context.t('SkipThisStep')}
           </ButtonSkip>
         </View>
