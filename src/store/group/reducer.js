@@ -1,6 +1,7 @@
 import reducer from '../../utils/reducer';
 import {types} from './actions';
 import CONFIG from '../../config';
+import {types as groupMessageTypes} from '../group-message/actions';
 
 const initState = {
   list: [],
@@ -405,9 +406,56 @@ export default reducer(initState, {
   },
 
   [types.SET_CURRENT_GROUP]: (state, action) => {
+    const list = state.list.map((item) => {
+      if (item.id === action.payload.id) {
+        return action.payload;
+      }
+      return item;
+    });
+
     return {
       ...state,
+      list,
       current: action.payload,
+    };
+  },
+
+  [types.UNSET_CURRENT_GROUP]: (state, action) => {
+    return {
+      ...state,
+      current: {...initState.current},
+      loading: false,
+      error: null
+    };
+  },
+
+  // Group Message types
+  [groupMessageTypes.SEND_SUCCESS]: (state, action) => {
+    const list = state.list.map((item) => {
+      if (item.id === action.group.id) {
+        return action.group;
+      }
+      return item;
+    });
+
+    return {
+      ...state,
+      list,
+    };
+  },
+
+  [groupMessageTypes.RECEIVE_MESSAGE_SUCCESS]: (state, action) => {
+    let list = [...state.list];
+    const index = list.findIndex((item) => item.id === action.group.id);
+    if (index >= 0) {
+      list[index] = action.group;
+    } else {
+      list.unshift(action.group);
+    }
+
+    return {
+      ...state,
+      list,
     };
   },
 });

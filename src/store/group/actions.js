@@ -57,6 +57,7 @@ export const types = {
   RECEIVE_INVITE_FAILURE: Symbol('RECEIVE_INVITE_FAILURE'),
 
   SET_CURRENT_GROUP: Symbol('SET_CURRENT_GROUP'),
+  UNSET_CURRENT_GROUP: Symbol('UNSET_CURRENT_GROUP'),
 
   FILTER_PUBLIC_GROUP: Symbol('FILTER_PUBLIC_GROUP'),
 };
@@ -69,6 +70,7 @@ export default {
       try {
         const realm = services.getRealm();
         let groupList = realm.objects(dbEnum.Group)
+          .filtered(`isDeleted = false`)
           .sorted(sort, descending);
         if (filter) {
           groupList = groupList.filtered(filter);
@@ -196,7 +198,7 @@ export default {
         await realm.write(() => {
           _group = realm.create(dbEnum.Group, group.current, false);
         });
-        const payload = {..._group};
+        const payload = JSON.parse(JSON.stringify(_group));
         console.log('group created', payload);
         dispatch({type: types.CREATE_SUCCESS, payload});
         return payload;
@@ -255,7 +257,7 @@ export default {
         await realm.write(() => {
           _group = realm.create(dbEnum.Group, group.current, true);
         });
-        const payload = {..._group};
+        const payload = JSON.parse(JSON.stringify(_group));
         // console.log('group updated', payload);
         dispatch({type: types.UPDATE_SUCCESS, payload});
         return payload;
@@ -405,7 +407,7 @@ export default {
           await realm.write(() => {
             _group = realm.create(dbEnum.Group, groupData, false);
           });
-          payload = {..._group};
+          payload = JSON.parse(JSON.stringify(_group));
           // console.log('subscribed to group result', payload);
           dispatch({type: types.SUBSCRIBE_SUCCESS, payload});
           return payload;
@@ -572,7 +574,7 @@ export default {
           groups[0].isSubscribed = false;
           groups[0].dateUpdate = new Date();
         });
-        const payload = {...groups[0]};
+        const payload = JSON.parse(JSON.stringify(groups[0]));
         // console.log('unsubscribed from group', payload);
         dispatch({type: types.UNSUBSCRIBE_SUCCESS, payload});
         return payload;
@@ -658,8 +660,37 @@ export default {
     return {type: types.UPDATE_MEMBER_SUCCESS};
   },
 
-  setCurrentGroup: (data) => {
-    return {type: types.SET_CURRENT_GROUP, payload: data};
+  setCurrentGroup: (group, clearMessages = false) => {
+    return async dispatch => {
+      try {
+        const realm = services.getRealm();
+        if (group.unreadCount > 0) {
+          const realmGroup = realm.objectForPrimaryKey(dbEnum.Group, group.id);
+          if (realmGroup) {
+            await realm.write(() => {
+              realmGroup.unreadCount = 0;
+              realmGroup.dateUpdate = new Date();
+            });
+            group = JSON.parse(JSON.stringify(realmGroup));
+          }
+        }
+        dispatch({type: types.SET_CURRENT_GROUP, payload: group, clearMessages});
+        return group;
+      } catch (e) {
+        throw e;
+      }
+    };
+  },
+
+  unsetCurrentGroup: (clearMessages = false) => {
+    return async dispatch => {
+      try {
+        dispatch({type: types.UNSET_CURRENT_GROUP, payload: {}, clearMessages});
+        return true;
+      } catch (e) {
+        throw e;
+      }
+    };
   },
 
   filterPublicGroup: (filter = '') => {

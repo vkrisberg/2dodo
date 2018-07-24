@@ -101,6 +101,13 @@ export default (theme) => {
       marginLeft: 5,
     },
 
+    username: {
+      color: colors[theme].grayBlue,
+      fontSize: 13,
+      overflow: 'hidden',
+      ...getFont({}),
+    },
+
     limitText: {
       color: colors[theme].grayText,
       fontSize: 13,

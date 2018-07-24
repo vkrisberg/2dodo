@@ -50,7 +50,7 @@ export default function ({event, store, navigation}) {
       store.dispatch(groupActions.getPublicGroupListResult(data));
       break;
     case actionEnum.inviteMembersToGroup:
-      if (data.encrypt_time) {
+      if (data.type === 'client_message') {
         store.dispatch(groupActions.receiveInvite(data));
       } else {
         store.dispatch(groupActions.inviteResult(data));
@@ -69,7 +69,7 @@ export default function ({event, store, navigation}) {
       store.dispatch(groupActions.updateGroupMemberResult(data));
       break;
     case actionEnum.sendGroupMessage:
-      if (data.encrypt_time) {
+      if (data.type === 'client_message') {
         store.dispatch(groupMessageActions.receiveMessage(data));
       } else {
         store.dispatch(groupMessageActions.sendResult(data));

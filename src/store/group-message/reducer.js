@@ -166,6 +166,8 @@ export default reducer(initState, {
     return {
       ...state,
       group: action.payload,
+      list: !action.clearMessages ? state.list : [],
+      typing: {},
     };
   },
 });

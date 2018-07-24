@@ -48,7 +48,7 @@ export default {
         }
         console.log('group messages loaded', messages.length);
         const payload = messages.map((item) => {
-          return {...item};
+          return JSON.parse(JSON.stringify(item));
         });
         dispatch({type: types.LOAD_SUCCESS, payload});
         return payload;
@@ -94,7 +94,7 @@ export default {
 
         await apiGroup.sendGroupMessage(sendData);
 
-        const payload = {...groupMessage};
+        const payload = JSON.parse(JSON.stringify(groupMessage));
         // console.log('group message send', payload);
         dispatch({type: types.SEND, payload});
         return payload;
@@ -110,22 +110,24 @@ export default {
       try {
         const realm = services.getRealm();
         const {groupMessage} = getState();
+        const dateNow = new Date();
         const _groupMessage = realm.objectForPrimaryKey(dbEnum.GroupMessage, groupMessage.current.id);
 
         if (!_groupMessage) {
           throw new Error(`group message '${groupMessage.current.id}' is not found`);
         }
 
+        const groupId = _groupMessage.groupId;
         let payload = null;
 
         // send result error
         if (message.error || !message.data.success) {
           await realm.write(() => {
             _groupMessage.status = messageEnum.error;
-            _groupMessage.dateUpdate = new Date();
+            _groupMessage.dateUpdate = dateNow;
           });
 
-          payload = {..._groupMessage};
+          payload = JSON.parse(JSON.stringify(_groupMessage));
           // console.log('group message send error', payload);
           dispatch({type: types.SEND_SUCCESS, payload});
           return payload;
@@ -134,11 +136,25 @@ export default {
         // send result success
         await realm.write(() => {
           _groupMessage.status = messageEnum.sent;
-          _groupMessage.dateUpdate = new Date();
+          _groupMessage.dateUpdate = dateNow;
         });
-        payload = {..._groupMessage};
+        payload = JSON.parse(JSON.stringify(_groupMessage));
+
+        // set last message
+        const realmGroup = realm.objectForPrimaryKey(dbEnum.Group, groupId);
+        if (realmGroup) {
+          await realm.write(() => {
+            realmGroup.lastMessage = _groupMessage;
+            realmGroup.dateUpdate = dateNow;
+          });
+        }
+        const groupPayload = {
+          ...realmGroup,
+          lastMessage: {...realmGroup.lastMessage}
+        };
+
         // console.log('group message send success', payload);
-        dispatch({type: types.SEND_SUCCESS, payload});
+        dispatch({type: types.SEND_SUCCESS, payload, group: groupPayload});
         return payload;
       } catch (e) {
         dispatch({type: types.SEND_FAILURE, error: e});
@@ -173,7 +189,7 @@ export default {
 
         await apiGroup.sendGroupMessage(sendData);
 
-        const payload = {...groupMessage};
+        const payload = JSON.parse(JSON.stringify(groupMessage));
         // console.log('group message resend', payload);
         dispatch({type: types.RESEND, payload});
         return payload;
@@ -211,7 +227,7 @@ export default {
       const realm = services.getRealm();
       try {
         // send delivery report
-        const msgEncryptTime =  get(message, 'encrypt_time', null);
+        const msgEncryptTime = get(message, 'encrypt_time', null);
         await apiServer.deliveryReport(msgEncryptTime);
 
         const {group} = getState();
@@ -237,20 +253,23 @@ export default {
         if (groups.length > 1) {
           throw new Error(`more than one group with link '${data.link}' found`);
         }
+        const currentGroup = groups[0];
 
-        const realmContact = realm.objectForPrimaryKey(dbEnum.Contact, helpers.getUsername(message.from));
-        const groupCurrent = groups[0];
+        // link contact
+        const username = helpers.getUsername(message.from);
+        const realmContact = realm.objectForPrimaryKey(dbEnum.Contact, username);
+
         const messageData = {
           id: wsMessage.generateUuid(),
-          groupId: groupCurrent.id,
-          groupLink: groupCurrent.link,
-          groupType: groupCurrent.type,
+          groupId: currentGroup.id,
+          groupLink: currentGroup.link,
+          groupType: currentGroup.type,
           type: dataMessage.type || messageEnum.text,
-          username: wsMessage.getUsername(message.from),
+          username,
           from: message.from,
           text: dataMessage.data,
           contact: realmContact,
-          status:messageEnum.received,
+          status: messageEnum.received,
           isOwn: false,
           dateSend: wsMessage.rfcToDate(dataMessage.dateSend),
           dateCreate: dateNow,
@@ -262,22 +281,18 @@ export default {
           groupMessage = realm.create(dbEnum.GroupMessage, messageData, false);
         });
 
-        const filteredGroup = group.list.find(item => item.link === message.data.link);
-        const realmGroup = realm.objectForPrimaryKey(dbEnum.Group, filteredGroup.id);
+        // set last message and increment unreadCount
+        await realm.write(() => {
+          if (group.current.id !== currentGroup.id) {
+            currentGroup.unreadCount += 1;
+          }
+          currentGroup.lastMessage = groupMessage;
+          currentGroup.isDeleted = false;
+          currentGroup.dateUpdate = dateNow;
+        });
 
-        if (realmGroup) {
-          await realm.write(() => {
-            if (group.current.id !== filteredGroup.id) {
-              realmGroup.unreadCount += 1;
-            }
-            realmGroup.lastMessage = groupMessage;
-          });
-        }
-
-        const groupPayload = JSON.parse(JSON.stringify(realmGroup));
-
+        const groupPayload = JSON.parse(JSON.stringify(currentGroup));
         const payload = JSON.parse(JSON.stringify(groupMessage));
-        // const payload = {...groupMessage};
         // console.log('group message received', payload);
         dispatch({type: types.RECEIVE_MESSAGE_SUCCESS, payload, group: groupPayload});
         return payload;
