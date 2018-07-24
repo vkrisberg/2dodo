@@ -71,7 +71,8 @@ export default class MessageInput extends PureComponent {
     return (
       <Button
         style={_styles.leftButton}
-        disabled={disabled}>
+        // disabled={disabled}
+        disabled>
         <View style={_styles.clipButton}>
           <Image source={IMG_CLIP}/>
         </View>
@@ -87,7 +88,8 @@ export default class MessageInput extends PureComponent {
       return (
         <Button
           style={_styles.rightButton}
-          disabled={disabled}>
+          // disabled={disabled}
+          disabled>
           <View style={_styles.recordingButton}>
             <Image source={IMG_MICROPHONE}/>
           </View>
@@ -111,7 +113,8 @@ export default class MessageInput extends PureComponent {
     return (
       <Button
         style={_styles.rightButton}
-        disabled={disabled}>
+        // disabled={disabled}
+        disabled>
         <View style={_styles.microphoneButton}>
           <Image source={IMG_MICROPHONE}/>
         </View>

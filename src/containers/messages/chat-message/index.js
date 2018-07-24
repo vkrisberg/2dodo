@@ -149,30 +149,64 @@ class ChatMessage extends PureComponent {
     );
   };
 
-  renderMessageList = (theme) => {
+  renderIosBody = (theme) => {
     const {account, chatMessage} = this.props;
 
     return (
       <Fragment>
-        <MessageList
-          items={chatMessage.list}
-          renderItem={this.renderMessage}
-          theme={theme}
-          showTyping={this.state.showTyping}
-          style={{paddingHorizontal: 0}}
-          typing={chatMessage.typing}
-          context={this.context}/>
-        <MessageInput
-          theme={theme}
-          context={this.context}
-          quote={this.state.quote}
-          onPressQuote={this.onQuotePress}
-          disabled={!account.net.connected || !account.connected}
-          onSubmit={this.onSubmitText}
-          onTyping={this.onMessageTyping}/>
+        <SearchInput placeholder="Search in messages" onChange={this.onSearchChange}/>
+        <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+          <MessageList
+            items={chatMessage.list}
+            renderItem={this.renderMessage}
+            theme={theme}
+            showTyping={this.state.showTyping}
+            style={{paddingHorizontal: 0}}
+            typing={chatMessage.typing}
+            context={this.context}/>
+          <MessageInput
+            theme={theme}
+            context={this.context}
+            quote={this.state.quote}
+            onPressQuote={this.onQuotePress}
+            disabled={!account.net.connected || !account.connected}
+            onSubmit={this.onSubmitText}
+            onTyping={this.onMessageTyping}/>
+        </KeyboardAvoidingView>
       </Fragment>
     );
   };
+
+  renderAndroidBody = (theme) => {
+    const {account, chatMessage} = this.props;
+
+    return (
+      <DismissKeyboardLayout style={styles.fullWrap}>
+        <View style={styles.searchInputContainer}>
+          <SearchInput placeholder="Search in messages" onChange={this.onSearchChange}/>
+        </View>
+        <KeyboardAvoidingView style={styles.container}>
+          <MessageList
+            items={chatMessage.list}
+            renderItem={this.renderMessage}
+            theme={theme}
+            showTyping={this.state.showTyping}
+            style={{paddingHorizontal: 0}}
+            typing={chatMessage.typing}
+            context={this.context}/>
+          <MessageInput
+            theme={theme}
+            context={this.context}
+            quote={this.state.quote}
+            onPressQuote={this.onQuotePress}
+            disabled={!account.net.connected || !account.connected}
+            onSubmit={this.onSubmitText}
+            onTyping={this.onMessageTyping}/>
+        </KeyboardAvoidingView>
+      </DismissKeyboardLayout>
+    );
+  };
+
 
   render() {
     const {account, chat, contact} = this.props;
@@ -188,20 +222,7 @@ class ChatMessage extends PureComponent {
                       avatar={chat.current.avatar}
                       onAvatarPress={this.onNavbarAvatarPress}
                       onBackPress={this.onBack}/>
-          <DismissKeyboardLayout style={styles.fullWrap}>
-            <View style={styles.searchInputContainer}>
-              <SearchInput placeholder="Search in messages" onChange={this.onSearchChange}/>
-            </View>
-            {
-              Platform.OS === 'ios' ?
-                <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
-                  {this.renderMessageList(theme)}
-                </KeyboardAvoidingView> :
-                <KeyboardAvoidingView style={styles.container}>
-                  {this.renderMessageList(theme)}
-                </KeyboardAvoidingView>
-            }
-          </DismissKeyboardLayout>
+          {Platform.OS === 'ios' ? this.renderIosBody(theme) : this.renderAndroidBody(theme)}
         </BackgroundLayout>
       </MainLayout>
     );
