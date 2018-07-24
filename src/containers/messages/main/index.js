@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import {isEmpty, map, get} from 'lodash';
 import moment from 'moment';
 
-import {MainLayout, BackgroundLayout} from '../../../components/layouts';
+import {MainLayout, BackgroundLayout, DismissKeyboardLayout} from '../../../components/layouts';
 import {ChatList} from '../../../components/lists';
 import {SearchInput, Navbar, NavbarDots, ButtonAdd, ChatListItem, ButtonNavbar} from '../../../components/elements';
 import {chatActions, chatMessageActions, contactActions, groupActions} from '../../../store/actions';
@@ -354,11 +354,13 @@ class Messages extends Component {
           <Navbar renderTitle={this.context.t('Messages')}
                   renderLeft={<NavbarDots/>}
                   renderRight={this.renderNavbarButton()}/>
-          <SearchInput placeholder="Search in chats" onChange={this.searchChats}/>
-          <ChatList theme={theme}
-                    context={this.context}
-                    items={chat.list}
-                    renderItem={this.renderChatItem}/>
+          <DismissKeyboardLayout style={{flex: 1, width: '100%'}}>
+            <SearchInput placeholder="Search in chats" onChange={this.searchChats}/>
+            <ChatList theme={theme}
+                      context={this.context}
+                      items={chat.list}
+                      renderItem={this.renderChatItem}/>
+          </DismissKeyboardLayout>
         </BackgroundLayout>
       </MainLayout>
     );

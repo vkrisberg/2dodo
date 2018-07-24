@@ -13,6 +13,7 @@ export default class Button extends PureComponent {
     color: PropTypes.string,
     bgColor: PropTypes.string,
     borderColor: PropTypes.string,
+    opacity: PropTypes.number,
     disabled: PropTypes.bool,
     textStyle: PropTypes.any,
     style: PropTypes.any,
@@ -41,13 +42,14 @@ export default class Button extends PureComponent {
   }
 
   render() {
-    let {theme, color, bgColor, disabled, borderColor, style} = this.props;
+    let {theme, color, bgColor, disabled, borderColor, style, opacity} = this.props;
     if (disabled) {
       color = colors[theme].disableButtonText;
       borderColor = colors[theme].disableButtonText;
       bgColor = colors[theme].disableButtonBg;
+      opacity = 0.5;
     }
-    const _styles = styles({theme, color, bgColor, borderColor});
+    const _styles = styles({theme, color, bgColor, borderColor, opacity});
 
     return (
       <TouchableOpacity style={[_styles.container, style]}

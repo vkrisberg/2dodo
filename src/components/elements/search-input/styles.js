@@ -42,6 +42,7 @@ export default (theme) => {
       fontSize: 13,
       height: 30,
       width: '100%',
+      padding: 0,
       ...getFont({weight: weights.regular}),
     },
   });
