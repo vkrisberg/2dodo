@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Platform, KeyboardAvoidingView, View, Alert, ActionSheetIOS, AsyncStorage, Text} from 'react-native';
-import {withNavigation} from 'react-navigation';
+import {NavigationActions, StackActions, withNavigation} from 'react-navigation';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -13,6 +13,11 @@ import {accountActions} from '../../store/actions';
 import {colors, sizes} from '../../styles';
 import {validation} from '../../utils';
 import styles from './styles';
+
+const goToMessagesAction = StackActions.reset({
+  index: 0,
+  actions: [NavigationActions.navigate({routeName: routeEnum.Messages})],
+});
 
 class Login extends Component {
 
@@ -27,6 +32,7 @@ class Login extends Component {
   };
 
   state = {
+    connecting: false,
     errors: {
       login: false,
       password: false,
@@ -102,16 +108,37 @@ class Login extends Component {
     }
 
     const {deviceId, hostname, user, keys} = realmAccount;
-    dispatch(accountActions.connect({deviceId, hostname, user, keys, password})).catch((error) => {
-      console.error('login error', error);
-      Alert.alert(this.context.t('LoginAuthError'));
-      this.setState({
-        errors: {
-          login: true,
-          password: true,
-        },
+    dispatch(accountActions.connect({deviceId, hostname, user, keys, password}))
+      .then(() => {
+        this.setState({
+          connecting: true,
+        });
+        setTimeout(() => {
+          if (this.props.account.error) {
+            this.props.dispatch(accountActions.stopReconnect());
+            this.setState({
+              connecting: false,
+              errors: {
+                login: true,
+                password: true,
+              },
+            });
+            return;
+          }
+          this.props.navigation.dispatch(goToMessagesAction);
+        }, 2000)
+      })
+      .catch((error) => {
+        console.error('login error', error);
+        Alert.alert(this.context.t('LoginAuthError'));
+        this.setState({
+          connecting: false,
+          errors: {
+            login: true,
+            password: true,
+          },
+        });
       });
-    });
   };
 
   keysImport = () => {
@@ -146,7 +173,7 @@ class Login extends Component {
               <Text style={this.styles.text}>{t('LoginWelcome')}</Text>
               <LoginForm context={this.context}
                          errors={this.state.errors}
-                         disabled={!account.net.connected || account.connecting}
+                         disabled={!account.net.connected || account.connecting || this.state.connecting}
                          onSubmit={this.login}/>
             </KeyboardAvoidingView>
             <Link style={this.styles.forgot}

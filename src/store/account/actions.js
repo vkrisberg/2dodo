@@ -16,6 +16,7 @@ export const types = {
   CONNECT_SUCCESS: Symbol('CONNECT_SUCCESS'),
   CONNECT_FAILURE: Symbol('CONNECT_FAILURE'),
   RECONNECT: Symbol('RECONNECT'),
+  STOP_RECONNECT: Symbol('STOP_RECONNECT'),
 
   LOGOUT: Symbol('LOGOUT'),
   LOGOUT_SUCCESS: Symbol('LOGOUT_SUCCESS'),
@@ -162,12 +163,17 @@ export default {
             return;
           }
           // connection attempts ended
-          throw new Error(error);
+          if (!account.stopReconnect) {
+            throw new Error(error);
+          }
+          return;
         }
         // go to Messages when log in
         if (account.connecting) {
           AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`, 'true');
-          navigation.dispatch(goToMessagesAction);
+          if (!account.errorRemind && account.logout === null) {
+            navigation.dispatch(goToMessagesAction);
+          }
         }
 
         dispatch({type: types.CONNECT_SUCCESS});
@@ -182,6 +188,15 @@ export default {
         // throw e;
       }
     };
+  },
+
+  stopReconnect: (connectionAttempts = 99) => {
+    return async (dispatch) => {
+      AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
+      AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
+      AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
+      dispatch({type: types.STOP_RECONNECT, payload: connectionAttempts});
+    }
   },
 
   logout: () => {
