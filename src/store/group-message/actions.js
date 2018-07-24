@@ -214,7 +214,8 @@ export default {
         const msgEncryptTime =  get(message, 'encrypt_time', null);
         await apiServer.deliveryReport(msgEncryptTime);
 
-        const {account} = getState();
+        const {group} = getState();
+
         const dateNow = new Date();
         let data = get(message, 'data', null);
         if (!data) {
@@ -238,12 +239,12 @@ export default {
         }
 
         const realmContact = realm.objectForPrimaryKey(dbEnum.Contact, helpers.getUsername(message.from));
-        const group = groups[0];
+        const groupCurrent = groups[0];
         const messageData = {
           id: wsMessage.generateUuid(),
-          groupId: group.id,
-          groupLink: group.link,
-          groupType: group.type,
+          groupId: groupCurrent.id,
+          groupLink: groupCurrent.link,
+          groupType: groupCurrent.type,
           type: dataMessage.type || messageEnum.text,
           username: wsMessage.getUsername(message.from),
           from: message.from,
@@ -255,13 +256,30 @@ export default {
           dateCreate: dateNow,
           dateUpdate: dateNow,
         };
+
         let groupMessage = {};
         await realm.write(() => {
           groupMessage = realm.create(dbEnum.GroupMessage, messageData, false);
         });
-        const payload = {...groupMessage};
+
+        const filteredGroup = group.list.find(item => item.link === message.data.link);
+        const realmGroup = realm.objectForPrimaryKey(dbEnum.Group, filteredGroup.id);
+
+        if (realmGroup) {
+          await realm.write(() => {
+            if (group.current.id !== filteredGroup.id) {
+              realmGroup.unreadCount += 1;
+            }
+            realmGroup.lastMessage = groupMessage;
+          });
+        }
+
+        const groupPayload = JSON.parse(JSON.stringify(realmGroup));
+
+        const payload = JSON.parse(JSON.stringify(groupMessage));
+        // const payload = {...groupMessage};
         // console.log('group message received', payload);
-        dispatch({type: types.RECEIVE_MESSAGE_SUCCESS, payload});
+        dispatch({type: types.RECEIVE_MESSAGE_SUCCESS, payload, group: groupPayload});
         return payload;
       } catch (e) {
         console.log('group message received error', e);
