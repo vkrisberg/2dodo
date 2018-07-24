@@ -1,5 +1,5 @@
-import React, {PureComponent} from 'react';
-import {View} from 'react-native';
+import React, {PureComponent, Fragment} from 'react';
+import {Platform, View, KeyboardAvoidingView} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -149,8 +149,33 @@ class ChatMessage extends PureComponent {
     );
   };
 
+  renderMessageList = (theme) => {
+    const {account, chatMessage} = this.props;
+
+    return (
+      <Fragment>
+        <MessageList
+          items={chatMessage.list}
+          renderItem={this.renderMessage}
+          theme={theme}
+          showTyping={this.state.showTyping}
+          style={{paddingHorizontal: 0}}
+          typing={chatMessage.typing}
+          context={this.context}/>
+        <MessageInput
+          theme={theme}
+          context={this.context}
+          quote={this.state.quote}
+          onPressQuote={this.onQuotePress}
+          disabled={!account.net.connected || !account.connected}
+          onSubmit={this.onSubmitText}
+          onTyping={this.onMessageTyping}/>
+      </Fragment>
+    );
+  };
+
   render() {
-    const {account, chat, chatMessage, contact} = this.props;
+    const {account, chat, contact} = this.props;
     const {theme} = account.user;
     const navbarDescription = contact.current.isOnline ? this.context.t('online') : this.context.t('offline');
 
@@ -167,22 +192,15 @@ class ChatMessage extends PureComponent {
             <View style={styles.searchInputContainer}>
               <SearchInput placeholder="Search in messages" onChange={this.onSearchChange}/>
             </View>
-            <MessageList
-              items={chatMessage.list}
-              renderItem={this.renderMessage}
-              theme={account.user.theme}
-              showTyping={this.state.showTyping}
-              style={{paddingHorizontal: 0}}
-              typing={this.props.chatMessage.typing}
-              context={this.context}/>
-            <MessageInput
-              theme={theme}
-              context={this.context}
-              quote={this.state.quote}
-              onPressQuote={this.onQuotePress}
-              disabled={!account.net.connected || !account.connected}
-              onSubmit={this.onSubmitText}
-              onTyping={this.onMessageTyping}/>
+            {
+              Platform.OS === 'ios' ?
+                <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+                  {this.renderMessageList(theme)}
+                </KeyboardAvoidingView> :
+                <KeyboardAvoidingView style={styles.container}>
+                  {this.renderMessageList(theme)}
+                </KeyboardAvoidingView>
+            }
           </DismissKeyboardLayout>
         </BackgroundLayout>
       </MainLayout>

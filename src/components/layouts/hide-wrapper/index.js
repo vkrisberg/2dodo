@@ -7,7 +7,7 @@ export default class HideWrapper extends PureComponent {
     const {children} = this.props;
 
     return (
-      <View pointerEvents={'none'} style={styles.container}>
+      <View pointerEvents={'none'} style={[styles.container, this.props.style]}>
         {children}
       </View>
     );
