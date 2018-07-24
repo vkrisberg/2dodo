@@ -10,7 +10,7 @@ import moment from 'moment';
 import {MainLayout, BackgroundLayout, DismissKeyboardLayout} from '../../../components/layouts';
 import {ChatList} from '../../../components/lists';
 import {SearchInput, Navbar, NavbarDots, ButtonAdd, ChatListItem, ButtonNavbar} from '../../../components/elements';
-import {chatActions, chatMessageActions, contactActions, groupActions} from '../../../store/actions';
+import {accountActions, chatActions, chatMessageActions, contactActions, groupActions} from '../../../store/actions';
 import {actionEnum, routeEnum} from '../../../enums';
 // import androidPushListeners from './android-push-listeners';
 
@@ -92,7 +92,7 @@ class Messages extends Component {
     }, GET_ONLINE_UPDATE_TIME);
 
     // TODO - remove after tests
-    this.sendTestLocalNotification();
+    // this.sendTestLocalNotification();
   };
 
   unmount = () => {
@@ -113,8 +113,7 @@ class Messages extends Component {
       PushNotificationIOS.setApplicationIconBadgeNumber(0);
     }
 
-    if (state === 'active') {
-    }
+    this.props.dispatch(accountActions.setAppState(state));
   };
 
   notificationActions = async ({action, meta}) => {

@@ -53,6 +53,8 @@ export const types = {
   SET_NEW_PASSWORD_SUCCESS: Symbol('SET_NEW_PASSWORD_SUCCESS'),
   SET_NEW_PASSWORD_FAILURE: Symbol('SET_NEW_PASSWORD_FAILURE'),
   SET_DEFAULT_NEW_PASSWORD: Symbol('SET_DEFAULT_NEW_PASSWORD'),
+
+  SET_APP_STATE: Symbol('SET_APP_STATE'),
 };
 
 const goToMessagesAction = StackActions.reset({
@@ -143,6 +145,10 @@ export default {
       const {account} = getState();
       const navigation = services.getNavigation();
       try {
+        // app in background
+        if (account.appState !== 'active' || !account.net.connected) {
+          return;
+        }
         // login failed
         if (!connected && account.connecting) {
           throw new Error('connect failed: login error');
@@ -387,5 +393,9 @@ export default {
         throw e;
       }
     };
+  },
+
+  setAppState: (state) => {
+    return {type: types.SET_APP_STATE, payload: state};
   },
 };
