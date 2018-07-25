@@ -168,7 +168,7 @@ class Login extends Component {
     return (
       <MainLayout netOffline={!account.net.connected}>
         <BackgroundLayout background="login" barStyle="light-content">
-          <DismissKeyboardLayout>
+          <DismissKeyboardLayout style={this.styles.wrapper}>
             <KeyboardAvoidingView style={this.styles.container} behavior="position" enabled>
               <Logo style={this.styles.logo}/>
               <Text style={this.styles.text}>{t('LoginWelcome')}</Text>
@@ -180,19 +180,21 @@ class Login extends Component {
             <Link style={this.styles.forgot}
                   to={routeEnum.ResetPassword}
                   color={forgotLinkColor}>{t('ForgotPassword')}</Link>
-            <View style={this.styles.registration}>
-              <Text style={this.styles.registrationLabel}>{t('FirstTimeInApp')}</Text>
-              <Link to={routeEnum.Registration}
-                    color={colors.light.blueDarker}>{t('Registration')}</Link>
-            </View>
-            <View style={this.styles.keysImportContainer}>
-              <Button style={this.styles.keysImportButton}
-                      color={colors.light.grayDarker}
-                      borderColor="transparent"
-                      onPress={this.keysImport}
-                      disabled>
-                {t('KeysImport')}
-              </Button>
+            <View style={this.styles.bottomContainer}>
+              <View style={this.styles.registration}>
+                <Text style={this.styles.registrationLabel}>{t('FirstTimeInApp')}</Text>
+                <Link to={routeEnum.Registration}
+                      color={colors.light.blueDarker}>{t('Registration')}</Link>
+              </View>
+              <View style={this.styles.keysImportContainer}>
+                <Button style={this.styles.keysImportButton}
+                        color={colors.light.grayDarker}
+                        borderColor="transparent"
+                        onPress={this.keysImport}
+                        disabled>
+                  {t('KeysImport')}
+                </Button>
+              </View>
             </View>
           </DismissKeyboardLayout>
         </BackgroundLayout>
