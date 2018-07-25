@@ -114,9 +114,44 @@ class GroupMessage extends PureComponent {
     );
   };
 
+  renderBottom = (type) => {
+    const {context} = this;
+    const {account, group} = this.props;
+    const {theme} = this.props.account.user;
+
+    if (type === 'channel') {
+      return (
+        <View style={this.styles.btnContainer}>
+          <Button
+            color={colors[theme].blueCornFlower}
+            style={this.styles.btn}
+            textStyle={{fontSize: 15}}
+            onPress={() => this.onUnsubscribe(group.current.link)}
+            disabled>{context.t('Unsubscribe')}</Button>
+          <Button
+            color={colors[theme].blackText}
+            style={[this.styles.btn, this.styles.btnBorder]}
+            textStyle={{fontSize: 15}}
+            onPress={this.onSoundMute}
+            disabled>{context.t('SoundMute')}</Button>
+        </View>
+      );
+    }
+
+    return (
+      <MessageInput
+        theme={theme}
+        context={context}
+        quote={this.state.quote}
+        onPressQuote={this.onQuotePress}
+        disabled={!account.net.connected || !account.connected}
+        onSubmit={this.onSubmitText}/>
+    );
+  };
+
   renderMessageList = (theme) => {
     const {context} = this;
-    const {account, groupMessage, group} = this.props;
+    const {groupMessage, group} = this.props;
     const currentGroup = group.current;
 
     return (
@@ -128,30 +163,7 @@ class GroupMessage extends PureComponent {
           showTyping={this.state.showTyping}
           typing={groupMessage.typing}
           context={context}/>
-        {
-          currentGroup.type === 'channel' ?
-            <View style={this.styles.btnContainer}>
-              <Button
-                color={colors[theme].blueCornFlower}
-                style={this.styles.btn}
-                textStyle={{fontSize: 15}}
-                onPress={() => this.onUnsubscribe(currentGroup.link)}
-                disabled>{context.t('Unsubscribe')}</Button>
-              <Button
-                color={colors[theme].blackText}
-                style={[this.styles.btn, this.styles.btnBorder]}
-                textStyle={{fontSize: 15}}
-                onPress={this.onSoundMute}
-                disabled>{context.t('SoundMute')}</Button>
-            </View> :
-            <MessageInput
-              theme={theme}
-              context={context}
-              quote={this.state.quote}
-              onPressQuote={this.onQuotePress}
-              disabled={!account.net.connected || !account.connected}
-              onSubmit={this.onSubmitText}/>
-        }
+        {this.renderBottom(currentGroup.type)}
       </Fragment>
     );
   };
