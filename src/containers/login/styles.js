@@ -3,6 +3,12 @@ import {colors, getFont, sizes} from '../../styles';
 
 export default (theme) => {
   return StyleSheet.create({
+    wrapper: {
+      flex: 1,
+      width: '100%',
+      alignItems: 'center',
+    },
+
     container: {
       alignItems: 'center',
       justifyContent: 'center',
@@ -14,6 +20,13 @@ export default (theme) => {
 
     forgot: {
       marginTop: 15,
+    },
+
+    bottomContainer: {
+      width: 315,
+      alignItems: 'center',
+      position: 'absolute',
+      bottom: 15,
     },
 
     keysImportContainer: {
@@ -45,7 +58,6 @@ export default (theme) => {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      marginTop: sizes.isIphone5 ? 0 : 65,
     },
 
     registrationLabel: {
