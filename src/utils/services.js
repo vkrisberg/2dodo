@@ -9,8 +9,20 @@ class Services {
     this.httpConfig = config || CONFIG;
     this.http = await http.init(this.httpConfig, store);
     this.realmConfig = config ? config.realm : CONFIG.realm;
-    this.realm = await realm.init(this.realmConfig, store);
+    this.realm = await realm.init(this.realmConfig);
     ws.init({store});
+  }
+
+  async realmInit(path, config) {
+    if (this.realm) {
+      this.realm.close();
+    }
+
+    this.realmConfig = config ? config.realm : CONFIG.realm;
+    this.realmConfig.path = path;
+    this.realm = await realm.init(this.realmConfig);
+
+    return this.realm;
   }
 
   navigationInit(navigation) {

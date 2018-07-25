@@ -91,6 +91,14 @@ class Messages extends Component {
       this.props.dispatch(contactActions.getOnlineUsers());
     }, GET_ONLINE_UPDATE_TIME);
 
+    setTimeout(() => {
+      this.props.dispatch(accountActions.setRouteName(routeEnum.Messages));
+      // show request profile modal if exist
+      if (this.props.contact.receiveRequestProfile) {
+        this.props.navigation.navigate(routeEnum.RequestProfileModal);
+      }
+    }, 1000);
+
     // TODO - remove after tests
     // this.sendTestLocalNotification();
   };
