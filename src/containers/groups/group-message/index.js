@@ -4,10 +4,11 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
-import {NavbarChat, MessageListItem, MessageInput, Loader} from '../../../components/elements';
+import {NavbarChat, MessageListItem, MessageInput, Loader, Button} from '../../../components/elements';
 import {chatActions, chatMessageActions, groupActions, groupMessageActions} from '../../../store/actions';
 import {MessageList} from '../../../components/lists';
 import styles from './styles';
+import {colors} from '../../../styles';
 import {messageEnum, routeEnum} from '../../../enums';
 
 class GroupMessage extends PureComponent {
@@ -89,6 +90,15 @@ class GroupMessage extends PureComponent {
     });
   };
 
+  onUnsubscribe = (link) => {
+    this.props.dispatch(groupActions.unsubscribeFromGroup(link))
+      .then(() => {
+        this.props.navigation.goBack();
+      });
+  };
+
+  onSoundMute = () => {};
+
   renderMessage = ({item}) => {
     const {theme} = this.props.account.user;
 
@@ -106,7 +116,8 @@ class GroupMessage extends PureComponent {
 
   renderMessageList = (theme) => {
     const {context} = this;
-    const {account, groupMessage} = this.props;
+    const {account, groupMessage, group} = this.props;
+    const currentGroup = group.current;
 
     return (
       <Fragment>
@@ -117,13 +128,30 @@ class GroupMessage extends PureComponent {
           showTyping={this.state.showTyping}
           typing={groupMessage.typing}
           context={context}/>
-        <MessageInput
-          theme={theme}
-          context={context}
-          quote={this.state.quote}
-          onPressQuote={this.onQuotePress}
-          disabled={!account.net.connected || !account.connected}
-          onSubmit={this.onSubmitText}/>
+        {
+          currentGroup.type === 'channel' ?
+            <View style={this.styles.btnContainer}>
+              <Button
+                color={colors[theme].blueCornFlower}
+                style={this.styles.btn}
+                textStyle={{fontSize: 15}}
+                onPress={() => this.onUnsubscribe(currentGroup.link)}
+                disabled>{context.t('Unsubscribe')}</Button>
+              <Button
+                color={colors[theme].blackText}
+                style={[this.styles.btn, this.styles.btnBorder]}
+                textStyle={{fontSize: 15}}
+                onPress={this.onSoundMute}
+                disabled>{context.t('SoundMute')}</Button>
+            </View> :
+            <MessageInput
+              theme={theme}
+              context={context}
+              quote={this.state.quote}
+              onPressQuote={this.onQuotePress}
+              disabled={!account.net.connected || !account.connected}
+              onSubmit={this.onSubmitText}/>
+        }
       </Fragment>
     );
   };
