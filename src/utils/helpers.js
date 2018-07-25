@@ -35,10 +35,19 @@ const getDeviceId = (from) => {
   return fromArr[2] || '';
 };
 
+const getRealmPath = (username) => {
+  if (!username) {
+    return 'default.realm';
+  }
+  const dbName = username.replace('@', '_');
+  return `${dbName}.realm`;
+};
+
 export default {
   getFullName,
   getUsername,
   getNickname,
   getLogin,
   getDeviceId,
+  getRealmPath,
 };

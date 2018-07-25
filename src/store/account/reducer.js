@@ -45,6 +45,7 @@ const initState = {
   connectionAttempts: 0,
   stopReconnect: false,
   appState: 'active',
+  routeName: 'Preload',
 
   loading: false,
   updating: false,
@@ -411,6 +412,13 @@ export default reducer(initState, {
     return {
       ...state,
       appState: action.payload,
+    };
+  },
+
+  [types.SET_ROUTE_NAME]: (state, action) => {
+    return {
+      ...state,
+      routeName: action.payload,
     };
   },
 });

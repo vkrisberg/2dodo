@@ -13,6 +13,7 @@ export default class RegistrationForm extends Component {
   static propTypes = {
     context: PropTypes.object,
     account: PropTypes.object,
+    connecting: PropTypes.bool,
     onRegister: PropTypes.func,
     onSettings: PropTypes.func,
     onAvatar: PropTypes.func,
@@ -62,7 +63,7 @@ export default class RegistrationForm extends Component {
   };
 
   render() {
-    const {context, account, onSettings, onAvatar, onTheme} = this.props;
+    const {context, account, connecting, onSettings, onAvatar, onTheme} = this.props;
     const {theme} = account.user;
     const server = `http${account.isSecure ? 's' : ''}://${account.hostname}`;
 
@@ -88,13 +89,13 @@ export default class RegistrationForm extends Component {
           <RegistrationEmailForm theme={theme}
                                  context={context}
                                  initialValues={{phonePrefix: phonePrefixEnum.rus}}
-                                 disabled={!account.net.connected}
+                                 disabled={!account.net.connected || account.loading}
                                  onSubmit={this.onRegister}/>
           <RegistrationSettingsForm theme={theme}
                                     context={context}
                                     user={account.user}
                                     initialValues={account.user}
-                                    disabled={!account.net.connected || account.connecting}
+                                    disabled={!account.net.connected || account.connecting || connecting}
                                     onAvatar={onAvatar}
                                     onTheme={onTheme}
                                     onSubmit={onSettings}/>
