@@ -4,7 +4,7 @@ import {colors, getFont, sizes} from '../../styles';
 export default (theme) => {
   return StyleSheet.create({
     wrapper: {
-      flex: 1,
+      height: sizes.windowHeight,
       width: '100%',
       alignItems: 'center',
     },
