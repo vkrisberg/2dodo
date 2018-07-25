@@ -223,6 +223,8 @@ const translations = {
     'GroupUsers': 'Пользователи в группе',
     'CreateGroupChat': 'Создать группу',
     'Start': 'Вперед',
+    'Unsubscribe': 'Отписаться',
+    'SoundMute': 'Выключить звук',
     // Contact
     'online': 'в сети',
     'offline': 'не в сети',
@@ -463,6 +465,8 @@ const translations = {
     'GroupUsers': 'Users in group',
     'CreateGroupChat': 'Create group chat',
     'Start': 'Start',
+    'Unsubscribe': 'Unsubscribe',
+    'SoundMute': 'Sound mute',
     // Contact
     'online': 'online',
     'offline': 'offline',
