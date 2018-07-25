@@ -10,6 +10,7 @@ export default {
   maxHashCount: 10,
   maxConnectionAttempts: 10,
   realm: {
+    path: 'default.realm',
     schema: Schema,
     schemaVersion: 1,
     deleteRealmIfMigrationNeeded: true,

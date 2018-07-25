@@ -3,7 +3,7 @@ import {NavigationActions, StackActions} from 'react-navigation';
 import {merge} from 'lodash';
 
 import apiAccount from '../../api/account';
-import {services} from '../../utils';
+import {helpers, services} from '../../utils';
 import {pgplib, hashlib} from '../../utils/encrypt';
 import {storageEnum, dbEnum} from '../../enums';
 import CONFIG from '../../config';
@@ -55,6 +55,7 @@ export const types = {
   SET_DEFAULT_NEW_PASSWORD: Symbol('SET_DEFAULT_NEW_PASSWORD'),
 
   SET_APP_STATE: Symbol('SET_APP_STATE'),
+  SET_ROUTE_NAME: Symbol('SET_ROUTE_NAME'),
 };
 
 const goToMessagesAction = StackActions.reset({
@@ -83,7 +84,6 @@ export default {
         // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
         // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
         //---
-        const realm = services.getRealm();
         const authorized = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
         const username = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
         const password = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
@@ -91,6 +91,10 @@ export default {
         if (!authorized || !username || !password) {
           throw new Error('remind failed: user is not authorized');
         }
+
+        // each user his own database
+        const realmPath = helpers.getRealmPath(username);
+        const realm = await services.realmInit(realmPath);
 
         const account = realm.objectForPrimaryKey(dbEnum.Account, username);
         // console.log('account', account.keys.publicKey);
@@ -228,8 +232,8 @@ export default {
         AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
         AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
         AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
-        navigation.dispatch(goToLoginAction);
         dispatch({type: types.LOGOUT_SUCCESS});
+        navigation.dispatch(goToLoginAction);
       } catch (e) {
         dispatch({type: types.LOGOUT_FAILURE, error: e});
         // throw e;
@@ -397,5 +401,9 @@ export default {
 
   setAppState: (state) => {
     return {type: types.SET_APP_STATE, payload: state};
+  },
+
+  setRouteName: (routeName) => {
+    return {type: types.SET_ROUTE_NAME, payload: routeName};
   },
 };

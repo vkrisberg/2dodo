@@ -8,7 +8,7 @@ import {MainLayout, BackgroundLayout, DismissKeyboardLayout} from '../../compone
 import {LoginForm} from '../../components/forms';
 import {Logo, Button, Link} from '../../components/elements';
 import {routeEnum, dbEnum} from '../../enums';
-import {services} from '../../utils';
+import {helpers, services} from '../../utils';
 import {accountActions} from '../../store/actions';
 import {colors, sizes} from '../../styles';
 import {validation} from '../../utils';
@@ -43,6 +43,10 @@ class Login extends Component {
     super(props);
     this.realm = services.getRealm();
     this.styles = styles(props.account.user.theme);
+  }
+
+  componentDidMount() {
+    this.props.dispatch(accountActions.setRouteName(routeEnum.Login));
   }
 
   componentDidUpdate(prevProps) {
@@ -93,6 +97,10 @@ class Login extends Component {
     if (login.indexOf('@') === -1) {
       username = `${login}@${account.hostname}`;
     }
+
+    // each user his own database
+    const realmPath = helpers.getRealmPath(username);
+    this.realm = await services.realmInit(realmPath);
 
     const realmAccount = this.realm.objectForPrimaryKey(dbEnum.Account, username);
 

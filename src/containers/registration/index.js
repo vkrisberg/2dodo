@@ -9,7 +9,7 @@ import {MainLayout, BackgroundLayout} from '../../components/layouts';
 import {RegistrationForm} from '../../components/forms';
 import {accountActions} from '../../store/actions';
 import {dbEnum, routeEnum} from '../../enums';
-import {services} from '../../utils';
+import {helpers, services} from '../../utils';
 import storageEnum from '../../enums/storage-enum';
 import CONFIG from '../../config';
 
@@ -30,6 +30,10 @@ class Registration extends Component {
     t: PropTypes.func.isRequired,
   };
 
+  state = {
+    connecting: false,
+  };
+
   constructor(props) {
     super(props);
     this.realm = services.getRealm();
@@ -47,7 +51,7 @@ class Registration extends Component {
     };
   }
 
-  saveToDatabase = () => {
+  saveToDatabase = async () => {
     const {account} = this.props;
     const {username} = account.user;
     const {deviceId, hostname} = account;
@@ -70,6 +74,10 @@ class Registration extends Component {
       dateCreate,
       dateUpdate,
     };
+
+    // each user his own database
+    const realmPath = helpers.getRealmPath(username);
+    this.realm = await services.realmInit(realmPath);
 
     this.realm.write(() => {
       this.realm.create(dbEnum.Account, resultAccount, true);
@@ -120,6 +128,10 @@ class Registration extends Component {
     const {firstName, secondName, avatar} = data;
     const password = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
 
+    this.setState({
+      connecting: true,
+    });
+
     this.props.dispatch(accountActions.updateProfile({firstName, secondName, avatar})).then((user) => {
       this.props.dispatch(accountActions.connect({
         deviceId: account.deviceId,
@@ -128,9 +140,14 @@ class Registration extends Component {
         user,
         password,
       })).then(() => {
-        this.props.navigation.dispatch(goToMessagesAction);
+        setTimeout(() => {
+          this.props.navigation.dispatch(goToMessagesAction);
+        }, 2000);
       }).catch((error) => {
         console.log('login error', error);
+        this.setState({
+          connecting: false,
+        });
         Alert.alert(context.t('LoginAuthError'));
       });
     }, (error) => {
@@ -164,6 +181,7 @@ class Registration extends Component {
         <BackgroundLayout background="registration" barStyle="light-content">
           <RegistrationForm context={this.context}
                             account={account}
+                            connecting={this.state.connecting}
                             onRegister={this.registration}
                             onSettings={() => this.updateSettings({
                               firstName: formSettings.values.firstName,

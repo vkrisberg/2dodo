@@ -394,12 +394,13 @@ export default {
   },
 
   receiveRequestProfile: (message) => {
-    return async dispatch => {
+    return async (dispatch, getState) => {
       try {
         // send delivery report
         const msgEncryptTime = get(message, 'encrypt_time', null);
         await apiServer.deliveryReport(msgEncryptTime);
 
+        const {account} = getState();
         const navigation = services.getNavigation();
         const from = get(message, 'from', '');
         const username = wsMessage.getUsername(from);
@@ -407,7 +408,9 @@ export default {
           return false;
         }
         dispatch({type: types.RECEIVE_REQUEST_PROFILE, payload: username});
-        navigation.navigate(routeEnum.RequestProfileModal);
+        if (account.routeName === routeEnum.Messages) {
+          navigation.navigate(routeEnum.RequestProfileModal);
+        }
         return username;
       } catch (e) {
         console.log('receive request profile error', e);
