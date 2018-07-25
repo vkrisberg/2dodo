@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import {isEmpty, map} from 'lodash';
 
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
 import {GroupList} from '../../../components/lists';
@@ -56,11 +57,50 @@ class Groups extends Component {
     this.props.navigation.navigate(routeEnum.GroupMessage, {group});
   };
 
-  onGroupLongPress = () => {};
+  onGroupLongPress = (group) => {
+    if (!this.state.editMode) {
+      this.setState({
+        selected: {[group.id]: group},
+        editMode: true,
+      });
+    }
+  };
 
-  onGroupCheckboxPress = () => {};
+  onGroupCheckboxPress = (group) => {
+    if (this.state.editMode) {
+      const selected = {...this.state.selected};
 
-  onGroupsDelete = () => {};
+      if (!selected[group.id]) {
+        selected[group.id] = group;
+      } else {
+        delete selected[group.id];
+      }
+
+      if (isEmpty(selected)) {
+        this.setState({
+          editMode: false,
+          selected: {},
+        });
+        return;
+      }
+
+      this.setState({selected});
+    }
+  };
+
+  deleteGroups = (ids) => {};
+
+  onGroupsDelete = () => {
+    const groupIds = map(this.state.selected, (item, key) => key);
+    if (groupIds.length) {
+      this.deleteGroups(groupIds).then(() => {
+        this.setState({
+          editMode: false,
+          selected: {},
+        });
+      });
+    }
+  };
 
   renderGroupItem = ({item}) => {
     const {account} = this.props;
