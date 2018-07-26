@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import RNLanguages from 'react-native-languages';
-import {View, Text, FlatList, SectionList} from 'react-native';
+import {View, Text, FlatList, SectionList, TouchableOpacity} from 'react-native';
 
 import {TextLabel} from '../../elements';
 import {ContactsEmptyIcon} from '../../icons/index';
@@ -15,16 +15,20 @@ export default class ContactList extends Component {
   static propTypes = {
     items: PropTypes.array,
     renderItem: PropTypes.func,
+    onPressLetter: PropTypes.func,
     sections: PropTypes.bool,
     showSearchResult: PropTypes.bool,
     theme: PropTypes.string,
     context: PropTypes.object,
     style: PropTypes.any,
+    currentLetter: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
     items: [],
     renderItem: () => {
+    },
+    onPressLetter: () => {
     },
     theme: themeEnum.light,
     sections: false,
@@ -59,6 +63,10 @@ export default class ContactList extends Component {
 
   _keyExtractor = (item) => item.username;
 
+  onPressLetter = (letter) => {
+    this.props.onPressLetter(letter);
+  };
+
   renderSearchResult = (_styles) => {
     const {theme, context} = this.props;
 
@@ -75,14 +83,14 @@ export default class ContactList extends Component {
 
   renderSectionList = (_styles) => {
     const {items} = this.state;
-    const {renderItem} = this.props;
+    const {renderItem, currentLetter} = this.props;
     const lng = RNLanguages.language.substr(0, 2);
     const alphabet = generateAlphabet(alphabetEnum[lng].start, alphabetEnum[lng].end);
 
     return (
       <View style={_styles.sectionContainer}>
         <SectionList
-          ref={ref => this.flatList = ref}
+          ref={ref => this.sectionListRef = ref}
           sections={items}
           renderItem={renderItem}
           onLayout={e => this.updateLayoutHeight(e)}
@@ -98,7 +106,9 @@ export default class ContactList extends Component {
         <View style={_styles.alphabet}>
           {
             alphabet.map((letter, index) =>
-              <Text key={index} style={_styles.alphabetLetter}>{letter}</Text>
+              <TouchableOpacity key={index} onPress={() => this.onPressLetter(letter)}>
+                <Text style={[_styles.alphabetLetter, currentLetter === letter && {color: colors[this.props.theme].blue}]}>{letter}</Text>
+              </TouchableOpacity>
             )
           }
         </View>

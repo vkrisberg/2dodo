@@ -130,10 +130,10 @@ class RegistrationLoginForm extends Component {
               autoCapitalize={'none'}
               autoCorrect={false}/>
           </View>
-          <View style={_styles.checkboxContainer}>
-            <TextLabel theme={theme} color={colors[theme].blackText}>{context.t('UseSpecialServerParams')}</TextLabel>
-            <Checkbox input={{value: this.state.checked, onChange: this.toggleServerInput}} disabled/>
-          </View>
+          {/*<View style={_styles.checkboxContainer}>*/}
+            {/*<TextLabel theme={theme} color={colors[theme].blackText}>{context.t('UseSpecialServerParams')}</TextLabel>*/}
+            {/*<Checkbox input={{value: this.state.checked, onChange: this.toggleServerInput}} disabled/>*/}
+          {/*</View>*/}
           {this.renderServerInput(_styles)}
           <View style={_styles.buttonContainer}>
             <Button disabled={disabled} onPress={this.onSubmit}>{context.t('Continue')}</Button>

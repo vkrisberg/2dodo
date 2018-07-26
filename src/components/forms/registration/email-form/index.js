@@ -95,25 +95,25 @@ class RegistrationEmailForm extends Component {
                 autoCorrect={false}/>
             </View>
           </View>
-          <View style={_styles.checkboxContainer}>
-            <TextLabel theme={theme} color={colors[theme].grayDarker}>{context.t('ForBestSecurity')}</TextLabel>
-            <TextLabel theme={theme} color={colors[theme].blackText}>{context.t('CreateNewKey')}</TextLabel>
-            <Checkbox input={{value: true}} disabled={true}/>
-          </View>
+          {/*<View style={_styles.checkboxContainer}>*/}
+            {/*<TextLabel theme={theme} color={colors[theme].grayDarker}>{context.t('ForBestSecurity')}</TextLabel>*/}
+            {/*<TextLabel theme={theme} color={colors[theme].blackText}>{context.t('CreateNewKey')}</TextLabel>*/}
+            {/*<Checkbox input={{value: true}} disabled={true}/>*/}
+          {/*</View>*/}
           <View style={_styles.buttonContainer}>
             <Button disabled={disabled} onPress={this.props.handleSubmit}>{context.t('Done')}</Button>
           </View>
         </KeyboardAvoidingView>
-        <View style={_styles.skipContainer}>
-          <ButtonSkip
-            // disabled={disabled}
-            disabled={true}
-            onSkip={this.props.handleSubmit}
-            color={colors[theme].grayDarker}
-            marginBottom={15}>
-            {context.t('SkipThisStep')}
-          </ButtonSkip>
-        </View>
+        {/*<View style={_styles.skipContainer}>*/}
+          {/*<ButtonSkip*/}
+            {/*// disabled={disabled}*/}
+            {/*disabled={true}*/}
+            {/*onSkip={this.props.handleSubmit}*/}
+            {/*color={colors[theme].grayDarker}*/}
+            {/*marginBottom={15}>*/}
+            {/*{context.t('SkipThisStep')}*/}
+          {/*</ButtonSkip>*/}
+        {/*</View>*/}
       </View>
     );
   }
