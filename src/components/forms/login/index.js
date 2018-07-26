@@ -63,16 +63,16 @@ class LoginForm extends Component {
           autoCorrect={false}
           multiline={false}
         />
-        <View style={_styles.securityContainer}>
-          <Text style={[_styles.text, _styles.securityText]}>{context.t('ForBestSecurity')}</Text>
-          <Text style={_styles.text}>{context.t('CreateNewKey')}</Text>
-          <Field
-            component={Checkbox}
-            name="createNewKey"
-            color={colors.light.white}
-            disabled
-          />
-        </View>
+        {/*<View style={_styles.securityContainer}>*/}
+          {/*<Text style={[_styles.text, _styles.securityText]}>{context.t('ForBestSecurity')}</Text>*/}
+          {/*<Text style={_styles.text}>{context.t('CreateNewKey')}</Text>*/}
+          {/*<Field*/}
+            {/*component={Checkbox}*/}
+            {/*name="createNewKey"*/}
+            {/*color={colors.light.white}*/}
+            {/*disabled*/}
+          {/*/>*/}
+        {/*</View>*/}
         <Button color={colors.light.loginButtonText}
                 borderColor={colors.light.white}
                 bgColor={colors.light.white}

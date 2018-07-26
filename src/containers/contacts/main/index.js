@@ -20,12 +20,17 @@ class Contacts extends Component {
     t: PropTypes.func.isRequired,
   };
 
-  state = {
-    editMode: false,
-    selected: {},
-    chosenContacts: [],
-    chosenMessage: [],
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      editMode: false,
+      selected: {},
+      chosenContacts: [],
+      chosenMessage: [],
+      currentLetter: 'A',
+    };
+  }
 
   componentDidMount() {
     this.loadContactList();
@@ -108,6 +113,26 @@ class Contacts extends Component {
     );
   };
 
+  onPressLetter = (currentLetter) => {
+    let index = null;
+    const section = this.props.contact.sectionList.find((item, i) => {
+      if(item.title === currentLetter) {
+        index = i;
+        return item;
+      }
+    });
+
+    if(section) {
+      this.setState({currentLetter});
+      this.contactList.sectionListRef.scrollToLocation({
+        animated: true,
+        sectionIndex: index,
+        itemIndex: 0,
+        viewPosition: 0.5,
+      });
+    }
+  };
+
   render() {
     const {context} = this;
     const {contact, account} = this.props;
@@ -119,7 +144,14 @@ class Contacts extends Component {
                   renderLeft={<NavbarDots/>}
                   renderRight={<ButtonAdd onPress={this.onCreate}/>}/>
           <SearchInput placeholder="Search contacts" onChange={this.onSearchChange}/>
-          <ContactList context={context} items={contact.sectionList} renderItem={this.renderContactItem} sections/>
+          <ContactList
+            ref={item => (this.contactList = item)}
+            context={context}
+            items={contact.sectionList}
+            renderItem={this.renderContactItem}
+            onPressLetter={this.onPressLetter}
+            currentLetter={this.state.currentLetter}
+            sections/>
         </BackgroundLayout>
       </MainLayout>
     );
