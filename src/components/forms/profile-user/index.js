@@ -224,14 +224,12 @@ class ProfileUserForm extends Component {
             <View style={_styles.btnContainer}>
               <Button
                 style={_styles.actionBtn}
-                onPress={this.onExit}
-                disabled>
+                onPress={this.onExit}>
                 {context.t('ExitOrChange')}
               </Button>
               <Button
                 style={_styles.actionBtn}
-                onPress={() => this.onDelete(user.username)}
-                disabled>
+                onPress={() => this.onDelete(user.username)}>
                 <Text style={[_styles.defaultText, {color: colors[theme].redLight,}]}>{context.t('DeleteAccount')}</Text>
               </Button>
             </View>
