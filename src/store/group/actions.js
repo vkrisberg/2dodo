@@ -597,7 +597,11 @@ export default {
           for (let i = 0; i < realmGroups.length; i++) {
             const group = realmGroups[i];
             dispatch({type: types.UNSUBSCRIBE, payload: group.link});
-            await apiGroup.unsubscribeFromGroup(group.link);
+            if (group.role === 'admin') {
+              await apiGroup.deleteGroup(group.link);
+            } else {
+              await apiGroup.unsubscribeFromGroup(group.link);
+            }
           }
           await realm.write(() => {
             realm.delete(realmGroups);

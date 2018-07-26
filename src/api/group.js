@@ -93,7 +93,6 @@ export default {
   },
 
   unsubscribeFromGroup: async (link) => {
-    console.log('LINK', link)
     const websocket = services.getWebsocket();
     const serverMessage = await wsMessage.getServerMessage({
       action: actionEnum.unsubscribeFromGroup,
