@@ -585,6 +585,42 @@ export default {
     };
   },
 
+  deleteAndUnsubscribe: (groups = []) => {
+    return async dispatch => {
+      try {
+        const realm = services.getRealm();
+        const groupIds = groups.map((item) => item.id);
+        const query = groupIds.join("' OR id = '");
+        const realmGroups = realm.objects(dbEnum.Group).filtered(`id = '${query}'`);
+
+        if (realmGroups.length) {
+          for (let i = 0; i < realmGroups.length; i++) {
+            const group = realmGroups[i];
+            dispatch({type: types.UNSUBSCRIBE, payload: group.link});
+            await apiGroup.unsubscribeFromGroup(group.link);
+          }
+          await realm.write(() => {
+            realm.delete(realmGroups);
+          });
+
+          for (let i = 0; i < groupIds.length; i++) {
+            const groupId = groupIds[i];
+            const messages = realm.objects(dbEnum.GroupMessage)
+              .filtered(`groupId = '${groupId}'`);
+            await realm.write(() => {
+              realm.delete(messages);
+            });
+          }
+        }
+        dispatch({type: types.DELETE_SUCCESS, payload: groupIds});
+        return groups;
+      } catch (e) {
+        dispatch({type: types.UNSUBSCRIBE_FAILURE, error: e});
+        throw e;
+      }
+    };
+  },
+
   getGroupMember: (data) => {
     return async dispatch => {
       dispatch({type: types.GET_MEMBER, payload: data});

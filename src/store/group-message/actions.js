@@ -128,8 +128,8 @@ export default {
           });
 
           payload = JSON.parse(JSON.stringify(_groupMessage));
-          // console.log('group message send error', payload);
-          dispatch({type: types.SEND_SUCCESS, payload});
+          // console.log('group message send error', payload, message.error);
+          dispatch({type: types.SEND_SUCCESS, payload, error: message.error});
           return payload;
         }
 

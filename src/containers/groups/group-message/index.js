@@ -127,7 +127,7 @@ class GroupMessage extends PureComponent {
             style={this.styles.btn}
             textStyle={{fontSize: 15}}
             onPress={() => this.onUnsubscribe(group.current.link)}
-            disabled>{context.t('Unsubscribe')}</Button>
+            disabled={!group.current.isSubscribed}>{context.t('Unsubscribe')}</Button>
           <Button
             color={colors[theme].blackText}
             style={[this.styles.btn, this.styles.btnBorder]}
@@ -144,7 +144,7 @@ class GroupMessage extends PureComponent {
         context={context}
         quote={this.state.quote}
         onPressQuote={this.onQuotePress}
-        disabled={!account.net.connected || !account.connected}
+        disabled={!account.net.connected || !account.connected || !group.current.isSubscribed}
         onSubmit={this.onSubmitText}/>
     );
   };

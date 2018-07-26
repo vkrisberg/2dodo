@@ -179,14 +179,14 @@ class Messages extends Component {
       return;
     }
 
-    // Alert.alert(
-    //   'Failed To Register For Remote Push',
-    //   `Error (${error.code}): ${error.message}`,
-    //   [{
-    //     text: 'Dismiss',
-    //     onPress: null,
-    //   }]
-    // );
+    Alert.alert(
+      'Failed To Register For Remote Push',
+      `Error (${error.code}): ${error.message}`,
+      [{
+        text: 'Dismiss',
+        onPress: null,
+      }]
+    );
   };
 
   onRemoteNotification = async (notification) => {

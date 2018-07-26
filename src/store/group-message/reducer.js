@@ -77,6 +77,7 @@ export default reducer(initState, {
     return {
       ...state,
       list,
+      error: action.error ? action.error.toString() : null,
       // loading: false,
     };
   },

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View} from 'react-native';
+import {Alert, View} from 'react-native';
 import {connect} from 'react-redux';
 import {submit} from 'redux-form';
 import PropTypes from 'prop-types';
@@ -10,7 +10,7 @@ import {MainLayout, BackgroundLayout} from '../../../components/layouts';
 import {Navbar, ButtonBack, ButtonNavbar, Loader} from '../../../components/elements';
 import {ProfileUserForm} from '../../../components/forms';
 import styles from './styles';
-import {accountActions, groupActions} from "../../../store/actions";
+import {accountActions, chatActions, contactActions, groupActions} from '../../../store/actions';
 
 class ProfileSettings extends Component {
   static propTypes = {
@@ -66,11 +66,30 @@ class ProfileSettings extends Component {
       });
   };
 
-  onExit = () => alert('click on exit btn');
+  onExit = () => {
+    this.props.dispatch(accountActions.logout());
+  };
 
-  onDelete = () => alert('click on delete btn');
+  onDelete = () => {
+    const {context} = this;
 
-  onAddBtn = () => {};
+    Alert.alert(
+      context.t('DeleteAccount'),
+      context.t('DeleteAccountConfirm'),
+      [
+        {text: context.t('Cancel')},
+        {
+          text: context.t('Delete'), onPress: () => {
+            this.props.dispatch(accountActions.deleteAccount());
+          }
+        }
+      ],
+      {cancelable: false},
+    );
+  };
+
+  onAddBtn = () => {
+  };
 
   onGroups = () => this.props.navigation.goBack();
 
@@ -95,7 +114,8 @@ class ProfileSettings extends Component {
               theme={theme}
               context={context}
               initialValues={Object.assign({}, account.user, {group: group.list})}
-              onSubmit={() => {}}
+              onSubmit={() => {
+              }}
               onAddBtn={this.onAddBtn}
               onGroups={this.onGroups}
               onSound={this.onSound}

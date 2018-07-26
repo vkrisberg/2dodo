@@ -1,5 +1,6 @@
 import {AsyncStorage} from 'react-native';
 import {NavigationActions, StackActions} from 'react-navigation';
+import fs from 'react-native-fs';
 import {merge} from 'lodash';
 
 import apiAccount from '../../api/account';
@@ -237,6 +238,24 @@ export default {
       } catch (e) {
         dispatch({type: types.LOGOUT_FAILURE, error: e});
         // throw e;
+      }
+    };
+  },
+
+  deleteAccount: () => {
+    return async dispatch => {
+      dispatch({type: types.LOGOUT});
+      try {
+        const realm = services.getRealm();
+        const path = realm.path;
+        realm.close();
+        await fs.unlink(path);
+
+        const websocket = services.getWebsocket();
+        websocket.close();
+      } catch (e) {
+        dispatch({type: types.LOGOUT_FAILURE, error: e});
+        throw e;
       }
     };
   },

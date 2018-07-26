@@ -3,6 +3,7 @@ package com.tododo;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.rnfs.RNFSPackage;
 import io.realm.react.RealmReactPackage;
 import com.horcrux.svg.SvgPackage;
 import com.bitgo.randombytes.RandomBytesPackage;
@@ -31,6 +32,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNFSPackage(),
             new RealmReactPackage(),
             new SvgPackage(),
             new RandomBytesPackage(),
