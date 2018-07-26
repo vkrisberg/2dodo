@@ -6,7 +6,7 @@ import {isEmpty, map} from 'lodash';
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
 import {GroupList} from '../../../components/lists';
 import {SearchInput, Navbar, NavbarDots, ButtonAdd, GroupListItem, ButtonNavbar, Loader} from '../../../components/elements';
-import {groupActions} from '../../../store/actions';
+import {chatActions, groupActions} from '../../../store/actions';
 import {routeEnum} from '../../../enums';
 
 class Groups extends Component {
@@ -47,6 +47,10 @@ class Groups extends Component {
     return this.loadGroupList(filter);
   };
 
+  deleteGroups = (groups) => {
+    return this.props.dispatch(groupActions.deleteAndUnsubscribe(groups));
+  };
+
   onSearchChange = (text) => {
     this.searchGroups(text);
   };
@@ -54,6 +58,11 @@ class Groups extends Component {
   onAddGroup = () => this.props.navigation.navigate(routeEnum.GroupAdd);
 
   onGroupPress = (group) => {
+    if (this.state.editMode) {
+      this.onGroupCheckboxPress(group);
+      return;
+    }
+
     this.props.navigation.navigate(routeEnum.GroupMessage, {group});
   };
 
@@ -88,12 +97,10 @@ class Groups extends Component {
     }
   };
 
-  deleteGroups = (ids) => {};
-
   onGroupsDelete = () => {
-    const groupIds = map(this.state.selected, (item, key) => key);
-    if (groupIds.length) {
-      this.deleteGroups(groupIds).then(() => {
+    const groups = map(this.state.selected, (item) => item);
+    if (groups.length) {
+      this.deleteGroups(groups).then(() => {
         this.setState({
           editMode: false,
           selected: {},
