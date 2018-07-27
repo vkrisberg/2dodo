@@ -67,7 +67,7 @@ export default (theme) => {
       fontSize: 10,
       zIndex: 2,
       color: colors[theme].grayLightQuartz,
-      textAlign: 'right',
+      textAlign: 'center',
       ...getFont({}),
     },
 

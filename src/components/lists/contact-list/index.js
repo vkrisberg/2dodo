@@ -84,6 +84,23 @@ export default class ContactList extends Component {
     }
   };
 
+  renderLetterBlock = (letter, index, currentLetter, lettersArray, lastLetterCode) => {
+    const _styles = styles(this.props.theme);
+
+    return (
+      <View key={index} style={_styles.alphabetBlock}>
+        <TouchableOpacity onPress={() => this.onPressLetter(letter)}>
+          <Text style={[_styles.alphabetLetter, currentLetter === letter && {color: colors[this.props.theme].blue}]}>{letter}</Text>
+        </TouchableOpacity>
+        {
+          ((index !== (lettersArray.length - 1) && letter.charCodeAt(0) + 1 !== lettersArray[index + 1].charCodeAt(0)) ||
+            ((lastLetterCode !== 90 || lastLetterCode !== 1071) && index === (lettersArray.length - 1) )) &&
+          <Image style={_styles.alphabetLetterAfter} source={IMG_MENU_DOTS}/>
+        }
+      </View>
+    );
+  };
+
   renderLetters = (letterCount, planAddLetter, contactLettersLanguageLength, contactLettersMain, contactLettersSecond, startCode, finishCode) => {
     let renderLetters = [];
     let addedLetter = 0;
@@ -207,17 +224,10 @@ export default class ContactList extends Component {
             return false;
           }
 
+          const contactLettersLastLetterCode = contactLetters[contactLetters.length - 1].charCodeAt(0);
+
           return (
-            <View key={index} style={_styles.alphabetBlock}>
-              <TouchableOpacity onPress={() => this.onPressLetter(letter)}>
-                <Text style={[_styles.alphabetLetter, currentLetter === letter && {color: colors[this.props.theme].blue}]}>{letter}</Text>
-              </TouchableOpacity>
-              {
-                index !== (contactLetters.length - 1) &&
-                letter.charCodeAt(0) + 1 !== contactLetters[index + 1].charCodeAt(0) &&
-                <Image style={_styles.alphabetLetterAfter} source={IMG_MENU_DOTS}/>
-              }
-            </View>
+            this.renderLetterBlock(letter, index, currentLetter, contactLetters, contactLettersLastLetterCode)
           );
         })
       );
@@ -228,24 +238,17 @@ export default class ContactList extends Component {
     const planAddLetter = letterCount - contactLettersEnglishLength - contactLettersRussianLength;
     let renderLetters = [];
 
-    if (lng === 'en') {
+    if (lng === 'en' && contactLettersEnglish.length) {
       renderLetters = this.renderLetters(letterCount, planAddLetter, contactLettersEnglishLength, contactLettersEnglish, contactLettersRussian, 65, 90);
-    } else {
+    } else if (lng === 'rus' && contactLettersRussian.length) {
       renderLetters = this.renderLetters(letterCount, planAddLetter, contactLettersRussianLength, contactLettersRussian, contactLettersEnglish, 1040, 1071);
     }
 
+    const renderLettersLastLetterCode = renderLetters[renderLetters.length - 1].charCodeAt(0);
+
     return (
       renderLetters.map((letter, index) =>
-        <View key={index} style={_styles.alphabetBlock}>
-          <TouchableOpacity onPress={() => this.onPressLetter(letter)}>
-            <Text style={[_styles.alphabetLetter, currentLetter === letter && {color: colors[this.props.theme].blue}]}>{letter}</Text>
-          </TouchableOpacity>
-          {
-            index !== (renderLetters.length - 1) &&
-            letter.charCodeAt(0) + 1 !== renderLetters[index + 1].charCodeAt(0) &&
-            <Image style={_styles.alphabetLetterAfter} source={IMG_MENU_DOTS}/>
-          }
-        </View>
+        this.renderLetterBlock(letter, index, currentLetter, renderLetters, renderLettersLastLetterCode)
       )
     );
   };
