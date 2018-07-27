@@ -34,6 +34,12 @@ class Contacts extends Component {
 
   componentDidMount() {
     this.loadContactList();
+
+    if(this.props.contact.sectionList.length) {
+      this.setState({
+        currentLetter: this.props.contact.sectionList[0].title
+      });
+    }
   }
 
   loadContact = (username) => {

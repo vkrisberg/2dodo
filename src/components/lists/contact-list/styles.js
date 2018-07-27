@@ -58,7 +58,7 @@ export default (theme) => {
     alphabetLetter: {
       fontSize: 10,
       color: colors[theme].grayLightQuartz,
-      marginBottom: 11,
+      height: 23,
       textAlign: 'right',
       ...getFont({}),
     },

@@ -2,13 +2,14 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import RNLanguages from 'react-native-languages';
 import {View, Text, FlatList, SectionList, TouchableOpacity} from 'react-native';
+import {range} from 'lodash';
 
 import {TextLabel} from '../../elements';
 import {ContactsEmptyIcon} from '../../icons/index';
 import {themeEnum, alphabetEnum} from '../../../enums';
 import {generateAlphabet} from '../../../utils';
 import styles from './styles';
-import {colors} from '../../../styles';
+import {colors, sizes} from '../../../styles';
 
 export default class ContactList extends Component {
 
@@ -81,11 +82,153 @@ export default class ContactList extends Component {
     }
   };
 
+  renderAlphabet = (_styles, currentLetter) => {
+    const {items} = this.state;
+    const lng = RNLanguages.language.substr(0, 2);
+    const alphabet = generateAlphabet(alphabetEnum[lng].start, alphabetEnum[lng].end);
+    const tabBarBottomHeight = 55;
+    const searchInputHeight = 55;
+    const containerHeight = sizes.windowHeight - sizes.navbarHeight - tabBarBottomHeight - searchInputHeight;
+    const letterCount = Math.floor(containerHeight / _styles.alphabetLetter.height);
+    let contactLettersEnglish = [];
+    let contactLettersRussian = [];
+    let contactLetters = [...contactLettersEnglish, ...contactLettersRussian];
+
+    items.map(item => {
+      const letter = item.title;
+      const letterCode = letter.charCodeAt(0);
+
+      if (letterCode >= 65 && letterCode <= 90) {
+        contactLettersEnglish.push(letter);
+      }
+
+      if (letterCode >= 1040 && letterCode <= 1071) {
+        contactLettersRussian.push(letter);
+      }
+    });
+
+    if (contactLetters.length >= letterCount) {
+      return (
+        contactLetters.map((letter, index) => {
+          if (index > letterCount) {
+            return false;
+          }
+
+          return (
+            <TouchableOpacity key={index} onPress={() => this.onPressLetter(letter)}>
+              <Text style={[_styles.alphabetLetter, currentLetter === letter && {color: colors[this.props.theme].blue}]}>{letter}</Text>
+            </TouchableOpacity>
+          );
+        })
+      );
+    }
+
+    let renderLetters = []; //24
+    const contactLettersEnglishLength = contactLettersEnglish.length; //1
+    const contactLettersRussianLength = contactLettersRussian.length;//1
+    const planAddLetter = letterCount - contactLettersEnglishLength - contactLettersRussianLength;//22
+    let addedLetter = 0;
+
+    if (lng === 'en') {
+      if (contactLettersEnglishLength > 1) {
+        let lastIndex = contactLettersEnglish[0].charCodeAt(0);
+
+        contactLettersEnglish.map((item, index) => {
+          const itemCode = item.charCodeAt(0);
+          if(addedLetter < planAddLetter) {
+            const letterDifference = itemCode - lastIndex;
+
+            if(letterDifference > 1) {
+              range(0, (letterDifference - 1), 1).map(item => {
+                if (addedLetter < planAddLetter) {
+                  const currentLetter = String.fromCharCode(lastIndex + 1 + item);
+
+                  if(currentLetter.charCodeAt(0) >= 65 && currentLetter.charCodeAt(0) <= 90) {
+                    renderLetters.push(currentLetter);
+                    addedLetter++;
+                  }
+                }
+              });
+            }
+          }
+
+          if(index !== 0) {
+            lastIndex = itemCode;
+          }
+        });
+
+        if(addedLetter < planAddLetter) {
+          const firstLetterIndex = contactLettersEnglish[0].charCodeAt(0);
+          const lastLetterIndex = contactLettersEnglish[contactLettersEnglishLength - 1].charCodeAt(0);
+          const firstLetterDifference = firstLetterIndex - 65;
+          const lastLetterDifference = 90 - lastLetterIndex;
+
+          if (firstLetterDifference > lastLetterDifference) {
+            range(1, (firstLetterDifference + 1), 1).map(item => {
+              if(addedLetter < planAddLetter) {
+                renderLetters.push(String.fromCharCode(firstLetterIndex - item));
+                addedLetter++;
+              }
+            });
+          }
+
+          if (addedLetter < planAddLetter) {
+            if(lastLetterDifference > 0) {
+              range(1, (lastLetterDifference + 1), 1).map(item => {
+                if (addedLetter < planAddLetter) {
+                  renderLetters.push(String.fromCharCode(lastLetterIndex + item));
+                  addedLetter++;
+                }
+              });
+            }
+          }
+        }
+      } else {
+        const letterIndex = contactLettersEnglish[0].charCodeAt(0);
+        const firstLetterDifference = letterIndex - 65;
+        const lastLetterDifference = 90 - letterIndex;
+
+        if (lastLetterDifference > 0) {
+          range(1, (lastLetterDifference + 1), 1).map(item => {
+            if (addedLetter < planAddLetter) {
+              renderLetters.push(String.fromCharCode(letterIndex + item));
+              addedLetter++;
+            }
+          });
+        }
+
+        if (addedLetter < planAddLetter) {
+          range(1, (firstLetterDifference + 1), 1).map(item => {
+            if (addedLetter < planAddLetter) {
+              renderLetters.push(String.fromCharCode(letterIndex - item));
+              addedLetter++;
+            }
+          });
+        }
+      }
+
+      renderLetters = [...renderLetters, ...contactLettersEnglish, ...contactLettersRussian];
+      renderLetters.sort(function(a, b){
+        if(a < b) return -1;
+        if(a > b) return 1;
+        return 0;
+      });
+    } else {
+      renderLetters = [...contactLettersEnglish];
+    }
+
+    return (
+      renderLetters.map((letter, index) =>
+        <TouchableOpacity key={index} onPress={() => this.onPressLetter(letter)}>
+          <Text style={[_styles.alphabetLetter, currentLetter === letter && {color: colors[this.props.theme].blue}]}>{letter}</Text>
+        </TouchableOpacity>
+      )
+    );
+  };
+
   renderSectionList = (_styles) => {
     const {items} = this.state;
     const {renderItem, currentLetter} = this.props;
-    const lng = RNLanguages.language.substr(0, 2);
-    const alphabet = generateAlphabet(alphabetEnum[lng].start, alphabetEnum[lng].end);
 
     return (
       <View style={_styles.sectionContainer}>
@@ -104,13 +247,7 @@ export default class ContactList extends Component {
           )}
         />
         <View style={_styles.alphabet}>
-          {
-            alphabet.map((letter, index) =>
-              <TouchableOpacity key={index} onPress={() => this.onPressLetter(letter)}>
-                <Text style={[_styles.alphabetLetter, currentLetter === letter && {color: colors[this.props.theme].blue}]}>{letter}</Text>
-              </TouchableOpacity>
-            )
-          }
+          {this.renderAlphabet(_styles, currentLetter)}
         </View>
       </View>
     );
