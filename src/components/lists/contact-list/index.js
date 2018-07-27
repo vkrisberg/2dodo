@@ -180,7 +180,7 @@ export default class ContactList extends Component {
     const tabBarBottomHeight = 55;
     const searchInputHeight = 55;
     const containerHeight = sizes.windowHeight - sizes.navbarHeight - tabBarBottomHeight - searchInputHeight;
-    const letterCount = Math.floor(containerHeight / _styles.alphabetLetter.height);
+    const letterCount = Math.floor(containerHeight / _styles.letterContainer.height);
     let contactLettersEnglish = [];
     let contactLettersRussian = [];
     let contactLetters = [...contactLettersEnglish, ...contactLettersRussian];
@@ -206,8 +206,13 @@ export default class ContactList extends Component {
           }
 
           return (
-            <TouchableOpacity key={index} onPress={() => this.onPressLetter(letter)}>
+            <TouchableOpacity key={index} onPress={() => this.onPressLetter(letter)} style={_styles.letterContainer}>
               <Text style={[_styles.alphabetLetter, currentLetter === letter && {color: colors[this.props.theme].blue}]}>{letter}</Text>
+              {
+                index !== (contactLetters.length - 1) &&
+                letter.charCodeAt(0) + 1 !== contactLetters[index + 1].charCodeAt(0) &&
+                <Text style={_styles.alphabetLetterAfter}>‧‧‧</Text>
+              }
             </TouchableOpacity>
           );
         })
@@ -227,8 +232,13 @@ export default class ContactList extends Component {
 
     return (
       renderLetters.map((letter, index) =>
-        <TouchableOpacity key={index} onPress={() => this.onPressLetter(letter)}>
+        <TouchableOpacity key={index} onPress={() => this.onPressLetter(letter)} style={_styles.letterContainer}>
           <Text style={[_styles.alphabetLetter, currentLetter === letter && {color: colors[this.props.theme].blue}]}>{letter}</Text>
+          {
+            index !== (renderLetters.length - 1) &&
+            letter.charCodeAt(0) + 1 !== renderLetters[index + 1].charCodeAt(0) &&
+            <Text style={_styles.alphabetLetterAfter}>‧‧‧</Text>
+          }
         </TouchableOpacity>
       )
     );

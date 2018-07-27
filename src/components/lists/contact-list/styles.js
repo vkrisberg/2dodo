@@ -55,11 +55,26 @@ export default (theme) => {
       marginTop: 13,
     },
 
+    letterContainer: {
+      width: 20,
+      height: 23,
+      alignItems: 'center',
+    },
+
     alphabetLetter: {
       fontSize: 10,
       color: colors[theme].grayLightQuartz,
-      height: 23,
       textAlign: 'right',
+      ...getFont({}),
+    },
+
+    alphabetLetterAfter: {
+      color: colors[theme].blueCornFlower,
+      position: 'absolute',
+      bottom: -5,
+      left: '50%',
+      marginLeft: -3,
+      fontSize: 20,
       ...getFont({}),
     },
 
