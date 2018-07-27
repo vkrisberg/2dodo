@@ -82,10 +82,101 @@ export default class ContactList extends Component {
     }
   };
 
+    renderLetters = (letterCount, planAddLetter, contactLettersLanguageLength, contactLettersMain, contactLettersSecond, startCode, finishCode) => {
+      let renderLetters = [];
+      let addedLetter = 0;
+
+      if (contactLettersLanguageLength > 1) {
+        let lastIndex = contactLettersMain[0].charCodeAt(0);
+
+        contactLettersMain.map((item, index) => {
+          const itemCode = item.charCodeAt(0);
+          if(addedLetter < planAddLetter) {
+            const letterDifference = itemCode - lastIndex;
+
+            if(letterDifference > 1) {
+              range(0, (letterDifference - 1), 1).map(item => {
+                if (addedLetter < planAddLetter) {
+                  const currentLetter = String.fromCharCode(lastIndex + 1 + item);
+
+                  if(currentLetter.charCodeAt(0) >= startCode && currentLetter.charCodeAt(0) <= finishCode) {
+                    renderLetters.push(currentLetter);
+                    addedLetter++;
+                  }
+                }
+              });
+            }
+          }
+
+          if(index !== 0) {
+            lastIndex = itemCode;
+          }
+        });
+
+        if(addedLetter < planAddLetter) {
+          const firstLetterIndex = contactLettersMain[0].charCodeAt(0);
+          const lastLetterIndex = contactLettersMain[contactLettersLanguageLength - 1].charCodeAt(0);
+          const firstLetterDifference = firstLetterIndex - startCode;
+          const lastLetterDifference = finishCode - lastLetterIndex;
+
+          if (firstLetterDifference > lastLetterDifference) {
+            range(1, (firstLetterDifference + 1), 1).map(item => {
+              if(addedLetter < planAddLetter) {
+                renderLetters.push(String.fromCharCode(firstLetterIndex - item));
+                addedLetter++;
+              }
+            });
+          }
+
+          if (addedLetter < planAddLetter) {
+            if(lastLetterDifference > 0) {
+              range(1, (lastLetterDifference + 1), 1).map(item => {
+                if (addedLetter < planAddLetter) {
+                  renderLetters.push(String.fromCharCode(lastLetterIndex + item));
+                  addedLetter++;
+                }
+              });
+            }
+          }
+        }
+      } else {
+        const letterIndex = contactLettersMain[0].charCodeAt(0);
+        const firstLetterDifference = letterIndex - startCode;
+        const lastLetterDifference = finishCode - letterIndex;
+
+        if (lastLetterDifference > 0) {
+          range(1, (lastLetterDifference + 1), 1).map(item => {
+            if (addedLetter < planAddLetter) {
+              renderLetters.push(String.fromCharCode(letterIndex + item));
+              addedLetter++;
+            }
+          });
+        }
+
+        if (addedLetter < planAddLetter) {
+          range(1, (firstLetterDifference + 1), 1).map(item => {
+            if (addedLetter < planAddLetter) {
+              renderLetters.push(String.fromCharCode(letterIndex - item));
+              addedLetter++;
+            }
+          });
+        }
+      }
+
+      renderLetters = [...renderLetters, ...contactLettersMain, ...contactLettersSecond];
+      renderLetters.sort(function(a, b){
+        if(a < b) return -1;
+        if(a > b) return 1;
+        return 0;
+      });
+
+      return renderLetters;
+    };
+
   renderAlphabet = (_styles, currentLetter) => {
     const {items} = this.state;
     const lng = RNLanguages.language.substr(0, 2);
-    const alphabet = generateAlphabet(alphabetEnum[lng].start, alphabetEnum[lng].end);
+    // const alphabet = generateAlphabet(alphabetEnum[lng].start, alphabetEnum[lng].end);
     const tabBarBottomHeight = 55;
     const searchInputHeight = 55;
     const containerHeight = sizes.windowHeight - sizes.navbarHeight - tabBarBottomHeight - searchInputHeight;
@@ -123,98 +214,15 @@ export default class ContactList extends Component {
       );
     }
 
-    let renderLetters = []; //24
-    const contactLettersEnglishLength = contactLettersEnglish.length; //1
-    const contactLettersRussianLength = contactLettersRussian.length;//1
-    const planAddLetter = letterCount - contactLettersEnglishLength - contactLettersRussianLength;//22
-    let addedLetter = 0;
+    const contactLettersEnglishLength = contactLettersEnglish.length;
+    const contactLettersRussianLength = contactLettersRussian.length;
+    const planAddLetter = letterCount - contactLettersEnglishLength - contactLettersRussianLength;
+    let renderLetters = [];
 
     if (lng === 'en') {
-      if (contactLettersEnglishLength > 1) {
-        let lastIndex = contactLettersEnglish[0].charCodeAt(0);
-
-        contactLettersEnglish.map((item, index) => {
-          const itemCode = item.charCodeAt(0);
-          if(addedLetter < planAddLetter) {
-            const letterDifference = itemCode - lastIndex;
-
-            if(letterDifference > 1) {
-              range(0, (letterDifference - 1), 1).map(item => {
-                if (addedLetter < planAddLetter) {
-                  const currentLetter = String.fromCharCode(lastIndex + 1 + item);
-
-                  if(currentLetter.charCodeAt(0) >= 65 && currentLetter.charCodeAt(0) <= 90) {
-                    renderLetters.push(currentLetter);
-                    addedLetter++;
-                  }
-                }
-              });
-            }
-          }
-
-          if(index !== 0) {
-            lastIndex = itemCode;
-          }
-        });
-
-        if(addedLetter < planAddLetter) {
-          const firstLetterIndex = contactLettersEnglish[0].charCodeAt(0);
-          const lastLetterIndex = contactLettersEnglish[contactLettersEnglishLength - 1].charCodeAt(0);
-          const firstLetterDifference = firstLetterIndex - 65;
-          const lastLetterDifference = 90 - lastLetterIndex;
-
-          if (firstLetterDifference > lastLetterDifference) {
-            range(1, (firstLetterDifference + 1), 1).map(item => {
-              if(addedLetter < planAddLetter) {
-                renderLetters.push(String.fromCharCode(firstLetterIndex - item));
-                addedLetter++;
-              }
-            });
-          }
-
-          if (addedLetter < planAddLetter) {
-            if(lastLetterDifference > 0) {
-              range(1, (lastLetterDifference + 1), 1).map(item => {
-                if (addedLetter < planAddLetter) {
-                  renderLetters.push(String.fromCharCode(lastLetterIndex + item));
-                  addedLetter++;
-                }
-              });
-            }
-          }
-        }
-      } else {
-        const letterIndex = contactLettersEnglish[0].charCodeAt(0);
-        const firstLetterDifference = letterIndex - 65;
-        const lastLetterDifference = 90 - letterIndex;
-
-        if (lastLetterDifference > 0) {
-          range(1, (lastLetterDifference + 1), 1).map(item => {
-            if (addedLetter < planAddLetter) {
-              renderLetters.push(String.fromCharCode(letterIndex + item));
-              addedLetter++;
-            }
-          });
-        }
-
-        if (addedLetter < planAddLetter) {
-          range(1, (firstLetterDifference + 1), 1).map(item => {
-            if (addedLetter < planAddLetter) {
-              renderLetters.push(String.fromCharCode(letterIndex - item));
-              addedLetter++;
-            }
-          });
-        }
-      }
-
-      renderLetters = [...renderLetters, ...contactLettersEnglish, ...contactLettersRussian];
-      renderLetters.sort(function(a, b){
-        if(a < b) return -1;
-        if(a > b) return 1;
-        return 0;
-      });
+      renderLetters = this.renderLetters(letterCount, planAddLetter, contactLettersEnglishLength, contactLettersEnglish, contactLettersRussian, 65, 90);
     } else {
-      renderLetters = [...contactLettersEnglish];
+      renderLetters = this.renderLetters(letterCount, planAddLetter, contactLettersRussianLength, contactLettersRussian, contactLettersEnglish, 1040, 1071);
     }
 
     return (
