@@ -55,12 +55,26 @@ export default (theme) => {
       marginTop: 13,
     },
 
+    alphabetBlock: {
+      width: 20,
+      height: 23,
+      overflow: 'hidden',
+      alignItems: 'center',
+    },
+
     alphabetLetter: {
+      padding: 3,
       fontSize: 10,
+      zIndex: 2,
       color: colors[theme].grayLightQuartz,
-      marginBottom: 11,
-      textAlign: 'right',
+      textAlign: 'center',
       ...getFont({}),
+    },
+
+    alphabetLetterAfter: {
+      position: 'absolute',
+      bottom: 1,
+      transform: [{scale: 0.4}]
     },
 
     divider: {
