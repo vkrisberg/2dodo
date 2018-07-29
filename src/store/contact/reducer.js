@@ -1,3 +1,4 @@
+import {sortBy} from 'lodash';
 import reducer from '../../utils/reducer';
 import {types} from './actions';
 import {types as chatTypes} from '../chat/actions';
@@ -62,9 +63,11 @@ export default reducer(initState, {
   },
 
   [types.LOAD_SUCCESS]: (state, action) => {
+    const list = sortBy(action.payload, ['firstName', 'secondName', 'username']);
+
     return {
       ...state,
-      list: action.payload,
+      list,
       sectionList: getSectionList(action.payload),
       loading: false,
     };
@@ -119,8 +122,9 @@ export default reducer(initState, {
       };
     }
 
-    const list = state.list.filter((item) => item.username !== action.payload.username);
+    let list = state.list.filter((item) => item.username !== action.payload.username);
     list.push(action.payload);
+    list = sortBy(list, ['firstName', 'secondName', 'username']);
 
     return {
       ...state,

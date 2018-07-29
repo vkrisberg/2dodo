@@ -23,12 +23,14 @@ class Contacts extends Component {
   constructor(props) {
     super(props);
 
+    this.filter = '';
     this.state = {
       editMode: false,
       selected: {},
       chosenContacts: [],
       chosenMessage: [],
       currentLetter: 'A',
+      pressedLetter: false,
     };
   }
 
@@ -40,13 +42,13 @@ class Contacts extends Component {
     return this.props.dispatch(contactActions.loadOne(username));
   };
 
-  loadContactList = (filter, sort, descending) => {
+  loadContactList = (filter = this.filter, sort, descending) => {
     return this.props.dispatch(contactActions.loadList(filter, sort, descending));
   };
 
   searchContacts = (text) => {
-    const filter = `username CONTAINS[c] '${text}' OR firstName CONTAINS[c] '${text}' OR secondName CONTAINS[c] '${text}'`;
-    return this.loadContactList(filter);
+    this.filter = text ? `username CONTAINS[c] '${text}' OR firstName CONTAINS[c] '${text}' OR secondName CONTAINS[c] '${text}'` : '';
+    return this.loadContactList(this.filter);
   };
 
   onSearchChange = (text) => {
@@ -63,7 +65,7 @@ class Contacts extends Component {
     });
   };
 
-  onPressDeleteBtn =(username) => {
+  onPressDeleteBtn = (username) => {
     const {context} = this;
 
     Alert.alert(
@@ -71,11 +73,13 @@ class Contacts extends Component {
       context.t('DeleteContactConfirm'),
       [
         {text: context.t('Cancel')},
-        {text: context.t('Delete'), onPress: () => {
-          this.props.dispatch(contactActions.delete(username)).then(() => {
-            this.props.dispatch(chatActions.loadList());
-          });
-        }}
+        {
+          text: context.t('Delete'), onPress: () => {
+            this.props.dispatch(contactActions.delete(username)).then(() => {
+              this.props.dispatch(chatActions.loadList());
+            });
+          }
+        }
       ],
       {cancelable: false},
     );
@@ -99,6 +103,36 @@ class Contacts extends Component {
     this.setState({chosenMessage: [...chosenContacts, contact]});
   };
 
+  onPressLetter = (currentLetter) => {
+    let index = null;
+    const section = this.props.contact.sectionList.find((item, i) => {
+      if (item.title === currentLetter) {
+        index = i;
+        return item;
+      }
+    });
+
+    if (section) {
+      this.setState({currentLetter, pressedLetter: true});
+      this.contactList.sectionListRef.scrollToLocation({
+        animated: true,
+        sectionIndex: index,
+        itemIndex: 0,
+        viewPosition: 0.5,
+      });
+    }
+  };
+
+  onScrollBeginDrag = () => {
+    this.setState({pressedLetter: false});
+  };
+
+  onViewableItemsChanged = ({viewableItems}) => {
+    if (!this.state.pressedLetter) {
+      this.setState({currentLetter: viewableItems[0].section.title});
+    }
+  };
+
   renderContactItem = ({item}) => {
     return (
       <ContactListItem
@@ -113,26 +147,6 @@ class Contacts extends Component {
     );
   };
 
-  onPressLetter = (currentLetter) => {
-    let index = null;
-    const section = this.props.contact.sectionList.find((item, i) => {
-      if(item.title === currentLetter) {
-        index = i;
-        return item;
-      }
-    });
-
-    if(section) {
-      this.setState({currentLetter});
-      this.contactList.sectionListRef.scrollToLocation({
-        animated: true,
-        sectionIndex: index,
-        itemIndex: 0,
-        viewPosition: 0.5,
-      });
-    }
-  };
-
   render() {
     const {context} = this;
     const {contact, account} = this.props;
@@ -145,13 +159,15 @@ class Contacts extends Component {
                   renderRight={<ButtonAdd onPress={this.onCreate}/>}/>
           <SearchInput placeholder="Search contacts" onChange={this.onSearchChange}/>
           <ContactList
-            ref={item => (this.contactList = item)}
+            ref={ref => (this.contactList = ref)}
             context={context}
+            sections={true}
             items={contact.sectionList}
+            currentLetter={this.state.currentLetter}
             renderItem={this.renderContactItem}
             onPressLetter={this.onPressLetter}
-            currentLetter={this.state.currentLetter}
-            sections/>
+            onScrollBeginDrag={this.onScrollBeginDrag}
+            onViewableItemsChanged={this.onViewableItemsChanged}/>
         </BackgroundLayout>
       </MainLayout>
     );
