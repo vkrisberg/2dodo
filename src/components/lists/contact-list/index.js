@@ -21,10 +21,14 @@ export default class ContactList extends Component {
     onPressLetter: PropTypes.func,
     sections: PropTypes.bool,
     showSearchResult: PropTypes.bool,
+    refreshing: PropTypes.bool,
+    onRefresh: PropTypes.func,
+    onViewableItemsChanged: PropTypes.func,
+    onScrollBeginDrag: PropTypes.func,
     theme: PropTypes.string,
     context: PropTypes.object,
     style: PropTypes.any,
-    currentLetter: PropTypes.string.isRequired,
+    currentLetter: PropTypes.string,
   };
 
   static defaultProps = {
@@ -255,7 +259,7 @@ export default class ContactList extends Component {
 
   renderSectionList = (_styles) => {
     const {items} = this.state;
-    const {renderItem, currentLetter} = this.props;
+    const {renderItem, currentLetter, refreshing, onRefresh, onScrollBeginDrag, onViewableItemsChanged} = this.props;
 
     return (
       <View style={_styles.sectionContainer}>
@@ -266,6 +270,10 @@ export default class ContactList extends Component {
           onLayout={e => this.updateLayoutHeight(e)}
           onContentSizeChange={(w, h) => this.updateContentSize(w, h)}
           keyExtractor={this._keyExtractor}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          onScrollBeginDrag={onScrollBeginDrag}
+          onViewableItemsChanged={onViewableItemsChanged}
           renderSectionHeader={({section: {title}}) => (
             <View style={_styles.sectionHeader}>
               <Text style={_styles.sectionLeft}>{title}</Text>
