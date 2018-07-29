@@ -259,7 +259,7 @@ export default class ContactList extends Component {
 
   renderSectionList = (_styles) => {
     const {items} = this.state;
-    const {renderItem, currentLetter} = this.props;
+    const {renderItem, currentLetter, refreshing, onRefresh, onScrollBeginDrag, onViewableItemsChanged} = this.props;
 
     return (
       <View style={_styles.sectionContainer}>
