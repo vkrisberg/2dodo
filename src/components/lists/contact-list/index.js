@@ -88,8 +88,15 @@ export default class ContactList extends Component {
     }
   };
 
-  renderLetterBlock = (letter, index, currentLetter, lettersArray, lastLetterCode) => {
+  renderLetterBlock = (letter, index, currentLetter, lettersArray, lastLetterCode, language) => {
     const _styles = styles(this.props.theme);
+    let notEqualLastLetterCode;
+
+    if (language === 'en') {
+      notEqualLastLetterCode = lastLetterCode !== 90;
+    } else {
+      notEqualLastLetterCode = lastLetterCode !== 1071;
+    }
 
     return (
       <View key={index} style={_styles.alphabetBlock}>
@@ -98,7 +105,7 @@ export default class ContactList extends Component {
         </TouchableOpacity>
         {
           ((index !== (lettersArray.length - 1) && letter.charCodeAt(0) + 1 !== lettersArray[index + 1].charCodeAt(0)) ||
-            ((lastLetterCode !== 90 || lastLetterCode !== 1071) && index === (lettersArray.length - 1) )) &&
+            (notEqualLastLetterCode && index === (lettersArray.length - 1))) &&
           <Image style={_styles.alphabetLetterAfter} source={IMG_MENU_DOTS}/>
         }
       </View>
@@ -231,7 +238,7 @@ export default class ContactList extends Component {
           const contactLettersLastLetterCode = contactLetters[contactLetters.length - 1].charCodeAt(0);
 
           return (
-            this.renderLetterBlock(letter, index, currentLetter, contactLetters, contactLettersLastLetterCode)
+            this.renderLetterBlock(letter, index, currentLetter, contactLetters, contactLettersLastLetterCode, lng)
           );
         })
       );
@@ -252,7 +259,7 @@ export default class ContactList extends Component {
 
     return (
       renderLetters.map((letter, index) =>
-        this.renderLetterBlock(letter, index, currentLetter, renderLetters, renderLettersLastLetterCode)
+        this.renderLetterBlock(letter, index, currentLetter, renderLetters, renderLettersLastLetterCode, lng)
       )
     );
   };

@@ -38,9 +38,10 @@ export default (theme) => {
     },
 
     sectionHeader: {
-      marginVertical: 3,
+      paddingTop: 3,
       flexDirection: 'row',
-      alignItems: 'center',
+      alignItems: 'flex-end',
+      backgroundColor: colors[theme].bgMain,
     },
 
     sectionLeft: {
