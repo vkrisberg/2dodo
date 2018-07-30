@@ -4,6 +4,7 @@ import {Provider} from 'react-redux';
 import RNDeviceInfo from 'react-native-device-info';
 import RNLanguages from 'react-native-languages';
 import I18n, {setTranslations} from 'redux-i18n';
+import SplashScreen from 'react-native-splash-screen';
 
 import store from './store/store';
 import {accountActions} from './store/actions';
@@ -48,6 +49,8 @@ export default class App extends Component {
   }
 
   componentDidMount() {
+    SplashScreen.hide();
+
     NetInfo.getConnectionInfo().then((connectionInfo) => {
       console.log('initial connection, type: ' + connectionInfo.type + ', effectiveType: ' + connectionInfo.effectiveType);
       store.dispatch(accountActions.netUpdate(connectionInfo));
