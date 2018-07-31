@@ -30,6 +30,7 @@
     "react-native-languages": "^2.0.1",
     "react-native-openpgp": "^1.0.4",
     "react-native-randombytes": "^3.4.0",
+    "react-native-splash-screen": "^3.0.6",
     "react-native-svg": "^6.4.1",
     "react-native-svg-uri": "^1.2.3",
     "react-native-swipeout": "^2.3.3",
