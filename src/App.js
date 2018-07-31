@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {NetInfo, Platform, Text} from 'react-native';
+import {NetInfo, Platform, Text, StatusBar} from 'react-native';
 import {Provider} from 'react-redux';
 import RNDeviceInfo from 'react-native-device-info';
 import RNLanguages from 'react-native-languages';
@@ -77,6 +77,10 @@ export default class App extends Component {
     return (
       <Provider store={store}>
         <I18n translations={{}} initialLang={this.language} fallbackLang="en" useReducer={true}>
+          <StatusBar
+            backgroundColor="#62a3ff"
+            barStyle="light-content"
+          />
           <RootStack/>
         </I18n>
       </Provider>
