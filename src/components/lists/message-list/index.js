@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {View, FlatList, Image, Keyboard} from 'react-native';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 
 import {TextLabel, MessageTyping} from '../../elements';
 import {themeEnum} from '../../../enums';
-import {colors} from '../../../styles';
+import { colors, fontStyle} from '../../../styles';
 import styles from './styles';
 
 import IMG_MESSAGES_EMPTY from './img/messages_empty.png';
@@ -35,6 +36,8 @@ export default class MessagesList extends Component {
     super(props);
 
     this.flatList = null;
+    this.firstDate = null;
+    this.lastDate = null;
 
     this.state = {
       items: props.items,
@@ -54,9 +57,6 @@ export default class MessagesList extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.items !== this.props.items) {
       this.setState({items: this.props.items});
-    }
-
-    if (prevState.items !== this.state.items) {
       this.flatList && this.flatList.scrollToEnd({animated: false});
     }
   }
@@ -99,6 +99,41 @@ export default class MessagesList extends Component {
     }
   }
 
+  _itemSeparatorComponent = (data) => {
+    const { leadingItem } = data;
+    const itemDate = leadingItem.dateCreate;
+
+    if ((!this.lastDate || !moment(itemDate).isSame(this.lastDate, 'day')) && !moment(itemDate).isSame(this.firstDate, 'day')) {
+      this.lastDate = itemDate;
+      return this.renderDate(itemDate);
+    } else {
+      return null;
+    }
+  }
+
+  _listHeaderComponent = () => {
+    if (!this.props.items || !this.props.items[0]) return null;
+
+    this.firstDate = this.props.items[0].dateCreate;
+    return this.renderDate(this.firstDate);
+  }
+
+  renderDate = (date) => {
+    const { theme } = this.props;
+    const _styles = styles({});
+
+    let dateString = `${moment(date).format('DD MMMM')}`;
+    if (!moment().isSame(date, 'year')) {
+      dateString += ` ${moment(date).year()}`;
+    }
+
+    return <View style={_styles.dateTextContainer}>
+      <TextLabel style={_styles.status} fontStyle={fontStyle.italic} size={12} color={colors[theme].grayInput}>
+        {dateString}
+      </TextLabel>
+    </View>;
+  }
+
   updateContentSize(w, h) {
     this.setState({contentSize: h});
     if (this.state.isKeyboardActive) {
@@ -132,6 +167,8 @@ export default class MessagesList extends Component {
           ref={ref => this.flatList = ref}
           data={items}
           renderItem={renderItem}
+          ItemSeparatorComponent={this._itemSeparatorComponent}
+          ListHeaderComponent={this._listHeaderComponent}
           onLayout={e => this.updateLayoutHeight(e)}
           onContentSizeChange={(w, h) => this.updateContentSize(w, h)}
           keyExtractor={this._keyExtractor}/>
