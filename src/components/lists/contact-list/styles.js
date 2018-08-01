@@ -53,7 +53,7 @@ export default (theme) => {
 
     alphabet: {
       width: 20,
-      marginTop: 13,
+      marginTop: 0,
     },
 
     alphabetBlock: {

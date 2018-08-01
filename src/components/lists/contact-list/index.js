@@ -13,6 +13,8 @@ import {colors, sizes} from '../../../styles';
 
 import IMG_MENU_DOTS from '../../elements/navbar-chat/img/menu_dots.png';
 
+const LANGUAGES = ['en', 'ru'];
+
 export default class ContactList extends Component {
 
   static propTypes = {
@@ -46,6 +48,7 @@ export default class ContactList extends Component {
     super(props);
 
     this.flatList = null;
+    this.styles = styles(props.theme);
 
     this.state = {
       items: props.items,
@@ -74,12 +77,12 @@ export default class ContactList extends Component {
     this.props.onPressLetter(letter);
   };
 
-  renderSearchResult = (_styles) => {
+  renderSearchResult = () => {
     const {theme, context} = this.props;
 
     if (this.props.showSearchResult) {
       return (
-        <TextLabel style={_styles.searchResult}
+        <TextLabel style={this.styles.searchResult}
                    color={colors[theme].grayInput}
                    size={13}>
           {`${context.t('SearchResults')} (${this.state.items.length})`}
@@ -89,7 +92,6 @@ export default class ContactList extends Component {
   };
 
   renderLetterBlock = (letter, index, currentLetter, lettersArray, lastLetterCode, language) => {
-    const _styles = styles(this.props.theme);
     let notEqualLastLetterCode;
 
     if (language === 'en') {
@@ -99,14 +101,14 @@ export default class ContactList extends Component {
     }
 
     return (
-      <View key={index} style={_styles.alphabetBlock}>
+      <View key={index} style={this.styles.alphabetBlock}>
         <TouchableOpacity onPress={() => this.onPressLetter(letter)}>
-          <Text style={[_styles.alphabetLetter, currentLetter === letter && {color: colors[this.props.theme].blue}]}>{letter}</Text>
+          <Text style={[this.styles.alphabetLetter, currentLetter === letter && {color: colors[this.props.theme].blue}]}>{letter}</Text>
         </TouchableOpacity>
         {
-          ((index !== (lettersArray.length - 1) && letter.charCodeAt(0) + 1 !== lettersArray[index + 1].charCodeAt(0)) ||
-            (notEqualLastLetterCode && index === (lettersArray.length - 1))) &&
-          <Image style={_styles.alphabetLetterAfter} source={IMG_MENU_DOTS}/>
+          // ((index !== (lettersArray.length - 1) && letter.charCodeAt(0) + 1 !== lettersArray[index + 1].charCodeAt(0)) ||
+          //   (notEqualLastLetterCode && index === (lettersArray.length - 1))) &&
+          // <Image style={this.styles.alphabetLetterAfter} source={IMG_MENU_DOTS}/>
         }
       </View>
     );
@@ -203,17 +205,22 @@ export default class ContactList extends Component {
     return renderLetters;
   };
 
-  renderAlphabet = (_styles, currentLetter) => {
+  renderAlphabet = (currentLetter) => {
     const {items} = this.state;
-    const lng = RNLanguages.language.substr(0, 2);
+    // TODO - get language from store (no system)
+    const lng = 'en'; // RNLanguages.language.substr(0, 2);
+
+    if (LANGUAGES.indexOf(lng) === -1 || !items || !items.length) {
+      return null;
+    }
+
     // const alphabet = generateAlphabet(alphabetEnum[lng].start, alphabetEnum[lng].end);
     const tabBarBottomHeight = 55;
     const searchInputHeight = 55;
     const containerHeight = sizes.windowHeight - sizes.navbarHeight - tabBarBottomHeight - searchInputHeight;
-    const letterCount = Math.floor(containerHeight / _styles.alphabetBlock.height);
+    const letterCount = Math.floor(containerHeight / this.styles.alphabetBlock.height);
     let contactLettersEnglish = [];
     let contactLettersRussian = [];
-    let contactLetters = [...contactLettersEnglish, ...contactLettersRussian];
 
     items.map(item => {
       const letter = item.title;
@@ -227,6 +234,8 @@ export default class ContactList extends Component {
         contactLettersRussian.push(letter);
       }
     });
+
+    let contactLetters = [...contactLettersEnglish, ...contactLettersRussian];
 
     if (contactLetters.length >= letterCount) {
       return (
@@ -251,8 +260,12 @@ export default class ContactList extends Component {
 
     if (lng === 'en' && contactLettersEnglish.length) {
       renderLetters = this.renderLetters(letterCount, planAddLetter, contactLettersEnglishLength, contactLettersEnglish, contactLettersRussian, 65, 90);
-    } else if (lng === 'rus' && contactLettersRussian.length) {
+    } else if (lng === 'ru' && contactLettersRussian.length) {
       renderLetters = this.renderLetters(letterCount, planAddLetter, contactLettersRussianLength, contactLettersRussian, contactLettersEnglish, 1040, 1071);
+    }
+
+    if (!renderLetters.length) {
+      return null;
     }
 
     const renderLettersLastLetterCode = renderLetters[renderLetters.length - 1].charCodeAt(0);
@@ -264,12 +277,12 @@ export default class ContactList extends Component {
     );
   };
 
-  renderSectionList = (_styles) => {
+  renderSectionList = () => {
     const {items} = this.state;
     const {renderItem, currentLetter, refreshing, onRefresh, onScrollBeginDrag, onViewableItemsChanged} = this.props;
 
     return (
-      <View style={_styles.sectionContainer}>
+      <View style={this.styles.sectionContainer}>
         <SectionList
           ref={ref => this.sectionListRef = ref}
           sections={items}
@@ -282,26 +295,26 @@ export default class ContactList extends Component {
           onScrollBeginDrag={onScrollBeginDrag}
           onViewableItemsChanged={onViewableItemsChanged}
           renderSectionHeader={({section: {title}}) => (
-            <View style={_styles.sectionHeader}>
-              <Text style={_styles.sectionLeft}>{title}</Text>
-              {!(title === 'Me' || title === 'Я') && <View style={[_styles.divider]}/>}
+            <View style={this.styles.sectionHeader}>
+              <Text style={this.styles.sectionLeft}>{title}</Text>
+              {!(title === 'Me' || title === 'Я') && <View style={[this.styles.divider]}/>}
             </View>
           )}
         />
-        <View style={_styles.alphabet}>
-          {this.renderAlphabet(_styles, currentLetter)}
+        <View style={this.styles.alphabet}>
+          {this.renderAlphabet(currentLetter)}
         </View>
       </View>
     );
   };
 
-  renderFlatList = (_styles) => {
+  renderFlatList = () => {
     const {items} = this.state;
     const {renderItem} = this.props;
 
     return (
       <View>
-        {this.renderSearchResult(_styles)}
+        {this.renderSearchResult()}
         <FlatList
           ref={ref => this.flatList = ref}
           data={items}
@@ -317,23 +330,22 @@ export default class ContactList extends Component {
   render() {
     const {items} = this.state;
     const {sections, theme, context, style} = this.props;
-    const _styles = styles(theme);
 
     if (!items.length) {
       return (
-        <View style={_styles.emptyContainer}>
-          <View style={_styles.emptyWrapper}>
+        <View style={this.styles.emptyContainer}>
+          <View style={this.styles.emptyWrapper}>
             <ContactsEmptyIcon/>
-            <TextLabel style={_styles.text} color={colors[theme].blackText}>{context.t('NoContacts')}</TextLabel>
+            <TextLabel style={this.styles.text} color={colors[theme].blackText}>{context.t('NoContacts')}</TextLabel>
           </View>
         </View>
       );
     }
 
     return (
-      <View style={[_styles.container, style]}>
-        {sections && this.renderSectionList(_styles)}
-        {!sections && this.renderFlatList(_styles)}
+      <View style={[this.styles.container, style]}>
+        {sections && this.renderSectionList()}
+        {!sections && this.renderFlatList()}
       </View>
     );
   }

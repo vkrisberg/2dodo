@@ -8,7 +8,8 @@
     "start-android": "react-native run-android",
     "test": "jest",
     "test:watch": "jest --watch",
-    "postinstall": "./node_modules/.bin/rn-nodeify --install \"crypto, stream, vm, events, buffer\" --hack"
+    "postinstall": "./node_modules/.bin/rn-nodeify --install \"crypto, stream, vm, events, buffer\" --hack",
+    "eslint": "./node_modules/.bin/eslint ./src"
   },
   "dependencies": {
     "axios": "^0.18.0",
