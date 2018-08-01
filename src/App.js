@@ -39,7 +39,7 @@ export default class App extends Component {
       deviceModel: RNDeviceInfo.getModel(),
       platform: Platform.OS,
     };
-    // TODO - get language from system
+    // TODO - get language from store (no system)
     this.language = 'en'; // RNLanguages.language.substr(0, 2);
 
     store.dispatch(accountActions.update(device));
