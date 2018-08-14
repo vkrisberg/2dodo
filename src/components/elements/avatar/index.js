@@ -18,6 +18,7 @@ export default class Avatar extends PureComponent {
     textStyle: PropTypes.any,
     style: PropTypes.any,
     onPress: PropTypes.func,
+    children: PropTypes.any,
   };
 
   static defaultProps = {
@@ -61,9 +62,7 @@ export default class Avatar extends PureComponent {
     const _styles = styles({theme, color, bgColor});
 
     return (
-      <TouchableOpacity style={[_styles.container, style]}
-                        disabled={disabled}
-                        onPress={this.onPress}>
+      <TouchableOpacity style={[_styles.container, style]} disabled={disabled} onPress={this.onPress}>
         {this.renderAvatar(_styles)}
       </TouchableOpacity>
     );

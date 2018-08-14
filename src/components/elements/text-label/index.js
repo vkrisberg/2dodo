@@ -16,6 +16,7 @@ export default class TextLabel extends PureComponent {
     fontStyle: PropTypes.string,
     textAlign: PropTypes.string,
     style: PropTypes.any,
+    children: PropTypes.any,
   };
 
   static defaultProps = {

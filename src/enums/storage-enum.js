@@ -3,4 +3,5 @@ export default {
   username: 'username',
   password: 'password',
   skipEvents: 'skipEvents',
+  pushToken: 'pushToken',
 };

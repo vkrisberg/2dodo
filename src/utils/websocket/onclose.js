@@ -15,6 +15,8 @@ export default function ({event, store, navigation}) {
       store.dispatch(accountActions.logoutResult({clean: true, error: null}));
     } else if (code && reason) {
       store.dispatch(accountActions.connectResult({connected: false, error: {code, reason}}));
+    } else {
+      store.dispatch(accountActions.reconnect(true));
     }
   }
 };

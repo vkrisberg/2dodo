@@ -54,7 +54,7 @@ class Registration extends Component {
   saveToDatabase = async () => {
     const {account} = this.props;
     const {username} = account.user;
-    const {deviceId, hostname} = account;
+    const {deviceId, hostname, pushToken} = account;
     const dateCreate = new Date();
     const dateUpdate = new Date();
     const user = {
@@ -71,6 +71,7 @@ class Registration extends Component {
       keys,
       deviceId,
       hostname,
+      pushToken,
       dateCreate,
       dateUpdate,
     };

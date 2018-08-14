@@ -33,9 +33,7 @@ export default class ButtonAdd extends Component {
     const _styles = styles({theme});
 
     return (
-      <TouchableOpacity style={[_styles.container, style]}
-                        disabled={disabled}
-                        onPress={this.onPress}>
+      <TouchableOpacity style={[_styles.container, style]} disabled={disabled} onPress={this.onPress}>
         <AddIcon color={color}/>
       </TouchableOpacity>
     );

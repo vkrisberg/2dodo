@@ -32,6 +32,7 @@ const initState = {
   deviceName: '',
   deviceModel: '',
   platform: '',
+  pushToken: '',
   hostname: CONFIG.hostname,
   isSecure: CONFIG.isSecure,
 
@@ -86,6 +87,10 @@ export default reducer(initState, {
       connected: true,
       // stopReconnect: false,
       error: null,
+      net: {
+        info: 'wifi',
+        connected: true,
+      },
     };
   },
 
@@ -168,6 +173,7 @@ export default reducer(initState, {
       ...state,
       deviceId: action.payload.deviceId,
       password: action.payload.password,
+      pushToken: action.payload.pushToken,
       user: {
         ...action.payload.user,
       },
@@ -204,6 +210,7 @@ export default reducer(initState, {
     const {data} = action;
     const account = {
       password: data.password,
+      pushToken: data.push_token,
       user: {
         ...state.user,
         username: data.username,
@@ -419,6 +426,30 @@ export default reducer(initState, {
     return {
       ...state,
       routeName: action.payload,
+    };
+  },
+
+  [types.PUSH_TOKEN_UPDATE]: (state, action) => {
+    return {
+      ...state,
+      updating: true,
+      error: null,
+    };
+  },
+
+  [types.PUSH_TOKEN_UPDATE_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      updating: false,
+      pushToken: action.payload,
+    };
+  },
+
+  [types.PUSH_TOKEN_UPDATE_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      updating: false,
+      error: action.error.toString(),
     };
   },
 });

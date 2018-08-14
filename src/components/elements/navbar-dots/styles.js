@@ -13,4 +13,4 @@ export default ({theme}) => {
       width: 42,
     },
   });
-}
+};

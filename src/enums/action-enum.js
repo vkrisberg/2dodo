@@ -28,4 +28,5 @@ export default {
   syncMessages: 'sync_messages',
   getAccessLog: 'get_access_log',
   getOnlineUsers: 'get_online_users',
+  updatePushToken: 'update_push_token',
 };

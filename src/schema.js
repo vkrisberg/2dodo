@@ -55,6 +55,7 @@ Account.schema = {
     keys: 'RsaKey',
     deviceId: 'string',
     hostname: 'string',
+    pushToken: 'string?',
     dateCreate: 'date',
     dateUpdate: 'date',
   },

@@ -36,10 +36,11 @@ export default class MessageTyping extends PureComponent {
         <View style={_styles.circle}/>
         <View style={_styles.circle}/>
         <View style={[_styles.circle, {marginBottom: 2}]}/>
-        <TextLabel style={_styles.text}
-                   size={14}
-                   color={colors[theme].messageTextSecond}
-                   weight={weights.medium}>{typingText}</TextLabel>
+        <TextLabel
+          style={_styles.text}
+          size={14}
+          color={colors[theme].messageTextSecond}
+          weight={weights.medium}>{typingText}</TextLabel>
       </View>
     );
   };

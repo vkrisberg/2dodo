@@ -1,7 +1,7 @@
 import {AsyncStorage} from 'react-native';
 import {NavigationActions, StackActions} from 'react-navigation';
 import fs from 'react-native-fs';
-import {merge} from 'lodash';
+import {get, merge} from 'lodash';
 
 import apiAccount from '../../api/account';
 import {helpers, services} from '../../utils';
@@ -9,6 +9,7 @@ import {pgplib, hashlib} from '../../utils/encrypt';
 import {storageEnum, dbEnum} from '../../enums';
 import CONFIG from '../../config';
 import routeEnum from '../../enums/route-enum';
+import {apiServer} from "../../api";
 
 export const types = {
   UPDATE: Symbol('UPDATE'),
@@ -57,6 +58,10 @@ export const types = {
 
   SET_APP_STATE: Symbol('SET_APP_STATE'),
   SET_ROUTE_NAME: Symbol('SET_ROUTE_NAME'),
+
+  PUSH_TOKEN_UPDATE: Symbol('PUSH_TOKEN_UPDATE'),
+  PUSH_TOKEN_UPDATE_SUCCESS: Symbol('PUSH_TOKEN_UPDATE_SUCCESS'),
+  PUSH_TOKEN_UPDATE_FAILURE: Symbol('PUSH_TOKEN_UPDATE_FAILURE'),
 };
 
 const goToMessagesAction = StackActions.reset({
@@ -69,6 +74,11 @@ const goToLoginAction = StackActions.reset({
   actions: [NavigationActions.navigate({routeName: routeEnum.Login})],
 });
 
+const KEY_AUTHORIZED = `${CONFIG.storagePrefix}:${storageEnum.authorized}`;
+const KEY_USERNAME = `${CONFIG.storagePrefix}:${storageEnum.username}`;
+const KEY_PASSWORD = `${CONFIG.storagePrefix}:${storageEnum.password}`;
+const KEY_PUSH_TOKEN = `${CONFIG.storagePrefix}:${storageEnum.pushToken}`;
+
 export default {
 
   update: (data) => {
@@ -80,14 +90,14 @@ export default {
       dispatch({type: types.REMIND});
       try {
         //--- TODO - remove after test
-        // await AsyncStorage.clear();
-        // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
-        // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
-        // await AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
+        // await AsyncStorage.removeItem(KEY_AUTHORIZED);
+        // await AsyncStorage.removeItem(KEY_USERNAME);
+        // await AsyncStorage.removeItem(KEY_PASSWORD);
+        // await AsyncStorage.removeItem(KEY_PUSH_TOKEN);
         //---
-        const authorized = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
-        const username = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
-        const password = await AsyncStorage.getItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
+        const authorized = await AsyncStorage.getItem(KEY_AUTHORIZED);
+        const username = await AsyncStorage.getItem(KEY_USERNAME);
+        const password = await AsyncStorage.getItem(KEY_PASSWORD);
 
         if (!authorized || !username || !password) {
           throw new Error('remind failed: user is not authorized');
@@ -128,8 +138,33 @@ export default {
   connect: ({deviceId, hostname, user, keys, password}) => {
     return async dispatch => {
       try {
-        AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.username}`, user.username);
-        AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.password}`, password);
+        AsyncStorage.setItem(KEY_USERNAME, user.username);
+        AsyncStorage.setItem(KEY_PASSWORD, password);
+        services.websocketConnect({
+          deviceId,
+          hostname,
+          username: user.username,
+          password,
+          hashKey: keys.hashKey,
+        });
+        dispatch({type: types.CONNECT, payload: {deviceId, hostname, user, keys, password}});
+      } catch (e) {
+        dispatch({type: types.CONNECT_FAILURE, error: e});
+        throw e;
+      }
+    };
+  },
+
+  reconnect: (force = false) => {
+    return async (dispatch, getState) => {
+      try {
+        const {account} = getState();
+        const {deviceId, hostname, user, password, keys} = account;
+
+        if (!force && account.connected) {
+          return;
+        }
+
         services.websocketConnect({
           deviceId,
           hostname,
@@ -151,7 +186,7 @@ export default {
       const navigation = services.getNavigation();
       try {
         // app in background
-        if (account.appState !== 'active' || !account.net.connected) {
+        if (account.appState !== 'active') {
           return;
         }
         // login failed
@@ -181,7 +216,7 @@ export default {
         }
         // go to Messages when log in
         if (account.connecting) {
-          AsyncStorage.setItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`, 'true');
+          AsyncStorage.setItem(KEY_AUTHORIZED, 'true');
           if (!account.errorRemind && account.logout === null) {
             navigation.dispatch(goToMessagesAction);
           }
@@ -189,9 +224,9 @@ export default {
 
         dispatch({type: types.CONNECT_SUCCESS});
       } catch (e) {
-        AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
-        AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
-        AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
+        AsyncStorage.removeItem(KEY_AUTHORIZED);
+        AsyncStorage.removeItem(KEY_USERNAME);
+        AsyncStorage.removeItem(KEY_PASSWORD);
         if (!account.connecting) {
           navigation.dispatch(goToLoginAction);
         }
@@ -203,11 +238,11 @@ export default {
 
   stopReconnect: (connectionAttempts = 99) => {
     return async (dispatch) => {
-      AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
-      AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
-      AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
+      AsyncStorage.removeItem(KEY_AUTHORIZED);
+      AsyncStorage.removeItem(KEY_USERNAME);
+      AsyncStorage.removeItem(KEY_PASSWORD);
       dispatch({type: types.STOP_RECONNECT, payload: connectionAttempts});
-    }
+    };
   },
 
   logout: () => {
@@ -230,9 +265,9 @@ export default {
         if (!clean) {
           throw new Error(error);
         }
-        AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.authorized}`);
-        AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.username}`);
-        AsyncStorage.removeItem(`${CONFIG.storagePrefix}:${storageEnum.password}`);
+        AsyncStorage.removeItem(KEY_AUTHORIZED);
+        AsyncStorage.removeItem(KEY_USERNAME);
+        AsyncStorage.removeItem(KEY_PASSWORD);
         dispatch({type: types.LOGOUT_SUCCESS});
         navigation.dispatch(goToLoginAction);
       } catch (e) {
@@ -277,7 +312,9 @@ export default {
         data.open_key = publicKey;
         data.hash_key = hashKey;
         data.username = `${data.name}@${account.hostname}`;
+        data.push_token = await AsyncStorage.getItem(KEY_PUSH_TOKEN) || '';
         // TODO - parse and apply data.server
+        // console.log('send register data', data);
         const res = await apiAccount.registration(data);
         dispatch({type: types.REGISTER_SUCCESS, payload: res.data, data});
         return data;
@@ -424,5 +461,53 @@ export default {
 
   setRouteName: (routeName) => {
     return {type: types.SET_ROUTE_NAME, payload: routeName};
+  },
+
+  updatePushToken: (token = null) => {
+    return async (dispatch, getState) => {
+      dispatch({type: types.PUSH_TOKEN_UPDATE});
+      try {
+        const realm = services.getRealm();
+        const {account} = getState();
+        const dateNow = new Date();
+
+        const _token = token || await AsyncStorage.getItem(KEY_PUSH_TOKEN);
+        if (!_token) {
+          throw new Error('push token is null');
+        }
+
+        const realmAccount = realm.objectForPrimaryKey(dbEnum.Account, account.user.username);
+        if (!realmAccount) {
+          throw new Error('account not found in database');
+        }
+
+        if (!realmAccount.pushToken || realmAccount.pushToken !== _token) {
+          await realm.write(() => {
+            realmAccount.pushToken = _token;
+            realmAccount.dateUpdate = dateNow;
+          });
+          await apiServer.updatePushToken(_token);
+          console.log('push token updated and sent', _token);
+        }
+
+        dispatch({type: types.PUSH_TOKEN_UPDATE_SUCCESS, payload: _token});
+        return _token;
+      } catch (e) {
+        dispatch({type: types.PUSH_TOKEN_UPDATE_FAILURE, error: e});
+        throw e;
+      }
+    };
+  },
+
+  updatePushTokenResult: (message) => {
+    return async (dispatch) => {
+      // send delivery report
+      const msgEncryptTime =  get(message, 'encrypt_time', null);
+      await apiServer.deliveryReport(msgEncryptTime);
+
+      if (message.error) {
+        dispatch({type: types.PUSH_TOKEN_UPDATE_FAILURE, error: message.error});
+      }
+    };
   },
 };
