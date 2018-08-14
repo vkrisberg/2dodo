@@ -31,7 +31,8 @@ export default class MessageListItem extends PureComponent {
 
   static defaultProps = {
     theme: themeEnum.light,
-    onAvatarPress: () => {},
+    onAvatarPress: () => {
+    },
     groupChat: false,
   };
 
@@ -73,11 +74,17 @@ export default class MessageListItem extends PureComponent {
     const name = item.contact ? item.contact.fullName || item.contact.nickname : item.username;
 
     return (
-      <TouchableOpacity style={[groupChat ? containerGroupStyle : containerStyle, _styles.container]} onPress={this.onPress(item)} onLongPress={this.onLongPress}>
+      <TouchableOpacity
+        style={[groupChat ? containerGroupStyle : containerStyle, _styles.container]}
+        onPress={this.onPress(item)} onLongPress={this.onLongPress}>
         {groupChat && !item.isOwn &&
-          <TouchableOpacity onPress={() => this.onAvatarPress(item.contact ? item.contact : item.username)} style={_styles.avatarContainer}>
-            <AvatarIcon theme={theme} source={item.contact ? item.contact.avatar : ''} label={name} width={32} height={32}/>
-          </TouchableOpacity>}
+        <TouchableOpacity
+          onPress={() => this.onAvatarPress(item.contact ? item.contact : item.username)}
+          style={_styles.avatarContainer}>
+          <AvatarIcon
+            theme={theme} source={item.contact ? item.contact.avatar : ''} label={name} width={32}
+            height={32}/>
+        </TouchableOpacity>}
         <View style={{flex: 1}}>
           <Image
             style={_styles.background}
@@ -87,9 +94,10 @@ export default class MessageListItem extends PureComponent {
           <View style={_styles.wrapper}>
             {item.quote && this.renderQuote(item.quote, item.isOwn)}
             <View style={_styles.textWrapper}>
-              <TextLabel color={textColor}
-                         size={15}
-                         weight={weights.medium}>{item.text}</TextLabel>
+              <TextLabel
+                color={textColor}
+                size={15}
+                weight={weights.medium}>{item.text}</TextLabel>
             </View>
             <View style={_styles.dateWrapper}>
               {item.isOwn && (item.status === messageEnum.sending || item.status === messageEnum.sent) && !groupChat &&
@@ -98,10 +106,11 @@ export default class MessageListItem extends PureComponent {
               <Image source={IMG_STATUS_RECEIVED} style={_styles.statusIcon}/>}
               {item.isOwn && item.status === messageEnum.read && !groupChat &&
               <Image source={IMG_STATUS_READ} style={_styles.statusIcon}/>}
-              <TextLabel color={dateColor}
-                         size={11}
-                         fontStyle={fontStyle.italic}
-                         weight={weights.medium}>{moment(item.dateCreate).format(DATE_FORMAT)}</TextLabel>
+              <TextLabel
+                color={dateColor}
+                size={11}
+                fontStyle={fontStyle.italic}
+                weight={weights.medium}>{moment(item.dateCreate).format(DATE_FORMAT)}</TextLabel>
             </View>
           </View>
         </View>

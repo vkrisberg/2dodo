@@ -1,6 +1,5 @@
 import {services, wsMessage} from '../utils';
 import {actionEnum} from '../enums';
-import CONFIG from '../config';
 
 export default {
   createGroup: async (data) => {

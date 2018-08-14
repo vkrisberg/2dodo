@@ -16,6 +16,7 @@ class ButtonBack extends Component {
     disabled: PropTypes.bool,
     style: PropTypes.any,
     onPress: PropTypes.func,
+    navigation: PropTypes.any,
   };
 
   static defaultProps = {
@@ -38,9 +39,7 @@ class ButtonBack extends Component {
     const _styles = styles({theme});
 
     return (
-      <TouchableOpacity style={[_styles.container, style]}
-                        disabled={disabled}
-                        onPress={this.onPress}>
+      <TouchableOpacity style={[_styles.container, style]} disabled={disabled} onPress={this.onPress}>
         <ArrowIcon color={color}/>
       </TouchableOpacity>
     );

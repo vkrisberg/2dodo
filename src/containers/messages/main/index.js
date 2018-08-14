@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {PushNotificationIOS, AppState, Alert, Platform} from 'react-native';
-import RNDeviceInfo from 'react-native-device-info';
 import FCM from 'react-native-fcm';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
@@ -52,6 +51,13 @@ class Messages extends Component {
 
   init = async () => {
     AppState.addEventListener('change', this.handleAppStateChange);
+
+    // Push notifications for iOS
+    if (Platform.OS === 'ios') {
+      PushNotificationIOS.addEventListener('notification', this.onRemoteNotification);
+      PushNotificationIOS.addEventListener('localNotification', this.onLocalNotification);
+    }
+
     // Push notifications for Android
     if (Platform.OS === 'android') {
       // androidPushListeners.registerKilledListener();
@@ -65,26 +71,9 @@ class Messages extends Component {
         const meta = JSON.parse(get(notify, 'meta', '{}'));
         await this.notificationActions({action, meta});
       }
-      try {
-        let result = await FCM.requestPermissions({badge: true, sound: true, alert: true});
-        console.log('FCM.requestPermissions result', result);
-      } catch (e) {
-        console.error(e);
-      }
-      FCM.getFCMToken().then(token => {
-        console.log('FCM.getFCMToken', token);
-      });
     }
 
-    // Push notifications for iOS
-    if (Platform.OS === 'ios') {
-      PushNotificationIOS.addEventListener('register', this.onPushRegistered);
-      PushNotificationIOS.addEventListener('registrationError', this.onPushRegistrationError);
-      PushNotificationIOS.addEventListener('notification', this.onRemoteNotification);
-      PushNotificationIOS.addEventListener('localNotification', this.onLocalNotification);
-      PushNotificationIOS.requestPermissions();
-    }
-
+    this.updatePushToken();
     this.loadChatList();
     this.loadContactList();
     this.timer = setInterval(() => {
@@ -106,8 +95,6 @@ class Messages extends Component {
   unmount = () => {
     clearInterval(this.timer);
     if (Platform.OS === 'ios') {
-      PushNotificationIOS.removeEventListener('register', this.onPushRegistered);
-      PushNotificationIOS.removeEventListener('registrationError', this.onPushRegistrationError);
       PushNotificationIOS.removeEventListener('notification', this.onRemoteNotification);
       PushNotificationIOS.removeEventListener('localNotification', this.onLocalNotification);
     }
@@ -154,41 +141,6 @@ class Messages extends Component {
     }
   };
 
-  onPushRegistered = (token) => {
-    console.log('TOKEN:', token);
-
-    if (!token) {
-      return;
-    }
-
-    let device = {
-      uuid: RNDeviceInfo.getUniqueID(),
-      type: Platform.OS,
-      name: RNDeviceInfo.getDeviceName(),
-      model: RNDeviceInfo.getModel(),
-      token,
-    };
-
-    console.log('DEVICE:', device);
-  };
-
-  onPushRegistrationError = (error) => {
-    console.log('NOTIFICATION ERROR:', error);
-
-    if (!error) {
-      return;
-    }
-
-    Alert.alert(
-      'Failed To Register For Remote Push',
-      `Error (${error.code}): ${error.message}`,
-      [{
-        text: 'Dismiss',
-        onPress: null,
-      }]
-    );
-  };
-
   onRemoteNotification = async (notification) => {
     console.log('NOTIFICATION:', notification);
 
@@ -226,6 +178,10 @@ class Messages extends Component {
 
   loadChatList = (filter, sort, descending) => {
     return this.props.dispatch(chatActions.loadList(filter, sort, descending));
+  };
+
+  updatePushToken = () => {
+    return this.props.dispatch(accountActions.updatePushToken());
   };
 
   createChat = async (contacts) => {
@@ -329,14 +285,15 @@ class Messages extends Component {
     const {account} = this.props;
 
     return (
-      <ChatListItem item={item}
-                    theme={account.user.theme}
-                    context={this.context}
-                    editMode={this.state.editMode}
-                    selectedItems={this.state.selected}
-                    onPress={this.onChatPress}
-                    onLongPress={this.onChatLongPress}
-                    onCheckboxPress={this.onChatCheckboxPress}/>
+      <ChatListItem
+        item={item}
+        theme={account.user.theme}
+        context={this.context}
+        editMode={this.state.editMode}
+        selectedItems={this.state.selected}
+        onPress={this.onChatPress}
+        onLongPress={this.onChatLongPress}
+        onCheckboxPress={this.onChatCheckboxPress}/>
     );
   };
 
@@ -359,15 +316,17 @@ class Messages extends Component {
     return (
       <MainLayout netOffline={!account.net.connected} wsConnected={account.connected}>
         <BackgroundLayout theme={theme} paddingHorizontal={10}>
-          <Navbar renderTitle={this.context.t('Messages')}
-                  renderLeft={<NavbarDots/>}
-                  renderRight={this.renderNavbarButton()}/>
+          <Navbar
+            renderTitle={this.context.t('Messages')}
+            renderLeft={<NavbarDots/>}
+            renderRight={this.renderNavbarButton()}/>
           <DismissKeyboardLayout style={{flex: 1, width: '100%'}}>
             <SearchInput placeholder="Search in chats" onChange={this.searchChats}/>
-            <ChatList theme={theme}
-                      context={this.context}
-                      items={chat.list}
-                      renderItem={this.renderChatItem}/>
+            <ChatList
+              theme={theme}
+              context={this.context}
+              items={chat.list}
+              renderItem={this.renderChatItem}/>
           </DismissKeyboardLayout>
         </BackgroundLayout>
       </MainLayout>

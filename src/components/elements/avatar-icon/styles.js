@@ -34,4 +34,4 @@ export default ({theme, width, height}) => {
       height: height,
     },
   });
-}
+};

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, TouchableOpacity, Text, Image} from 'react-native';
+import {View, TouchableOpacity, Image} from 'react-native';
 import PropTypes from 'prop-types';
 
 import {Navbar, ButtonBack, ButtonNavbar, TextLabel} from '../index';
@@ -49,13 +49,17 @@ export default class NavbarChat extends Component {
     this.props.onMenuPress && this.props.onMenuPress();
   };
 
-  onSearchIcon = () => {};
+  onSearchIcon = () => {
+  };
 
-  onSettings = () => {};
+  onSettings = () => {
+  };
 
-  onSound = () => {};
+  onSound = () => {
+  };
 
-  onCall = () => {};
+  onCall = () => {
+  };
 
   renderTitle = (_styles) => {
     const {theme, title, description} = this.props;
@@ -63,18 +67,22 @@ export default class NavbarChat extends Component {
     return (
       <View style={_styles.container}>
         <View style={_styles.titleContainer}>
-          <TextLabel theme={theme}
-                     color={colors[theme].navbarTitle}
-                     weight={weights.bold}
-                     size={18}>{title}</TextLabel>
-          <TextLabel theme={theme}
-                     color={colors[theme].messageTextSecond}
-                     weight={weights.medium}
-                     size={13}>{description}</TextLabel>
+          <TextLabel
+            theme={theme}
+            color={colors[theme].navbarTitle}
+            weight={weights.bold}
+            size={18}>{title}</TextLabel>
+          <TextLabel
+            theme={theme}
+            color={colors[theme].messageTextSecond}
+            weight={weights.medium}
+            size={13}>{description}</TextLabel>
         </View>
         <HideWrapper style={{width: 'auto'}}>
           <TouchableOpacity style={_styles.menuContainer} onPress={this.onMenuPress}>
-            <Image style={_styles.menuDots} source={IMG_MENU_DOTS} tintColor={this.state.showPanel ? colors[theme].blue : null}/>
+            <Image
+              style={_styles.menuDots} source={IMG_MENU_DOTS}
+              tintColor={this.state.showPanel ? colors[theme].blue : null}/>
           </TouchableOpacity>
         </HideWrapper>
       </View>
@@ -111,7 +119,8 @@ export default class NavbarChat extends Component {
 
     return (
       <View>
-        <Navbar theme={theme}
+        <Navbar
+          theme={theme}
           renderTitle={this.renderTitle(_styles)}
           renderLeft={<ButtonBack onPress={onBackPress}/>}
           renderRight={this.renderAvatar()}/>

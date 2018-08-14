@@ -1,7 +1,8 @@
 import {
+  accountActions,
   contactActions,
   chatActions, chatMessageActions,
-  groupActions, groupMessageActions
+  groupActions, groupMessageActions,
 } from '../../store/actions';
 import {actionEnum} from '../../enums';
 
@@ -16,6 +17,9 @@ export default function ({event, store, navigation}) {
       break;
     case actionEnum.getOnlineUsers:
       store.dispatch(contactActions.receiveOnlineUsers(data));
+      break;
+    case actionEnum.updatePushToken:
+      store.dispatch(accountActions.updatePushTokenResult(data));
       break;
     // chats
     case actionEnum.createChat:
@@ -84,7 +88,7 @@ export default function ({event, store, navigation}) {
       break;
     case actionEnum.sendProfile:
       store.dispatch(contactActions.receiveProfile(data)).then(() => {
-        store.dispatch(chatActions.loadList())
+        store.dispatch(chatActions.loadList());
       });
       break;
   }

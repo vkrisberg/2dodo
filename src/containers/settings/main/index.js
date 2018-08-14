@@ -117,7 +117,12 @@ class Settings extends Component {
       ],
       [
         {
-          text: this.props.account.deviceId,
+          text: `Device ID: ${this.props.account.deviceId}`,
+          onPress: () => {},
+          navigate: false,
+        },
+        {
+          text: `Push Token: ${this.props.account.pushToken}`,
           onPress: () => {},
           navigate: false,
         },

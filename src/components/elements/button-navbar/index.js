@@ -16,6 +16,7 @@ export default class ButtonNavbar extends Component {
     textStyle: PropTypes.any,
     style: PropTypes.any,
     onPress: PropTypes.func,
+    children: PropTypes.any,
   };
 
   static defaultProps = {
@@ -45,9 +46,7 @@ export default class ButtonNavbar extends Component {
     const _styles = styles({theme, color, bgColor, position});
 
     return (
-      <TouchableOpacity style={[_styles.container, style]}
-                        disabled={disabled}
-                        onPress={this.onPress}>
+      <TouchableOpacity style={[_styles.container, style]} disabled={disabled} onPress={this.onPress}>
         {this.renderText(_styles)}
       </TouchableOpacity>
     );

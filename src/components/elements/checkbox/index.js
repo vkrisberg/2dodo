@@ -17,7 +17,7 @@ const hitSlop = {
 export default class Checkbox extends PureComponent {
 
   static propTypes = {
-    input: PropTypes.shape({}),
+    input: PropTypes.shape({value: PropTypes.any}),
     disabled: PropTypes.bool,
     color: PropTypes.string,
     style: PropTypes.any,

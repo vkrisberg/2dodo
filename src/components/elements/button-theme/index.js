@@ -44,8 +44,7 @@ export default class ButtonTheme extends PureComponent {
     const text = isDayLight ? context.t('DayLight') : context.t('DarkNight');
 
     return (
-      <TouchableOpacity style={[_styles.container, style]}
-                        onPress={this.onPress}>
+      <TouchableOpacity style={[_styles.container, style]} onPress={this.onPress}>
         <Text style={_styles.text}>{text}</Text>
         {isActive && <MarkIcon color={color}/>}
       </TouchableOpacity>

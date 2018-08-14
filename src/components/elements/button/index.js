@@ -18,6 +18,7 @@ export default class Button extends PureComponent {
     textStyle: PropTypes.any,
     style: PropTypes.any,
     onPress: PropTypes.func,
+    children: PropTypes.any,
   };
 
   static defaultProps = {
@@ -52,9 +53,7 @@ export default class Button extends PureComponent {
     const _styles = styles({theme, color, bgColor, borderColor, opacity});
 
     return (
-      <TouchableOpacity style={[_styles.container, style]}
-                        disabled={disabled}
-                        onPress={this.onPress}>
+      <TouchableOpacity style={[_styles.container, style]} disabled={disabled} onPress={this.onPress}>
         {this.renderText(_styles)}
       </TouchableOpacity>
     );

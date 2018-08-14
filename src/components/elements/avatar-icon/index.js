@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import {TextLabel} from '../index';
 import {themeEnum} from '../../../enums';
 import {colors, weights} from '../../../styles';
-import {validation} from '../../../utils'
+import {validation} from '../../../utils';
 import styles from './styles';
 
 import IMG_CIRCLE from '../../../images/icons/circle/circle.png';
