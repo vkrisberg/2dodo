@@ -30,7 +30,6 @@ class ContactAdd extends Component {
 
   constructor(props) {
     super(props);
-    this.searchTimerId = null;
   }
 
   componentDidMount() {
@@ -60,13 +59,7 @@ class ContactAdd extends Component {
   };
 
   onSearchChange = (value) => {
-    if (this.searchTimerId) {
-      clearTimeout(this.searchTimerId);
-    }
-
-    this.searchTimerId = setTimeout(() => {
-      this.props.dispatch(contactActions.search(value));
-    }, 500);
+    this.props.dispatch(contactActions.search(value));
   };
 
   onContactPress(item) {

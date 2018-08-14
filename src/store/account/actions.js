@@ -155,13 +155,38 @@ export default {
     };
   },
 
+  reconnect: (force = false) => {
+    return async (dispatch, getState) => {
+      try {
+        const {account} = getState();
+        const {deviceId, hostname, user, password, keys} = account;
+
+        if (!force && account.connected) {
+          return;
+        }
+
+        services.websocketConnect({
+          deviceId,
+          hostname,
+          username: user.username,
+          password,
+          hashKey: keys.hashKey,
+        });
+        dispatch({type: types.CONNECT, payload: {deviceId, hostname, user, keys, password}});
+      } catch (e) {
+        dispatch({type: types.CONNECT_FAILURE, error: e});
+        throw e;
+      }
+    };
+  },
+
   connectResult: ({connected, error}) => {
     return async (dispatch, getState) => {
       const {account} = getState();
       const navigation = services.getNavigation();
       try {
         // app in background
-        if (account.appState !== 'active' || !account.net.connected) {
+        if (account.appState !== 'active') {
           return;
         }
         // login failed

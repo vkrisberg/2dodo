@@ -87,6 +87,10 @@ export default reducer(initState, {
       connected: true,
       // stopReconnect: false,
       error: null,
+      net: {
+        info: 'wifi',
+        connected: true,
+      },
     };
   },
 
