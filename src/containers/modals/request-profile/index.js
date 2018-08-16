@@ -33,6 +33,7 @@ class RequestProfileModal extends Component {
   };
 
   onCancel = () => {
+    this.props.dispatch(contactActions.clearReceiveProfile());
     this.props.navigation.goBack();
   };
 
