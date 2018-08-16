@@ -305,10 +305,18 @@ export default reducer(initState, {
     };
   },
 
+  [types.CLEAR_RECEIVE_PROFILE]: (state, action) => {
+    return {
+      ...state,
+      receiveRequestProfile: null,
+    };
+  },
+
   [types.SEND_PROFILE]: (state, action) => {
     return {
       ...state,
       sendProfile: action.payload,
+      receiveRequestProfile: null,
     };
   },
 

@@ -40,6 +40,7 @@ export const types = {
 
   REQUEST_PROFILE: Symbol('REQUEST_PROFILE'),
   RECEIVE_REQUEST_PROFILE: Symbol('RECEIVE_REQUEST_PROFILE'),
+  CLEAR_RECEIVE_PROFILE: Symbol('CLEAR_RECEIVE_PROFILE'),
 
   SEND_PROFILE: Symbol('SEND_PROFILE'),
 
@@ -416,6 +417,10 @@ export default {
         console.log('receive request profile error', e);
       }
     };
+  },
+
+  clearReceiveProfile: () => {
+    return {type: types.CLEAR_RECEIVE_PROFILE};
   },
 
   sendProfile: (contacts) => {
