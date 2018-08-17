@@ -10,7 +10,7 @@ import {MainLayout, BackgroundLayout} from '../../../components/layouts';
 import {Navbar, ButtonBack, ButtonNavbar, Loader} from '../../../components/elements';
 import {ProfileUserForm} from '../../../components/forms';
 import styles from './styles';
-import {accountActions, chatActions, contactActions, groupActions} from '../../../store/actions';
+import {accountActions, groupActions} from '../../../store/actions';
 
 class ProfileSettings extends Component {
   static propTypes = {
@@ -23,6 +23,11 @@ class ProfileSettings extends Component {
   static contextTypes = {
     t: PropTypes.func.isRequired,
   };
+
+  constructor(props) {
+    super(props);
+    this.styles = styles(theme);
+  }
 
   componentDidMount() {
     this.props.dispatch(groupActions.loadList());
@@ -99,7 +104,6 @@ class ProfileSettings extends Component {
     const {context} = this;
     const {account, group} = this.props;
     const {theme} = this.props.account.user;
-    const _styles = styles(theme);
 
     return (
       <MainLayout netOffline={!account.net.connected} wsConnected={account.connected}>
@@ -109,7 +113,7 @@ class ProfileSettings extends Component {
             renderTitle={context.t('MyProfile')}
             renderLeft={<ButtonBack/>}
             renderRight={this.renderNavbarButton()}/>
-          <View style={[_styles.body, _styles.bodyProfile]}>
+          <View style={[this.styles.body, this.styles.bodyProfile]}>
             <ProfileUserForm
               theme={theme}
               context={context}

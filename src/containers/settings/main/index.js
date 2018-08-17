@@ -27,6 +27,11 @@ class Settings extends Component {
     t: PropTypes.func.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+    this.styles = styles(theme);
+  }
+
   logout = () => {
     this.props.dispatch(accountActions.logout());
   };
@@ -71,7 +76,6 @@ class Settings extends Component {
     const {user} = this.props.account;
     const fullName = helpers.getFullName(user);
     const {theme} = user;
-    const _styles = styles(theme);
     const settingsData = [
       [
         {
@@ -136,50 +140,50 @@ class Settings extends Component {
             renderTitle={context.t('Settings')}
             renderLeft={<NavbarDots/>}
             renderRight={this.renderNavbarButton()}/>
-          <ScrollView style={_styles.container}>
-            <View style={_styles.header}>
+          <ScrollView style={this.styles.container}>
+            <View style={this.styles.header}>
               <TouchableOpacity onPress={this.onEditProfile}>
                 <AvatarIcon theme={theme} source={user.avatar} label={fullName}/>
               </TouchableOpacity>
-              <View style={_styles.userData}>
+              <View style={this.styles.userData}>
                 <TouchableOpacity onPress={this.onEditProfile}>
-                  <Text style={_styles.name}>{fullName}</Text>
+                  <Text style={this.styles.name}>{fullName}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={_styles.usernameBlock} onPress={this.onEditProfile}>
-                  <Text style={[_styles.defaultText, _styles.username]}>{helpers.getNickname(user.username)}</Text>
+                <TouchableOpacity style={this.styles.usernameBlock} onPress={this.onEditProfile}>
+                  <Text style={[this.styles.defaultText, this.styles.username]}>{helpers.getNickname(user.username)}</Text>
                   <Image source={arrowIcon}/>
                 </TouchableOpacity>
-                <View style={_styles.buttonsBlock}>
+                <View style={this.styles.buttonsBlock}>
                   <Button
-                    style={_styles.actionBtn}
+                    style={this.styles.actionBtn}
                     onPress={this.onQrCode}
                     disabled>
-                    <Text style={[_styles.defaultText, _styles.btnText]}>{context.t('ShowMyQrCode')}</Text>
+                    <Text style={[this.styles.defaultText, this.styles.btnText]}>{context.t('ShowMyQrCode')}</Text>
                   </Button>
                   <Button
-                    style={[_styles.actionBtn, _styles.shareBtn]}
+                    style={[this.styles.actionBtn, this.styles.shareBtn]}
                     onPress={this.onQrCode}
                     disabled>
-                    <Image source={shareIcon} style={_styles.shareIcon}/>
-                    <Text style={[_styles.defaultText, _styles.btnText]}>{context.t('Share')}</Text>
+                    <Image source={shareIcon} style={this.styles.shareIcon}/>
+                    <Text style={[this.styles.defaultText, this.styles.btnText]}>{context.t('Share')}</Text>
                   </Button>
                 </View>
               </View>
             </View>
-            <View style={_styles.divider}/>
-            <View style={_styles.content}>
+            <View style={this.styles.divider}/>
+            <View style={this.styles.content}>
               <SettingsList
                 items={settingsData[0]}
                 renderItem={this.renderSettingsItem}/>
             </View>
-            <View style={_styles.divider}/>
-            <View style={[_styles.content]}>
+            <View style={this.styles.divider}/>
+            <View style={[this.styles.content]}>
               <SettingsList
                 items={settingsData[1]}
                 renderItem={this.renderSettingsItem}/>
             </View>
-            <View style={_styles.divider}/>
-            <View style={[_styles.content, {marginBottom: 60}]}>
+            <View style={this.styles.divider}/>
+            <View style={[this.styles.content, {marginBottom: 60}]}>
               <SettingsList
                 items={settingsData[2]}
                 renderItem={this.renderSettingsItem}/>

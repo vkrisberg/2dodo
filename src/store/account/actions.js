@@ -303,7 +303,8 @@ export default {
         const {publicKey, privateKey} = await pgplib.generateKey({
           name: data.name,
           email: data.email,
-          passphrase: data.password,
+          // TODO: has not encryptKey method to change password, need to forgot-password procedure
+          // passphrase: data.password,
         });
         const hashKey = hashlib.hexSha256(privateKey);
         data.publicKey = publicKey;

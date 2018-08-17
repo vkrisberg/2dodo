@@ -171,7 +171,6 @@ class Login extends Component {
   render() {
     const {account} = this.props;
     const {t} = this.context;
-    const forgotLinkColor = (sizes.isIphone5 && Platform.OS === 'ios') ? colors.light.blueDarker : colors.light.white;
 
     return (
       <MainLayout netOffline={!account.net.connected}>
@@ -187,7 +186,7 @@ class Login extends Component {
             </KeyboardAvoidingView>
             <Link style={this.styles.forgot}
                   to={routeEnum.ResetPassword}
-                  color={forgotLinkColor}>{t('ForgotPassword')}</Link>
+                  color={colors.light.white}>{t('ForgotPassword')}</Link>
             <View style={this.styles.bottomContainer}>
               <View style={this.styles.registration}>
                 <Text style={this.styles.registrationLabel}>{t('FirstTimeInApp')}</Text>

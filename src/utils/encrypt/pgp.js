@@ -60,7 +60,7 @@ const encrypt = (publicKey, data) => {
 const decrypt = async (privateKey, data, passphrase = '') => {
   const _privateKey = openpgp.readArmoredKey(privateKey).keys[0];
 
-  if (passphrase) {
+  if (!_privateKey.primaryKey.isDecrypted && passphrase) {
     await _privateKey.decrypt(passphrase);
   }
 
