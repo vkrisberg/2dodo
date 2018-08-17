@@ -29,6 +29,7 @@ class Settings extends Component {
 
   constructor(props) {
     super(props);
+    const {theme} = props.account.user;
     this.styles = styles(theme);
   }
 

@@ -20,7 +20,8 @@ export default class Loader extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.styles = styles(theme, props.inheritSizes);
+    const {theme, inheritSizes} = props;
+    this.styles = styles(theme, inheritSizes);
   }
 
   render() {
