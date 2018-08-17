@@ -18,12 +18,16 @@ export default class Loader extends PureComponent {
     inheritSizes: false,
   };
 
+  constructor(props) {
+    super(props);
+    this.styles = styles(theme, props.inheritSizes);
+  }
+
   render() {
-    const {theme, inheritSizes} = this.props;
-    const _styles = styles(theme, inheritSizes);
+    const {theme} = this.props;
 
     return (
-      <View style={_styles.container}>
+      <View style={this.styles.container}>
         <ActivityIndicator size={'large'} color={colors[theme].blue}/>
       </View>
     );
