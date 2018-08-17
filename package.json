@@ -6,6 +6,7 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "start-ios": "react-native run-ios",
     "start-android": "react-native run-android",
+    "start-android-release": "react-native run-android --variant=release",
     "test": "jest",
     "test:watch": "jest --watch",
     "postinstall": "./node_modules/.bin/rn-nodeify --install \"crypto, stream, vm, events, buffer\" --hack",
