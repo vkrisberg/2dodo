@@ -88,7 +88,7 @@ export default class Profile extends PureComponent {
                 width={65}
                 height={65}/>
               <View style={_styles.info}>
-                <Text style={_styles.name}>
+                <Text style={_styles.name} numberOfLines={1}>
                   {user.fullName ? user.fullName : user.username}
                 </Text>
                 <Text style={_styles.lastVisit}>{moment(user.dateUpdate).format('DD.MM.YY')}</Text>
