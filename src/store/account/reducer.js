@@ -1,6 +1,6 @@
 import reducer from '../../utils/reducer';
 import {types} from './actions';
-import {themeEnum} from '../../enums'
+import {themeEnum} from '../../enums';
 import CONFIG from '../../config';
 
 const initState = {
@@ -50,6 +50,7 @@ const initState = {
 
   loading: false,
   updating: false,
+  deleting: false,
   logout: null,
   error: null,
   errorRemind: null,
@@ -155,6 +156,61 @@ export default reducer(initState, {
     return {
       ...state,
       loading: false,
+      logout: false,
+      error: action.error.toString(),
+    };
+  },
+
+  [types.DELETE]: (state, action) => {
+    return {
+      ...state,
+      loading: true,
+      deleting: true,
+      logout: true,
+      error: null
+    };
+  },
+
+  [types.DELETE_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      authorized: false,
+      user: {
+        username: '',
+        nickname: '',
+        email: '',
+        phones: [],
+        firstName: '',
+        secondName: '',
+        bio: '',
+        avatar: '',
+        theme: themeEnum.light,
+      },
+      keys: {
+        publicKey: null,
+        privateKey: null,
+        hashKey: null,
+      },
+      connected: false,
+      connecting: false,
+      connectionAttempts: 0,
+      stopReconnect: false,
+      loading: false,
+      updating: false,
+      deleting: false,
+      logout: null,
+      error: null,
+      errorRemind: null,
+      resetPassword: false,
+      setNewPassword: false,
+    };
+  },
+
+  [types.DELETE_FAILURE]: (state, action) => {
+    return {
+      ...state,
+      loading: false,
+      deleting: false,
       logout: false,
       error: action.error.toString(),
     };

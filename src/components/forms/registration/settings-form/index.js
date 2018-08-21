@@ -30,7 +30,6 @@ class RegistrationSettingsForm extends Component {
   static propTypes = {
     theme: PropTypes.string,
     context: PropTypes.object,
-    user: PropTypes.object,
     initialValues: PropTypes.object,
     disabled: PropTypes.bool,
     onAvatar: PropTypes.func,
@@ -43,6 +42,10 @@ class RegistrationSettingsForm extends Component {
     theme: themeEnum.light,
     disabled: false,
   };
+
+  componentWillUnmount() {
+    this.props.reset();
+  }
 
   onThemeChange(theme) {
     return () => {
@@ -94,7 +97,7 @@ class RegistrationSettingsForm extends Component {
   };
 
   render() {
-    const {theme, context, user, disabled} = this.props;
+    const {theme, context, disabled} = this.props;
     const _styles = styles(theme);
 
     return (
