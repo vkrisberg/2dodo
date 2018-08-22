@@ -5,6 +5,7 @@ export default {
   RsaKey: 'RsaKey',
   Chat: 'Chat',
   ChatMessage: 'ChatMessage',
+  EncryptChatMessage: 'EncryptChatMessage',
   Group: 'Group',
   GroupMessage: 'GroupMessage',
   HashKey: 'HashKey',

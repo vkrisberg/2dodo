@@ -1,5 +1,6 @@
 import {get, map, filter, keyBy, isEmpty, size} from 'lodash';
 
+import {chatMessageActions} from '../actions';
 import {apiChat, apiServer} from '../../api';
 import {helpers, services, wsMessage} from '../../utils';
 import {hashlib} from '../../utils/encrypt';
@@ -350,6 +351,21 @@ export default {
         };
         await hashKeyAdd(hashKeyData);
         dispatch({type: types.RECEIVE_CHAT_SUCCESS, payload});
+
+        // search unencrypted messages and decrypt them
+        let messages = realm.objects(dbEnum.EncryptChatMessage)
+          .sorted('dateCreate', false)
+          .filtered(`chatId = '${chat.id}'`);
+        if (messages.length) {
+          for (let i = 0; i < messages.length; i++) {
+            const message = JSON.parse(messages[i].message);
+            await dispatch(chatMessageActions.receiveMessage(message));
+          }
+          await realm.write(() => {
+            realm.delete(messages);
+          });
+        }
+
         return payload;
       } catch (e) {
         dispatch({type: types.RECEIVE_CHAT_FAILURE, error: e});

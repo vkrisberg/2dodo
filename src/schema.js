@@ -176,6 +176,25 @@ ChatMessage.schema = {
 };
 
 /**
+ * Encrypted chat message schema
+ */
+class EncryptChatMessage {
+}
+
+EncryptChatMessage.schema = {
+  name: 'EncryptChatMessage',
+  primaryKey: 'id',
+  properties: {
+    id: 'string',
+    chatId: {type: 'string', indexed: true},
+    from: 'string?', // login@hostname@deviceId
+    message: 'string?',
+    encryptTime: {type: 'date', indexed: true},
+    dateCreate: {type: 'date', indexed: true},
+  },
+};
+
+/**
  * Group/channel schema
  */
 class Group {
@@ -250,6 +269,7 @@ export default [
   Contact,
   HashKey,
   ChatMessage,
+  EncryptChatMessage,
   Chat,
   GroupMessage,
   Group,
