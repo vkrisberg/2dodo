@@ -178,6 +178,7 @@ const translations = {
     'NoUserAddInGroup': 'Вы должны добавить хотя бы одного пользователя для создания группы',
     'UnexpectedError': 'Возникла непредвиденная ошибка, повторите запрос опять',
     'GroupNameAlreadyExists': 'Группа с таким названием уже существует, введите другое',
+    'DeviceExistsError': 'Пользователь с таким логином уже зарегистрирован на сервере',
     // Chat
     'NoChats': 'У Вас еще нет чатов',
     'NoMessages': 'Нет сообщений',
@@ -421,6 +422,7 @@ const translations = {
     'NoUserAddInGroup': 'You must add at least one user to create a group',
     'UnexpectedError': 'Unexpected error occurred, please try again',
     'GroupNameAlreadyExists': 'Group name already exists, enter another name',
+    'DeviceExistsError': 'A user with such login is already registered on the server',
     // Chat
     'NoChats': 'Your have no chats yet',
     'NoMessages': 'No messages',

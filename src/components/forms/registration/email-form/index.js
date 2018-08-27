@@ -24,6 +24,10 @@ class RegistrationEmailForm extends Component {
     disabled: false,
   };
 
+  componentWillUnmount() {
+    this.props.reset();
+  }
+
   renderField = (props) => {
     const {meta: {touched, error}} = props;
     const {theme, context} = this.props;

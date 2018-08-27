@@ -21,6 +21,7 @@ export default class MessageListItem extends PureComponent {
 
   static propTypes = {
     item: PropTypes.object.isRequired,
+    isRenderSeparator: PropTypes.bool,
     theme: PropTypes.string,
     context: PropTypes.object,
     onPress: PropTypes.func,
@@ -36,6 +37,11 @@ export default class MessageListItem extends PureComponent {
     groupChat: false,
   };
 
+  // constructor(props) {
+  //   super(props);
+  //   this.lastDate = null;
+  // }
+
   onPress(item) {
     return () => {
       this.props.onPress && this.props.onPress(item);
@@ -50,6 +56,26 @@ export default class MessageListItem extends PureComponent {
 
   onAvatarPress = (username) => {
     this.props.onAvatarPress(username);
+  };
+
+  renderDateSeparator = (date, _styles) => {
+    const {theme, isRenderSeparator} = this.props;
+
+    if (!isRenderSeparator) {
+      return null;
+    }
+
+    let dateString = `${moment(date).format('DD MMMM')}`;
+
+    if (!moment().isSame(date, 'year')) {
+      dateString += ` ${moment(date).year()}`;
+    }
+
+    return <View style={_styles.dateTextContainer}>
+      <TextLabel fontStyle={fontStyle.italic} size={12} color={colors[theme].grayInput}>
+        {dateString}
+      </TextLabel>
+    </View>;
   };
 
   renderQuote = (quote, isOwn) => {
@@ -74,47 +100,50 @@ export default class MessageListItem extends PureComponent {
     const name = item.contact ? item.contact.fullName || item.contact.nickname : item.username;
 
     return (
-      <TouchableOpacity
-        style={[groupChat ? containerGroupStyle : containerStyle, _styles.container]}
-        onPress={this.onPress(item)} onLongPress={this.onLongPress}>
-        {groupChat && !item.isOwn &&
+      <View>
+        {this.renderDateSeparator(item.dateCreate, _styles)}
         <TouchableOpacity
-          onPress={() => this.onAvatarPress(item.contact ? item.contact : item.username)}
-          style={_styles.avatarContainer}>
-          <AvatarIcon
-            theme={theme} source={item.contact ? item.contact.avatar : ''} label={name} width={32}
-            height={32}/>
-        </TouchableOpacity>}
-        <View style={{flex: 1}}>
-          <Image
-            style={_styles.background}
-            capInsets={{top: 10, left: 15, bottom: 10, right: 15}}
-            resizeMode="stretch"
-            source={bubbleImg}/>
-          <View style={_styles.wrapper}>
-            {item.quote && this.renderQuote(item.quote, item.isOwn)}
-            <View style={_styles.textWrapper}>
-              <TextLabel
-                color={textColor}
-                size={15}
-                weight={weights.medium}>{item.text}</TextLabel>
-            </View>
-            <View style={_styles.dateWrapper}>
-              {item.isOwn && (item.status === messageEnum.sending || item.status === messageEnum.sent) && !groupChat &&
-              <Image source={IMG_STATUS_SEND} style={_styles.statusIcon}/>}
-              {item.isOwn && item.status === messageEnum.received && !groupChat &&
-              <Image source={IMG_STATUS_RECEIVED} style={_styles.statusIcon}/>}
-              {item.isOwn && item.status === messageEnum.read && !groupChat &&
-              <Image source={IMG_STATUS_READ} style={_styles.statusIcon}/>}
-              <TextLabel
-                color={dateColor}
-                size={11}
-                fontStyle={fontStyle.italic}
-                weight={weights.medium}>{moment(item.dateCreate).format(DATE_FORMAT)}</TextLabel>
+          style={[groupChat ? containerGroupStyle : containerStyle, _styles.container]}
+          onPress={this.onPress(item)} onLongPress={this.onLongPress}>
+          {groupChat && !item.isOwn &&
+          <TouchableOpacity
+            onPress={() => this.onAvatarPress(item.contact ? item.contact : item.username)}
+            style={_styles.avatarContainer}>
+            <AvatarIcon
+              theme={theme} source={item.contact ? item.contact.avatar : ''} label={name} width={32}
+              height={32}/>
+          </TouchableOpacity>}
+          <View style={{flex: 1}}>
+            <Image
+              style={_styles.background}
+              capInsets={{top: 10, left: 15, bottom: 10, right: 15}}
+              resizeMode="stretch"
+              source={bubbleImg}/>
+            <View style={_styles.wrapper}>
+              {item.quote && this.renderQuote(item.quote, item.isOwn)}
+              <View style={_styles.textWrapper}>
+                <TextLabel
+                  color={textColor}
+                  size={15}
+                  weight={weights.medium}>{item.text}</TextLabel>
+              </View>
+              <View style={_styles.dateWrapper}>
+                {item.isOwn && (item.status === messageEnum.sending || item.status === messageEnum.sent) && !groupChat &&
+                <Image source={IMG_STATUS_SEND} style={_styles.statusIcon}/>}
+                {item.isOwn && item.status === messageEnum.received && !groupChat &&
+                <Image source={IMG_STATUS_RECEIVED} style={_styles.statusIcon}/>}
+                {item.isOwn && item.status === messageEnum.read && !groupChat &&
+                <Image source={IMG_STATUS_READ} style={_styles.statusIcon}/>}
+                <TextLabel
+                  color={dateColor}
+                  size={11}
+                  fontStyle={fontStyle.italic}
+                  weight={weights.medium}>{moment(item.dateCreate).format(DATE_FORMAT)}</TextLabel>
+              </View>
             </View>
           </View>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </View>
     );
   }
 }

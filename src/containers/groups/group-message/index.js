@@ -2,14 +2,15 @@ import React, {Fragment, PureComponent} from 'react';
 import {Platform, View, KeyboardAvoidingView, Alert} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import moment from "moment/moment";
 
 import {MainLayout, BackgroundLayout} from '../../../components/layouts';
 import {NavbarChat, MessageListItem, MessageInput, Loader, Button} from '../../../components/elements';
-import {chatActions, chatMessageActions, groupActions, groupMessageActions} from '../../../store/actions';
+import {groupActions, groupMessageActions} from '../../../store/actions';
 import {MessageList} from '../../../components/lists';
 import styles from './styles';
 import {colors} from '../../../styles';
-import {messageEnum, routeEnum} from '../../../enums';
+import {routeEnum} from '../../../enums';
 
 class GroupMessage extends PureComponent {
 
@@ -37,6 +38,7 @@ class GroupMessage extends PureComponent {
     const {theme} = props.account.user;
     this.styles = styles(theme);
     this.group = {};
+    this.lastDate = null;
   }
 
   componentDidMount() {
@@ -99,14 +101,18 @@ class GroupMessage extends PureComponent {
 
   onSoundMute = () => {};
 
-  renderMessage = ({item}) => {
+  renderMessage = ({item, index}) => {
     const {theme} = this.props.account.user;
+
+    const isRenderSeparator = index === 0 || !moment(item.dateCreate).isSame(this.lastDate, 'day');
+    this.lastDate = item.dateCreate;
 
     return (
       <MessageListItem
         theme={theme}
         context={this.context}
         item={item}
+        isRenderSeparator={isRenderSeparator}
         groupChat={true}
         onPress={this.onMessagePress}
         onLongPress={this.onMessageLongPress}

@@ -93,7 +93,6 @@ export default class RegistrationForm extends Component {
                                  onSubmit={this.onRegister}/>
           <RegistrationSettingsForm theme={theme}
                                     context={context}
-                                    user={account.user}
                                     initialValues={account.user}
                                     disabled={!account.net.connected || account.connecting || connecting}
                                     onAvatar={onAvatar}

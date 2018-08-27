@@ -2,6 +2,7 @@ import React, {PureComponent, Fragment} from 'react';
 import {Platform, View, KeyboardAvoidingView} from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import moment from "moment/moment";
 
 import {MainLayout, BackgroundLayout, DismissKeyboardLayout} from '../../../components/layouts';
 import {NavbarChat, SearchInput, MessageListItem, MessageInput} from '../../../components/elements';
@@ -36,6 +37,7 @@ class ChatMessage extends PureComponent {
     };
 
     this.chat = {};
+    this.lastDate = null;
   }
 
   componentDidMount() {
@@ -130,16 +132,22 @@ class ChatMessage extends PureComponent {
     });
   };
 
-  renderMessage = ({item}) => {
+  renderMessage = ({item, index}) => {
     const {theme} = this.props.account.user;
 
+    const isRenderSeparator = index === 0 || !moment(item.dateCreate).isSame(this.lastDate, 'day');
+    this.lastDate = item.dateCreate;
+
     return (
-      <MessageListItem
-        theme={theme}
-        context={this.context}
-        item={item}
-        onPress={this.onMessagePress}
-        onLongPress={this.onMessageLongPress}/>
+      <View>
+        <MessageListItem
+          theme={theme}
+          context={this.context}
+          item={item}
+          isRenderSeparator={isRenderSeparator}
+          onPress={this.onMessagePress}
+          onLongPress={this.onMessageLongPress}/>
+      </View>
     );
   };
 
@@ -210,12 +218,13 @@ class ChatMessage extends PureComponent {
     return (
       <MainLayout netOffline={!account.net.connected} wsConnected={account.connected}>
         <BackgroundLayout theme={theme}>
-          <NavbarChat context={this.context}
-                      title={chat.current.name}
-                      description={navbarDescription}
-                      avatar={chat.current.avatar}
-                      onAvatarPress={this.onNavbarAvatarPress}
-                      onBackPress={this.onBack}/>
+          <NavbarChat
+            context={this.context}
+            title={chat.current.name}
+            description={navbarDescription}
+            avatar={chat.current.avatar}
+            onAvatarPress={this.onNavbarAvatarPress}
+            onBackPress={this.onBack}/>
           {Platform.OS === 'ios' ? this.renderIosBody(theme) : this.renderAndroidBody(theme)}
         </BackgroundLayout>
       </MainLayout>

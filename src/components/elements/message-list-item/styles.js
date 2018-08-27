@@ -1,5 +1,5 @@
 import {StyleSheet} from "react-native";
-import {colors, fonts, weights, sizes} from "../../../styles";
+import {colors} from "../../../styles";
 
 export default ({theme}) => {
   return StyleSheet.create({
@@ -40,8 +40,7 @@ export default ({theme}) => {
       paddingBottom: 30,
     },
 
-    textWrapper: {
-    },
+    textWrapper: {},
 
     dateWrapper: {
       position: 'absolute',
@@ -57,6 +56,11 @@ export default ({theme}) => {
 
     statusIcon: {
       marginRight: 3,
+    },
+
+    dateTextContainer: {
+      paddingVertical: 8,
+      marginLeft: 10
     },
   });
 };

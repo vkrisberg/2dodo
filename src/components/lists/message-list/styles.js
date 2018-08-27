@@ -26,9 +26,5 @@ export default ({theme, verticalOffset}) => {
     text: {
       marginTop: 15,
     },
-    dateTextContainer: {
-      paddingVertical: 8,
-      marginLeft: 10
-    }
   });
 };

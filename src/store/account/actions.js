@@ -14,6 +14,10 @@ import {apiServer} from "../../api";
 export const types = {
   UPDATE: Symbol('UPDATE'),
 
+  REMIND: Symbol('REMIND'),
+  REMIND_SUCCESS: Symbol('REMIND_SUCCESS'),
+  REMIND_FAILURE: Symbol('REMIND_FAILURE'),
+
   CONNECT: Symbol('CONNECT'),
   CONNECT_SUCCESS: Symbol('CONNECT_SUCCESS'),
   CONNECT_FAILURE: Symbol('CONNECT_FAILURE'),
@@ -24,9 +28,9 @@ export const types = {
   LOGOUT_SUCCESS: Symbol('LOGOUT_SUCCESS'),
   LOGOUT_FAILURE: Symbol('LOGOUT_FAILURE'),
 
-  REMIND: Symbol('REMIND'),
-  REMIND_SUCCESS: Symbol('REMIND_SUCCESS'),
-  REMIND_FAILURE: Symbol('REMIND_FAILURE'),
+  DELETE: Symbol('DELETE'),
+  DELETE_SUCCESS: Symbol('DELETE_SUCCESS'),
+  DELETE_FAILURE: Symbol('DELETE_FAILURE'),
 
   REGISTER: Symbol('REGISTER'),
   REGISTER_SUCCESS: Symbol('REGISTER_SUCCESS'),
@@ -259,8 +263,9 @@ export default {
   },
 
   logoutResult: ({clean, error}) => {
-    return async dispatch => {
+    return async (dispatch, getState) => {
       try {
+        const {account} = getState();
         const navigation = services.getNavigation();
         if (!clean) {
           throw new Error(error);
@@ -268,7 +273,11 @@ export default {
         AsyncStorage.removeItem(KEY_AUTHORIZED);
         AsyncStorage.removeItem(KEY_USERNAME);
         AsyncStorage.removeItem(KEY_PASSWORD);
-        dispatch({type: types.LOGOUT_SUCCESS});
+        if (account.deleting) {
+          dispatch({type: types.DELETE_SUCCESS});
+        } else {
+          dispatch({type: types.LOGOUT_SUCCESS});
+        }
         navigation.dispatch(goToLoginAction);
       } catch (e) {
         dispatch({type: types.LOGOUT_FAILURE, error: e});
@@ -279,17 +288,19 @@ export default {
 
   deleteAccount: () => {
     return async dispatch => {
-      dispatch({type: types.LOGOUT});
+      dispatch({type: types.DELETE});
       try {
         const realm = services.getRealm();
+        const websocket = services.getWebsocket();
         const path = realm.path;
+        // close and delete db file
         realm.close();
         await fs.unlink(path);
-
-        const websocket = services.getWebsocket();
+        // close connection
         websocket.close();
+        // then it will be called "logoutResult" method
       } catch (e) {
-        dispatch({type: types.LOGOUT_FAILURE, error: e});
+        dispatch({type: types.DELETE_FAILURE, error: e});
         throw e;
       }
     };

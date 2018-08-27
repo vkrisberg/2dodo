@@ -292,11 +292,30 @@ export default {
         const encryptTime = wsMessage.rfcToRealm(msgEncryptTime);
         let hashKeys = realm.objects(dbEnum.HashKey)
           .filtered(`chatId = '${meta.chatId}' AND dateSend = ${encryptTime}`);
+
         // when send a message to yourself
         hashKeys = uniqBy(hashKeys, 'hashKey');
+
         // console.log('hashKeys', hashKeys.length, meta.chatId, encryptTime);
-        if (!hashKeys.length || hashKeys.length > 1) {
-          throw new Error('hashKey not found or more than one');
+
+        // when chat-message received before then chat
+        if (!hashKeys.length) {
+          const encryptChatMessage = {
+            id: meta.id,
+            chatId: meta.chatId,
+            from,
+            message: JSON.stringify(message),
+            encryptTime: wsMessage.rfcToDate(msgEncryptTime),
+            dateCreate: dateNow,
+          };
+          await realm.write(() => {
+            realm.create(dbEnum.EncryptChatMessage, encryptChatMessage);
+          });
+          throw new Error('hashKey not found');
+        }
+
+        if (hashKeys.length > 1) {
+          throw new Error('more than one hashKey');
         }
 
         const decryptedData = await wsMessage.decryptChatMessage({

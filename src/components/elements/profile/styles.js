@@ -57,10 +57,10 @@ export default (theme) => {
     },
 
     actions: {
-      flexShrink: 0,
-      alignSelf: 'flex-end',
+      position: 'absolute',
+      right: 0,
+      bottom: 20,
       flexDirection: 'row',
-      marginRight: 5,
     },
 
     writeIcon: {

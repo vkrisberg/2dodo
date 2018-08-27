@@ -117,8 +117,12 @@ class Registration extends Component {
         // this.props.navigation.navigate(routeEnum.Login);
       })
       .catch((error) => {
-        Alert.alert(error.response.data.message);
         console.log('registration error', error.response.status, error.response.data);
+        if (error.response.data.message === 'device already exists in db') {
+          Alert.alert(context.t('DeviceExistsError'));
+        } else {
+          Alert.alert(error.response.data.message);
+        }
         return false;
       });
   };
@@ -180,17 +184,19 @@ class Registration extends Component {
     return (
       <MainLayout netOffline={!account.net.connected}>
         <BackgroundLayout background="registration" barStyle="light-content">
-          <RegistrationForm context={this.context}
-                            account={account}
-                            connecting={this.state.connecting}
-                            onRegister={this.registration}
-                            onSettings={() => this.updateSettings({
-                              firstName: formSettings.values.firstName,
-                              secondName: formSettings.values.secondName,
-                              avatar: formSettings.values.avatar}
-                            )}
-                            onAvatar={this.updateAvatar}
-                            onTheme={this.updateTheme}/>
+          <RegistrationForm
+            context={this.context}
+            account={account}
+            connecting={this.state.connecting}
+            onRegister={this.registration}
+            onSettings={() => this.updateSettings({
+                firstName: formSettings.values.firstName,
+                secondName: formSettings.values.secondName,
+                avatar: formSettings.values.avatar
+              }
+            )}
+            onAvatar={this.updateAvatar}
+            onTheme={this.updateTheme}/>
         </BackgroundLayout>
       </MainLayout>
     );
